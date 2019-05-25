@@ -1,5 +1,5 @@
 ---
-unpacking tuple of list
+title: unpacking tuple of list
 ---
 
 [原文地址](https://www.geeksforgeeks.org/python-unpacking-tuple-of-lists/)
