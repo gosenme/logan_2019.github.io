@@ -1,0 +1,1010 @@
+---
+title: 编程概论
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编程概论</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#31">3.1　示例</a></li>
+<li><a href="#32">3.2　注释</a></li>
+<li><a href="#33">3.3　打印</a></li>
+<li><a href="#34">3.4　代码行</a></li>
+<li><a href="#35">3.5　关键字</a></li>
+<li><a href="#36">3.6　间距</a></li>
+<li><a href="#37">3.7　数据类型</a></li>
+<li><a href="#38">3.8　常量和变量</a></li>
+<li><a href="#39">3.9　语法</a></li>
+<li><a href="#310">3.10　错误与异常</a></li>
+<li><a href="#311">3.11　算术操作符</a></li>
+<li><a href="#312">3.12　比较操作符</a></li>
+<li><a href="#313">3.13　逻辑操作符</a></li>
+<li><a href="#314">3.14　条件语句</a></li>
+<li><a href="#315">3.15　语句</a></li>
+<li><a href="#316">3.16　术语表</a></li>
+<li><a href="#317">3.17　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“这是我能想到的，唯一可以让我既当工程师又做艺术家的工作。它要求具备极其缜密的技术思维，因为你必须要完成精确的思考，这点我很喜欢。另一方面，它又鼓励你肆意挥洒自己的创意，只有你想不到没有你做不到的。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——安迪 · 赫兹菲尔德（Andy Hertzfeld）</span></p>
+</blockquote>
+<p>我们的第一个程序打印出了 <code>Hello, World!</code>。接下来打印 100 次。在交互式 shell 中输入如下代码（print 需要缩进 4 个空格符）：</p>
+<pre class="代码无行号"><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/h79ob7s</span>
+2
+3
+4  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(100):
+5      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)</code></pre>
+<p>交互式 shell 应该会打印 <code>Hello, World!</code> 100 次。即使通常没有这样做的需要，但可以从这个例子中看出编程的强大。你能想到任何其他可以如此简单地做 100 遍的事情吗？我想不到。这就是编程的厉害之处。</p>
+<h3 id="31">3.1　示例</h3>
+<p>从现在开始，代码示例会以如下形式出现：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h4qntgk</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">100</span>):
+<span class="hljs-number">5</span>      print(<span class="hljs-string">"Hello, World!"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+&gt;&gt; Hello, World!
+&gt;&gt; Hello, World!
+…</code></pre>
+<p>打开 http://tinyurl.com/h4qntqk 这个链接，就可以看到包含有示例代码的网页，这样如果无法让代码运行，你可以轻松地复制代码，并粘贴到 IDLE 的文本编辑器中。<code>&gt;&gt;</code> 的后面则是交互式 shell 的输出。全书的每一个编程示例中都会看到 <code>&gt;&gt;</code>，这代表了程序的输出结果（会在交互式 shell 中打印出来）。“...”表示“等等”。</p>
+<p>如果示例后没有 <code>&gt;&gt;</code>，就表示该程序没有输出，或者只是在解释概念，输出并不太重要。</p>
+<p>字体为 Courier New 的部分，都是某种形式的代码、代码输出或编程术语。例如，上个例子中提到的词 <code>for</code>，它就会是 Courier New 字体。</p>
+<p>Courier New 是一个固定宽度（不等比）的字体，常用来显示编程文本。每个字符的宽度都一致，因此代码对齐后可以很容易地发现缩进和其他特征。</p>
+<p>可以用交互式 shell 或 <code>.py</code> 文件来运行示例代码。但是要注意的是，正如之前提到的，交互式 shell 中的输出与文件运行的输出可能略有不同，因此如果没得到完全一致的输出，原因就在于此。如果有示例要打印输出，但是却没有 <code>print</code> 字样，表示应该直接在交互式 shell 中输入代码。如果示例中有 <code>print</code> 字样，则说明应该从 <code>.py</code> 文件运行代码。</p>
+<h3 id="32">3.2　注释</h3>
+<p><strong>注释</strong>（comment）是用英文或其他自然语言写的一行（或一部分）代码，行首均有一个特殊标志告知编程语言忽略这行代码。Python 用井号（#）来创建注释。</p>
+<p>注释的目的是解释代码的功能。程序员通过注释，使得代码更易于阅读。在注释中，可以写下任何内容，只要保持为一行即可，示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hut6nwu</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>  <span class="hljs-comment"># 这是一行注释</span>
+<span class="hljs-number">4</span>  print(<span class="hljs-string">"Hello, World!"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+</code></pre>
+<p>只有在代码中执行特别操作，或者代码不清晰易懂的情况下，才需要写注释。尽量少写注释——不要每行代码都写注释，有特殊情况才需要。下面是一个注释多余的例子：</p>
+<pre><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/jpzlwqq</span>
+2
+3
+4  <span class="hljs-comment"># 打印 Hello, World!</span>
+5  <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)
+</code></pre>
+<p>注释之所以多余，是因为这行代码的功能已经非常明确。下面是一个注释合理的例子：</p>
+<pre class="代码无行号"><code class="hljs cpp"><span class="hljs-number">01</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/z52c8z8</span></span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-keyword">import</span></strong> math
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  # 对角线的长度
+<span class="hljs-number">08</span>  l = <span class="hljs-number">4</span>
+<span class="hljs-number">09</span>  w = <span class="hljs-number">10</span>
+<span class="hljs-number">10</span>  d = math.<span class="hljs-built_in">sqrt</span>(l**<span class="hljs-number">2</span>+ w**<span class="hljs-number">2</span>)</code></pre>
+<p>即使你完全理解了这段代码，也可能并不知道如何计算长方形的对角线长度，因此这里的注释就是有用的。</p>
+<h3 id="33">3.3　打印</h3>
+<p>程序不止可以打印 <code>Hello, World!</code>，它可以打印任何内容，只要记得加上双引号。</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zh5g2a3</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  print(<span class="hljs-string">"Python"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Python
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hhwqva2</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  print(<span class="hljs-string">"Hola!"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Hola!
+</code></pre>
+<h3 id="34">3.4　代码行</h3>
+<p>Python 程序是由一行一行的代码组成的。看下面这个程序：</p>
+<pre><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/jq2w5ro</span>
+2
+3
+4  <span class="hljs-comment"># 第一行</span>
+5  <span class="hljs-comment"># 第二行</span>
+6  <span class="hljs-comment"># 第三行</span>
+</code></pre>
+<p>程序共有 3 行代码。我们通常用代码所在的行数区别代码。在 IDLE 中，可以打开“编辑”菜单，选择“前往行”按钮，即可跳转至程序的指定行。在交互式 shell 中，一次只能输入一行代码，无法复制粘贴多行代码。</p>
+<p>有时一段代码比较长，超过了一行，可以用三引号、圆括号、方括号或者大括号扩展至新一行，示例如下：</p>
+<pre><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zcdx3yo</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  print(<span class="hljs-string">"""This is a really really
+5        really really long line of
+6        code."""</span>)
+</code></pre>
+<p>另外，还可以使用反斜杠 \ 对代码进行换行：</p>
+<pre><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hjcf2sa</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-keyword">print</span>\
+<span class="hljs-number">5</span>  (<span class="hljs-string">"""This is a really really
+6   really long line of code."""</span>)
+</code></pre>
+<p>上述两个例子的输出结果是一样的。反斜杠可以让我们将 <code>("""This is a really really really long line of code.""")</code> 和 <code>print</code> 放在不同的行，这种情况一般是不允许的。</p>
+<h3 id="35">3.5　关键字</h3>
+<p>Python 等编程语言中有一些具备特殊意义的字，即<strong>关键字</strong>（keyword）。前面见过的 <code>for</code> 就是一个关键字，用来多次执行代码。本章中还会学习更多的关键字。</p>
+<h3 id="36">3.6　间距</h3>
+<p>我们再来回顾一下那个打印 <code>Hello, World!</code> 100 次的程序：</p>
+<pre class="代码无行号"><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/glp9xq6</span>
+2
+3
+4  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(100):
+5      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)</code></pre>
+<p>前面已经提到，<code>print</code> 缩进了 4 个空格符。稍后会解释原因，缩进可以告诉 Python 解释器代码块的开始与结束。同时要注意，在本书示例中看到的缩进距离，都是 4 个空格符。如果代码间距不合理，程序将无法执行。</p>
+<p>其他编程语言没有类似的缩进要求；它们使用关键字或花括号来表示代码开始和结束。以下是用 JavaScript 编程语言编写的同一个程序：</p>
+<pre class="代码无行号"><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/hwa2zae</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <span class="hljs-comment"># 这是一个 JavaScript 程序</span>
+<span class="hljs-number">05</span>  <span class="hljs-comment"># 不过没法执行</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+<span class="hljs-number">08</span>  <strong><span class="hljs-keyword">for</span></strong> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++) {
+<span class="hljs-number">09</span>      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Hello, World!"</span>);
+<span class="hljs-number">10</span>  }</code></pre>
+<p>Python 的支持者坚信使用必要的缩进可以让 Python 比其他语言更易读易写。正如上例所示，即使编程语言不强制使用空格，程序员为了让代码更便于阅读，也会倾向于使用空格来分隔代码。</p>
+<h3 id="37">3.7　数据类型</h3>
+<p>Python 将数据划分成不同的类别，即<strong>数据类型</strong>（data type）。在 Python 中，每一个数据值，如 <code>2</code> 或 <code>"Hello, World!"</code>，被称为<strong>对象</strong>（object）。本书第二部分会详细介绍数据类型，现在可以把对象看作拥有 3 个属性的数据值：唯一标识（identity）、数据类型和值。对象的唯一标识，指的是其在计算机内存中的地址，该地址不会变化。对象的数据类型是对象所属的数据类别，这决定了对象的属性，也不会变化。对象的值是其表示的数据，例如数字 <code>2</code> 的值即为 2。</p>
+<p><code>"Hello, World!"</code> 这个对象的数据类型为<strong>字符串</strong>（str，string 的缩写），值为 <code>"Hello, World!"</code>。如果提及数据类型为 <code>str</code> 的对象，可以称其为字符串。字符串是由引号包括的一个或多个字符组成的序列。<strong>字符</strong>（character）是类似 <code>a</code> 或 <code>l</code> 这样的单个符号。可以使用单引号或双引号来表示字符串，但是前后的引号必须保持一致，示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hh5kjwp</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-string">"Hello, World!"</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'Hello, World!'</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/heaxhsh</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-string">'Hello, World!'</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'Hello, World!'</span>
+</code></pre>
+<p>字符串可用来表示文本，且有自己独特的属性。</p>
+<p>之前章节中用来计算的数字，也是对象，但不是字符串。整数（1，2，3，4 等）的数据类型为<strong>整型数据</strong>（<code>int</code>，全称为 integer）。与字符串一样，整型数据也有着独特的属性。例如，可以将两个整数相乘，但是不能相乘两个字符串。</p>
+<p>小数（带小数点的数字）的数据类型为 <code>float</code>。2.1、8.2 和 9.9999 都是数据类型为 <code>float</code> 的对象，我们称之为<strong>浮点数</strong>（floating-point number）。与其他所有数据类型一样，浮点数也有自己独有的属性，且一定程度上与整型数据类似。</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/guoc4gy</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2.2</span> + <span class="hljs-number">2.2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4.4</span>
+</code></pre>
+<p>数据类型为 <strong>bool</strong> 的对象被称为<strong>布尔值</strong>（boolean），仅有 <code>True</code> 和 <code>False</code> 两个值。</p>
+<pre><code class="hljs php"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jyllj2k</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-keyword">True</span>
+
+&gt;&gt; <span class="hljs-keyword">True</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jzgsxz4</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-keyword">False</span>
+
+&gt;&gt; <span class="hljs-keyword">False</span>
+</code></pre>
+<p>数据类型为 <strong>NoneType</strong> 的对象，其值永远为 <code>None</code>，用来表示数据缺失。</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/h8oqo5v</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  None
+</code></pre>
+<p>本章后续会介绍如何使用不同的数据类型。</p>
+<h3 id="38">3.8　常量和变量</h3>
+<p>你可以把 Python 当成计算器来算术，做加、减、乘、除、幂等运算。在交互式 shell 中输入以下所有示例：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zs65dp8</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> + <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gs9nwrw</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> - <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hasegvj</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">4</span> / <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2.0</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z8ok4q3</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> * <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+</code></pre>
+<p><strong>常量</strong>（constant）是一个永远不会改变的值。上面示例中的每一个数字，都是常量；数字 2 永远表示的值为 2。<strong>变量</strong>（variable）则相反，指的是会改变的值。变量由一个或多个字符组成的名称构成，并使用<strong>赋值符</strong>（assignment operator）等号赋予了这个名称一个值。</p>
+<p>有些编程语言要求程序员编写变量“声明”，明确说明变量的数据类型。例如，在 C 语言中可以这样创建变量：</p>
+<pre><code class="hljs cs"><span class="hljs-number">1</span>  <span class="hljs-meta"># 不用执行</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>  <span class="hljs-keyword">int</span> a;
+<span class="hljs-number">8</span>  a = <span class="hljs-number">144</span>;
+</code></pre>
+<p>Python 的做法更简单；可以直接用赋值符，将某个值赋给变量，即可创建：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hw64mrr</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  b = <span class="hljs-number">100</span>
+<span class="hljs-number">5</span>  b
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100</span>
+</code></pre>
+<p>下面介绍如何改变变量的值：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hw97que</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">100</span>
+<span class="hljs-number">5</span>  x
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  x = <span class="hljs-number">200</span>
+<span class="hljs-number">9</span>  x
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">200</span>
+</code></pre>
+<p>还可以使用两个变量进行算术运算：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z8hv5j5</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">5</span>  y = <span class="hljs-number">10</span>
+<span class="hljs-number">6</span>  z = x + y
+<span class="hljs-number">7</span>  z
+<span class="hljs-number">8</span>  a = x - y
+<span class="hljs-number">9</span>  a
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">20</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span>
+</code></pre>
+<p>编程时经常需要<strong>增加</strong>（increment）或<strong>减小</strong>（decrement）某个变量的值。考虑到这个操作非常普遍，Python 提供了特殊语法进行增减变量的值。如需增加变量的值，可将该变量赋予给自身，然后在等号的另一侧将变量与希望增加的值相加：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zvzf786</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">5</span>  x = x + <span class="hljs-number">1</span>
+<span class="hljs-number">6</span>  x
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">11</span>
+</code></pre>
+<p>如需减小变量的值，可以执行同样的操作，唯一的区别是要减去所希望的值：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gmuzdr9</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">5</span>  x = x - <span class="hljs-number">1</span>
+<span class="hljs-number">6</span>  x
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">9</span>
+</code></pre>
+<p>这些示例都是完全有效的，不过还有一种更简便的方法，示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zdva5wq</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">5</span>  x += <span class="hljs-number">1</span>
+<span class="hljs-number">6</span>  x
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">11</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jqw4m5r</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">5</span>  x -= <span class="hljs-number">1</span>
+<span class="hljs-number">6</span>  x
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">9</span>
+</code></pre>
+<p>变量不仅仅用于保存整型数的值，还可以表示任何数据类型，示例如下：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/jsygqcy</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  hi = <span class="hljs-string">"Hello, World!"</span>
+
+<span class="hljs-number">1</span>  # http:<span class="hljs-comment">//tinyurl.com/h47ty49</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  my_float = <span class="hljs-number">2.2</span>
+
+<span class="hljs-number">1</span>  # http:<span class="hljs-comment">//tinyurl.com/hx9xluq</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  my_boolean = True
+</code></pre>
+<p>只要遵守以下 4 条原则，可以随意命名变量。</p>
+<p>1．变量名不能包含空格符。如果想在变量名中使用两个单子，可以在中间加入下划线，如 <code>my_variable = "A string!"</code>。</p>
+<p>2．变量名只能使用特定的字母、数字和下划线。</p>
+<p>3．变量名不能以数字开头。虽然可以使用下划线开头，但是这种命名方式有着特殊的意义，后面内容会提到。因此在此之前尽量避免这种情况。</p>
+<p>4．不能使用 Python 关键字作为变量名。可在网页 http://theselftaughtprogrammer.io/keywords 中查看所有关键字。</p>
+<h3 id="39">3.9　语法</h3>
+<p><strong>语法（syntax）</strong>指的是规范一门语言中句子结构，尤其是字词顺序的一整套规则及流程。英语有语法，Python 也有。</p>
+<p>在 Python 中，字符串永远被包括在引号内。这就是 Python 的一个语法示例。下面是一个有效的 Python 程序：</p>
+<pre><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/j7c2npf</span>
+2
+3
+4  <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)
+</code></pre>
+<p>程序之所以有效，是因为遵守了 Python 的语法，在定义字符串时用引号包括了文本。如果只是在文本的一侧使用引号，就违背了 Python 的语法，代码将无法运行。</p>
+<h3 id="310">3.10　错误与异常</h3>
+<p>如果在编写 Python 程序时无视其语法，那么在运行时将出现错误。Python 解释器将告知代码无法执行，并给出有关该错误的信息。如果只用一个引号定义字符串，看看会发生什么情况，示例如下：</p>
+<pre><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/hp2plhs</span>
+2
+3
+4  <span class="hljs-comment"># 该代码有一个错误</span>
+5
+6
+7  my_string = <span class="hljs-string">"Hello World.
+
+&gt;&gt; File "</span>/Users/coryalthoff/PycharmProjects/se.py<span class="hljs-string">", line 1 my_string = 'd ^ SyntaxError: EOL while scanning string literal
+</span></code></pre>
+<p>这段信息表示程序中有一个语法错误。语法错误是致命的，将导致程序无法运行。如果强制执行，Python 会报错。错误信息会告诉你错误位于哪个文件，出现在哪一行，以及属于什么类型。尽管这个错误看上去很吓人，但却是很常见的。</p>
+<p>如果代码中有错误，首先要找到出错的那行代码，找到出错的地方。在本例中，你应该去找代码的第一行，观察一段时间后，会注意到里面只有一个引号。只要在字符串结尾再加上一个引号，即可解决该错误，然后可以重新运行。从这里开始，本书将这样表示错误输出：</p>
+<pre><code class="hljs cpp">&gt;&gt; SyntaxError: EOL <span class="hljs-keyword">while</span> scanning <span class="hljs-built_in">string</span> literal
+</code></pre>
+<p>为了方便阅读，书中只显示错误信息的最后一行。</p>
+<p>Python 有两种错误：语法错误和异常。不属于语法错误的错误，就是<strong>异常</strong>（exception）。如果用 0 作为分母，则会出现“ZeroDivisionError”异常。</p>
+<p>与语法错误不同的是，异常并不一定是致命的（有办法让程序在即使出现异常时仍继续运行，这会在下一章学到）。出现异常时，Python 程序员会说“Python（或程序）报了一个异常”。下面是一个异常的示例：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jxpztcx</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 该代码有一个错误</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>  <span class="hljs-number">10</span> / <span class="hljs-number">0</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-symbol">ZeroDivisionError:</span> division by zero
+</code></pre>
+<p>如果代码缩进不正确，程序会报“IdentationError”：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gtp6amr</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 该代码有一个错误</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>  y = <span class="hljs-number">2</span>
+<span class="hljs-number">8</span>          x =<span class="hljs-number">1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-symbol">IndentationError:</span> unexpected indent
+</code></pre>
+<p>在学习编程的过程中，你会经常碰到语法错误和异常（包括书中没有讲到过的），但是出错的情况会逐渐减少。要记住，在碰到语法错误或异常时，先找到出现问题的那行代码，然后仔细检查并找到解决办法（如果没有头绪可以在网上搜索错误或异常提示信息）。</p>
+<h3 id="311">3.11　算术操作符</h3>
+<p>之前，我们用 Python 做了简单的算术计算，如 4/2。这些示例中所使用到的符号被称为<strong>操作符</strong>（operator）。Python 将操作符分为多个类型，目前所见到的是<strong>算术操作符</strong>（arithmetic operator）。下面是 Python 中常用的一些算术操作符，见表 3-1。</p>
+<p>表3-1</p>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>含　　义</th>
+<th>示例</th>
+<th>运算结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>**</td>
+<td>指数运算</td>
+<td>2 ** 2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取模运算</td>
+<td>14 % 4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>//</td>
+<td>整除/地板除运算</td>
+<td>13 // 8</td>
+<td>1</td>
+</tr>
+<tr>
+<td>/</td>
+<td>除法运算</td>
+<td>13 / 8</td>
+<td>1.625</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘法运算</td>
+<td>8 * 2</td>
+<td>16</td>
+</tr>
+<tr>
+<td>−</td>
+<td>减法运算</td>
+<td>7 − 1</td>
+<td>6</td>
+</tr>
+<tr>
+<td>+</td>
+<td>加法运算</td>
+<td>2 + 2</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p>两个数相除时，会有一个商和一个余数。商就是除法运算的结果，余数即剩下的值。取模操作符返回的就是余数。例如，13 除以 5 的结果就是商 2 余 3，示例如下：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/qrdc195</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">13</span> <span class="hljs-comment">// 5</span>
+
+&gt;&gt; <span class="hljs-number">2</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/zsqwukd</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">13</span> % <span class="hljs-number">5</span>
+
+&gt;&gt; <span class="hljs-number">3</span>
+</code></pre>
+<p>对两个数取模时，如果没有余数（返回 0），则被取模的数字为另一个数字的倍数。如果有余数，则不是其倍数。因此取模运算被用于检验数字的奇偶性，示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jerpe6u</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 偶数</span>
+<span class="hljs-number">5</span>  <span class="hljs-number">12</span> % <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gkudhcr</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 奇数</span>
+<span class="hljs-number">5</span>  <span class="hljs-number">11</span> % <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+</code></pre>
+<p>有两个操作符用于除法运算。第一个是 // ，返回值为商：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/hh9fqzy</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">14</span> <span class="hljs-comment">// 3</span>
+
+&gt; <span class="hljs-number">4</span>
+</code></pre>
+<p>第二个是 / ，返回值为两个数相除的浮点数结果：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/zlkjjdp</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">14</span> / <span class="hljs-number">3</span>
+
+&gt; <span class="hljs-number">4.666666666666667</span>
+</code></pre>
+<p>还可以使用指数运算符求幂：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h8vuwd4</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>  <span class="hljs-number">2</span> ** <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+</code></pre>
+<p>操作符两侧的值（以上示例中就是数字）被称为<strong>操作数</strong>（operand）。两个操作数和一个操作符共同构成一个<strong>表达式</strong>（expression）。程序运行时，Python 会对每个表达式求值，并返回一个值作为结果。如果在交互式 shell 中输入表达式 2 + 2，则返回结果 4。</p>
+<p><strong>运算顺序</strong>（order of operation），指的是数学计算中对表达式求值的一套规则。可使用 PEMDAS 方法，帮助记忆数学公式的运算顺序：括号（parentheses）、指数（exponents）、乘法（multiplication）、除法（division）、加法（addition）和减法（subtraction）。括号的优先级大于指数符号，后者又优先于乘法和除法，最后才是加法和减法。如果操作符的优先级相同，如 15 / 3 * 2，则按照从左到右的顺序求值。上述表达式中将 15 先除以 3，然后再乘以 2。Python 对数学表达式求值时，遵循的是同一套运算顺序：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hgjyj7o</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> + <span class="hljs-number">2</span> * <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">6</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hsq7rcz</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  (<span class="hljs-number">2</span> + <span class="hljs-number">2</span>) * <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">8</span>
+</code></pre>
+<p>在第一个示例中，2 * 2 先进行求值，因为乘法的优先级大于加法。</p>
+<p>在第二个示例中，(2 + 2) 先求值，因为 Python 总是先对括号内的表达式求值。</p>
+<h3 id="312">3.12　比较操作符</h3>
+<p><strong>比较操作符</strong>（comparison operator）是 Python 中的另一种操作符。与算术操作符类似，比较操作符可用于表达式任意一侧的操作数；不同的是，带有比较操作符的表达式最后求值的结果不是 <code>True</code> 就是 <code>False</code>。详情见表 3-2。</p>
+<p>表 3-2　　</p>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>含　　义</th>
+<th>示　　例</th>
+<th>运算结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&gt;</td>
+<td>大于</td>
+<td>100 &gt; 10</td>
+<td>True</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>小于</td>
+<td>100 &lt; 10</td>
+<td>False</td>
+</tr>
+<tr>
+<td>&gt;=</td>
+<td>大于或等于</td>
+<td>2 &gt;= 2</td>
+<td>True</td>
+</tr>
+<tr>
+<td>&lt;=</td>
+<td>小于或等于</td>
+<td>1 &lt;= 4</td>
+<td>True</td>
+</tr>
+<tr>
+<td>==</td>
+<td>等于</td>
+<td>6 == 9</td>
+<td>False</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>不等于</td>
+<td>3 != 2</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+<p>在含有 &gt; 操作符的表达式中，如果左侧的数字大于右侧的数字，则表达式的值为 <code>True</code>，否则即为 <code>False</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jm7cxzp</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">100</span> &gt; <span class="hljs-number">10</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+</code></pre>
+<p>在含有 &lt; 操作符的表达式中，如果左侧的数字小于右侧的数字，则表达式的值为 <code>True</code>，否则即为 <code>False</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gsdhr8q</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>  <span class="hljs-number">100</span> &lt; <span class="hljs-number">10</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False
+</code></pre>
+<p>在含有 &gt;= 操作符的表达式中，如果左侧的大于或等于右侧的数字，则表达式的值为 <code>True</code>，否则即为 <code>False</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jy2oefs</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>  <span class="hljs-number">2</span> &gt;= <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+</code></pre>
+<p>在含有 &lt;= 操作符的表达式中，如果左侧的数字小于或等于右侧的数字，则表达式的值为 <code>True</code>，否则即为 <code>False</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jk599re</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> &gt;= <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+</code></pre>
+<p>在含有 == 操作符的表达式中，如果左侧的数字等于右侧的数字，则表达式的值为 <code>True</code>，否则即为 <code>False</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j2tsz9u</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j5mr2q2</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False
+</code></pre>
+<p>在含有 != 操作符的表达式中，如果左侧的数字不等于右侧的数字，则表达式的值为 <code>True</code>，否则即为 <code>False</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gsw3zoe</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> != <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z7pffk3</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> != <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False
+</code></pre>
+<p>此前，如果使用 = 将数字赋值给了变量，如 x = 100。可能会将其理解为“x 等于 100”，但这是错误的。前面看到，= 是用来给变量赋值的，而不是检查相等性的操作符。因此 x = 100 应理解为“x 的值为 100”。比较操作符 == 是用于检查两侧是否相等的，因此如果看到 x == 100，含义即为“x 等于 100”。</p>
+<h3 id="313">3.13　逻辑操作符</h3>
+<p><strong>逻辑操作符</strong>（logical operator）也是 Python 中的一类操作符。与比较操作符类似，逻辑操作符的求值结果也是 <code>True</code> 或 <code>False</code>。详情见表 3-3。</p>
+<p>表 3-3　　</p>
+<table>
+<thead>
+<tr>
+<th>操　作　符</th>
+<th>含　　义</th>
+<th>示　　例</th>
+<th>运算结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and</td>
+<td>与</td>
+<td>True and True</td>
+<td>True</td>
+</tr>
+<tr>
+<td>or</td>
+<td>或</td>
+<td>True or False</td>
+<td>True</td>
+</tr>
+<tr>
+<td>not</td>
+<td>非</td>
+<td>not True</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+<p>Python 关键字 and 可以连接两个表达式，如果二者均求值为 <code>True</code>，则返回 <code>True</code>。如果任意一个的值为 <code>False</code>，即返回 <code>False</code>：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zdqghb2</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">1</span> <strong><span class="hljs-keyword">and</span></strong> <span class="hljs-number">2</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zkp2jzy</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">2</span> <strong><span class="hljs-keyword">and</span></strong> <span class="hljs-number">2</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/honkev6</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">2</span> <strong><span class="hljs-keyword">and</span></strong> <span class="hljs-number">2</span> == <span class="hljs-number">1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zjrxxrc</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> == <span class="hljs-number">1</span> <strong><span class="hljs-keyword">and</span></strong> <span class="hljs-number">1</span> == <span class="hljs-number">1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False</code></pre>
+<p>可以在一个语句中多次使用 <code>and</code> 关键字：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zpvk56u</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">1</span> <strong><span class="hljs-keyword">and</span></strong> <span class="hljs-number">10</span> != <span class="hljs-number">2</span> <strong><span class="hljs-keyword">and</span></strong> <span class="hljs-number">2</span> &lt; <span class="hljs-number">10</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>关键字 <code>or</code> 可连接两个或多个表达式，如果任意一个表达式的值为 <code>True</code>，即返回 <code>True</code>：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hosuh7c</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">1</span> <strong><span class="hljs-keyword">or</span></strong> <span class="hljs-number">1</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zj6q8h9</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">1</span> <strong><span class="hljs-keyword">or</span></strong> <span class="hljs-number">2</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j8ngufo</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">2</span> <strong><span class="hljs-keyword">or</span></strong> <span class="hljs-number">2</span> == <span class="hljs-number">1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z728zxz</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> == <span class="hljs-number">1</span> <strong><span class="hljs-keyword">or</span></strong> <span class="hljs-number">1</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False</code></pre>
+<p>类似地，也可以在一个语句中多次使用 <code>or</code> 关键字：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/ja9mech</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">1</span> == <span class="hljs-number">1</span> <strong><span class="hljs-keyword">or</span></strong> <span class="hljs-number">1</span> == <span class="hljs-number">2</span> <strong><span class="hljs-keyword">or</span></strong> <span class="hljs-number">1</span> == <span class="hljs-number">3</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>该表达式的值为 <code>True</code>，因为 1 == 1 的值为 <code>True</code>，即使表达式其余的部分求值为 <code>False</code>，最终的值仍为 <code>True</code>。</p>
+<p>将关键字 <code>not</code> 放置在表达式的前面，将改变表达式的求值结果，逆转为原本结果的对立值。如果表达式原本的求值结果为 <code>True</code>，则加上 <code>not</code> 之后结果会变为 <code>False</code>：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h45eq6v</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">not</span></strong> <span class="hljs-number">1</span> == <span class="hljs-number">1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> False
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gsqj6og</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">not</span></strong> <span class="hljs-number">1</span> == <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<h3 id="314">3.14　条件语句</h3>
+<p>关键字 <code>if</code>、<code>elif</code> 和 <code>else</code> 用于<strong>条件语句</strong>（conditional statement）。条件语句是一种<strong>控制结构</strong>（control structure）：通过分析变量的值从而做出对应决定的代码块。条件语句是可根据条件执行额外代码的代码。为了方便理解，仔细看以下这个伪代码（pseudocode）示例（伪代码是用于解释说明示例代码的标记方法）：</p>
+<pre><code class="hljs php"><span class="hljs-number">1</span>  <span class="hljs-comment"># 不要执行</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-keyword">If</span> (expression) Then
+<span class="hljs-number">5</span>              (code_area1)
+<span class="hljs-number">6</span>  <span class="hljs-keyword">Else</span>
+<span class="hljs-number">7</span>              (code_area2)
+</code></pre>
+<p>上述伪代码显示，可以定义两个条件语句。如果第一个条件语句中定义的表达式为 <code>True</code>，则执行 <code>code_area1</code>；否则执行 <code>code_area2</code>。示例中的第一部分被称为 <code>if</code> 语句，第二部分为 <code>else</code> 语句。两者共同组成一个 <code>if-else</code> 语句：程序员用来表达“如果出现这种情况，则这样做，否则那样做”的方法。下面是 Python 中的 <code>if-else</code> 语句示例：</p>
+<pre class="代码无行号"><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/htvy6g3</span>
+2
+3
+4  home = <span class="hljs-string">"America"</span>
+5  <strong><span class="hljs-keyword">if</span></strong> home == <span class="hljs-string">"America"</span>:
+6      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, America!"</span>)
+7  <strong><span class="hljs-keyword">else</span></strong>:
+8      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)
+
+&gt;&gt; Hello, America!</code></pre>
+<p>第 5 行和第 6 行共同组成了 <code>if</code> 语句。一个 <code>if</code> 语句中，包括一行以 <code>if</code> 关键字开头的代码行，<code>if</code> 关键字之后是一个表达式，还有冒号、缩进，以及一行或多行如果表达式为 <code>True</code> 的情况下将执行的代码。第 7 行和第 8 行共同组成了 <code>else</code> 语句。一个 <code>else</code> 语句的开头是 <code>else</code> 关键字，然后是冒号、缩进，以及一行或多行如果 <code>if</code> 语句中表达式为 <code>False</code> 时将执行的代码。</p>
+<p>二者共同组成了一个 <code>if-else</code> 语句。本例的打印输出结果为 <code>Hello, America!</code>，因为 <code>if</code> 语句中的表达式结果为 <code>True</code>。如果将变量 <code>home</code> 的值修改为 <code>Canada</code>，则 <code>if</code> 语句中的表达式结果为 <code>False</code>，将会执行 <code>else</code> 语句中的代码，程序会打印出 <code>Hello, World!</code>。</p>
+<pre class="代码无行号"><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/jytyg5x</span>
+2
+3
+4  home = <span class="hljs-string">"Canada"</span>
+5  <strong><span class="hljs-keyword">if</span></strong> home ==<strong> </strong><span class="hljs-string">"America"</span>:
+6      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, America!"</span>)
+7  <strong><span class="hljs-keyword">else</span></strong>:
+8      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)
+
+&gt;&gt; Hello, World!</code></pre>
+<p>可以单独使用一个 <code>if</code> 语句：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jyg7dd2</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  home = <span class="hljs-string">"America"</span>
+<span class="hljs-number">5</span>  <strong><span class="hljs-keyword">if</span></strong> home == <span class="hljs-string">"America"</span>:
+<span class="hljs-number">6</span>      print(<span class="hljs-string">"Hello, America!"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Hello, America!</code></pre>
+<p>也可以连续使用多个 <code>if</code> 语句：</p>
+<pre class="代码无行号"><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/z24ckye</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  x = <span class="hljs-number">2</span>
+<span class="hljs-number">05</span>  <strong><span class="hljs-keyword">if</span></strong> x == <span class="hljs-number">2</span>:
+<span class="hljs-number">06</span>      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"The number is 2."</span>)
+<span class="hljs-number">07</span>  <strong><span class="hljs-keyword">if</span></strong> x % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">08</span>      <span class="hljs-built_in">print</span>(<span class="hljs-string">"The number is even."</span>)
+<span class="hljs-number">09</span>  <strong><span class="hljs-keyword">if</span></strong> x % <span class="hljs-number">2</span> != <span class="hljs-number">0</span>:
+<span class="hljs-number">10</span>      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"The number is odd."</span>)
+
+&gt;&gt; The number <span class="hljs-keyword">is</span> <span class="hljs-number">2.</span>
+&gt;&gt; The number <span class="hljs-keyword">is</span> even.</code></pre>
+<p>每个 <code>if</code> 语句只有在其表达式求值为 <code>True</code> 时，才会执行所有的代码。在本例中，前两个表达式的求值结果为 <code>True</code>，因此各自的代码都执行了，但是第 3 个表达式的结果为 <code>False</code>，所以没有执行。</p>
+<p>如果愿意，甚至还可以在 <code>if</code> 语句中再加入一个 <code>if</code> 语句（通常称之为嵌套）：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zrodgne</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">05</span>  y = <span class="hljs-number">11</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+08  <strong><span class="hljs-keyword">if</span></strong> x == <span class="hljs-number">10</span>:
+09      <strong><span class="hljs-keyword">if</span></strong> y == <span class="hljs-number">11</span>:
+<span class="hljs-number">10</span>          print(x + y)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">21</span></code></pre>
+<p>在本例中，只有在两个 <code>if</code> 语句的结果均为 <code>True</code> 时，才会打印 <code>x + y</code>。<code>else</code> 语句无法被单独使用，只能用在 <code>if-else</code> 语句的最后一部分。</p>
+<p>也可以使用 <code>elif</code> 关键字创建 <code>elif</code> 语句。<code>elif</code> 表示另外如果，该语句可无限添加到 <code>if-else</code> 语句中，使其支持更多的决策。</p>
+<p>如果一个 <code>if-else</code> 语句中包含有 <code>elif</code> 语句，则首先判断 <code>if</code> 语句。如果该语句中的表达式为 <code>True</code>，则只执行其中的代码。但是，如果其值为 <code>False</code>，每个之后的 <code>elif</code> 语句都将进行求值。只要有一个 <code>elif</code> 语句中的表达式结果为 <code>True</code>，则执行其中的代码并退出。如果没有任何一个 <code>elif</code> 语句的结果为 <code>True</code>，则执行 <code>else</code> 语句中的代码。下面是一个包含有 <code>elif</code> 语句的 <code>if-else</code> 语句示例：</p>
+<pre class="代码无行号"><code class="hljs bash">01  <span class="hljs-comment"># http://tinyurl.com/jpr265j</span>
+02
+03
+04  home = <span class="hljs-string">"Thailand"</span>
+05  <strong><span class="hljs-keyword">if</span></strong> home == <span class="hljs-string">"Japan"</span>:
+06      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"Hello, Japan!"</span>)
+07  <strong><span class="hljs-keyword">elif</span></strong> home == <span class="hljs-string">"Thailand"</span>:
+08      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"Hello, Thailand!"</span>)
+09  <strong><span class="hljs-keyword">elif</span></strong> home == <span class="hljs-string">"India"</span>:
+10      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, India!"</span>)
+11  <strong><span class="hljs-keyword">elif</span></strong> home == <span class="hljs-string">"China"</span>:
+12      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, China!"</span>)
+13  <strong><span class="hljs-keyword">else</span></strong>:
+14      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)
+
+&gt;&gt; Hello, Thailand!</code></pre>
+<p>下面这个示例中，所有的 <code>elif</code> 语句求值结果均不为 <code>True</code>，最后执行的是 <code>else</code> 语句中的代码。示例如下：</p>
+<pre class="代码无行号"><code class="hljs bash">01  <span class="hljs-comment"># http://tinyurl.com/zdvuuhs</span>
+02
+03  home = <span class="hljs-string">"Mars"</span>
+04  <strong><span class="hljs-keyword">if</span></strong> home == <span class="hljs-string">"America"</span>:
+05      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"Hello, America!"</span>)
+06  <strong><span class="hljs-keyword">elif</span></strong> home == <span class="hljs-string">"Canada"</span>:
+07      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"Hello, Canada!"</span>)
+08  <strong><span class="hljs-keyword">elif</span></strong> home == <span class="hljs-string">"Thailand"</span>:
+09      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, Thailand!"</span>)
+10  <strong><span class="hljs-keyword">elif</span></strong> home == <span class="hljs-string">"Mexico"</span>:
+11      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, Mexico!"</span>)
+12  <strong><span class="hljs-keyword">else</span></strong>:
+13      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello, World!"</span>)
+
+&gt;&gt; Hello, World! </code></pre>
+<p>最后，可以连续使用多个 <code>if</code> 语句和 <code>elif</code> 语句：</p>
+<pre class="代码无行号"><code class="hljs bash">01  <span class="hljs-comment"># http://tinyurl.com/hzyxgf4</span>
+02
+03
+04  x = 100
+05  <strong><span class="hljs-keyword">if</span></strong> x == 10:
+06      <span class="hljs-built_in">print</span>(<span class="hljs-string">"10!"</span>)
+07  <strong><span class="hljs-keyword">elif</span></strong> x == 20:
+08      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"20!"</span>)
+09  <strong><span class="hljs-keyword">else</span></strong>:
+10      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"I don't know!"</span>)
+11
+12
+13  <strong><span class="hljs-keyword">if</span></strong> x == 100:
+14      <span class="hljs-built_in">print</span>(<span class="hljs-string">"x is 100!"</span>)
+15
+16
+17  <strong><span class="hljs-keyword">if</span></strong> x % 2 == 0:
+18      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"x is even!"</span>)
+19<strong>  <span class="hljs-keyword">else</span></strong>:
+20      <span class="hljs-built_in">print</span>(<span class="hljs-string">"x is odd!"</span>)
+
+&gt;&gt; I don<span class="hljs-string">'t know!
+&gt;&gt; x is 100!
+&gt;&gt; x is even!</span></code></pre>
+<h3 id="315">3.15　语句</h3>
+<p><strong>语句</strong>（statement）这个术语可用来描述 Python 语言的多种构成部分。可以将一个 Python 语句视作一个命令或计算。本节将详细介绍语句的语法。如果感觉部分内容初次学起来很难懂，也不用太担心，随着练习 Python 的时间变长，你就会慢慢理解。</p>
+<p>Python 中有两类语句：<strong>简单语句</strong>（simple statement）和<strong>复合语句</strong>（compound statement）。简单语句一般就是一行代码，而复合语句通常包括多行代码。下面是一些简单语句的示例：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jrowero</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  print(<span class="hljs-string">"Hello, World!"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h2y549y</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-number">2</span> + <span class="hljs-number">2</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+</code></pre>
+<p><code>if</code> 语句和 <code>if-else</code> 语句，以及本章编写的第一个程序（打印 <code>Hello, World!</code> 100 次）都是复合语句。</p>
+<p>复合语句由一个或多个<strong>从句</strong>（clause）组成。从句包括两行或多行代码：<strong>代码头</strong>（header）及紧随其后的<strong>配套代码</strong>（suite）。代码头指的是从句中包含关键字的那行代码，之后是一个冒号和一行或多行带缩进的代码。缩进之后，是一个或多个配套代码。配套代码就是从句中一行普通的代码。代码头控制配套代码的执行。打印 <code>Hello, World!</code> 100 次的程序，就是由一个复合语句组成。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zfz3eel</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">100</span>):
+<span class="hljs-number">4</span>      print(<span class="hljs-string">"Hello, World!"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+&gt;&gt; Hello, World!
+&gt;&gt; Hello, World!
+…</code></pre>
+<p>程序的第一行是代码头，包括关键字 <code>for</code>，之后是冒号。缩进之后是配套代码 <code>print("Hello, World!")</code>。在上述示例中，代码头通过配套代码打印 <code>Hello, World!</code> 100 次，这是一个循环，将在第 7 章详细介绍。上述代码只有一个从句。</p>
+<p>复合语句可以由多个从句构成，你前面看到的 <code>if-else</code> 语句就是复合语句。<code>if</code> 语句之后如果带有一个 <code>else</code> 语句，就构成了一个由多个从句组成的复合语句。在包含多个从句的复合语句中，代码头从句共同控制代码执行。对于 <code>if-else</code> 语句，当 <code>if</code> 语句的值为 <code>True</code> 时，则执行 <code>if</code> 语句的配套代码，<code>else</code> 语句的配套代码不执行；当 <code>if</code> 语句的值为 <code>False</code> 时，则不执行 <code>if</code> 语句的配套代码，转而执行 <code>else</code> 语句的配套代码。上一节中的最后一个示例包含了 3 个复合语句：</p>
+<pre class="代码无行号"><code class="hljs bash">01  <span class="hljs-comment"># http://tinyurl.com/hpwkdo4</span>
+02
+03
+04  x = 100
+05  <strong><span class="hljs-keyword">if</span></strong> x == 10:
+06      <span class="hljs-built_in">print</span>(<span class="hljs-string">"10!"</span>)
+07  <strong><span class="hljs-keyword">elif</span></strong> x == 20:
+08      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"20!"</span>)
+09  <strong><span class="hljs-keyword">else</span></strong>:
+10      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"I don't know!"</span>)
+11
+12
+13  <strong><span class="hljs-keyword">if</span></strong> x == 100:
+14      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"x is 100!"</span>)
+15
+16
+17  <strong><span class="hljs-keyword">if</span></strong> x % 2 == 0:
+18      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"x is even!"</span>)
+19  <strong><span class="hljs-keyword">else</span></strong>:
+20      <span class="hljs-built_in">print</span>(<span class="hljs-string">"x is odd!"</span>)
+
+&gt;&gt; I don<span class="hljs-string">'t know!
+&gt;&gt; x is 100!
+&gt;&gt; x is even!</span></code></pre>
+<p>第一个复合语句中有 3 个从句，第二个里有一个从句，最后一个则有两个从句。</p>
+<p>关于语句还有一点要注意，语句之间是可以有空格的，这不会影响代码的执行。空格有时被用来提高代码的可读性。</p>
+<pre><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zlgcwoc</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  print(<span class="hljs-string">"Michael"</span>)
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+08
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  print(<span class="hljs-string">"Jordan"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Michael
+<span class="hljs-meta">&gt;&gt;</span> Jordan
+</code></pre>
+<h3 id="316">3.16　术语表</h3>
+<p><strong>注释</strong>：用英文或其他自然语言写的一行（或一部分）代码，行首均有一个特殊标志告知编程语言忽略这行代码。</p>
+<p><strong>关键字</strong>：编程语言中具有特殊意义的词。可在 http://theselftaughtprogrammer.io/keywords 网页中查看所有 Python 的关键字。</p>
+<p><strong>数据类型</strong>：数据所属的类别。</p>
+<p><strong>对象</strong>：Python 中具有 3 个属性的数据值——唯一标识、数据类型和值。</p>
+<p><strong>Str</strong>：字符串的数据类型。</p>
+<p><strong>字符</strong>：a 或 l 等单个符号。</p>
+<p><strong>Int</strong>：整数的数据类型。</p>
+<p><strong>整型数据</strong>：数据类型为 int 的对象，其值为一个整数。</p>
+<p><strong>Float</strong>：小数的数据类型。</p>
+<p><strong>浮点数</strong>：数据类型为 <code>float</code> 的对象，其值为一个小数。</p>
+<p><strong>Bool</strong>：布尔对象的数据类型。</p>
+<p><strong>布尔值</strong>：数据类型为 <code>bool</code> 的对象，其值为 <code>True</code> 或 <code>False</code>。</p>
+<p><strong>NoneType</strong>：<code>None</code> 对象的数据类型。</p>
+<p><strong>None</strong>：数据类型为 <code>NoneType</code> 的对象，其值永远为 <code>None</code>。</p>
+<p><strong>常量</strong>：不会改变的值。</p>
+<p><strong>变量</strong>：使用赋值操作符赋予了一个值的名称。</p>
+<p><strong>赋值操作符</strong>：Python 中的 <code>=</code> 符号。</p>
+<p><strong>增加</strong>：增加一个变量的值。</p>
+<p><strong>减少</strong>：减少一个变量的值。</p>
+<p><strong>语法</strong>：规范一门语言中句子结构，尤其是字词顺序的一整套规则及流程。</p>
+<p><strong>语法错误</strong>：违反编程语言的语法，所导致的致命编程错误。</p>
+<p><strong>异常</strong>：非致命的编程错误。</p>
+<p><strong>操作符</strong>：在表达式中与操作符一起使用的符号。</p>
+<p><strong>算术操作符</strong>：数学表达式中使用的一类操作符。</p>
+<p><strong>操作数</strong>：操作符两侧的值。</p>
+<p><strong>表达式</strong>：操作符及两个操作数构成的代码。</p>
+<p><strong>运算顺序</strong>：数学计算中用来对表达式求值的一组规则。</p>
+<p><strong>比较操作符</strong>：表达式中用到的一类操作符，求值结果为 <code>True</code> 或 <code>False</code>。</p>
+<p><strong>逻辑操作符</strong>：对两个表达式求值的一类操作符，求值结果为 <code>True</code> 或 <code>False</code>。</p>
+<p><strong>条件语句</strong>：根据条件执行不同代码的代码。</p>
+<p><strong>控制结构</strong>：通过分析变量的值，来决定代码如何执行的代码块。</p>
+<p><strong>伪代码</strong>：用来演示逻辑的标记方法，与代码类似。</p>
+<p><strong>if-else 语句</strong>：程序员用来表达“如果出现这种情况，则这样做，否则那样做”的方法。</p>
+<p><strong>if 语句</strong>：<code>if-else</code> 语句的第一部分。</p>
+<p><strong>else 语句</strong>：<code>if-else</code> 语句的第二部分。</p>
+<p><strong>语句</strong>：一个命令或计算。</p>
+<p><strong>简单语句</strong>：可用一行代码表述的语句。</p>
+<p><strong>复合语句</strong>：通常包括多行代码的语句。</p>
+<p><strong>从句</strong>：复合语句的组成部分；一个从句由两行或多行代码构成，包括代码头及配套代码。</p>
+<p><strong>代码头</strong>：从句中包含关键字的那行代码，之后是一个冒号和一行或多行带缩进的代码。</p>
+<p><strong>配套代码</strong>：从句中由代码头控制的代码。</p>
+<h3 id="317">3.17　挑战练习</h3>
+<p>1．请打印 3 个不同的字符串。</p>
+<p>2．编写程序：如果变量的值小于 10，打印一条消息；如果大于或等于 10，则打印不同的消息。</p>
+<p>3．编写程序：如果变量的值小于或等于 10，打印一条消息；如果大于 10 且小于或等于 25，则打印一条不同的消息；如果大于 25，则打印另一条不同的消息。</p>
+<p>4．编写一个将两个变量相除，并打印余数的程序。</p>
+<p>5．编写一个将两个变量相除，并打印商的程序。</p>
+<p>6．编写程序：为变量 age 赋予一个整数值，根据不同的数值打印不同的字符串说明。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
