@@ -1,0 +1,781 @@
+---
+title: asyncio使用指南
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>asyncio使用指南</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out">
+    <h3 id="">协程的演变</h3>
+    <p>其实早在 Python3.4 的时候就有协程,当时的协程是通过 @asyncio.coroutine 和 yeild from 实现的。在一些很老教程中你可能看到的是下面这种形式:</p>
+    <pre><code class="hljs coffeescript"><span class="hljs-keyword">import</span> asyncio
+
+@asyncio.coroutine
+def print_hello():
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello world!"</span>)
+    r = <span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> asyncio.sleep(<span
+                class="hljs-number">1</span>)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello again!"</span>)
+
+<span class="hljs-comment"># 创建并获取EventLoop:</span>
+<span class="hljs-keyword">loop</span> = asyncio.get_event_loop()
+<span class="hljs-comment"># 执行协程</span>
+<span class="hljs-keyword">loop</span>.run_until_complete(print_hello())
+<span class="hljs-keyword">loop</span>.close()
+</code></pre>
+    <p>因为现在几乎没有人这样写了，所以仅作为了解即可。</p>
+    <p>然后到了 Python3.5 引入了 async/await 语法糖，一直到现在Python3.8 都是用这种形式来表示协程，示例如下。</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">print_hello</span><span class="hljs-params">()</span>:</span>
+     print(<span class="hljs-string">"Hello world!"</span>)
+     <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">1</span>)
+     print(<span class="hljs-string">"Hello again!"</span>)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    loop = asyncio.get_event_loop()
+    <span class="hljs-keyword">try</span>:
+        print(<span class="hljs-string">"开始运行协程"</span>)
+        coro = print_hello()
+        print(<span class="hljs-string">"进入事件循环"</span>)
+        loop.run_until_complete(coro)
+    <span class="hljs-keyword">finally</span>:
+        print(<span class="hljs-string">"关闭事件循环"</span>)
+        loop.close()
+</code></pre>
+    <p>这种是目前应用范围最广的，可以看到比之前的代码舒服了不少，不用再使用装饰器的形式了。</p>
+    <p>然后就到了 Python3.7 和 Python3.8，协程发生了很多细小的变化，但是最大的一个变化就是，启动协程的方法变简单了，一句就可以搞定，不用再像上面那样，创建循环然后再仍到事件循环去执行。使用 asyncio.run
+        这个顶级 API 就可以了。</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">print_hello</span><span class="hljs-params">()</span>:</span>
+     print(<span class="hljs-string">"Hello world!"</span>)
+     <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">1</span>)
+     print(<span class="hljs-string">"Hello again!"</span>)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+        print(<span class="hljs-string">"开始运行协程"</span>)
+        asyncio.run(print_hello())
+        print(<span class="hljs-string">"进入事件循环"</span>)
+</code></pre>
+    <p>怎么样是不是代码更少了，启动协程更简单了。所以这也正是我们使用 3.8 作为本教程的 Python 版，与时俱进嘛。</p>
+    <h3 id="asyncio">asyncio 的组成部分</h3>
+    <p>根据目前的官方文档，总的来说分为了两部分：高层级 API 和低层级 API。</p>
+    <p>首先看高层级 API 也是接下来重点要讲的。</p>
+    <h4 id="api">高层级 API</h4>
+    <ul>
+        <li>协程对象和 Tasks 对象</li>
+        <li>数据流</li>
+        <li>同步源语</li>
+        <li>子进程</li>
+        <li>队列</li>
+        <li>异常</li>
+    </ul>
+    <h4 id="api-1">低层级 API</h4>
+    <ul>
+        <li>事件循环</li>
+        <li>Futures 对象</li>
+        <li>传输和协议</li>
+        <li>策略</li>
+        <li>平台支持</li>
+    </ul>
+    <p>上面列出了这么多的项目我们怎么去选择自己所需要的呢，总的来说对于刚入门的新手或者只是写一个自己用的程序一般都只会用到高级 API
+        的部分，这部分就属于开箱即用的那种，对于高级用户比如框架开发者，往往可以需要去适应各种需要，需要重新改写一些内部的结构，这个时候就需要用到低层级的 API，但是这两个层级呢只能是一个大概方向吧，主要是方便 API
+        的查看，下面呢我将围绕者高层级 API 和低层级 API 在日常实际工作中经常用到的内容做一些讲解。</p>
+    <h3 id="-1">了解几个概念</h3>
+    <p>在学习 asyncio 之前需要知道这样的几个概念。</p>
+    <h4 id="-2">事件循环</h4>
+    <p>事件循环是一种处理多并发量的有效方式，在维基百科中它被描述为「一种等待程序分配事件或消息的编程架构」，我们可以定义事件循环来简化使用轮询方法来监控事件，通俗的说法就是「当 A 发生时，执行
+        B」。所谓的事件，其实就是函数。事件循环，就是有一个队列，里面存放着一堆函数，从第一个函数开始执行，在函数执行的过程中，可能会有新的函数继续加入到这个队列中。一直到队列中所有的函数被执行完毕，并且再也不会有新的函数被添加到这个队列中，程序就结束了。</p>
+    <h4 id="future">Future</h4>
+    <p>Future 是一个数据结构，表示还未完成的工作结果。事件循环可以监视 Future 对象是否完成。从而允许应用的一部分等待另一部分完成一些工作。</p>
+    <p>简单说，Future 就是一个类，用生成器实现了回调。</p>
+    <h4 id="task">Task</h4>
+    <p>Task 是 Future 的一个子类，它知道如何包装和管理一个协程的执行。任务所需的资源可用时，事件循环会调度任务允许，并生成一个结果，从而可以由其他协程消费。一般操作最多的还是 Task。用 Task
+        来封装协程，给原本没有状态的协程增加一些状态。</p>
+    <h4 id="awaitableobjects">awaitable objects（可等待对象）</h4>
+    <p>如果一个对象可以用在 wait 表达式中，那么它就是一个可等待的对象。在 asyncio 模块中会一直提到这个概念，其中协程函数，Task，Future 都是 awaitable 对象。</p>
+    <p>用于 await 表达式中的对象。可以是 coroutine 也可以是实现了 <code>__await__()</code> 方法的对象，参见 PEP 492。类比于 Iterable 对象是 Generator 或实现了
+        <code>__iter__()</code> 方法的对象。</p>
+    <p><strong>object._<em>await</em>_(self)</strong></p>
+    <p>必须返回生成器，asyncio.Future 类也实现了该方法，用于兼容 await 表达式。</p>
+    <p>而 Task 继承自 Future，因此 awaitable 对象有三种：coroutines、Tasks 和 Futures。</p>
+    <p>await 的目的：</p>
+    <ul>
+        <li>获取协程的结果</li>
+        <li>挂起当前协程，将控制交由事件循环，切换到其他协程，然后等待结果，最后恢复协程继续执行</li>
+    </ul>
+    <h3 id="-3">启动一个协程</h3>
+    <p>现在我们使用 async/await 语法来声明一个协程。 代码如下：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+     print(<span class="hljs-string">'hello'</span>)
+     <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">1</span>)
+     print(<span class="hljs-string">'world'</span>)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>asyncio.run 只能用来启动程序入口协程，反过来你在程序中如果使用 asyncio.run 就会出错，之前我们提到对于其他的协程通过 await 链来实现，这里也是一样的。</p>
+    <p>下面说下代码的含义，首先启动 main 这个协程，main 方法就是先打印 hello，然后在打印过程中通过使用 asyncio.sleep 来等待 1 秒，之后再打印
+        world。前面我们提到用协程就意味着我们要一直使用非阻塞的代码，才能达到速度提升，所以这里我们用了非阻塞版的 time.sleep 即 asyncio.sleep 。</p>
+    <h3 id="-4">协程中调用协程</h3>
+    <p>之前我们提到了在协程中，可以使用 await 来调用一个协程。</p>
+    <p>就像下面的代码:</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">import</span> time
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">say_after</span><span class="hljs-params">(delay, what)</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.sleep(delay)
+    print(what)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-comment">#使用f-string拼接字符串</span>
+    print(<span class="hljs-string">f"开始运行 <span class="hljs-subst">{time.strftime(<span class="hljs-string">'%X'</span>)}</span>"</span>)
+
+    child1=<span class="hljs-keyword">await</span> say_after(<span class="hljs-number">1</span>, <span
+                class="hljs-string">'hello'</span>) <span class="hljs-comment">#通过await调用协程，然后接收一下返回值</span>
+    child2=<span class="hljs-keyword">await</span> say_after(<span class="hljs-number">2</span>, <span
+                class="hljs-string">'world'</span>)
+    print(<span class="hljs-string">"child1"</span>,child1)
+    print(<span class="hljs-string">"child2"</span>,child2)
+
+    print(<span class="hljs-string">f"结束运行 <span class="hljs-subst">{time.strftime(<span class="hljs-string">'%X'</span>)}</span>"</span>)
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+      asyncio.run(main())
+</code></pre>
+    <p>运行结果：</p>
+    <pre><code class="hljs css">开始运行 11<span class="hljs-selector-pseudo">:17</span><span class="hljs-selector-pseudo">:26</span>
+<span class="hljs-selector-tag">hello</span>
+<span class="hljs-selector-tag">world</span>
+<span class="hljs-selector-tag">child1</span> <span class="hljs-selector-tag">None</span>
+<span class="hljs-selector-tag">child2</span> <span class="hljs-selector-tag">None</span>
+结束运行 11<span class="hljs-selector-pseudo">:17</span><span class="hljs-selector-pseudo">:29</span>
+<span class="hljs-selector-attr">[Finished in 3.1s]</span>
+</code></pre>
+    <p>代码是没什么问题,正常运行。但是一般情况下我们用到更多的是下面的方式。将协程封装为 Task 让原本没有状态标示的协程添加上状态 。</p>
+    <p>我们可以通过 asyncio.create_task 方法来实现。</p>
+    <h4 id="asynciocreate_task">asyncio.create_task</h4>
+    <p><code>create_task</code>（在 3.6 版本中需要使用低层级的 API <code>asyncio.ensure_future</code>。）是
+        3.7以后加入的语法，作用是将协程包装为一个任务（Task），相比 3.6 版本的 <code>ensure_future</code> 可读性提高。</p>
+    <p>将上面的代码做如下修改：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">import</span> time
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">say_after</span><span class="hljs-params">(delay, what)</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.sleep(delay)
+    print(what)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    print(<span class="hljs-string">f"开始运行 <span class="hljs-subst">{time.strftime(<span class="hljs-string">'%X'</span>)}</span>"</span>)
+
+    child1=asyncio.create_task(say_after(<span class="hljs-number">1</span>, <span class="hljs-string">'hello'</span>)) <span
+                class="hljs-comment">#通过await调用协程，然后接收一下返回值</span>
+    child2=asyncio.create_task(say_after(<span class="hljs-number">2</span>, <span class="hljs-string">'world'</span>))
+    print(<span class="hljs-string">"调用任务child1前"</span>,child1)
+    print(<span class="hljs-string">"调用任务child2前"</span>,child2)
+    <span class="hljs-keyword">await</span> child1
+    <span class="hljs-keyword">await</span> child2
+    print(<span class="hljs-string">"调用任务child1后"</span>,child1)
+    print(<span class="hljs-string">"调用任务child2前"</span>,child2)
+
+    print(<span class="hljs-string">f"结束运行 <span class="hljs-subst">{time.strftime(<span class="hljs-string">'%X'</span>)}</span>"</span>)
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+      asyncio.run(main())
+</code></pre>
+    <p>运行结果如下:</p>
+    <pre><code class="hljs ruby">开始运行 <span class="hljs-number">11</span><span class="hljs-symbol">:</span><span
+            class="hljs-number">37</span><span class="hljs-symbol">:</span><span class="hljs-number">54</span>
+调用任务child1前 &lt;Task pending name=<span class="hljs-string">'Task-2'</span> coro=&lt;say_after() running at /Users/chennan/Desktop/<span
+                class="hljs-number">2019</span>/aiochatuse/hello.<span class="hljs-symbol">py:</span><span
+                class="hljs-number">4</span><span class="hljs-meta">&gt;&gt;
+</span>调用任务child2前 &lt;Task pending name=<span class="hljs-string">'Task-3'</span> coro=&lt;say_after() running at /Users/chennan/Desktop/<span
+                class="hljs-number">2019</span>/aiochatuse/hello.<span class="hljs-symbol">py:</span><span
+                class="hljs-number">4</span>&gt;&gt;
+hello
+world
+调用任务child1后 &lt;Task finished name=<span class="hljs-string">'Task-2'</span> coro=&lt;say_after() done, <span
+                class="hljs-keyword">defined</span> at /Users/chennan/Desktop/<span class="hljs-number">2019</span>/aiochatuse/hello.<span
+                class="hljs-symbol">py:</span><span class="hljs-number">4</span>&gt; result=None&gt;
+调用任务child2前 &lt;Task finished name=<span class="hljs-string">'Task-3'</span> coro=&lt;say_after() done, <span
+                class="hljs-keyword">defined</span> at /Users/chennan/Desktop/<span class="hljs-number">2019</span>/aiochatuse/hello.<span
+                class="hljs-symbol">py:</span><span class="hljs-number">4</span>&gt; result=None&gt;
+结束运行 <span class="hljs-number">11</span><span class="hljs-symbol">:</span><span class="hljs-number">37</span><span
+                class="hljs-symbol">:</span><span class="hljs-number">56</span>
+</code></pre>
+    <p>可以发现，我们的结果中多了"&lt;Task pending ..."和"&lt;Task finised ..."几行语句。这就是 Task
+        的一个状态变化，知道状态的好处就是我们可以根据任务的状态做进一步操作，不像协程函数那样没有状态标示，当然 Task 的状态不只有这些。</p>
+    <p>前面说到 Task 是 Future 的子类，所以 Task 拥有 Future 的一些状态。</p>
+    <h4 id="future-1">Future 的状态</h4>
+    <p>大概有如下几种:</p>
+    <ul>
+        <li>Pending</li>
+        <li>Running</li>
+        <li>Done</li>
+        <li>Cancelled</li>
+    </ul>
+    <p>创建 future 的时候，task 为 pending，事件循环调用执行的时候当然就是 running，调用完毕自然就是 done，如果需要停止事件循环，就需要先把 task 取消，状态为 cancel。这里先做了解知道
+        Task 是有状态的就够了。</p>
+    <h3 id="-5">并发运行任务</h3>
+    <p>一系列的协程可以通过 await 链式的调用，但是有的时候我们需要在一个协程里等待多个协程，比如我们在一个协程里等待 1000 个异步网络请求，对于访问次序有没有要求的时候，就可以使用另外的关键字 asyncio.wait 或
+        asyncio.gather 来解决了。</p>
+    <h4 id="asynciogather">asyncio.gather</h4>
+    <p>使用方法：</p>
+    <pre><code class="hljs python">asyncio.gather(*aws, loop=<span
+            class="hljs-keyword">None</span>, return_exceptions=<span class="hljs-keyword">False</span>)¶
+</code></pre>
+    <p>也就是说使用 gather 语句并发协程，就得用 await 去执行它。这个方法可以接收三个参数，第一个 aws。</p>
+    <p>aws 一般是一个列表，如果里面的元素是 awaitable 类型，在运行的时候它将自动被包装成 Task，gather 会根据 aws 中元素添加的顺序。顺序执行并返回结果列表。</p>
+    <p>第二个 loop 可以传入一个事件循环对象，一般不用管，最后一个 <code>return_exceptions</code> 默认是 False，如果 return_exceptions 为
+        True，异常将被视为成功结果，然后添加到结果列表中。</p>
+    <p>下面是一个 10 个数字并输出的例子：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">foo</span><span class="hljs-params">(num)</span>:</span>
+    <span class="hljs-keyword">return</span> num
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    coro = [asyncio.create_task(foo(i)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span
+                class="hljs-number">10</span>) ]
+    done= <span class="hljs-keyword">await</span> asyncio.gather(*coro)
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> done:
+        print(i)
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>运行之后结果如下：</p>
+    <pre><code class="hljs">0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</code></pre>
+    <p>gather 返回的结果是一个列表，迭代这个列表可以看到任务依次输出。</p>
+    <p>gather 通常被用来阶段性的一个操作，做完第一步才能做第二步，比如下面这样：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">import</span> time
+
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">step1</span><span class="hljs-params">(n, start)</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.sleep(n)
+    print(<span class="hljs-string">"第一阶段完成"</span>)
+    print(<span class="hljs-string">"此时用时"</span>, time.time() - start)
+    <span class="hljs-keyword">return</span> n
+
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">step2</span><span class="hljs-params">(n, start)</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.sleep(n)
+    print(<span class="hljs-string">"第二阶段完成"</span>)
+    print(<span class="hljs-string">"此时用时"</span>, time.time() - start)
+    <span class="hljs-keyword">return</span> n
+
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    now = time.time()
+    result = <span class="hljs-keyword">await</span> asyncio.gather(step1(<span class="hljs-number">5</span>, now), step2(<span
+                class="hljs-number">2</span>, now))
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> result:
+        print(i)
+    print(<span class="hljs-string">"总用时"</span>, time.time() - now)
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+   asyncio.run(main())
+</code></pre>
+    <p>输出内容：</p>
+    <pre><code class="hljs css">第二阶段完成
+此时用时 2<span class="hljs-selector-class">.0041821002960205</span>
+第一阶段完成
+此时用时 5<span class="hljs-selector-class">.0009942054748535</span>
+5
+2
+总用时 5<span class="hljs-selector-class">.001508951187134</span>
+</code></pre>
+    <p>可以通过上面结果得到如下结论：</p>
+    <ol>
+        <li>step1 和 step2 是并行运行的。</li>
+        <li>gather 会等待最耗时的那个完成之后才返回结果，耗时总时间取决于其中任务最长时间的那个。</li>
+    </ol>
+    <h4 id="asynciowait">asyncio.wait</h4>
+    <p>我们先看一下 wait 的语法结构：</p>
+    <pre><code class="hljs python">asyncio.wait(aws, *, loop=<span class="hljs-keyword">None</span>, timeout=<span
+            class="hljs-keyword">None</span>, return_when=ALL_COMPLETED)¶
+</code></pre>
+    <p>wait 一共有 4 个参数，第一个参数 aws，一般是一个任务列表。</p>
+    <p>第二个*之后的都是强制关键字参数，即 loop、timeout、return_when。</p>
+    <p>loop 通 gather 的参数是一个事件循环，该参数计划在 Python 3.10 中删除。</p>
+    <p>timeout 可以指定这组任务的超时时间，请注意，此函数不会引发 asyncio.TimeoutError，超时的时候会返回已完成的任务。</p>
+    <p>return_when 可以指定什么条件下返回结果，默认是所以任务完成就返回结果列表。</p>
+    <p>return_when 的具体参数看下面的表格：</p>
+    <table>
+        <thead>
+        <tr>
+            <th>参数名</th>
+            <th>含义</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>FIRST_COMPLETED</td>
+            <td>任何一个 future 完成或取消时返回</td>
+        </tr>
+        <tr>
+            <td>FIRST_EXCEPTION</td>
+            <td>任何一个 future 出现错误将返回，如果没有出现异常等价于 ALL_COMPLETED</td>
+        </tr>
+        <tr>
+            <td>ALL_COMPLETED</td>
+            <td>当所有任务完成或者被取消时返回结果，默认值。</td>
+        </tr>
+        </tbody>
+    </table>
+    <p>wait 返回的结果是一个元组，第一部分是完成的任务，第二部分是准备中的任务。</p>
+    <pre><code class="hljs bash"><span class="hljs-keyword">done</span>, pending = await asyncio.wait(aws)
+</code></pre>
+    <p>其中 done 表示完成的任务，可以通过迭代获取每个任务。</p>
+    <p>pending 表示的是还没执行的任务。</p>
+    <p>下面看一个例子来进一步了解：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">foo</span><span class="hljs-params">(num)</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">0.99991</span>)
+    <span class="hljs-keyword">return</span> num
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-comment">#coro = foo()</span>
+    coro = [asyncio.create_task(foo(i)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span
+                class="hljs-number">10</span>) ]
+    done, pending = <span class="hljs-keyword">await</span> asyncio.wait(coro,timeout=<span class="hljs-number">1</span>,return_when=<span
+                class="hljs-string">"ALL_COMPLETED"</span>)
+
+    <span class="hljs-keyword">for</span> coro <span class="hljs-keyword">in</span> done:
+        print(coro.result())
+    print(<span class="hljs-string">"pending"</span>,pending)
+    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> pending:
+         print(item)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>运行结果如下:</p>
+    <pre><code class="hljs python"><span class="hljs-number">2</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">0</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">4</span>
+<span class="hljs-number">1</span>
+<span class="hljs-number">7</span>
+pending {&lt;Task pending name=<span class="hljs-string">'Task-10'</span> coro=&lt;foo() running at /Users/chennan/Desktop/<span
+                class="hljs-number">2019</span>/aiochatuse/waitdemo.py:<span class="hljs-number">4</span>&gt; wait_for=&lt;Future finished result=<span
+                class="hljs-keyword">None</span>&gt;&gt;, &lt;Task pending name=<span
+                class="hljs-string">'Task-11'</span> coro=&lt;foo() running at /Users/chennan/Desktop/<span
+                class="hljs-number">2019</span>/aiochatuse/waitdemo.py:<span class="hljs-number">4</span>&gt; wait_for=&lt;Future finished result=<span
+                class="hljs-keyword">None</span>&gt;&gt;}
+&lt;Task pending name=<span class="hljs-string">'Task-10'</span> coro=&lt;foo() running at /Users/chennan/Desktop/<span
+                class="hljs-number">2019</span>/aiochatuse/waitdemo.py:<span class="hljs-number">4</span>&gt; wait_for=&lt;Future finished result=<span
+                class="hljs-keyword">None</span>&gt;&gt;
+&lt;Task pending name=<span class="hljs-string">'Task-11'</span> coro=&lt;foo() running at /Users/chennan/Desktop/<span
+                class="hljs-number">2019</span>/aiochatuse/waitdemo.py:<span class="hljs-number">4</span>&gt; wait_for=&lt;Future finished result=<span
+                class="hljs-keyword">None</span>&gt;&gt;
+</code></pre>
+    <p>首先说代码，使用 wait 实现并发的程序是无序的，所以我们看到数字不是一次出现的，这个是和 gather 的不同之处。另外在返回的参数上也有差别，wait 返回两个参数 done 和 pending。</p>
+    <p>上面的代码指定了一个 timeout，因为任务没在指定时间完成，所以就导致只有完成的任务输出了结果，没有完成的部分可以看到它们的状态是 pending。</p>
+    <h4 id="-6">总结</h4>
+    <p>最后我们总结一下 wait 和 gather 的相同之处和不同之处：</p>
+    <p>相同之处：都可以完成多个任务的并发操作。
+        不同之外：gather 适合按照顺序去做的任务，或者按照阶段去做的任务，返回的是结果列表，而 wait 不讲究任务的顺序，这个在做爬虫中经常使用到，然后 wait 可以返回 2 个结果，done 和 pending。</p>
+    <h3 id="-7">任务完成时处理</h3>
+    <h4 id="asyncioas_completed">asyncio.as_completed</h4>
+    <p><code>as_complete</code> 是一个生成器，会管理指定的一个任务列表，并生成他们的结果。每个协程结束运行时一次生成一个结果。与 wait 一样，<code>as_complete</code>
+        不能保证顺序，不过执行其他动作之前没有必要等待所有后台操作完成。</p>
+    <p>我们看下这个函数都有哪些参数：</p>
+    <pre><code class="hljs python">asyncio.as_completed(aws, *, loop=<span
+            class="hljs-keyword">None</span>, timeout=<span class="hljs-keyword">None</span>)
+</code></pre>
+    <p>和前面的 wait 类似，第一个参数 awas，然后 loop，最后 timeout，需要注意的是 timeout 如果指定了，那么在指定时间没完成的话会抛出 asyncio.exceptions.TimeoutError
+        异常。</p>
+    <p>下面看一个例子:</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">import</span> time
+
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">foo</span><span class="hljs-params">(n)</span>:</span>
+    print(<span class="hljs-string">f'等待<span class="hljs-subst">{n}</span>秒'</span>)
+    <span class="hljs-keyword">await</span> asyncio.sleep(n)
+    <span class="hljs-keyword">return</span> n
+
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    coroutine1 = foo(<span class="hljs-number">1</span>)
+    coroutine2 = foo(<span class="hljs-number">2</span>)
+    coroutine3 = foo(<span class="hljs-number">4</span>)
+
+    tasks = [asyncio.create_task(coroutine1),asyncio.create_task(coroutine2),asyncio.create_task(coroutine3)]
+    <span class="hljs-keyword">for</span> task <span class="hljs-keyword">in</span> asyncio.as_completed(tasks):
+        result = <span class="hljs-keyword">await</span> task
+        print(<span class="hljs-string">f'获取返回结果: <span class="hljs-subst">{result}</span>'</span>)
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    now = <span class="hljs-keyword">lambda</span> : time.time()
+    start = now()
+    asyncio.run(main())
+    print(now() - start)
+</code></pre>
+    <p>输出结果：</p>
+    <pre><code class="hljs makefile">等待1秒
+等待2秒
+等待4秒
+<span class="hljs-section">获取返回结果: 1</span>
+<span class="hljs-section">获取返回结果: 2</span>
+<span class="hljs-section">获取返回结果: 4</span>
+4.002715826034546
+</code></pre>
+    <p>可以看出整个执行过程总用时取决 等待时间最长的那个，即 4 秒。</p>
+    <p>接下来，对上面的代码稍作修改。</p>
+    <p>将</p>
+    <pre><code class="hljs bash"><span class="hljs-keyword">for</span> task <span class="hljs-keyword">in</span> asyncio.as_completed(tasks):
+</code></pre>
+    <p>改为</p>
+    <pre><code class="hljs bash"><span class="hljs-keyword">for</span> task <span class="hljs-keyword">in</span> asyncio.as_completed(tasks,timeout=2):
+</code></pre>
+    <p>其他地方不变，改完运行之后会看到上面提到的错误。</p>
+    <pre><code class="hljs sql">等待1秒
+等待2秒
+等待4秒
+获取返回结果: 1
+Traceback (most recent <span class="hljs-keyword">call</span> <span class="hljs-keyword">last</span>):
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Users/chennan/Desktop/2019/aiochatuse/ascomplete.py"</span>, line <span
+                class="hljs-number">25</span>, <span class="hljs-keyword">in</span> &lt;<span class="hljs-keyword">module</span>&gt;
+    asyncio.run(<span class="hljs-keyword">main</span>())
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/asyncio/runners.py"</span>, line <span
+                class="hljs-number">43</span>, <span class="hljs-keyword">in</span> run
+    <span class="hljs-keyword">return</span> loop.run_until_complete(<span class="hljs-keyword">main</span>)
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/asyncio/base_events.py"</span>, line <span
+                class="hljs-number">589</span>, <span class="hljs-keyword">in</span> run_until_complete
+    <span class="hljs-keyword">return</span> future.result()
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Users/chennan/Desktop/2019/aiochatuse/ascomplete.py"</span>, line <span
+                class="hljs-number">18</span>, <span class="hljs-keyword">in</span> <span
+                class="hljs-keyword">main</span>
+    <span class="hljs-keyword">result</span> = await task
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/asyncio/tasks.py"</span>, line <span
+                class="hljs-number">570</span>, <span class="hljs-keyword">in</span> _wait_for_one
+    <span class="hljs-keyword">raise</span> exceptions.TimeoutError
+asyncio.exceptions.TimeoutError
+</code></pre>
+    <h3 id="-8">取消任务的时候保证其他协程运行完毕</h3>
+    <p>在取消任务的时候存在一个问题,首先先看一段代码：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">coro</span><span class="hljs-params">()</span>:</span>
+    print(<span class="hljs-string">'开始休眠'</span>)
+    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">2</span>)
+    print(<span class="hljs-string">'结束休眠'</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">cancel_it</span><span class="hljs-params">(some_task)</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">0.5</span>)
+    some_task.cancel()
+    print(<span class="hljs-string">'取消some_task任务'</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    real_task = asyncio.create_task(coro())
+    <span class="hljs-keyword">await</span> cancel_it(real_task)
+    <span class="hljs-keyword">await</span> real_task
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>运行之后你会看到如下结果：</p>
+    <pre><code class="hljs sql">开始休眠
+取消some_task任务
+Traceback (most recent <span class="hljs-keyword">call</span> <span class="hljs-keyword">last</span>):
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Users/chennan/Desktop/2019/aiochatuse/shielddemo.py"</span>, line <span
+                class="hljs-number">24</span>, <span class="hljs-keyword">in</span> &lt;<span class="hljs-keyword">module</span>&gt;
+    asyncio.run(<span class="hljs-keyword">main</span>())
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/asyncio/runners.py"</span>, line <span
+                class="hljs-number">43</span>, <span class="hljs-keyword">in</span> run
+    <span class="hljs-keyword">return</span> loop.run_until_complete(<span class="hljs-keyword">main</span>)
+  <span class="hljs-keyword">File</span> <span class="hljs-string">"/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/asyncio/base_events.py"</span>, line <span
+                class="hljs-number">589</span>, <span class="hljs-keyword">in</span> run_until_complete
+    <span class="hljs-keyword">return</span> future.result()
+asyncio.exceptions.CancelledError
+</code></pre>
+    <p>下面说一下代码中的逻辑，在 main 协程中将 coro 协程封装为任务 <code>real_task</code>，然后 <code>cancel_it</code> 方法做了一个取消任务的逻辑 <code>some_task.cancel()</code>，并打印一句话。然后通过
+        await 去运行 <code>real_task</code> 方法，执行代码之后看到上面的结果。出现了 asyncio.exceptions.CancelledError 错误，同时看到 coro
+        只打印了一个开始休眠，后面的结束休眠没有打印。也就是说我们在取消一个任务的时候，里面对于的协程也被取消了。如果我们想在取消任务之后协程还能顺利执行完，就需要用到另外一个函数 shield。</p>
+    <h4 id="asyncioshield">asyncio.shield</h4>
+    <p>该方法的作用是，在执行 cancel 取消一个 task 之后，task 里面的协程仍然可以执行结束，不会像上面的 coro 那样出现错误。</p>
+    <pre><code class="hljs coffeescript">asyncio.shield(aw, *, <span class="hljs-keyword">loop</span>=None)
+</code></pre>
+    <p>aw 表示需要传入一个 Task。</p>
+    <p>接下来我们就使用这个方法对上面的例子做一个修改。</p>
+    <p>从代码中体会它的作用。</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">coro</span><span class="hljs-params">()</span>:</span>
+    print(<span class="hljs-string">'开始休眠'</span>)
+    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">2</span>)
+    print(<span class="hljs-string">'结束休眠'</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">cancel_it</span><span class="hljs-params">(some_task)</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">0.5</span>)
+    some_task.cancel()
+    print(<span class="hljs-string">'取消some_task任务'</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    real_task = asyncio.create_task(coro())
+    shield = asyncio.shield(real_task)
+    <span class="hljs-keyword">await</span> cancel_it(shield)
+    <span class="hljs-keyword">await</span> real_task
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>运行之后的结果：</p>
+    <pre><code class="hljs">开始休眠
+取消some_task任务
+结束休眠
+</code></pre>
+    <p>可以看到尽管 some_task 任务被取消，但是 coro 仍然成功的打印了最好的“结束休眠”。通过上面的例子我想大家应该知道 shield 的作用了。 </p>
+    <h3 id="-9">超时等待</h3>
+    <p>有时候需要等待一个任务完成之后再进行下一个，但是有的时候并不需要运行完就返回。</p>
+    <p>这个时候可以使用 wait_for。</p>
+    <h4 id="asynciowait_for">asyncio.wait_for</h4>
+    <p>该方法的语法如下：</p>
+    <pre><code class="hljs coffeescript">asyncio.wait_for(aw, timeout, *, <span class="hljs-keyword">loop</span>=None)
+</code></pre>
+    <p>aw 是一个任务，timeout 可以指定超时时间。如果发生超时，它将取消该任务并引发 asyncio.TimeoutError，此时为了保证任务中协程完成可以使用上面说的 shield。</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">foo</span><span class="hljs-params">()</span>:</span>
+     <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">1</span>)
+     print(<span class="hljs-string">"in foo"</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">eternity</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-comment"># Sleep for one hour</span>
+    <span class="hljs-keyword">await</span> foo()
+    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">3600</span>)
+    print(<span class="hljs-string">'yay!'</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-comment"># Wait for at most 1 second</span>
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">await</span> asyncio.wait_for(asyncio.shield(eternity()), timeout=<span
+                class="hljs-number">1.0</span>)
+    <span class="hljs-keyword">except</span> asyncio.TimeoutError:
+        print(<span class="hljs-string">'timeout!'</span>)
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>输出：</p>
+    <pre><code class="hljs bash"><span class="hljs-keyword">in</span> foo
+timeout!
+</code></pre>
+    <p>按照上面的经验可知道，如果我们把 asyncio.shield 去掉之后，“in foo” 就无法输出了。</p>
+    <h3 id="-10">协程配合线程</h3>
+    <h4 id="asynciorun_coroutine_threadsafe">asyncio.run<em>coroutine</em>threadsafe</h4>
+    <p>该方法的语法如下：</p>
+    <pre><code class="hljs coffeescript">asyncio.run_coroutine_threadsafe(coro, <span class="hljs-keyword">loop</span>)
+</code></pre>
+    <p>其实在协程中也可以使用多线程,有时候我们需要在主线程中启动一个子线程去做别的任务，这个时候我们就要用到下面的方法了，先上一个流畅的 Python 中的代码。</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">from</span>  threading <span class="hljs-keyword">import</span> Thread
+
+now = <span class="hljs-keyword">lambda</span>: time.time()
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">start_loop</span><span
+        class="hljs-params">(loop)</span>:</span>
+    asyncio.set_event_loop(loop)
+    loop.run_forever()
+
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">do_some_work</span><span class="hljs-params">(x)</span>:</span>
+    print(<span class="hljs-string">f'Waiting <span class="hljs-subst">{x}</span>'</span>)
+    <span class="hljs-keyword">await</span> asyncio.sleep(x)
+    print(<span class="hljs-string">f'Done after <span class="hljs-subst">{x}</span>s'</span>)
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">more_work</span><span
+        class="hljs-params">(x)</span>:</span>
+    print(<span class="hljs-string">f'More work <span class="hljs-subst">{x}</span>'</span>)
+    time.sleep(x)
+    print(<span class="hljs-string">'Finished more work {x}'</span>)
+
+
+start = now()
+<span class="hljs-comment"># 主线程中创建一个 new_loop</span>
+new_loop = asyncio.get_event_loop()
+<span class="hljs-comment"># 创建子线程 在其中开启无限事件循环</span>
+t = Thread(target=start_loop, args=(new_loop,))
+t.start()
+print(<span class="hljs-string">f'TIME: <span class="hljs-subst">{time.time() - start}</span>'</span>)
+
+<span class="hljs-comment"># 在主线程中新注册协程对象</span>
+<span class="hljs-comment"># 这样即可在子线程中进行事件循环的并发操作 同时主线程又不会被 block </span>
+<span class="hljs-comment"># 一共执行的时间大概在 6 s 左右 </span>
+asyncio.run_coroutine_threadsafe(do_some_work(<span class="hljs-number">6</span>), new_loop)
+asyncio.run_coroutine_threadsafe(do_some_work(<span class="hljs-number">4</span>), new_loop)
+</code></pre>
+    <p>上述的例子，主线程中创建一个 <code>new_loop</code>，然后在另外的子线程中开启一个无限事件循环。主线程通过 <code>run_coroutine_threadsafe</code>
+        新注册协程对象。这样就能在子线程中进行事件循环的并发操作，同时主线程又不会被 block。一共执行的时间大概在 6s 左右。</p>
+    <h3 id="-11">同步原语</h3>
+    <p>尽管 asyncio 应用通常作为单线程运行，不过仍被构建为并发应用。由于 I/O 以及其他外部事件的延迟和中断，每个协程或任务可能按一种不可预知的顺序执行。为了支持安全的并发执行，asyncio 包含了 threading
+        和 multiprocessing 模块中的一些底层原语的实现。</p>
+    <p>这里介绍两个经常用到的例子。</p>
+    <h4 id="queue">队列（Queue）</h4>
+    <p>asyncio.Queue 为协程提供了一个先进先出的数据结构，这与线程的 queue.Queue 或进程的multiprocessing.Queue 很类似，下面先看一个简单的例子，它是一个非阻塞的队列。</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">from</span> asyncio <span class="hljs-keyword">import</span> Queue
+
+queue=Queue()
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">start</span><span class="hljs-params">()</span>:</span>
+        [queue.put_nowait(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span
+                class="hljs-number">1</span>, <span class="hljs-number">10</span>)]
+        <span class="hljs-keyword">await</span> asyncio.create_task(work()) <span
+                class="hljs-comment">#put_nowait表示放入元素</span>
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">work</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">while</span> <span class="hljs-keyword">not</span> queue.empty():<span
+                class="hljs-comment">#判断队列的元素是否为空</span>
+            num = queue.get_nowait()<span class="hljs-comment">#获取元素</span>
+            print(<span class="hljs-string">f"获取数字:<span class="hljs-subst">{num}</span>"</span>)
+            queue.task_done()<span class="hljs-comment">#告诉队列该任务处理完。</span>
+    <span class="hljs-keyword">except</span> asyncio.CancelledError:
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(start())
+</code></pre>
+    <p>输出结果:</p>
+    <pre><code class="hljs css">获取数字<span class="hljs-selector-pseudo">:1</span>
+获取数字<span class="hljs-selector-pseudo">:2</span>
+获取数字<span class="hljs-selector-pseudo">:3</span>
+获取数字<span class="hljs-selector-pseudo">:4</span>
+获取数字<span class="hljs-selector-pseudo">:5</span>
+获取数字<span class="hljs-selector-pseudo">:6</span>
+获取数字<span class="hljs-selector-pseudo">:7</span>
+获取数字<span class="hljs-selector-pseudo">:8</span>
+获取数字<span class="hljs-selector-pseudo">:9</span>
+</code></pre>
+    <p>在做爬虫的时候对于 url 的处理，经常会用到队列的操作。另外一个要说的同步原语就是信号量。</p>
+    <h2 id="semaphore">信号量（Semaphore）</h2>
+    <p>简单说下什么是信号量，我们用停车场和车进行比喻。一个停车场一共就 5 个车位，所以我们知道可以同时容纳最多 5 辆车，这五个车位就是信号量。</p>
+    <p>然后说信号量的行为，当有车离开停车场的时候外面的车就会进来补，比如有 2 辆车离开，那么就可以再进来 2 辆车，依次类推，上面这个过程就是描述了信号量这个东西。</p>
+    <p>下面我们看如何在程序中使用。</p>
+    <p>asyncio.Semaphore 模块就是一个维持并发量的模块，我们用它起到一个限流的效果。首先来一段代码：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+
+sem=asyncio.Semaphore(<span class="hljs-number">3</span>) <span class="hljs-comment">#信号量指定为3</span>
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">branch</span><span class="hljs-params">(num)</span>:</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> sem:  <span class="hljs-comment">#通过异步上下文关键子控制并发量</span>
+        print(<span class="hljs-string">f"获取当前数字:<span class="hljs-subst">{num}</span>"</span>)
+        <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">0.5</span>)
+
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+
+     tasks=[asyncio.create_task(branch(i)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span
+                class="hljs-number">10</span>)] <span class="hljs-comment">#将协程封装成任务共10个</span>
+     <span class="hljs-keyword">await</span> asyncio.wait(tasks) <span class="hljs-comment">#执行这些任务</span>
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>执行之后你会发现：</p>
+    <pre><code class="hljs makefile"><span class="hljs-section">获取当前数字:0</span>
+<span class="hljs-section">获取当前数字:1</span>
+<span class="hljs-section">获取当前数字:2</span>
+Task exception was never retrieved
+<span class="hljs-section">future: &lt;Task finished name='Task-11' coro=&lt;branch() done, defined at /Users/chennan/Desktop/2019/aiochatuse/semaphoredemo.py:26&gt; exception=RuntimeError("Task &lt;Task pending name='Task-11' coro=&lt;branch() running at /Users/chennan/Desktop/2019/aiochatuse/semaphoredemo.py:27&gt; cb=[_wait.&lt;locals&gt;._on_completion() at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/asyncio/tasks.py:478]&gt; got Future &lt;Future pending&gt; attached to a different loop")&gt;</span>
+</code></pre>
+    <p>关键就是 attached to a different loop，这个地方说是当前的事件循环发生了改变，这个问题在Python3.6 的时候是不会出现的。</p>
+    <p>为什么 3.8 出错了？</p>
+    <p>这是因为：</p>
+    <p>我的信号量没有在循环内创建。也就是在 asyncio.run() 创建的循环之外创建了它们，因此它们使用 <code>events.get_event_loop()</code> 这就导致了新的事件循环产生。
+        asyncio.run() 创建一个新循环，然后在一个循环中创建的 future
+        不能在另一个循环中使用。所以问题就明确了，我们需要在循环之内创建。也就是我们需要定义一个全局变量，然后在主循环内部给其赋值。看到这，可能大家想到了 global，Python 3.7 增加了上下文变量 Context
+        Variables，至于为什么不用全局变量，因为可能会被其他协程修改，不安全，在这里也可以使用。</p>
+    <p>所以我们的代码变成了下面这个样子：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">from</span> contextvars <span class="hljs-keyword">import</span> ContextVar
+
+concurrent=ContextVar(<span class="hljs-string">"concurrent"</span>)<span class="hljs-comment">#定义全局上下文管理器</span>
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">branch</span><span class="hljs-params">(num)</span>:</span>
+    sem=concurrent.get()<span class="hljs-comment">#获取上下文关键字</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> sem:
+        print(<span class="hljs-string">f"获取当前数字:<span class="hljs-subst">{num}</span>"</span>)
+        <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">0.5</span>) <span
+                class="hljs-comment">#为了看到明显的效果</span>
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span
+                class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+     concurrent.set(asyncio.Semaphore(<span class="hljs-number">3</span>)) <span class="hljs-comment">#上下文管理器赋值</span>
+     tasks=[asyncio.create_task(branch(i)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span
+                class="hljs-number">10</span>)]
+     <span class="hljs-keyword">await</span> asyncio.wait(tasks)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    asyncio.run(main())
+</code></pre>
+    <p>然后我们再次输出：</p>
+    <pre><code class="hljs css">获取当前数字<span class="hljs-selector-pseudo">:0</span>
+获取当前数字<span class="hljs-selector-pseudo">:1</span>
+获取当前数字<span class="hljs-selector-pseudo">:2</span>
+获取当前数字<span class="hljs-selector-pseudo">:3</span>
+获取当前数字<span class="hljs-selector-pseudo">:4</span>
+获取当前数字<span class="hljs-selector-pseudo">:5</span>
+获取当前数字<span class="hljs-selector-pseudo">:6</span>
+获取当前数字<span class="hljs-selector-pseudo">:7</span>
+获取当前数字<span class="hljs-selector-pseudo">:8</span>
+获取当前数字<span class="hljs-selector-pseudo">:9</span>
+</code></pre>
+    <p>可以看到程序每隔 3 组输出一次，这就达到了我们想要的效果了。</p>
+    </div>
+</body>
+</html>
