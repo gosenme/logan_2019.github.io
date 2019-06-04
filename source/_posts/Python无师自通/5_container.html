@@ -1,0 +1,589 @@
+---
+title: 容器
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>容器</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#51">5.1　方法</a></li>
+<li><a href="#52">5.2　列表</a></li>
+<li><a href="#53">5.3　元组</a></li>
+<li><a href="#54">5.4　字典</a></li>
+<li><a href="#55">5.5　容器嵌套容器</a></li>
+<li><a href="#56">5.6　术语表</a></li>
+<li><a href="#57">5.7　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“愚者困惑，智者提问。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——本杰明 · 迪斯雷利（Benjamin Disraeli）</span></p>
+</blockquote>
+<p>在第 3 章中，我们学习了如何用变量保存对象。本章将讨论如何用容器保存对象。容器就像是文件柜，可有效整理数据。这里将学习 3 个常用的容器：列表、元组和字典。</p>
+<h3 id="51">5.1　方法</h3>
+<p>第 4 章介绍了函数。Python 中有一个类似的概念，叫<strong>方法</strong>（method）。方法是与指定数据类型紧密相关的函数。方法与函数一样，可执行代码并返回结果。不同的是，只有在对象上才能调用方法。同样也可以传递参数给方法。调用字符串的 <code>upper</code> 和 <code>replace</code> 方法的示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zdllght</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-string">"Hello"</span>.upper()
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'HELLO'</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hfgpst5</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-string">"Hello"</span>.replace(<span class="hljs-string">"o"</span>, <span class="hljs-string">"@"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'Hell@'</span>
+</code></pre>
+<p>本书第二部分将详细介绍方法。</p>
+<h3 id="52">5.2　列表</h3>
+<p><strong>列表</strong>（list）是以固定顺序保存对象的容器（如图 5-1 所示）。</p>
+<p><img src="https://images.gitbook.cn/aab3b280-6fc3-11e9-9e1b-5b6158413fa5" alt="enter image description here"></p>
+<p>图 5-1　列表</p>
+<p>列表用方括号表示。我们可使用两种语法创建列表，一种是使用 <code>list</code> 函数创建空列表，示例如下：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/h4go6kg</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fruit = <span class="hljs-built_in">list</span>()
+<span class="hljs-number">5</span>  fruit
+
+&gt;&gt; []
+</code></pre>
+<p>或者直接使用方括号：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jft8p7x</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fruit = []
+<span class="hljs-number">5</span>  fruit
+
+<span class="hljs-meta">&gt;&gt;</span> []
+</code></pre>
+<p>使用第二种语法，并将你希望放在列表中的所有对象填入方括号中，用逗号分隔，即可创建一个包含所有对象的列表。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h2y8nos</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fruit = [<span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Orange"</span>, <span class="hljs-string">"Pear"</span>]
+<span class="hljs-number">5</span>  fruit
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'Apple'</span>, <span class="hljs-string">'Orange'</span>, <span class="hljs-string">'Pear'</span>]
+</code></pre>
+<p>上述示例中的列表有 3 个元素：<code>"Apple"</code>、<code>"Orange"</code> 和 <code>"Pear"</code>。列表中的元素是有序的。除非你重新调整列表中元素的顺序，否则 <code>"Apple"</code> 永远是第一个元素，<code>"Orange"</code> 是第二个元素，<code>"Pear"</code> 则是第三个元素。<code>"Apple"</code> 位于列表的开头，末尾则是 <code>"Pear"</code>。这里可使用 <code>append</code> 方法向列表中添加一个新元素。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h9w3z2m</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fruit = [<span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Orange"</span>, <span class="hljs-string">"Pear"</span>]
+<span class="hljs-number">5</span>  fruit.append(<span class="hljs-string">"Banana"</span>)
+<span class="hljs-number">6</span>  fruit.append(<span class="hljs-string">"Peach"</span>)
+<span class="hljs-number">7</span>  fruit
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'Apple'</span>, <span class="hljs-string">'Orange'</span>, <span class="hljs-string">'Pear'</span>, <span class="hljs-string">'Banana'</span>, <span class="hljs-string">'Peach'</span>]
+</code></pre>
+<p>传递给 <code>append</code> 方法的两个对象现在都加入了列表。但 <code>append</code> 方法永远是将新元素添加至列表的末尾。</p>
+<p>列表不仅可以保存字符串，它还可以保存任意数据类型。示例如下：</p>
+<pre><code class="hljs php"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zhpntsr</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  random = []
+<span class="hljs-number">5</span>  random.append(<span class="hljs-keyword">True</span>)
+<span class="hljs-number">6</span>  random.append(<span class="hljs-number">100</span>)
+<span class="hljs-number">7</span>  random.append(<span class="hljs-number">1.1</span>)
+<span class="hljs-number">8</span>  random.append(<span class="hljs-string">"Hello"</span>)
+<span class="hljs-number">9</span>  random
+
+&gt;&gt; [<span class="hljs-keyword">True</span>, <span class="hljs-number">100</span>, <span class="hljs-number">1.1</span>, <span class="hljs-string">'Hello'</span>]
+</code></pre>
+<p>字符串、列表和元组都是<strong>可迭代的</strong>（iterable）。如果可以使用循环访问对象中的每一个元素，那么该对象是可迭代的，被称为<strong>可迭代对象</strong>。可迭代对象中的每一个元素都有一个<strong>索引</strong>（index），即表示元素在可迭代对象中位置的数字。列表中第一个元素的索引是 0，而不是 1。</p>
+<p>在如下示例中，<code>"Apple"</code> 的索引是 0，<code>"Orange"</code> 的索引是 1，<code>"Pear"</code> 的索引是 2：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/z8zzk8d</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fruit = [<span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Orange"</span>, <span class="hljs-string">"Pear"</span>]
+</code></pre>
+<p>你可以使用语法[列表名][[索引]]获取一个元素：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jqtlwpf</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fruit = [<span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Orange"</span>, <span class="hljs-string">"Pear"</span>]
+<span class="hljs-number">5</span>  fruit[<span class="hljs-number">0</span>]
+<span class="hljs-number">6</span>  fruit[<span class="hljs-number">1</span>]
+<span class="hljs-number">7</span>  fruit[<span class="hljs-number">2</span>]
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'Apple'</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'Orange'</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'Pear'</span>
+</code></pre>
+<p>如果获取的是不存在的索引，Python 会报告异常：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/za3rv95</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  colors = [<span class="hljs-string">"blue"</span>, <span class="hljs-string">"green"</span>, <span class="hljs-string">"yellow"</span>]
+<span class="hljs-number">5</span>  colors[<span class="hljs-number">4</span>]
+
+&gt;&gt; IndexError: <span class="hljs-built_in">list</span> index out of range
+</code></pre>
+<p>列表是<strong>可变的</strong>（mutable）。如果一个容器是可变的，则可以向该容器中增删对象。将列表中某个元素的索引赋给一个新的对象，即可改变该元素：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h4ahvf9</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  colors = [<span class="hljs-string">"blue"</span>, <span class="hljs-string">"green"</span>, <span class="hljs-string">"yellow"</span>]
+<span class="hljs-number">5</span>  colors
+<span class="hljs-number">6</span>  colors[<span class="hljs-number">2</span>] = <span class="hljs-string">"red"</span>
+<span class="hljs-number">7</span>  colors
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'blue'</span>, <span class="hljs-string">'green'</span>, <span class="hljs-string">'yellow'</span>]
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'blue'</span>, <span class="hljs-string">'green'</span>, <span class="hljs-string">'red'</span>]
+</code></pre>
+<p>也可使用 <code>pop</code> 方法移除列表中的最后一个元素：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j52uvmq</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  colors = [<span class="hljs-string">"blue"</span>, <span class="hljs-string">"green"</span>, <span class="hljs-string">"yellow"</span>]
+<span class="hljs-number">5</span>  colors
+<span class="hljs-number">6</span>  item = colors.pop()
+<span class="hljs-number">7</span>  item
+<span class="hljs-number">8</span>  colors
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'blue'</span>, <span class="hljs-string">'green'</span>, <span class="hljs-string">'yellow'</span>]
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'yellow'</span>
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'blue'</span>, <span class="hljs-string">'green'</span>]
+</code></pre>
+<p>不能对空列表使用 <code>pop</code> 方法。否则，Python 则会报告异常。</p>
+<p>你可以使用加法操作符来合并两个列表：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jjxnk4z</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  colors1 = [<span class="hljs-string">"blue"</span>, <span class="hljs-string">"green"</span>, <span class="hljs-string">"yellow"</span>]
+<span class="hljs-number">5</span>  colors2 = [<span class="hljs-string">"orange"</span>, <span class="hljs-string">"pink"</span>, <span class="hljs-string">"black"</span>]
+<span class="hljs-number">6</span>  colors1 + colors2
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'blue'</span>, <span class="hljs-string">'green'</span>, <span class="hljs-string">'yellow'</span>, <span class="hljs-string">'orange'</span>, <span class="hljs-string">'pink'</span>, <span class="hljs-string">'black'</span>]
+</code></pre>
+<p>也可以使用关键字 <code>in</code> 检查某个元素是否在列表中：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z4fnv39</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  colors = [<span class="hljs-string">"blue"</span>, <span class="hljs-string">"green"</span>, <span class="hljs-string">"yellow"</span>]
+<span class="hljs-number">5</span>  <span class="hljs-string">"green"</span> <strong><span class="hljs-keyword">in</span></strong> colors
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>使用关键字 <code>not</code> 检查某个元素是否不在列表中：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jqzk8pj</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  colors = [<span class="hljs-string">"blue"</span>, <span class="hljs-string">"green"</span>, <span class="hljs-string">"yellow"</span>]
+<span class="hljs-number">5</span>  <span class="hljs-string">"black"</span> <strong><span class="hljs-keyword">not</span></strong> <strong><span class="hljs-keyword">in</span></strong> colors
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>使用函数 <code>len</code> 可获得列表的大小（包含元素的个数）：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hhx6rx4</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  len(colors)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">3</span>
+</code></pre>
+<p>下面是一个在实践中使用列表的例子：</p>
+<pre class="代码无行号"><code class="hljs bash">01  <span class="hljs-comment"># http://tinyurl.com/gq7yjr7</span>
+02
+03
+04  colors = [<span class="hljs-string">"purple"</span>,
+05            <span class="hljs-string">"orange"</span>,
+06            <span class="hljs-string">"green"</span>]
+07
+08
+09  guess = input(<span class="hljs-string">"Guess a color:"</span>)
+10
+11
+12<strong><span class="hljs-keyword">if</span></strong> guess <strong><span class="hljs-keyword">in</span></strong> colors:
+13      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"You guessed correctly!"</span>)
+14<strong><span class="hljs-keyword">else</span></strong>:
+15      <span class="hljs-built_in">print</span>(<span class="hljs-string">"Wrong! Try again."</span>)
+
+&gt;&gt; Guess a color:</code></pre>
+<p>列表 <code>colors</code> 包含了代表颜色的不同字符串。程序使用内置函数 <code>input</code> 来让用户猜测是什么颜色，并将用户的答案保存至变量。如果答案在 <code>colors</code> 列表中，则告知用户猜测正确。反之，让用户再次尝试。</p>
+<h3 id="53">5.3　元组</h3>
+<p><strong>元组</strong>（tuple）是存储有序对象的一种容器。与列表不同，元组是<strong>不可变的</strong>（immutable），这意味着其内容不会变化。创建元组后，无法修改其中任何元组的值，也无法添加或修改元素。用圆括号表示元组，且必须用逗号分隔元组中的元素。有两种语法可以创建元组，第一种如下所示：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zo88eal</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  my_tuple = tuple()
+<span class="hljs-number">5</span>  my_tuple
+
+<span class="hljs-meta">&gt;&gt;</span> ()
+</code></pre>
+<p>以及第二种语法：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zm3y26j</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  my_tuple = ()
+<span class="hljs-number">5</span>  my_tuple
+
+<span class="hljs-meta">&gt;&gt;</span> ()
+</code></pre>
+<p>如果要向元组中新增对象，可用第二种语法创建一个新的元组，并在其中加入你希望增加的每个元素，用逗号分隔：</p>
+<pre><code class="hljs php"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zlwwfe3</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  rndm = (<span class="hljs-string">"M. Jackson"</span>, <span class="hljs-number">1958</span>, <span class="hljs-keyword">True</span>)
+<span class="hljs-number">5</span>  rndm
+
+&gt;&gt; (<span class="hljs-string">'M. Jackson'</span>, <span class="hljs-number">1958</span>, <span class="hljs-keyword">True</span>)
+</code></pre>
+<p>即使元组中只有一个元素，也需要在该元素的后面加上逗号。只有这样，Python 才能将其与其他为了表示运算顺序而放在圆括号中的数字标记进行区分。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j8mca8o</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 这是元组</span>
+<span class="hljs-number">5</span>  (<span class="hljs-string">"self_taught"</span>, )
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  <span class="hljs-comment"># 这不是元组</span>
+<span class="hljs-number">9</span>  (<span class="hljs-number">9</span>) + <span class="hljs-number">1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> (<span class="hljs-string">'self_taught'</span>, )
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">10</span>
+</code></pre>
+<p>创建元组之后，不能再新增元素或修改已有元素。如果在创建元组后这样做，Python 会报告异常：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z3x34nk</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  dys = (<span class="hljs-string">"1984"</span>,
+<span class="hljs-number">5</span>         <span class="hljs-string">"Brave New World"</span>,
+<span class="hljs-number">6</span>         <span class="hljs-string">"Fahrenheit 451"</span>)
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>
+<span class="hljs-number">9</span>  dys[<span class="hljs-number">1</span>] = <span class="hljs-string">"Handmaid's Tale"</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-symbol">TypeError:</span> <span class="hljs-string">'tuple'</span> object does not support item assignment
+</code></pre>
+<p>可使用与列表一样的方法来获取元组的元素，即引用其索引：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z9dc6lo</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  dys = (<span class="hljs-string">"1984"</span>,
+<span class="hljs-number">5</span>         <span class="hljs-string">"Brave New World"</span>,
+<span class="hljs-number">6</span>         <span class="hljs-string">"Fahrenheit 451"</span>)
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>
+<span class="hljs-number">9</span>  dys[<span class="hljs-number">2</span>]
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'Fahrenheit 451'</span>
+</code></pre>
+<p>可使用关键字 <code>in</code> 来检查某个元素是否在元组中：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j3bsel7</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  dys = (<span class="hljs-string">"1984"</span>,
+<span class="hljs-number">5</span>         <span class="hljs-string">"Brave New World"</span>,
+<span class="hljs-number">6</span>         <span class="hljs-string">"Fahrenheit 451"</span>)
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>
+<span class="hljs-number">9</span>  <span class="hljs-string">"1984"</span> <strong><span class="hljs-keyword">in</span></strong> dys
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>在 <code>in</code> 前加上关键字 <code>not</code> 即可检查元素是否不在元组中：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jpdjjv9</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  dys = (<span class="hljs-string">"1984"</span>,
+<span class="hljs-number">5</span>         <span class="hljs-string">"Brave New World"</span>,
+<span class="hljs-number">6</span>         <span class="hljs-string">"Fahrenheit 451"</span>)
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>
+<span class="hljs-number">9</span>  <span class="hljs-string">"Handmaid's Tale"</span> <strong><span class="hljs-keyword">not</span></strong> <strong><span class="hljs-keyword">in</span></strong> dys
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>你可能会疑惑为什么要使用一个看上去没有列表灵活的数据结构。因为在处理明确永远不会改变的，并且也不希望其他程序对其进行修改的值时，元组是非常有用的。地理坐标就是适合使用元组存储的一种数据。城市的经纬度应保存在元组中，因为这些值永远不会改变，保存为元组意味着程序不会意外对其进行修改。元组不像列表那样可以用作字典的键，这个知识点会在下一节介绍。</p>
+<h3 id="54">5.4　字典</h3>
+<p><strong>字典</strong>（dictionary）是另一种用于存储对象的内置容器。它们被用来链接<strong>键</strong>（key）和<strong>值</strong>（value）这两个对象（如图 5-2 所示）。将一个对象链接至另一个对象，也被称为<strong>映射</strong>（mapping），结果为产生一个<strong>键值对</strong>（key-value pair）。可将键值对添加到字典，然后使用键在字典中查询，可获得其对应的值。但是无法使用值来查询键。</p>
+<p><img src="https://images.gitbook.cn/38d2e810-6fc4-11e9-9e1b-5b6158413fa5" alt="enter image description here"></p>
+<p>图 5-2　字典</p>
+<p>字典是可变的，因此可以向字典中新增键值对。与列表和元组不同，字典中存储的对象是无序的。字典的价值在于键与值之间的关联。需要成对存储数据的场景很多。例如，可以将关于某个人的信息存储在字典中，将名为 height 的键，映射至代表这个人身高的值；将名为 eyecolor 的键映射至代表这个人眼睛颜色的值；将名为 nationality 的键映射至代表这个人国籍的值。</p>
+<p>字典用花括号表示。有两种创建字典的语法，其一如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zfn6jmw</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  my_dict = dict()
+<span class="hljs-number">5</span>  my_dict
+
+<span class="hljs-meta">&gt;&gt;</span> {}
+</code></pre>
+<p>另一种方法如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jfgemf2</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  my_dict = {}
+<span class="hljs-number">5</span>  my_dict
+
+<span class="hljs-meta">&gt;&gt;</span> {}
+</code></pre>
+<p>可以在创建字典时直接添加键值对。上述两种语法都要求用冒号分隔键与值，每个键值对之间用逗号分隔。与元组不同的是，如果只有一个键值对，不需要在其后添加逗号。如下示例介绍了创建字典时如何添加键值对：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hplqc4u</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fruits = {<span class="hljs-string">"Apple"</span>:
+<span class="hljs-number">5</span>            <span class="hljs-string">"Red"</span>,
+<span class="hljs-number">6</span>            <span class="hljs-string">"Banana"</span>:
+<span class="hljs-number">7</span>            <span class="hljs-string">"Yellow"</span>}
+<span class="hljs-number">8</span>  fruits
+
+<span class="hljs-meta">&gt;&gt;</span> {<span class="hljs-string">'Apple'</span>: <span class="hljs-string">'Red'</span>, <span class="hljs-string">'Banana'</span>: <span class="hljs-string">'Yellow'</span>}
+</code></pre>
+<p>读者在 shell 中看到的字典元素顺序可能与上例中有所不同，因为字典的键是无序的，Python 会随机打印其元素（本节中所有示例均适用该情况）。</p>
+<p>字典是可变的。创建字典后，可通过语法“<code>[字典名][[键]] = [值]</code>”添加新的键值对，并通过语法“<code>[字典名][[键]]</code>”查找值。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/grc28lh</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  facts = dict()
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  <span class="hljs-comment"># 添加键-值对</span>
+08  facts[<span class="hljs-string">"code"</span>] = <span class="hljs-string">"fun"</span>
+09  <span class="hljs-comment"># 查找键对应的值</span>
+<span class="hljs-number">10</span>  facts[<span class="hljs-string">"code"</span>]
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  <span class="hljs-comment"># 添加键-值对</span>
+<span class="hljs-number">14</span>  facts[<span class="hljs-string">"Bill"</span>] = <span class="hljs-string">"Gates"</span>
+<span class="hljs-number">15</span>  <span class="hljs-comment"># 查找键对应的值</span>
+<span class="hljs-number">16</span>  facts[<span class="hljs-string">"Bill"</span>]
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>
+<span class="hljs-number">19</span>  <span class="hljs-comment"># 添加键-值对</span>
+<span class="hljs-number">20</span>  facts[<span class="hljs-string">"founded"</span>] = <span class="hljs-number">1776</span>
+<span class="hljs-number">21</span>  <span class="hljs-comment"># 查找键对应的值</span>
+<span class="hljs-number">22</span>  facts[<span class="hljs-string">"founded"</span>]
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'fun'</span>
+<span class="hljs-meta">&gt;&gt;</span> Gates
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1776</span>
+</code></pre>
+<p>字典的值可以是任意对象。在上例中，前两个值是字符串，最后一个值 1776 是整数。但是字典的键必须是不可变的。字符串或元组可以用作字典的键，但是列表或字典不可以。</p>
+<p>可以使用关键字 <code>in</code> 检查某个键是否在字典中，但不能用其检查某个值是否在字典中。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hgf9vmp</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  bill = dict({<span class="hljs-string">"Bill Gates"</span>:
+<span class="hljs-number">5</span>               <span class="hljs-string">"charitable"</span>})
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  <span class="hljs-string">"Bill Gates"</span> <strong><span class="hljs-keyword">in</span></strong> bill
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>如果访问一个不在字典中的键，Python 将报告异常。</p>
+<p>在关键字 <code>in</code> 之前加上关键字 <code>not</code>，可检查键是否不在字典中。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/he3g993</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  bill = dict({<span class="hljs-string">"Bill Gates"</span>:
+<span class="hljs-number">5</span>                   <span class="hljs-string">"charitable"</span>})
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  <span class="hljs-string">"Bill Doors"</span> <strong><span class="hljs-keyword">not</span></strong> <strong><span class="hljs-keyword">in</span></strong> bill
+
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p>可使用关键字 <code>del</code> 删除字典中的键值对。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/htrd9lj</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  books = {<span class="hljs-string">"Dracula"</span>: <span class="hljs-string">"Stoker"</span>,
+<span class="hljs-number">5</span>           <span class="hljs-string">"1984"</span>: <span class="hljs-string">"Orwell"</span>,
+<span class="hljs-number">6</span>           <span class="hljs-string">"The Trial"</span>: <span class="hljs-string">"Kafka"</span>}
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>
+<span class="hljs-number">9</span> <strong>del</strong> books[<span class="hljs-string">"The Trial"</span>]
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  books
+
+<span class="hljs-meta">&gt;&gt;</span> {<span class="hljs-string">'Dracula'</span>: <span class="hljs-string">'Stoker'</span>, <span class="hljs-string">'1984'</span>: <span class="hljs-string">'Orwell'</span>}</code></pre>
+<p>一个使用字典的程序示例如下：</p>
+<pre class="代码无行号"><code class="hljs bash">01  <span class="hljs-comment"># http://tinyurl.com/gnjvep7</span>
+02
+03
+04  rhymes = {<span class="hljs-string">"1"</span>: <span class="hljs-string">"fun"</span>,
+05            <span class="hljs-string">"2"</span>: <span class="hljs-string">"blue"</span>
+06            <span class="hljs-string">"3"</span>: <span class="hljs-string">"me"</span>,
+07            <span class="hljs-string">"4"</span>: <span class="hljs-string">"floor"</span>,
+08            <span class="hljs-string">"5"</span>: <span class="hljs-string">"live"</span>
+09            }
+10
+11
+12  n = input(<span class="hljs-string">"Type a number:"</span>)
+13 <strong><span class="hljs-keyword">if</span></strong> n <strong><span class="hljs-keyword">in</span></strong> rhymes:
+14      rhyme = rhymes[n]
+15      <span class="hljs-built_in">print</span>(rhyme)
+16 <strong><span class="hljs-keyword">else</span></strong>:
+17      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"Not found."</span>)
+
+Type a number:</code></pre>
+<p>字典 <code>rhymes</code> 中有 6 个数字（键），分别映射至 6 个单词（值）。程序让用户输入数字，并保存在变量中。在从字典中查找单词之前，记得先用 <code>in</code> 关键字检查字典中是否存在对应的键。如果存在，则查找字典中对应的单词并打印出来。否则会打印消息告诉用户未查找到。</p>
+<h3 id="55">5.5　容器嵌套容器</h3>
+<p>可以在容器中存储容器。例如，你可以在列表中保存列表：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/gops9fz</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  lists = []
+<span class="hljs-number">05</span>  rap = [<span class="hljs-string">"Kanye West"</span>,
+<span class="hljs-number">06</span>         <span class="hljs-string">"Jay Z"</span>,
+<span class="hljs-number">07</span>         <span class="hljs-string">"Eminem"</span>,
+08         <span class="hljs-string">"Nas"</span>]
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  rock = [<span class="hljs-string">"Bob Dylan"</span>,
+<span class="hljs-number">12</span>          <span class="hljs-string">"The Beatles"</span>,
+<span class="hljs-number">13</span>          <span class="hljs-string">"Led Zeppelin"</span>]
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  djs = [<span class="hljs-string">"Zeds Dead"</span>,
+<span class="hljs-number">17</span>         <span class="hljs-string">"Tiesto"</span>]
+<span class="hljs-number">18</span>
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>  lists.append(rap)
+<span class="hljs-number">21</span>  lists.append(rock)
+<span class="hljs-number">22</span>  lists.append(djs)
+<span class="hljs-number">23</span>
+<span class="hljs-number">24</span>
+<span class="hljs-number">25</span>  print(lists)
+
+<span class="hljs-meta">&gt;&gt;</span> [[<span class="hljs-string">'Kanye West'</span>, <span class="hljs-string">'Jay Z'</span>, <span class="hljs-string">'Eminem'</span>, <span class="hljs-string">'Nas'</span>], [<span class="hljs-string">'Bob Dylan'</span>, <span class="hljs-string">'The Beatles'</span>, <span class="hljs-string">'Led Zeppelin'</span>], [<span class="hljs-string">'Zeds Dead'</span>, <span class="hljs-string">'Tiesto'</span>]]
+</code></pre>
+<p>在上述例中，<code>lists</code> 有 3 个元素。每个元素都是一个列表：第一个元素是嘻哈歌手列表，第二个元素是摇滚歌手列表，第三个元素是 DJ 列表。可通过元素对应的索引访问这些列表：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gu4mudk</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 接上例</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>  rap = lists[<span class="hljs-number">0</span>]
+<span class="hljs-number">8</span>  print(rap)
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'Kanye West'</span>, <span class="hljs-string">'Jay Z'</span>, <span class="hljs-string">'Eminem'</span>, <span class="hljs-string">'Nas'</span>]
+</code></pre>
+<p>如果向列表 <code>rap</code> 中添加一个新元素，该修改也会体现在 <code>lists</code> 列表中：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hdtosm2</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 接上例</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+08  rap = lists[<span class="hljs-number">0</span>]
+09  rap.append(<span class="hljs-string">"Kendrick Lamar"</span>)
+<span class="hljs-number">10</span>  print(rap)
+<span class="hljs-number">11</span>  print(lists)
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'Kanye West'</span>, <span class="hljs-string">'Jay Z'</span>, <span class="hljs-string">'Eminem'</span>, <span class="hljs-string">'Nas'</span>, <span class="hljs-string">'Kendrick Lamar'</span>]
+<span class="hljs-meta">&gt;&gt;</span> [[<span class="hljs-string">'Kanye West'</span>, <span class="hljs-string">'Jay Z'</span>, <span class="hljs-string">'Eminem'</span>, <span class="hljs-string">'Nas'</span>, <span class="hljs-string">'Kendrick Lamar'</span>],
+[<span class="hljs-string">'Bob Dylan'</span>, <span class="hljs-string">'The Beatles'</span>, <span class="hljs-string">'Led Zeppelin'</span>], [<span class="hljs-string">'Zeds Dead'</span>, <span class="hljs-string">'Tiesto'</span>]]
+</code></pre>
+<p>也可以在列表中存储元素，在元组中存储列表，还可以在列表或元组中存储字典：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/z9dhema</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  locations = []
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  la = (<span class="hljs-number">34.0522</span>, <span class="hljs-number">188.2437</span>)
+08  chicago = (<span class="hljs-number">41.8781</span>, <span class="hljs-number">87.6298</span>)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  locations.append(la)
+<span class="hljs-number">12</span>  locations.append(chicago)
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  print(locations)
+
+<span class="hljs-meta">&gt;&gt;</span> [(<span class="hljs-number">34.0522</span>, <span class="hljs-number">188.2437</span>), (<span class="hljs-number">41.8781</span>, <span class="hljs-number">87.6298</span>)]
+
+<span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/ht7gpsd</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  eights = [<span class="hljs-string">"Edgar Allan Poe"</span>,
+<span class="hljs-number">05</span>            <span class="hljs-string">"Charles Dickens"</span>]
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+08  nines = [<span class="hljs-string">"Hemingway"</span>,
+09           <span class="hljs-string">"Fitzgerald"</span>,
+<span class="hljs-number">10</span>          <span class="hljs-string">"Orwell"</span>]
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  authors = (eights, nines)
+<span class="hljs-number">14</span>  print(authors)
+
+<span class="hljs-meta">&gt;&gt;</span> ([<span class="hljs-string">'Edgar Allan Poe'</span>, <span class="hljs-string">'Charles Dickens'</span>], [<span class="hljs-string">'Hemingway'</span>, <span class="hljs-string">'Fitzgerald'</span>, <span class="hljs-string">'Orwell'</span>])
+
+<span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/h8ck5er</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  bday = {<span class="hljs-string">"Hemingway"</span>:
+<span class="hljs-number">05</span>          <span class="hljs-string">"7.21.1899"</span>,
+<span class="hljs-number">06</span>          <span class="hljs-string">"Fitzgerald"</span>:
+<span class="hljs-number">07</span>          <span class="hljs-string">"9.24.1896"</span>}
+08
+09
+<span class="hljs-number">10</span>  my_list = [bday]
+<span class="hljs-number">11</span>  print(my_list)
+<span class="hljs-number">12</span>  my_tuple = (bday,)
+<span class="hljs-number">13</span>  print(my_tuple)
+
+<span class="hljs-meta">&gt;&gt;</span> [{<span class="hljs-string">'Hemingway'</span>: <span class="hljs-string">'7.21.1899'</span>, <span class="hljs-string">'Fitzgerald'</span>: <span class="hljs-string">'9.24.1896'</span>}]
+<span class="hljs-meta">&gt;&gt;</span> ({<span class="hljs-string">'Hemingway'</span>: <span class="hljs-string">'7.21.1899'</span>, <span class="hljs-string">'Fitzgerald'</span>: <span class="hljs-string">'9.24.1896'</span>},)
+</code></pre>
+<p>列表、字典或元组都可以成为字典中的值：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">01</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/zqupwx4</span></span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  ny = {<span class="hljs-string">"locations"</span>:
+<span class="hljs-number">05</span>        (<span class="hljs-number">40.7128</span>,
+<span class="hljs-number">06</span>         <span class="hljs-number">74.0059</span>),
+<span class="hljs-number">07</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>        <span class="hljs-string">"celebs"</span>:
+<span class="hljs-number">10</span>        [<span class="hljs-string">"W. Allen"</span>,
+<span class="hljs-number">11</span>         <span class="hljs-string">"Jay Z"</span>,
+<span class="hljs-number">12</span>         <span class="hljs-string">"K. Bacon"</span>],
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>         <span class="hljs-string">"facts"</span>:
+<span class="hljs-number">15</span>         {<span class="hljs-string">"state"</span>:
+<span class="hljs-number">16</span>          <span class="hljs-string">"NY"</span>,
+<span class="hljs-number">17</span>          <span class="hljs-string">"country"</span>:
+<span class="hljs-number">18</span>          <span class="hljs-string">"America"</span>}
+<span class="hljs-number">19</span>  }
+</code></pre>
+<p>本例中，字典 <code>ny</code> 有 3 个键：<code>"locations"</code>、<code>"celebs"</code> 和 <code>"facts"</code>。第一个键的值是一个元组，因为地理坐标永远不会变。第二个键的值是生活在纽约的名人列表，因为可能会变化所以使用列表。第三个键的值是一个字典，因为键值对是表示纽约有关联事实的最好方式。</p>
+<h3 id="56">5.6　术语表</h3>
+<p><strong>方法</strong>：与指定数据类型紧密相关的函数。</p>
+<p><strong>列表</strong>：存储有序对象的一种容器。</p>
+<p><strong>可迭代的</strong>：如果可使用循环访问对象中的每一个元素，则该对象是可迭代的。</p>
+<p><strong>可迭代对象</strong>：可迭代的对象，如字符串、列表和元素。</p>
+<p><strong>索引</strong>：代表元素在可迭代对象中位置的数字。</p>
+<p><strong>可变的</strong>：容器中的内容可以发生变化。</p>
+<p><strong>不可变的</strong>：容器中的内容不能改变。</p>
+<p><strong>字典</strong>：存储对象的一种内置容器，将一个称为键的对象，映射至一个称为值的对象。</p>
+<p><strong>键</strong>：用来查找字典中对应的值。</p>
+<p><strong>值</strong>：字典中映射至键的值。</p>
+<p><strong>映射</strong>：将一个对象链接至另一个对象。</p>
+<p><strong>键值对</strong>：字典中键映射至值。</p>
+<h3 id="57">5.7　挑战练习</h3>
+<p>1．创建一个你最喜欢歌手的列表。</p>
+<p>2．创建一个由元组构成的列表，每个元组包含居住过或旅游过的城市的经纬度。</p>
+<p>3．创建一个包含你的不同属性的字典：身高、最喜欢的颜色和最喜欢的作者等。</p>
+<p>4．编写一个程序，让用户询问你的身高、最喜欢的颜色或最喜欢的作者，并返回上一个挑战中创建的字典。</p>
+<p>5．创建一个字典，将最喜欢的歌手映射至你最喜欢的歌曲。</p>
+<p>6．列表、元组和容器只是 Python 中内置容器的一部分。自行研究 Python 中的集合（也是一种容器）在什么情况下可以使用集合？</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
