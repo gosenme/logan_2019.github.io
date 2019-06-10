@@ -1,0 +1,143 @@
+---
+title: 综合练习
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>综合练习</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#101hangman">10.1　Hangman</a></li>
+<li><a href="#102">10.2　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“我所学到的一切，都是从书本上得来的。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——亚伯拉罕 · 林肯（Abraham Lincoln）</span></p>
+</blockquote>
+<p>本章将结合目前所学的知识，开发一个文本游戏——经典的 Hangman 猜词游戏。如果之前没玩过，可先了解游戏的大致规则。</p>
+<p>1．玩家一挑选一个秘密单词，单词中有多少个字母，则划多少条横线（这里用下划线表示）。</p>
+<p>2．玩家二每次猜一个字母。</p>
+<p>3．如果玩家二猜测的字母正确，玩家一将下划线修改为正确的字母。在本书的游戏版本中，如果单词中有一个字母出现两次，玩家二也必须猜两次。如果玩家二猜测错误，玩家一则画出上吊的人的一部分身体（从头部开始），如图 10-1 所示。</p>
+<p><img src="https://images.gitbook.cn/50a48af0-700c-11e9-83ce-bf64b45f6e99" alt="enter image description here"></p>
+<p>图 10-1　游戏图案</p>
+<p>4．如果玩家二在玩家一画完上吊的人之前猜对单词，玩家二胜利，反之失败。</p>
+<p>在接下来要编写的程序中，计算机将扮演玩家一，用户将扮演玩家二。准备好玩游戏了吗？</p>
+<h3 id="101hangman">10.1　Hangman</h3>
+<p>Hangman 游戏代码的第一部分如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jhrvs94</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">hangman</span><span class="hljs-params">(word)</span>:</span>
+<span class="hljs-number">05</span>      wrong = <span class="hljs-number">0</span>
+<span class="hljs-number">06</span>      stages = [<span class="hljs-string">""</span>,
+<span class="hljs-number">07</span>          <span class="hljs-string">"                "</span>,
+<span class="hljs-number">08</span>          <span class="hljs-string">"|               "</span>,
+<span class="hljs-number">09</span>          <span class="hljs-string">"|        |      "</span>,
+<span class="hljs-number">10</span>          <span class="hljs-string">"|        0      "</span>,
+<span class="hljs-number">11</span>          <span class="hljs-string">"|       /|\     "</span>,
+<span class="hljs-number">12</span>          <span class="hljs-string">"|       / \     "</span>,
+<span class="hljs-number">13</span>          <span class="hljs-string">"|               "</span>
+<span class="hljs-number">14</span>           ]
+<span class="hljs-number">15</span>      rletters = list(word)
+<span class="hljs-number">16</span>      board = [<span class="hljs-string">"__"</span>] * len(word)
+<span class="hljs-number">17</span>      win = <span class="hljs-keyword">False</span>
+<span class="hljs-number">18</span>      print(<span class="hljs-string">"Welcome to Hangman"</span>)</code></pre>
+<p>首先，创建一个叫 <code>hangman</code> 的函数用于保存游戏。该函数接受一个叫 <code>word</code> 的变量作为参数，也就是玩家二要猜的单词。用另一个变量 <code>wrong</code> 记录玩家二猜错了多少个字母。</p>
+<p>变量 <code>stages</code> 是一个列表，含有用来画上吊的人的字符串。Python 将 <code>stages</code> 列表中的每个字符串换行打印出来之后，就会组成一个上吊的人的图案。变量 <code>rletter</code> 也是一个列表，用来保存 <code>word</code> 变量中的每个字母，同时也用来记录还需要猜对的字母。</p>
+<p>变量 <code>board</code> 也是一个字符串列表，用来记录显示给玩家二的提示，假如单词是 <code>cat</code> 则可能显示 <code>c__t</code>（玩家二已经猜对了 <code>c</code> 和 <code>t</code>）。这里用 <code>["__"]</code> * <code>len(word)</code> 来填充 <code>board</code> 列表，变量 <code>word</code> 中的每个字母都用一个下划线表示。例如，如果单词是 <code>cat</code>，<code>board</code> 列表一开始的元素就是 <code>["__", "__", "__"]</code>。</p>
+<p>还需要一个叫 <code>win</code> 的变量，起始值为 <code>False</code>，用来记录玩家二是否赢了游戏。接下来，打印 <code>Welcome to Hangman</code>。</p>
+<p>代码的第二部分则是一个维持游戏运行的循环，如下所示：</p>
+<pre class="代码无行号"><code class="hljs cs"><span class="hljs-number">01</span>  <span class="hljs-meta"># http://tinyurl.com/ztrp5jc</span>
+<span class="hljs-number">02</span>  <strong><span class="hljs-keyword">while</span></strong> wrong &lt; len(stages) - <span class="hljs-number">1</span>:
+<span class="hljs-number">03</span>      print(<span class="hljs-string">"\n"</span>)
+<span class="hljs-number">04</span>      msg = <span class="hljs-string">"Guess a letter"</span>
+<span class="hljs-number">05</span>      <span class="hljs-keyword">char</span> = input(msg)
+<span class="hljs-number">06</span>      <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-keyword">char</span> <strong><span class="hljs-keyword">in</span></strong> rletters:
+<span class="hljs-number">07</span>          cind = rletters.index(<span class="hljs-keyword">char</span>)
+<span class="hljs-number">08</span>          board[cind] = <span class="hljs-keyword">char</span>
+<span class="hljs-number">09</span>          rletters[cind] = <span class="hljs-string">'$'</span>
+<span class="hljs-number">10</span>      <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">11</span>          wrong += <span class="hljs-number">1</span>
+<span class="hljs-number">12</span>      print((<span class="hljs-string">" "</span>.<span class="hljs-keyword">join</span>(board)))
+<span class="hljs-number">13</span>      e = wrong + <span class="hljs-number">1</span>
+<span class="hljs-number">14</span>      <strong>print</strong>(<span class="hljs-string">"\n"</span>.<span class="hljs-keyword">join</span>(stages[<span class="hljs-number">0</span>:e]))
+<span class="hljs-number">15</span>      <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-string">"__"</span> <strong>not</strong> <strong><span class="hljs-keyword">in</span></strong> board:
+<span class="hljs-number">16</span>          <strong>print</strong>(<span class="hljs-string">"You win!"</span>)
+<span class="hljs-number">17</span>          print(<span class="hljs-string">" "</span>.<span class="hljs-keyword">join</span>(board))
+<span class="hljs-number">18</span>          win = True
+<span class="hljs-number">19</span>          <strong><span class="hljs-keyword">break</span></strong></code></pre>
+<p>只要变量 <code>wrong</code> 的值小于 <code>len(stages) - 1</code>，循环（和游戏）就会继续。变量 <code>wrong</code> 记录了玩家二猜错的次数，因此当玩家二猜错的次数大于画完上吊的人所需字符串的数量时（<code>stages</code> 列表中的字符串数量），游戏结束。我们将 <code>stages</code> 列表的长度减去 1，这是因为列表从 0 开始计数，而 <code>wrong</code> 变量则是从 1 开始。</p>
+<p>进入循环之后，打印一个空白行，让 shell 中的游戏界面看上去不乱。然后，通过内置的 <code>input</code> 函数收集玩家二的答案，并保存在变量 <code>guess</code> 中。</p>
+<p>如果 <code>guess</code> 在 <code>rletters</code>（记录玩家二没猜对的字母列表）中，则猜测正确。如果猜对了，则需要更新 <code>board</code> 列表，后面会用来打印剩余的字母。如果玩家二猜了字母 <code>c</code>，则要将 <code>board</code> 列表改为 <code>["c", "__", "__"]</code>。</p>
+<p>因此，应使用 <code>rletters</code> 列表的 <code>index</code> 方法，获取玩家二所猜字母的第一个索引，并在 <code>board</code> 列表中的对应索引位置替换为正确的字母。</p>
+<p>但是有一个问题。由于 <code>index</code> 只返回要查找字母的第一个索引，那么如果变量 <code>word</code> 中相同的字母有两个或两个以上，代码就会出错。为了解决这个问题，我们把 <code>rletters</code> 中猜对的字母替换为美元符号，这样下次循环时，<code>index</code> 函数就能找到字母下一次出现的索引（如果有的话），而不是仍返回第一个索引。</p>
+<p>如果玩家二猜错了，则将 <code>wrong</code> 的值递增 1。</p>
+<p>下一步，用 <code>board</code> 和 <code>stages</code> 列表打印得分情况和上吊的人。打印得分情况的代码是 <code>" ".join(board)</code>。</p>
+<p>打印上吊的人会更复杂一些。当 <code>stages</code> 列表中的每个元素打印在一行之后，完整图案就打印完了。可通过 <code>'\n'.join(stages)</code> 打印整个图案，代码会在列表中的各个元素后加入一个换行符，这样就能确保每个字符串各占一行了。</p>
+<p>如果要在游戏的每个阶段都打印上吊的人，则需对 <code>stages</code> 列表进行切片。从阶段 0 开始，切片至目前所处的阶段（用变量 wrong 表示）并加一。加一，是因为在切片时尾端不会出现在结果里。切片只会返回打印当前上吊的人进度所需要的字符串。</p>
+<p>最后，检查玩家二是否赢得游戏。如果 <code>board</code> 列表中没有了下划线，就表示猜对了所有字母，玩家二赢得游戏。如果是这样，则打印 <code>You win! It was:</code> 和猜对的单词。同时将变量 <code>variable</code> 设为 <code>True</code>，跳出循环。</p>
+<p>退出循环之后，如果玩家二赢了游戏，则程序结束。如果输了，变量 <code>win</code> 被设为 <code>False</code>。如果是这种情况，则打印完整的上吊的人和 <code>You lose!</code>，最后是没有猜对的那个单词：</p>
+<pre class="代码无行号"><code class="hljs coffeescript"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zqklqxo</span>
+<span class="hljs-number">2</span>  <strong><span class="hljs-keyword">if</span></strong> <strong><span class="hljs-keyword">not</span></strong> win:
+<span class="hljs-number">3</span>      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"\n"</span>.join(stages[<span class="hljs-number">0</span>:wrong]))
+<span class="hljs-number">4</span>      <span class="hljs-built_in">print</span>(<span class="hljs-string">"You lose! It was {}."</span>.format(word))</code></pre>
+<p>完整的代码如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/h9q2cpc</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">hangman</span><span class="hljs-params">(word)</span>:</span>
+<span class="hljs-number">05</span>      wrong = <span class="hljs-number">0</span>
+<span class="hljs-number">06</span>      stages = [<span class="hljs-string">""</span>,
+<span class="hljs-number">07</span>          <span class="hljs-string">"                "</span>,
+<span class="hljs-number">08</span>          <span class="hljs-string">"|               "</span>,
+<span class="hljs-number">09</span>          <span class="hljs-string">"|        |      "</span>,
+<span class="hljs-number">10</span>          <span class="hljs-string">"|        0      "</span>,
+<span class="hljs-number">11</span>          <span class="hljs-string">"|       /|\     "</span>,
+<span class="hljs-number">12</span>          <span class="hljs-string">"|       / \     "</span>,
+<span class="hljs-number">13</span>          <span class="hljs-string">"|               "</span>
+<span class="hljs-number">14</span>           ]
+<span class="hljs-number">15</span>      rletters = list(word)
+<span class="hljs-number">16</span>      board = [<span class="hljs-string">"__"</span>] * len(word)
+<span class="hljs-number">17</span>      win = <span class="hljs-keyword">False</span>
+<span class="hljs-number">18</span>      print(<span class="hljs-string">"Welcome to Hangman"</span>)
+<span class="hljs-number">19</span>      <strong><span class="hljs-keyword">while</span></strong> wrong &lt; len(stages) - <span class="hljs-number">1</span>:
+<span class="hljs-number">20</span>          <strong>print</strong>(<span class="hljs-string">"\n"</span>)
+<span class="hljs-number">21</span>          msg = <span class="hljs-string">"Guess a letter"</span>
+<span class="hljs-number">22</span>          char = input(msg)
+<span class="hljs-number">23</span>          <strong><span class="hljs-keyword">if</span></strong> char <strong><span class="hljs-keyword">in</span></strong> rletters:
+<span class="hljs-number">24</span>              cind = rletters.index(char)
+<span class="hljs-number">25</span>              board[cind] = char
+<span class="hljs-number">26</span>              rletters[cind] = <span class="hljs-string">'$'</span>
+<span class="hljs-number">27</span>          <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">28</span>              wrong += <span class="hljs-number">1</span>
+<span class="hljs-number">29</span>          <strong>print</strong>((<span class="hljs-string">" "</span>.join(board)))
+<span class="hljs-number">30</span>          e = wrong + <span class="hljs-number">1</span>
+<span class="hljs-number">31</span>          <strong>print</strong>(<span class="hljs-string">"\n"</span>.join(stages[<span class="hljs-number">0</span>:e]))
+<span class="hljs-number">32</span>          <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-string">"__"</span> <strong><span class="hljs-keyword">not</span></strong> <strong><span class="hljs-keyword">in</span></strong> board:
+<span class="hljs-number">33</span>              <strong>print</strong>(<span class="hljs-string">"You win!"</span>)
+<span class="hljs-number">34</span>              print(<span class="hljs-string">" "</span>.join(board))
+<span class="hljs-number">35</span>              win = <span class="hljs-keyword">True</span>
+<span class="hljs-number">36</span>              <strong><span class="hljs-keyword">break</span></strong>
+<span class="hljs-number">37</span>      <strong><span class="hljs-keyword">if</span></strong> <strong><span class="hljs-keyword">not</span></strong> win:
+<span class="hljs-number">38</span>          <strong>print</strong>(<span class="hljs-string">"\n"</span>.join(stages[<span class="hljs-number">0</span>:wrong]))
+<span class="hljs-number">39</span>          print(<span class="hljs-string">"You lose! It was {}."</span>.format(word))
+<span class="hljs-number">40</span>
+<span class="hljs-number">41</span>
+<span class="hljs-number">42</span>  hangman(<span class="hljs-string">"cat"</span>)</code></pre>
+<h3 id="102">10.2　挑战练习</h3>
+<p>修改本章编写的游戏，要求从一个单词列表中随机选择单词。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
