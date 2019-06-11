@@ -1,0 +1,317 @@
+---
+title: 面向对象的四大支柱
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>面向对象的四大支柱</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#131">13.1　封装</a></li>
+<li><a href="#132">13.2　抽象</a></li>
+<li><a href="#133">13.3　多态</a></li>
+<li><a href="#134">13.4　继承</a></li>
+<li><a href="#135">13.5　组合</a></li>
+<li><a href="#136">13.6　术语表</a></li>
+<li><a href="#137">13.7　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“优良设计创造价值的速度，快于其增加成本的速度。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——托马斯 · C. 盖勒（Thomas C.Gale）</span></p>
+</blockquote>
+<p>面向对象编程有四大概念：封装、抽象、多态和继承。它们共同构成了<strong>面向对象编程的四大支柱</strong>。编程语言必须同时支持这 4 个概念，才能被认为是一门面向对象编程的语言，如 Python、Java 和 Ruby。本章将分别学习面向对象编程的 4 个支柱。</p>
+<h3 id="131">13.1　封装</h3>
+<p><strong>封装</strong>（encapsulation）包含两个概念。第一个概念是在面向对象编程中，对象将变量（状态）和方法（用来改变状态或执行涉及状态的计算）集中在一个地方——即对象本身。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/j74o5rh</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Rectangle</span>():</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, l)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.width = w
+<span class="hljs-number">07</span>          <span class="hljs-keyword">self</span>.len = l
+08
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">area</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">12</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.width * <span class="hljs-keyword">self</span>.len</code></pre>
+<p>上例中，实例变量 <code>len</code> 和 <code>width</code> 保存的是对象的状态，并在 area 方法内集中在相同的地方（对象本身）。该方法使用对象的状态来返回长方形的面积。</p>
+<p>封装包含的第二个概念，指的是隐藏类的内部数据，以避免<strong>客户端</strong>（client）<strong>代码</strong>（即类外部的代码）直接进行访问。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jtz28ha</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Data</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.nums = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+<span class="hljs-number">07</span>
+08
+09      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">change_data</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, index, n)</span></span>:
+<span class="hljs-number">10</span>          <span class="hljs-keyword">self</span>.nums[index] = n</code></pre>
+<p><code>Data</code> 类有一个叫 <code>num</code> 的实例变量，包含一个整型数列表。创建一个 <code>Data</code> 对象后，有两种方法可以改变 <code>nums</code> 中的元素：使用 <code>change_data</code> 方法，或者直接使用 <code>Data</code> 对象访问其 <code>nums</code> 实例变量。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/huczqr5</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Data</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.nums = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+<span class="hljs-number">07</span>
+08
+09      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">change_data</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, index, n)</span></span>:
+<span class="hljs-number">10</span>          <span class="hljs-keyword">self</span>.nums[index] = n
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  data_one = Data()
+<span class="hljs-number">14</span>  data_one.nums[<span class="hljs-number">0</span>] = <span class="hljs-number">100</span>
+<span class="hljs-number">15</span>  <strong>print</strong>(data_one.nums)
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>  data_two = Data()
+<span class="hljs-number">19</span>  data_two.change_data(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>)
+<span class="hljs-number">20</span>  <strong>print</strong>(data_two.nums)
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-number">100</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-number">100</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</code></pre>
+<p>以上两种方法都有效，但是假如你将实例变量 <code>nums</code> 变成一个元组又该如何操作呢？如果这样改动，任何外部尝试修改 <code>nums</code> 变量的代码都是无效的。<code>nums[0] = 100</code> 这样的代码将无法成功执行，因为元组是不可变的。</p>
+<p>许多编程语言允许程序员定义<strong>私有变量</strong>（private variable）和<strong>私有方法</strong>（private method）来解决这个问题：对象可以访问这些变量和方法，但是客户端代码不行。私有变量和方法适用于如下场景：有一个类内部使用的方法或变量，并且希望后续调整代码实现（或保留选项的灵活），但不想让任何使用该类的人依赖这些方法或变量，因为后续代码可能会调整（到时会导致客户端代码无法执行）。私有变量是封装包含的第二个概念的一种范例；私有变量隐藏了类的内部数据，避免客户端代码直接访问。<strong>公有变量</strong>（public variable）则相反，它是客户端代码可以直接访问的变量。</p>
+<p>Python 中没有私有变量，所有的变量都是可以公开访问的。Python 通过另一种方法解决了私有变量应对的问题：使用命名约定。在 Python 中，如果有调用者不应该访问的变量或方法，则应在名称前加下划线。Python 程序员看见某个方法或变量以下划线开头时，就会知道它们不应该被使用（不过实际仍然是可以使用的）。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jkaorle</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">PublicPrivateExample</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.public = <span class="hljs-string">"safe"</span>
+<span class="hljs-number">07</span>          <span class="hljs-keyword">self</span>._unsafe = <span class="hljs-string">"unsafe"</span>
+08
+09
+<span class="hljs-number">10</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">public_method</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">11</span>          <span class="hljs-comment"># 客户端可以使用</span>
+<span class="hljs-number">12</span>          <strong>pass</strong>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">_unsafe_method</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">16</span>          <span class="hljs-comment"># 客户端不应使用</span>
+<span class="hljs-number">17</span>          <strong>pass</strong></code></pre>
+<p>编写客户端代码的程序员看到上述代码后，会知道变量 <code>self.public</code> 是可以安全使用的，但是不应该使用变量 <code>self._unsafe</code>，因为其以下划线开头。如果非要使用，后续可能会有风险。维护上述代码的程序员，没有义务一直保留 <code>self._unsafe</code>，因为调用者本不应该访问该变量。客户端程序员也能确认 <code>public_method</code> 是可以放心使用的，而 <code>_unsafe_method</code> 则不然，因为其名称同样以下划线开头。</p>
+<h3 id="132">13.2　抽象</h3>
+<p><strong>抽象</strong>（abstraction）指的是“剥离事物的诸多特征，使其只保留最基本的特质”的过程。在面向对象编程中，使用类进行对象建模时就会用到抽象的技巧。</p>
+<p>假设要对人进行建模。人的特征很复杂：头发和眼睛颜色不同，还有身高、体重、种族、性别等诸多特征。如要创建一个类代表人，有一些细节可能与要解决的问题并不相关。举个例子，我们创建一个 <code>Person</code> 类，但是忽略其眼睛颜色和身高等特征，这就是在进行抽象。<code>Person</code> 对象是对人的抽象，代表的是只具备解决当前问题所需的基本特征的人。</p>
+<h3 id="133">13.3　多态</h3>
+<p><strong>多态</strong>（polymorphism）指的是“为不同的基础形态（数据类型）提供相关接口的能力”。接口，指的是函数或方法。下面就是一个多态的示例：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hrxd7gn</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  print(<span class="hljs-string">"Hello, World!"</span>)
+<span class="hljs-number">5</span>  print(<span class="hljs-number">200</span>)
+<span class="hljs-number">6</span>  <strong>print</strong>(<span class="hljs-number">200.1</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+&gt;&gt; <span class="hljs-number">200</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">200.1</span></code></pre>
+<p><code>print</code> 函数为字符串、整数和浮点数这 3 种不同的数据类型提供了相同的接口。我们不必定义并调用 3 个不同的函数（如调用 <code>print_string</code> 打印字符串，<code>print_int</code> 打印整数，<code>print_float</code> 打印浮点数），只需要调用 <code>print</code> 函数即可支持所有数据类型。</p>
+<p>内置函数 <code>type</code> 可以返回对象的数据类型如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gnxq24x</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  type(<span class="hljs-string">"Hello, World!"</span>)
+<span class="hljs-number">5</span>  type(<span class="hljs-number">200</span>)
+<span class="hljs-number">6</span>  type(<span class="hljs-number">200.1</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> '<span class="hljs-title">str</span>'&gt;</span>
+<span class="hljs-meta">&gt;&gt;</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> '<span class="hljs-title">int</span>'&gt;</span>
+<span class="hljs-meta">&gt;&gt;</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> '<span class="hljs-title">float</span>'&gt;</span>
+</code></pre>
+<p>假设我们要编写一个程序，创建 3 个对象，用对象分别画出三角形、正方形和圆形。可以定义 3 个不同的类 <code>Triangle</code>、<code>Square</code> 和 <code>Circle</code>，并各自定义 <code>draw</code> 方法来实现。<code>Triangle.draw()</code> 用来画三角形，<code>Sqaure.draw()</code> 用来画正方形，<code>Circle.draw()</code> 则用来画圆形。这样设计的话，每个对象都有一个 <code>draw</code> 接口，支持画出自身类所对应的图形。这样就为 3 个不同的数据类型提供了相同的接口。</p>
+<p>如果 Python 不支持多态，每个图形就都需要创建一个方法：<code>draw_triangle</code> 画 <code>Triangle</code> 对象，<code>draw_square</code> 画 <code>Sqaure</code> 对象，<code>draw_cirlce</code> 画 <code>Circle</code> 对象。</p>
+<p>另外，如果有一个包含这些对象的列表，且要将每个对象画出来，就必须要检查每个对象的数据类型，然后调用正确的方法。这会让程序规模变大，更难阅读，更难编写，也更加脆弱。这还会使得程序更难以优化，因为每添加一个新图形，必须要找到代码中所有要画出图形的地方，并为新图形添加检查代码（以便确定使用哪个方法），而且还需再调用新的画图函数。下面分别是未使用多态和使用了多态的画图代码示例：</p>
+<pre class="代码无行号"><code class="hljs bash">01  <span class="hljs-comment"># 不要执行</span>
+02
+03
+04
+05  <span class="hljs-comment"># 未使用多态的代码画图</span>
+06
+07  shapes = [trl, sql, crl]
+08  <strong><span class="hljs-keyword">for</span></strong> a_shape <strong><span class="hljs-keyword">in</span></strong> shapes:
+09      <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-built_in">type</span>(a_shape) == <span class="hljs-string">"Triangle"</span>:
+10          a_shape.draw_triangle()
+11      <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-built_in">type</span>(a_shape) == <span class="hljs-string">"Square"</span>:
+12          a_shape.draw_square()
+13      <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-built_in">type</span>(a_shape) == <span class="hljs-string">"Circle"</span>:
+14          a_shape.draw_cirlce()
+15
+16
+17  <span class="hljs-comment"># 使用多态的代码画图</span>
+18
+19  shapes = [trl,
+20            swl,
+21            crl]
+22  <strong><span class="hljs-keyword">for</span></strong> a_shape <strong><span class="hljs-keyword">in</span></strong> shapes:
+23      a_shape.draw()</code></pre>
+<p>如果在没有使用多态的代码中添加新图形，则必须修改 <code>for</code> 循环中的代码，检查 <code>a_shape</code> 的类型并调用其画图方法。通过统一多态的接口，可以随意向 <code>shapes</code> 列表中添加新图形，不需要再添加额外的代码即可画出对应图形。</p>
+<h3 id="134">13.4　继承</h3>
+<p>编程语境中的<strong>继承</strong>（inheritance），与基因继承类似。在基因继承中，子女会从父母那继承眼睛颜色等特征。类似地，在创建类时，该类也可以从另一个类那里继承方法和变量。被继承的类，称为<strong>父类</strong>（parent class）；继承的类则被称为<strong>子类</strong>（child class）。本节将使用继承对图形进行建模。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zrnqeo3</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Shape</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self, w, l)</span>:</span>
+<span class="hljs-number">06</span>          self.width = w
+<span class="hljs-number">07</span>          self.len = l
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">print_size</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">11</span>          print(<span class="hljs-string">"""{} by {}
+12                """</span>.format(self.width,
+<span class="hljs-number">13</span>                           self.len))
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  my_shape = Shape(<span class="hljs-number">20</span>, <span class="hljs-number">25</span>)
+<span class="hljs-number">17</span>  my_shape.print_size()
+
+&gt;&gt; <span class="hljs-number">20</span> by <span class="hljs-number">25</span></code></pre>
+<p>通过该类，我们可以创建拥有 <code>width</code> 和 <code>len</code> 属性的 <code>Shape</code> 对象。<code>Shape</code> 对象有一个方法 <code>print_size</code>，可打印其 <code>width</code> 和 <code>len</code> 的值。</p>
+<p>接下来，定义一个子类。在创建子类时，将父类的变量名传入子类，即可继承父类的属性。下例中 <code>Square</code> 类的继承来自 <code>Shape</code> 类：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/j8lj35s</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Shape</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self, w, l)</span>:</span>
+<span class="hljs-number">06</span>          self.width = w
+<span class="hljs-number">07</span>          self.len = l
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">print_size</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">11</span>          print(<span class="hljs-string">"""{} by {}
+12                """</span>.format(self.width,
+<span class="hljs-number">13</span>                           self.len))
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Square</span><span class="hljs-params">(Shape)</span>:</span>
+<span class="hljs-number">17</span>      <strong><span class="hljs-keyword">pass</span></strong>
+<span class="hljs-number">18</span>
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>  a_square = Square(<span class="hljs-number">20</span>, <span class="hljs-number">20</span>)
+<span class="hljs-number">21</span>  a_square.print_size()
+
+&gt;&gt; <span class="hljs-number">20</span> by <span class="hljs-number">20</span></code></pre>
+<p>因为我们将 <code>Shape</code> 类作为参数传给了 <code>Square</code> 类，后者就继承了 <code>Shape</code> 类的变量和方法。<code>Sqaure</code> 类中定义的代码只有关键字 <code>keyword</code>，表示不执行任何操作。</p>
+<p>由于继承了父类，我们可以创建 <code>Square</code> 对象，传入宽度和长度参数，并在其上调用 <code>print_size</code> 方法，而不需要再写任何代码（除 <code>pass</code> 外）。由此带来的代码量缩减很重要，因为避免代码重复可以让程序更精简、更可控。</p>
+<p>子类与其他类没有区别，它可以定义新的方法和变量，不会影响父类。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/hwjdcy9</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Shape</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self, w, l)</span>:</span>
+<span class="hljs-number">06</span>          self.width = w
+<span class="hljs-number">07</span>          self.len = l
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">print_size</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">11</span>          <strong>print</strong>(<span class="hljs-string">"""{} by {}
+12                """</span>.format(self.width,
+<span class="hljs-number">13</span>                           self.len))
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Square</span><span class="hljs-params">(Shape)</span>:</span>
+<span class="hljs-number">17</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">area</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">18</span>          <strong><span class="hljs-keyword">return</span></strong> self.width * self.len
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>  a_square = Square(<span class="hljs-number">20</span>, <span class="hljs-number">20</span>)
+<span class="hljs-number">22</span>  <strong>print</strong>(a_square.area())
+
+&gt;&gt; <span class="hljs-number">400</span></code></pre>
+<p>当子类继承父类的方法时，我们可以定义一个与继承的方法名称相同的新方法，从而覆盖父类中的方法。子类改变从父类中继承方法的实现能力，被称为<strong>方法覆盖</strong>（method overriding），示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/hy9m8ht</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Shape</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self, w, l)</span>:</span>
+<span class="hljs-number">06</span>          self.width = w
+<span class="hljs-number">07</span>          self.len = l
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">print_size</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">11</span>          print(<span class="hljs-string">"""{} by {}
+12                """</span>.format(self.width,
+<span class="hljs-number">13</span>                           self.len))
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Square</span><span class="hljs-params">(Shape)</span>:</span>
+<span class="hljs-number">17</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">area</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">18</span>          <strong><span class="hljs-keyword">return</span></strong> self.width * self.len
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">print_size</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">22</span>          print(<span class="hljs-string">"""I am {} by {}
+23                """</span>.format(self.width,
+<span class="hljs-number">24</span>                           self.len))
+<span class="hljs-number">25</span>
+<span class="hljs-number">26</span>
+<span class="hljs-number">27</span>  a_square = Square(<span class="hljs-number">20</span>, <span class="hljs-number">20</span>)
+<span class="hljs-number">28</span>  a_square.print_size()
+
+&gt;&gt; I am <span class="hljs-number">20</span> by <span class="hljs-number">20</span></code></pre>
+<p>上例中，由于定义了一个叫 <code>print_size</code> 的方法，新定义的方法覆盖了父类中同名的方法，在调用时会打印不同的信息。</p>
+<h3 id="135">13.5　组合</h3>
+<p>介绍完面向对象编程的 4 个支柱之后，这里再介绍一个更重要的概念：<strong>组合</strong>（composition）。通过组合技巧，将一个对象作为变量保存在另一个对象中，可以模拟“拥有”关系。例如，可使用组合来表达狗和其主人之间的关系（狗有主人）。为此，我们首先定义表示狗和人的类：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zqg488n</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Dog</span>():</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>,
+<span class="hljs-number">06</span>                   name,
+<span class="hljs-number">07</span>                   breed,
+08                   owner)</span></span>:
+09          <span class="hljs-keyword">self</span>.name = name
+<span class="hljs-number">10</span>          <span class="hljs-keyword">self</span>.breed = breed
+<span class="hljs-number">11</span>          <span class="hljs-keyword">self</span>.owner = owner
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Person</span>():</span>
+<span class="hljs-number">15</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name)</span></span>:
+<span class="hljs-number">16</span>          <span class="hljs-keyword">self</span>.name = name</code></pre>
+<p>然后，在创建 <code>Dog</code> 对象时将 <code>Person</code> 对象作为 <code>owner</code> 参数传入：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zlzefd4</span>
+<span class="hljs-number">02</span>  <span class="hljs-comment"># 接上例</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>  mick = Person(<span class="hljs-string">"Mick Jagger"</span>)
+<span class="hljs-number">07</span>  stan = Dog(<span class="hljs-string">"Stanley"</span>,
+08             <span class="hljs-string">"Bulldog"</span>,
+09              mick)
+<span class="hljs-number">10</span>  print(stan.owner.name)
+
+<span class="hljs-meta">&gt;&gt;</span> Mick Jagger
+</code></pre>
+<p>这样，<code>stan</code> 对象 <code>"Stanley"</code> 就有了一位主人，即名叫 <code>"Mick Jagger"</code> 的 <code>Person</code> 对象，保存在其实例变量 <code>owner</code> 中。</p>
+<h3 id="136">13.6　术语表</h3>
+<p><strong>面向对象编程的四大支柱</strong>：封装、抽象、多态和继承。</p>
+<p><strong>继承</strong>：在基因继承中，子女会从父母那继承眼睛颜色等特征。类似地，在创建类时，该类也可以从另一个类那里继承方法和变量。</p>
+<p><strong>父类</strong>：被继承的类。</p>
+<p><strong>子类</strong>：继承父类的类。</p>
+<p><strong>方法覆盖</strong>：子类改变从父类中继承方法的实现能力。</p>
+<p><strong>多态</strong>：多态指的是为不同的基础形态（数据类型）提供相关接口的能力。</p>
+<p><strong>抽象</strong>：抽象指的是剥离事物的诸多特征，使其只保留最基本的特质的过程。</p>
+<p><strong>客户端代码</strong>：使用对象的类之外的代码。</p>
+<p><strong>封装</strong>：封装包含两个概念。第一个概念是在面向对象编程中对象将变量（状态）和方法（用来改变状态或执行涉及状态的计算）集中在一个地方——即对象本身。第二个概念指的是隐藏类的内部数据，以避免客户端代码（即类外部的代码）直接进行访问。</p>
+<p><strong>组合</strong>：通过组合技巧，将一个对象作为变量保存在另一个对象中，可以模拟“拥有”关系。</p>
+<h3 id="137">13.7　挑战练习</h3>
+<p>1．创建 <code>Rectangle</code> 和 <code>Square</code> 类，使它们均有一个叫 <code>calculate_perimeter</code> 的方法，计算其所表示图形的周长。创建 <code>Rectangle</code> 和 <code>Sqaure</code> 对象，并调用二者的周长计算方法。</p>
+<p>2．在 <code>Square</code> 类中，定义一个叫 <code>change_size</code> 的方法，支持传入一个数字，增加或减少（数字为负时）<code>Square</code> 对象的边长。</p>
+<p>3．创建一个叫 <code>Shape</code> 的类。在其中定义一个叫 <code>what_am_i</code> 的方法，被调用时打印 <code>"I am s shape"</code>。调整上个挑战中的 <code>Square</code> 和 <code>Rectangle</code> 类，使其继承 <code>Shape</code> 类，然后创建 <code>Sqaure</code> 和 <code>Rectangle</code> 对象，并在二者上调用新方法。</p>
+<p>4．创建一个叫 <code>Horse</code> 的类，以及一个叫 <code>Rider</code> 的类。使用组合，表示一批有骑手的马。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
