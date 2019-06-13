@@ -1,0 +1,357 @@
+---
+title: 综合练习
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>综合练习</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#151">15.1　卡牌</a></li>
+<li><a href="#152">15.2　牌堆</a></li>
+<li><a href="#153">15.3　玩家</a></li>
+<li><a href="#154">15.4　游戏</a></li>
+<li><a href="#155">15.5　战争</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“代码跑起来我们再聊。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——沃德 · 坎宁汉（Ward Cunningham）</span></p>
+</blockquote>
+<p>本章将学习开发著名的棋牌游戏——战争。在该游戏中，每名玩家从牌堆中抽取一张牌，牌面点数最高的玩家获胜。我们将分别定义表示扑克牌、牌堆、玩家和游戏的类，来逐步开发“战争”。</p>
+<h3 id="151">15.1　卡牌</h3>
+<p>下面是表示扑克牌的类：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jj22qv4</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Card</span>:</span>
+<span class="hljs-number">05</span>      suits = [<span class="hljs-string">"spades"</span>,
+<span class="hljs-number">06</span>               <span class="hljs-string">"hearts"</span>,
+<span class="hljs-number">07</span>               <span class="hljs-string">"diamonds"</span>,
+<span class="hljs-number">08</span>               <span class="hljs-string">"clubs"</span>]
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>      values = [<span class="hljs-keyword">None</span>, <span class="hljs-keyword">None</span>, <span class="hljs-string">"2"</span>, <span class="hljs-string">"3"</span>,
+<span class="hljs-number">12</span>                <span class="hljs-string">"4"</span>, <span class="hljs-string">"5"</span>, <span class="hljs-string">"6"</span>, <span class="hljs-string">"7"</span>,
+<span class="hljs-number">13</span>                <span class="hljs-string">"8"</span>, <span class="hljs-string">"9"</span>, <span class="hljs-string">"10"</span>,
+<span class="hljs-number">14</span>                <span class="hljs-string">"Jack"</span>, <span class="hljs-string">"Queen"</span>,
+<span class="hljs-number">15</span>                <span class="hljs-string">"King"</span>, <span class="hljs-string">"Ace"</span> ]
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self, v, s)</span>:</span>
+<span class="hljs-number">19</span>          <span class="hljs-string">"""suit 和 value 的值都为整型数"""</span>
+<span class="hljs-number">20</span>          self.value = v
+<span class="hljs-number">21</span>          self.suit = s
+<span class="hljs-number">22</span>
+<span class="hljs-number">23</span>
+<span class="hljs-number">24</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__lt__</span><span class="hljs-params">(self, c2)</span>:</span>
+<span class="hljs-number">25</span>          <strong><span class="hljs-keyword">if</span></strong> self.value &lt; c2.value:
+<span class="hljs-number">26</span>              <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">True</span>
+<span class="hljs-number">27</span>          <strong><span class="hljs-keyword">if</span></strong> self.value == c2.value:
+<span class="hljs-number">28</span>              <strong><span class="hljs-keyword">if</span></strong> self.suit &lt; c2.suit:
+<span class="hljs-number">29</span>                  <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">True</span>
+<span class="hljs-number">30</span>              <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">31</span>                  <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">False</span>
+<span class="hljs-number">32</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">False</span>
+<span class="hljs-number">33</span>
+<span class="hljs-number">34</span>
+<span class="hljs-number">35</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__gt__</span><span class="hljs-params">(self, c2)</span>:</span>
+<span class="hljs-number">36</span>          <strong><span class="hljs-keyword">if</span></strong> self.value &gt; c2.value:
+<span class="hljs-number">37</span>              <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">True</span>
+<span class="hljs-number">38</span>          <strong><span class="hljs-keyword">if</span></strong> self.value == c2.value:
+<span class="hljs-number">39</span>              <strong><span class="hljs-keyword">if</span></strong> self.suit &gt; c2.suit:
+<span class="hljs-number">40</span>                  <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">True</span>
+<span class="hljs-number">41</span>              <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">42</span>                  <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">False</span>
+<span class="hljs-number">43</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">False</span>
+<span class="hljs-number">44</span>
+<span class="hljs-number">45</span>
+<span class="hljs-number">46</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__repr__</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">47</span>          v = self.values[self.value] + <span class="hljs-string">" of "</span> \
+<span class="hljs-number">48</span>          + self.suits[self.suit]
+<span class="hljs-number">49</span>          <strong><span class="hljs-keyword">return</span></strong> v</code></pre>
+<p><code>Card</code> 类有两个类变量：<code>suits</code> 和 <code>values</code>。前者是一个字符串列表，表示扑克牌的花色：<code>spades</code>、<code>hearts</code>、<code>diamonds</code> 和 <code>clubs</code>。后者是一个表示扑克牌数字的字符串列表：<code>2～10</code>、<code>Jack</code>、<code>Queen</code>、<code>King</code> 和 <code>Ace</code>。列表 <code>values</code> 的前两个索引处的元素都是 <code>None</code>，以确保列表中的字符串与其所处的索引相匹配，即 <code>values</code> 列表中的字符串 <code>"2"</code> 位于索引 <code>2</code>。</p>
+<p><code>Card</code> 对象有两个实例变量：<code>suit</code> 和 <code>value</code>，均为整型数。二者结合在一起，表示 <code>Card</code> 对象代表的是什么牌。例如，创建 <code>Card</code> 对象时传入参数 <code>2</code> 作为 <code>suit</code> 的值，传入参数 <code>1</code> 作为 <code>value</code> 的值，就意味着创建了一张 <code>2 of hearts</code>（红桃二）。</p>
+<p>由于定义了 <code>__lt__</code> 和 <code>__gt__</code> 这两个魔法方法，就可以在表达式中使用大于和小于运算符比较 <code>Card</code> 对象。魔法方法中的代码会判断当前扑克牌是大于还是小于作为参数传入的扑克牌，同时也会判断两张牌的值是否相同。如果加入两张牌的值都是 <code>10</code>，那么就会通过 <code>suit</code> 来比较。<code>suits</code> 列表中的花色是按大小排列的，即索引值越大的花色，越小；索引值越小的花色，越大。示例如下：</p>
+<pre><code class="hljs php"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j6donnr</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  card1 = Card(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>)
+<span class="hljs-number">5</span>  card2 = Card(<span class="hljs-number">11</span>, <span class="hljs-number">3</span>)
+<span class="hljs-number">6</span>  <span class="hljs-keyword">print</span>(card1 &lt; card2)
+
+&gt;&gt; <span class="hljs-keyword">True</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hc9ktlr</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  card1 = Card(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>)
+<span class="hljs-number">5</span>  card2 = Card(<span class="hljs-number">11</span>, <span class="hljs-number">3</span>)
+<span class="hljs-number">6</span>  <span class="hljs-keyword">print</span>(card1 &gt; card2)
+
+&gt;&gt; <span class="hljs-keyword">False</span>
+</code></pre>
+<p><code>Card</code> 类中定义的最后一个方法是 <code>__repr__</code>，通过 <code>value</code> 和 <code>suit</code> 实例变量查找扑克牌在 <code>values</code> 和 <code>suits</code> 列表中对应的值和花色，并返回查询结果。示例如下：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z57hc75</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  card = Card(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>)
+<span class="hljs-number">5</span>  <span class="hljs-built_in">print</span>(card)
+
+&gt;&gt; <span class="hljs-number">3</span> <span class="hljs-keyword">of</span> diamonds
+</code></pre>
+<h3 id="152">15.2　牌堆</h3>
+<p>接下来，我们定义一个用来表示牌堆（deck of cards）的类：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jz8zfz7</span>
+<span class="hljs-number">2</span>  <strong>from</strong> random <strong>import</strong> shuffle
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>
+<span class="hljs-number">5</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Deck</span>:</span>
+<span class="hljs-number">6</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">7</span>          <span class="hljs-keyword">self</span>.cards = []
+08          <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">2</span>, <span class="hljs-number">15</span>):
+09              <strong><span class="hljs-keyword">for</span></strong> j <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">4</span>):
+<span class="hljs-number">10</span>                  <span class="hljs-keyword">self</span>.cards.append(Card(i, j))
+<span class="hljs-number">11</span>          shuffle(<span class="hljs-keyword">self</span>.cards)
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">rm_card</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">15</span>          <strong><span class="hljs-keyword">if</span></strong> len(<span class="hljs-keyword">self</span>.cards) == <span class="hljs-number">0</span>:
+<span class="hljs-number">16</span>              <strong><span class="hljs-keyword">return</span></strong>
+<span class="hljs-number">17</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.cards.pop()</code></pre>
+<p>在初始化 <code>Deck</code> 对象时，<code>__init__</code> 方法中的两个 <code>for</code> 循环将创建牌堆中所有的 52 张牌，并添加到 <code>cards</code> 列表。第一个循环从 <code>2</code> 到 <code>15</code>，因为扑克牌的第一个值是 <code>2</code>，最后一个值是 <code>14</code>（Ace）。内部的 <code>for</code> 循环每循环一次，就会使用外循环的整型数作为扑克牌的值（如 <code>14</code> 表示 Ace），用内循环的整型数作为扑克牌的花色（如 <code>2</code> 表示红桃），以此创建一张扑克牌，总共创建 52 张，每种花色和数值的组合各创建一张。创建完所有的扑克牌之后，通过 <code>random</code> 模块中的 <code>shuffle</code> 方法随机排列 <code>cards</code> 列表中的元素，模拟洗牌的动作。</p>
+<p>牌堆还有一个叫 <code>rm_card</code> 的方法，从牌堆中返回一张扑克牌对象并将其从 <code>cards</code> 列表内移除，如果牌堆里没有牌时则返回 <code>None</code>。我们使用 <code>Deck</code> 类创建一副牌，并打印其中所有的牌：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hsv5n6p</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  deck = Deck()
+<span class="hljs-number">5</span>  <strong><span class="hljs-keyword">for</span></strong> card <strong><span class="hljs-keyword">in</span></strong> deck.<span class="hljs-symbol">cards:</span>
+<span class="hljs-number">6</span>      print(card)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span> of spades
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">8</span> of hearts
+...</code></pre>
+<h3 id="153">15.3　玩家</h3>
+<p>我们还需要一个类来表示游戏中的玩家，并记录他们手中的牌，以及赢了多少局。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gwyrt2s</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Player</span>:</span>
+<span class="hljs-number">5</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name)</span></span>:
+<span class="hljs-number">6</span>          <span class="hljs-keyword">self</span>.wins = <span class="hljs-number">0</span>
+<span class="hljs-number">7</span>          <span class="hljs-keyword">self</span>.card = None
+<span class="hljs-number">8</span>          <span class="hljs-keyword">self</span>.name = name</code></pre>
+<p><code>Player</code> 类有 3 个实例变量：<code>wins</code> 用来记录玩家赢的局数，<code>card</code> 用来代表玩家当前手中的牌，<code>name</code> 用来记录玩家的姓名。</p>
+<h3 id="154">15.4　游戏</h3>
+<p>最后，还需要一个类来表示游戏本身：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/huwq8mw</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Game</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">06</span>          name1 = input(<span class="hljs-string">"p1 name "</span>)
+<span class="hljs-number">07</span>          name2 = input(<span class="hljs-string">"p2 name "</span>)
+08          <span class="hljs-keyword">self</span>.deck = Deck()
+09          <span class="hljs-keyword">self</span>.p1 = Player(name1)
+<span class="hljs-number">10</span>          <span class="hljs-keyword">self</span>.p2 = Player(name2)
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">wins</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, winner)</span></span>:
+<span class="hljs-number">14</span>          w = <span class="hljs-string">"{} wins this round"</span>
+<span class="hljs-number">15</span>          w = w.format(winner)
+<span class="hljs-number">16</span>          <strong>print</strong>(w)
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>
+<span class="hljs-number">19</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">draw</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, p1n, p1c, p2n, p2c)</span></span>:
+<span class="hljs-number">20</span>          d = <span class="hljs-string">"{} drew {} {} drew {}"</span>
+<span class="hljs-number">21</span>          d = d.format(p1n, p1c, p2n, p2c)
+<span class="hljs-number">22</span>          <strong>print</strong>(d)
+<span class="hljs-number">23</span>
+<span class="hljs-number">24</span>
+<span class="hljs-number">25</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">play_game</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">26</span>          cards = <span class="hljs-keyword">self</span>.deck.cards
+<span class="hljs-number">27</span>          <strong>print</strong>(<span class="hljs-string">"beginning War!"</span>)
+<span class="hljs-number">28</span>          <strong><span class="hljs-keyword">while</span></strong> len(cards) &gt;= <span class="hljs-number">2</span>:
+<span class="hljs-number">29</span>              m = <span class="hljs-string">"q to quit. Any "</span> + <span class="hljs-string">"key to play:"</span>
+<span class="hljs-number">30</span>              response = input(m)
+<span class="hljs-number">31</span>              <strong><span class="hljs-keyword">if</span></strong> response = <span class="hljs-string">"q"</span>:
+<span class="hljs-number">32</span>                  <strong><span class="hljs-keyword">break</span></strong>
+<span class="hljs-number">33</span>              p1c = <span class="hljs-keyword">self</span>.deck.rm_card()
+<span class="hljs-number">34</span>              p2c = <span class="hljs-keyword">self</span>.deck.rm_card()
+<span class="hljs-number">35</span>              p1n = <span class="hljs-keyword">self</span>.p1.name
+<span class="hljs-number">36</span>              p2n = <span class="hljs-keyword">self</span>.p2.name
+<span class="hljs-number">37</span>              <span class="hljs-keyword">self</span>.draw(p1n, p1c, p2n, p2c)
+<span class="hljs-number">38</span>              <strong><span class="hljs-keyword">if</span></strong> p1c &gt; <span class="hljs-symbol">p2c:</span>
+<span class="hljs-number">39</span>                  <span class="hljs-keyword">self</span>.p1.wins += <span class="hljs-number">1</span>
+<span class="hljs-number">40</span>                  <span class="hljs-keyword">self</span>.wins(<span class="hljs-keyword">self</span>.p1.name)
+<span class="hljs-number">41</span>              <strong><span class="hljs-symbol">else</span></strong><span class="hljs-symbol">:</span>
+<span class="hljs-number">42</span>                  <span class="hljs-keyword">self</span>.p2.wins += <span class="hljs-number">1</span>
+<span class="hljs-number">43</span>                  <span class="hljs-keyword">self</span>.wins(<span class="hljs-keyword">self</span>.p2.name)
+<span class="hljs-number">44</span>
+<span class="hljs-number">45</span>
+<span class="hljs-number">46</span>          win = <span class="hljs-keyword">self</span>.winner(<span class="hljs-keyword">self</span>.p1, <span class="hljs-keyword">self</span>.p2)
+<span class="hljs-number">47</span>
+<span class="hljs-number">48</span>          <strong>print</strong>(<span class="hljs-string">"War is over. {} wins"</span>.format(win))
+<span class="hljs-number">49</span>
+<span class="hljs-number">50</span>
+<span class="hljs-number">51</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">winner</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, p1, p2)</span></span>:
+<span class="hljs-number">52</span>          <strong><span class="hljs-keyword">if</span></strong> p1.wins &gt; p2.<span class="hljs-symbol">wins:</span>
+<span class="hljs-number">53</span>              <strong><span class="hljs-keyword">return</span></strong> p1.name
+<span class="hljs-number">54</span>          <strong><span class="hljs-keyword">if</span></strong> p1 wins &lt; p2.<span class="hljs-symbol">wins:</span>
+<span class="hljs-number">55</span>              <strong><span class="hljs-keyword">return</span></strong> p2.name
+<span class="hljs-number">56</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-string">"It was a tie!"</span></code></pre>
+<p>创建 <code>Game</code> 对象时，Python 调用其 <code>__init__</code> 方法，其中的 <code>input</code> 函数将收集参与游戏的两名玩家的姓名，并保存在变量 <code>name1</code> 和 <code>name2</code> 中。接下来，创建一个 <code>Deck</code> 对象，保存在实例变量 <code>deck</code> 中，并使用 <code>name1</code> 和 <code>name2</code> 创建两个 <code>Player</code> 对象。</p>
+<p><code>Game</code> 类中的 <code>play_game</code> 方法会开启游戏，其中有一个 <code>while</code> 循环，只要牌堆中剩下两张或两张以上扑克牌，并且 <code>response</code> 变量的值并等于 <code>q</code>，游戏就会一直运行。每次循环，都将用户的输入赋值给 <code>response</code> 变量。游戏只有在有玩家输入 <code>"q"</code>，或者牌堆里少于两张牌时才会结束。</p>
+<p>每次循环将抽取两张扑克牌，<code>play_game</code> 方法将第一张牌给 <code>p1</code>，第二张牌给 <code>p2</code>。然后打印每个玩家的名字及抽到的扑克牌，同时比较哪张牌更大，手中牌更大的玩家赢得本轮，其对应 <code>wins</code> 实例变量的值递增 1。</p>
+<p><code>Game</code> 类还有一个叫 <code>winner</code> 的方法，接受两个 <code>Player</code> 对象，将比较各自赢得的局数，并返回获胜次数最多的玩家。</p>
+<p>当 <code>Deck</code> 对象中没有多余的扑克牌后，<code>play_game</code> 方法将打印一段话表示战争已经结束，然后调用 <code>winner</code> 方法（传入 <code>p1</code> 和 <code>p2</code> 作为参数），并打印返回的结果——赢得游戏胜利的玩家的姓名。</p>
+<h3 id="155">15.5　战争</h3>
+<p>以下是完整代码：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">001</span>  <span class="hljs-comment"># http://tinyurl.com/ho7364a</span>
+<span class="hljs-number">002</span>
+<span class="hljs-number">003</span>
+<span class="hljs-number">004</span>  <strong>from</strong> random <strong>import</strong> shuffle
+<span class="hljs-number">005</span>
+<span class="hljs-number">006</span>
+<span class="hljs-number">007</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Card</span>:</span>
+<span class="hljs-number">00</span>8      suits = [<span class="hljs-string">"spades"</span>,
+<span class="hljs-number">00</span>9               <span class="hljs-string">"hearts"</span>,
+<span class="hljs-number">010</span>               <span class="hljs-string">"diamonds"</span>,
+<span class="hljs-number">011</span>               <span class="hljs-string">"clubs"</span>]
+<span class="hljs-number">012</span>
+<span class="hljs-number">013</span>
+<span class="hljs-number">014</span>      values = [None, None, <span class="hljs-string">"2"</span>, <span class="hljs-string">"3"</span>,
+<span class="hljs-number">015</span>                <span class="hljs-string">"4"</span>, <span class="hljs-string">"5"</span>, <span class="hljs-string">"6"</span>, <span class="hljs-string">"7"</span>,
+<span class="hljs-number">016</span>                <span class="hljs-string">"8"</span>, <span class="hljs-string">"9"</span>, <span class="hljs-string">"10"</span>,
+<span class="hljs-number">017</span>                <span class="hljs-string">"Jack"</span>, <span class="hljs-string">"Queen"</span>,
+<span class="hljs-number">01</span>8                <span class="hljs-string">"King"</span>, <span class="hljs-string">"Ace"</span> ]
+<span class="hljs-number">01</span>9
+<span class="hljs-number">020</span>
+<span class="hljs-number">021</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, v, s)</span></span>:
+<span class="hljs-number">022</span>          <span class="hljs-string">""</span><span class="hljs-string">"suit 和 value 的值都为整型数"</span><span class="hljs-string">""</span>
+<span class="hljs-number">023</span>          <span class="hljs-keyword">self</span>.value = v
+<span class="hljs-number">024</span>          <span class="hljs-keyword">self</span>.suit = s
+<span class="hljs-number">025</span>
+<span class="hljs-number">026</span>
+<span class="hljs-number">027</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__lt__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, c2)</span></span>:
+<span class="hljs-number">02</span>8          <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-keyword">self</span>.value &lt; c2.<span class="hljs-symbol">value:</span>
+<span class="hljs-number">02</span>9              <strong><span class="hljs-keyword">return</span></strong> True
+<span class="hljs-number">030</span>          <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-keyword">self</span>.value == c2.<span class="hljs-symbol">value:</span>
+<span class="hljs-number">031</span>              <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-keyword">self</span>.suit &lt; c2.<span class="hljs-symbol">suit:</span>
+<span class="hljs-number">032</span>                  <strong><span class="hljs-keyword">return</span></strong> True
+<span class="hljs-number">033</span>              <strong><span class="hljs-symbol">else</span></strong><span class="hljs-symbol">:</span>
+<span class="hljs-number">034</span>                  <strong><span class="hljs-keyword">return</span></strong> False
+<span class="hljs-number">035</span>          <strong><span class="hljs-keyword">return</span></strong> False
+<span class="hljs-number">036</span>
+<span class="hljs-number">037</span>
+<span class="hljs-number">03</span>8      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__gt__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, c2)</span></span>:
+<span class="hljs-number">03</span>9          <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-keyword">self</span>.value &gt; c2.<span class="hljs-symbol">value:</span>
+<span class="hljs-number">040</span>              <strong><span class="hljs-keyword">return</span></strong> True
+<span class="hljs-number">041</span>          <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-keyword">self</span>.value == c2.<span class="hljs-symbol">value:</span>
+<span class="hljs-number">042</span>              <strong><span class="hljs-keyword">if</span></strong> <span class="hljs-keyword">self</span>.suit &gt; c2.<span class="hljs-symbol">suit:</span>
+<span class="hljs-number">043</span>                  <strong><span class="hljs-keyword">return</span></strong> True
+<span class="hljs-number">044</span>              <strong><span class="hljs-symbol">else</span></strong><span class="hljs-symbol">:</span>
+<span class="hljs-number">045</span>                  <strong><span class="hljs-keyword">return</span></strong> False
+<span class="hljs-number">046</span>          <strong><span class="hljs-keyword">return</span></strong> False
+<span class="hljs-number">047</span>
+<span class="hljs-number">04</span>8
+<span class="hljs-number">04</span>9      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__repr__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">050</span>          v = <span class="hljs-keyword">self</span>.values[<span class="hljs-keyword">self</span>.value] + <span class="hljs-string">" of "</span> \
+<span class="hljs-number">051</span>          + <span class="hljs-keyword">self</span>.suits[<span class="hljs-keyword">self</span>.suit]
+<span class="hljs-number">052</span>          <strong><span class="hljs-keyword">return</span></strong> v
+<span class="hljs-number">053</span>
+<span class="hljs-number">054</span>
+<span class="hljs-number">055</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Deck</span>:</span>
+<span class="hljs-number">056</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">057</span>          <span class="hljs-keyword">self</span>.cards = []
+<span class="hljs-number">05</span>8          <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">2</span>, <span class="hljs-number">15</span>):
+<span class="hljs-number">05</span>9              <strong><span class="hljs-keyword">for</span></strong> j <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">4</span>):
+<span class="hljs-number">060</span>                  <span class="hljs-keyword">self</span>.cards.append(Card(i, j))
+<span class="hljs-number">061</span>          shuffle(<span class="hljs-keyword">self</span>.cards)
+<span class="hljs-number">062</span>
+<span class="hljs-number">063</span>
+<span class="hljs-number">064</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">rm_card</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">065</span>          <strong><span class="hljs-keyword">if</span></strong> len(<span class="hljs-keyword">self</span>.cards) == <span class="hljs-number">0</span>:
+<span class="hljs-number">066</span>              <strong><span class="hljs-keyword">return</span></strong>
+<span class="hljs-number">067</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.cards.pop()
+<span class="hljs-number">06</span>8
+<span class="hljs-number">06</span>9
+<span class="hljs-number">070</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Player</span>:</span>
+<span class="hljs-number">071</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name)</span></span>:
+<span class="hljs-number">072</span>          <span class="hljs-keyword">self</span>.wins = <span class="hljs-number">0</span>
+<span class="hljs-number">073</span>          <span class="hljs-keyword">self</span>.card = None
+<span class="hljs-number">074</span>          <span class="hljs-keyword">self</span>.name = name
+<span class="hljs-number">075</span>
+<span class="hljs-number">076</span>
+<span class="hljs-number">077</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Game</span>:</span>
+<span class="hljs-number">07</span>8      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">07</span>9          name1 = input(<span class="hljs-string">"p1 name "</span>)
+08<span class="hljs-number">0</span>          name2 = input(<span class="hljs-string">"p2 name "</span>)
+081          <span class="hljs-keyword">self</span>.deck = Deck()
+082          <span class="hljs-keyword">self</span>.p1 = Player(name1)
+083          <span class="hljs-keyword">self</span>.p2 = Player(name2)
+084
+085
+086      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">wins</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, winner)</span></span>:
+087          w = <span class="hljs-string">"{} wins this round"</span>
+088          w = w.format(winner)
+089          <strong>print</strong>(w)
+09<span class="hljs-number">0</span>
+091
+092      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">draw</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, p1n, p1c, p2n, p2c)</span></span>:
+093          d = <span class="hljs-string">"{} drew {} {} drew {}"</span>
+094          d = d.format(p1n, p1c, p2n, p2c)
+095          <strong>print</strong>(d)
+096
+097
+098      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">play_game</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+099          cards = <span class="hljs-keyword">self</span>.deck.cards
+<span class="hljs-number">100</span>          <strong>print</strong>(<span class="hljs-string">"beginning War!"</span>)
+<span class="hljs-number">101</span>          <strong><span class="hljs-keyword">while</span></strong> len(cards) &gt;= <span class="hljs-number">2</span>:
+<span class="hljs-number">102</span>              m = <span class="hljs-string">"q to quit. Any "</span> + <span class="hljs-string">"key to play:"</span>
+<span class="hljs-number">103</span>              response = input(m)
+<span class="hljs-number">104</span>              <strong><span class="hljs-keyword">if</span></strong> response == <span class="hljs-string">'q'</span>:
+<span class="hljs-number">105</span>                  <strong><span class="hljs-keyword">break</span></strong>
+<span class="hljs-number">106</span>              p1c = <span class="hljs-keyword">self</span>.deck.rm_card()
+<span class="hljs-number">107</span>              p2c = <span class="hljs-keyword">self</span>.deck.rm_card()
+<span class="hljs-number">108</span>              p1n = <span class="hljs-keyword">self</span>.p1.name
+<span class="hljs-number">109</span>              p2n = <span class="hljs-keyword">self</span>.p2.name
+<span class="hljs-number">110</span>              <span class="hljs-keyword">self</span>.draw(p1n, p1c, p2n, p2c)
+<span class="hljs-number">111</span>              <strong><span class="hljs-keyword">if</span></strong> p1c &gt; <span class="hljs-symbol">p2c:</span>
+<span class="hljs-number">112</span>                  <span class="hljs-keyword">self</span>.p1.wins += <span class="hljs-number">1</span>
+<span class="hljs-number">113</span>                  <span class="hljs-keyword">self</span>.wins(<span class="hljs-keyword">self</span>.p1.name)
+<span class="hljs-number">114</span>              <strong><span class="hljs-symbol">else</span></strong><span class="hljs-symbol">:</span>
+<span class="hljs-number">115</span>                  <span class="hljs-keyword">self</span>.p2.wins += <span class="hljs-number">1</span>
+<span class="hljs-number">116</span>                  <span class="hljs-keyword">self</span>.wins(<span class="hljs-keyword">self</span>.p2.name)
+<span class="hljs-number">117</span>
+<span class="hljs-number">118</span>
+<span class="hljs-number">119</span>          win = <span class="hljs-keyword">self</span>.winner(<span class="hljs-keyword">self</span>.p1, <span class="hljs-keyword">self</span>.p2)
+<span class="hljs-number">120</span>
+<span class="hljs-number">121</span>          print(<span class="hljs-string">"War is over. {} wins"</span>.format(win))
+<span class="hljs-number">122</span>
+<span class="hljs-number">123</span>
+<span class="hljs-number">124</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">winner</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, p1, p2)</span></span>:
+<span class="hljs-number">125</span>          <strong><span class="hljs-keyword">if</span></strong> p1.wins &gt; p2.<span class="hljs-symbol">wins:</span>
+<span class="hljs-number">126</span>              <strong><span class="hljs-keyword">return</span></strong> p1.name
+<span class="hljs-number">127</span>          <strong><span class="hljs-keyword">if</span></strong> p1 wins &lt; p2.<span class="hljs-symbol">wins:</span>
+<span class="hljs-number">128</span>              <strong><span class="hljs-keyword">return</span></strong> p2.name
+<span class="hljs-number">129</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-string">"It was a tie!"</span>
+<span class="hljs-number">130</span>
+<span class="hljs-number">131</span>
+<span class="hljs-number">132</span>  game = Game()
+<span class="hljs-number">133</span>  game.play_game()
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">"p1 name"</span>
+…</code></pre></div></article>
+</body>
+</html>
