@@ -35,7 +35,7 @@ title: me
   > 1. 该系统主要负责公司业务基础数据处理，结合机器学习思想通过特征工程构建VSM;
   > 2. 结合业务设计并使用Keras、TensorFlow实现算法，产生匹配、分类、预测等模型;
   > 3. 选用Sainc/Flask作为Web框架, 使用Gunicorn代理, 采用Docker部署服务, 提供各功能数据交互接口;
-  > 4. 选择Redis做定时缓存以及分布式事务锁存储, 使用MongoDB存储非结构化数据, RabbitMQ作为消息队列。
+  > 4. 选择Redis做定时缓存以及分布式事务锁存储, 使用MongoDB存储非结构化数据。
 
 - Koasys供应商对接
 
