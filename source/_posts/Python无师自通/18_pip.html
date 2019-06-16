@@ -1,0 +1,120 @@
+---
+title: 包
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>包</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#181">18.1　包</a></li>
+<li><a href="#182pip">18.2　pip</a></li>
+<li><a href="#183">18.3　虚拟环境</a></li>
+<li><a href="#184">18.4　术语表</a></li>
+<li><a href="#185">18.5　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“每名程序员都是作家。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——塞坎 · 雷勒克（Sercan Leylek）</span></p>
+</blockquote>
+<p><strong>包管理器</strong>（package manager）是用来安装和管理其他程序的程序。之所以需要包管理器，是因为我们经常要使用其他程序来开发新的软件。例如，Web 开发者经常会用到 <strong>Web 框架</strong>，即协助构建网站的程序。程序员使用包管理器来安装 Web 框架和其他各种程序。本章将学习如何使用 Python 的包管理器 <strong>pip</strong>。</p>
+<h3 id="181">18.1　包</h3>
+<p><strong>包</strong>（package）是“打包”好用来发布的软件，它包括组成实际程序的所有文件，以及相关的<strong>元数据</strong>（metadata）：有关软件名称、版本号和<strong>依赖</strong>（dependencies）等数据。依赖指的是程序正常运行时所需要依赖的程序。我们可使用包管理器下载并安装程序。包管理器会下载包相关的所有依赖程序。</p>
+<h3 id="182pip">18.2　pip</h3>
+<p>本节将学习如何使用 Python 的包管理器 pip 来下载 Python 程序包。使用 pip 下载好包后，可在 Python 程序中直接作为模块导入。首先，打开 Bash（如果是 Windows 系统，则打开命令提示符）检查计算机上是否安装了 pip，输入命令 <code>pip</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/hmookdf</span>
+
+$ pip
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-symbol">Usage:</span> pip &lt;command&gt; [options]
+<span class="hljs-symbol">Commands:</span>
+install Install packages.
+download Download packages. ...
+</code></pre>
+<p>输入 <code>pip</code> 命令后，Bash 应该会打印一系列的选项。在下载安装 Python 时，一般就会自带 pip，不过较早的 Python 版本没有。如果输入 pip 命令后没有任何输出，那说明计算机上没有安装 pip。这样的话，请前往 http://www.theselftaughtprogrrammer.io/pip，了解如何安装。</p>
+<p>可使用语法 <code>pip install[包名称]</code> 安装新的程序包。默认会安装到一个叫 site-packages 的 Python 目录下。在网页 https://pypi.python.org/pypi 中可以查看所有可下载的 Python 包。有两种指定下载软件包的方式：指定包名称，或者包名称后面接两个等号 <code>(==)</code> 以及版本号。后者支持下载某个特定版本的包，而不是最新的版本。下面这个示例介绍了如何在 Ubuntu 和 UNIX 操作系统中安装用来创建网站的 Python 包——<code>Flask</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/hchso7u</span>
+
+$ sudo pip install Flask==<span class="hljs-number">0</span>.<span class="hljs-number">11.1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-symbol">Password:</span>
+<span class="hljs-meta">&gt;&gt;</span> Successfully installed flask-<span class="hljs-number">0</span>.<span class="hljs-number">11.1</span>
+</code></pre>
+<p>在 Windows 操作系统中，需要以管理员权限使用命令行。在命令提示符图标上单击鼠标右键，选择以管理员权限运行。</p>
+<p>然后在命令提示符中输入：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/hyxm3vt</span>
+
+$ pip install Flask==<span class="hljs-number">0</span>.<span class="hljs-number">11.1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> Successfully installed flask-<span class="hljs-number">0</span>.<span class="hljs-number">11.1</span>
+</code></pre>
+<p>通过上述命令，pip 将 <code>Flask</code> 模块安装在 site-packages 目录中。</p>
+<p>现在，可以在程序中直接导入 <code>Flask</code> 模块。新建一个 Python 文件，添加如下代码并运行程序：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h59sdyu</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong>from</strong> flask <strong>import</strong> Flask
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">07</span>  app = Flask(__name_<span class="hljs-number">_</span>)
+08
+09
+<span class="hljs-number">10</span>  @app.route(<span class="hljs-string">'/'</span>)
+<span class="hljs-number">11</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">index</span><span class="hljs-params">()</span></span>:
+<span class="hljs-number">12</span>      <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-string">"Hello, World!"</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  app.run(port=<span class="hljs-string">'8000'</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> * Running on <span class="hljs-symbol">http:</span>/<span class="hljs-regexp">/127.0.0.1:8000/</span> (Press CTRL+C to quit)</code></pre>
+<p>然后，在浏览器中打开 http://127.0.0.1:8000/，应该可以看到网页中出现“Hello, World!”字样，如图 18-1 所示。</p>
+<p><img src="https://images.gitbook.cn/c80b2d80-706e-11e9-856e-1b8faf24d23e" alt="enter image description here"></p>
+<p>图 18-1　Hello, World!</p>
+<p>Flask 模块可以让我们快速创建一个 Web 服务器和网站。前往 http://flask.pocoo.org/docs/0.11/tutorial 了解更多关于上述示例的介绍。</p>
+<p>我们可使用命令 <code>pip freeze</code> 查看已经安装了哪些包：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/zxgcqeh</span>
+
+pip freeze
+
+<span class="hljs-meta">&gt;&gt;</span> Flask==<span class="hljs-number">0</span>.<span class="hljs-number">11.11</span>
+...
+</code></pre>
+<p>最后，可以使用 <code>pip uninstall [包名称]</code> 卸载程序。执行如下命令卸载 Flask：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/ht8mleo</span>
+
+pip uninstall flask.
+...
+
+<span class="hljs-meta">&gt;&gt;</span> Proceed (y/n)? y ...
+</code></pre>
+<h3 id="183">18.3　虚拟环境</h3>
+<p>最后，我们最好将 Python 包安装在<strong>虚拟环境</strong>（virutal environment）中，而不是直接都安装在 site-packages 目录下。虚拟环境可以将不同编程项目所需的包分隔开来。可前往 http://docs.python-guide.org/en/latest/virtualenvs 了解更多有关虚拟环境的内容。</p>
+<h3 id="184">18.4　术语表</h3>
+<p><strong>包管理器</strong>：安装和管理其他程序的程序。</p>
+<p><strong>Web 框架</strong>：协助构建网站的程序。</p>
+<p><strong>包</strong>：“打包”用来发行的软件。</p>
+<p><strong>元数据</strong>：关于数据的数据。</p>
+<p><strong>依赖</strong>：程序正常运行所依赖的程序。</p>
+<p><strong>Apt-get</strong>：Ubuntu 操作系统提供的一个包管理器。</p>
+<p><strong>pip</strong>：Python 中的包管理器。</p>
+<p><strong>$PYTHONPATH</strong>：一个环境变量，Python 导入模块时将在该变量保存的目录列表中查找模块。</p>
+<p><strong>site-packages</strong>：位于 $PYTHONPATH 的目录，pip 将包安装在该目录中。</p>
+<p><strong>PyPI</strong>：托管 Python 包的网站。</p>
+<p><strong>虚拟环境</strong>：可使用虚拟环境将不同编程项目所需的包分隔开来。</p>
+<h3 id="185">18.5　挑战练习</h3>
+<p>在 PyPI 上找一个包，并使用 pip 下载安装。</p>
+</div></article>
+</body>
+</html>
