@@ -52,7 +52,7 @@ title: apscheduler
         scheduler<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token keyword">except</span> <span class="token punctuation">(</span>KeyboardInterrupt<span class="token punctuation">,</span> SystemExit<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">pass</span>
-<div class="hljs-button signin" data-title="登录后复制"></div></code><ul class="pre-numbering" style=""><li style="color: rgb(153, 153, 153);">1</li><li style="color: rgb(153, 153, 153);">2</li><li style="color: rgb(153, 153, 153);">3</li><li style="color: rgb(153, 153, 153);">4</li><li style="color: rgb(153, 153, 153);">5</li><li style="color: rgb(153, 153, 153);">6</li><li style="color: rgb(153, 153, 153);">7</li><li style="color: rgb(153, 153, 153);">8</li><li style="color: rgb(153, 153, 153);">9</li><li style="color: rgb(153, 153, 153);">10</li><li style="color: rgb(153, 153, 153);">11</li><li style="color: rgb(153, 153, 153);">12</li><li style="color: rgb(153, 153, 153);">13</li><li style="color: rgb(153, 153, 153);">14</li><li style="color: rgb(153, 153, 153);">15</li><li style="color: rgb(153, 153, 153);">16</li><li style="color: rgb(153, 153, 153);">17</li><li style="color: rgb(153, 153, 153);">18</li><li style="color: rgb(153, 153, 153);">19</li><li style="color: rgb(153, 153, 153);">20</li></ul></pre>
+<div class="hljs-button signin" data-title="登录后复制"></div></code></pre>
 <p>说明：<br>
 第 1 行代码声明文件内容以 utf-8 编码，告诉Python 解释器以 utf-8 编码解析源代码文件。</p>
 <p>导入 datetime 模块，用于打印当前时间。导入 os 模块，用于判断操作系统类型。</p>
@@ -86,13 +86,13 @@ title: apscheduler
         scheduler<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token keyword">except</span> <span class="token punctuation">(</span>KeyboardInterrupt<span class="token punctuation">,</span> SystemExit<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">pass</span>
-<div class="hljs-button signin" data-title="登录后复制"></div></code><ul class="pre-numbering" style=""><li style="color: rgb(153, 153, 153);">1</li><li style="color: rgb(153, 153, 153);">2</li><li style="color: rgb(153, 153, 153);">3</li><li style="color: rgb(153, 153, 153);">4</li><li style="color: rgb(153, 153, 153);">5</li><li style="color: rgb(153, 153, 153);">6</li><li style="color: rgb(153, 153, 153);">7</li><li style="color: rgb(153, 153, 153);">8</li><li style="color: rgb(153, 153, 153);">9</li><li style="color: rgb(153, 153, 153);">10</li><li style="color: rgb(153, 153, 153);">11</li><li style="color: rgb(153, 153, 153);">12</li><li style="color: rgb(153, 153, 153);">13</li><li style="color: rgb(153, 153, 153);">14</li><li style="color: rgb(153, 153, 153);">15</li><li style="color: rgb(153, 153, 153);">16</li><li style="color: rgb(153, 153, 153);">17</li><li style="color: rgb(153, 153, 153);">18</li><li style="color: rgb(153, 153, 153);">19</li><li style="color: rgb(153, 153, 153);">20</li><li style="color: rgb(153, 153, 153);">21</li></ul></pre>
+<div class="hljs-button signin" data-title="登录后复制"></div></code></pre>
 <p>定时 cron 任务也非常简单，直接给触发器 trigger 传入 ‘cron’ 即可。hour =19 ,minute =23 这里表示每天的19：23 分执行任务。这里可以填写数字，也可以填写字符串</p>
 <pre class="prettyprint"><code class="has-numbering" onclick="mdcp.signin(event)">hour =19 , minute =23
 hour ='19', minute ='23'
 minute = '*/3' 表示每 5 分钟执行一次
 hour ='19-21', minute= '23' 表示 19:23、 20:23、 21:23 各执行一次任务
-<div class="hljs-button signin" data-title="登录后复制"></div></code><ul class="pre-numbering" style=""><li style="color: rgb(153, 153, 153);">1</li><li style="color: rgb(153, 153, 153);">2</li><li style="color: rgb(153, 153, 153);">3</li><li style="color: rgb(153, 153, 153);">4</li></ul></pre>
+<div class="hljs-button signin" data-title="登录后复制"></div></code></pre>
 <p>python 就是这么灵活、易用、可读。例 2  执行结果如下：</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/12989993-a87021dbc9fd9f21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <h2><a name="t4"></a><a id="_106" target="_blank"></a>配置调度器</h2>
@@ -117,7 +117,7 @@ hour ='19-21', minute= '23' 表示 19:23、 20:23、 21:23 各执行一次任务
 <p>如果调度程序在应用程序的<strong>后台运行</strong>，选择 BackgroundScheduler，并使用默认的 jobstore 和默认的executor，则以下配置即可：</p>
 <pre class="prettyprint"><code class="prism language-python has-numbering" onclick="mdcp.signin(event)"><span class="token keyword">from</span> apscheduler<span class="token punctuation">.</span>schedulers<span class="token punctuation">.</span>background <span class="token keyword">import</span> BackgroundScheduler
 scheduler <span class="token operator">=</span> BackgroundScheduler<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<div class="hljs-button signin" data-title="登录后复制"></div></code><ul class="pre-numbering" style=""><li style="color: rgb(153, 153, 153);">1</li><li style="color: rgb(153, 153, 153);">2</li></ul></pre>
+<div class="hljs-button signin" data-title="登录后复制"></div></code></pre>
 <p>假如我们想<strong>配置更多信息</strong>：设置两个执行器、两个作业存储器、调整新作业的默认值，并设置不同的时区。下述三个方法是完全等同的。<br>
 配置需求</p>
 <ul>
