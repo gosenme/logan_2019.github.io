@@ -1,0 +1,533 @@
+---
+title: Spring Boot 工程化最佳实践
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#">开发工具</a></li>
+<li><a href="#-1">构建工具</a></li>
+<li><a href="#-2">工程结构</a></li>
+<li><a href="#-3">根据环境区分配置文件</a></li>
+<li><a href="#-4">配置文件敏感字段加解密</a></li>
+<li><a href="#http">替换底层的 HTTP 函数库</a><ul>
+<li><a href="#resttemplate">RestTemplate</a></li>
+<li><a href="#feign">Feign</a></li>
+<li><a href="#zuul">Zuul</a></li>
+</ul>
+</li>
+<li><a href="#apiapi">基于不同端口实现公有 API 和私有 API 的隔离</a><ul>
+<li><a href="#-5">区分内部和外部接口</a></li>
+<li><a href="#-6">监听不同的端口</a></li>
+<li><a href="#url">基于 URL 路径和端口对请求进行过滤</a></li>
+</ul>
+</li>
+<li><a href="#lombok">Lombok</a></li>
+<li><a href="#-7">日志记录</a></li>
+<li><a href="#hutool">工具类采用 Hutool</a></li>
+<li><a href="#-8">技术选型</a><ul>
+<li><a href="#redis">Redis 客户端</a></li>
+<li><a href="#-9">缓存框架</a></li>
+<li><a href="#-10">定时任务框架</a></li>
+<li><a href="#-11">熔断框架</a></li>
+<li><a href="#-12">数据库连接池</a></li>
+<li><a href="#-13">数据库重构工具</a></li>
+</ul>
+</li>
+<li><a href="#-14">总结</a></li>
+<li><a href="#-15">参考文档</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<p>Spring Boot 已经成为 Java 后端事实上的标准开发框架，目前已经演进到了 2.1.5 版本。在项目开发过程中，也逐渐形成了一些公认的不错的做法或者规范，本文试图将其沉淀总结为最佳实践，供后来人学习和使用。这些实践包含实际项目开发中的方方面面，包含但不限于工程实践、技术细节、规范流程、技术选型等，希望能让读者少走弯路，同时能在团队中形成相对统一的规范与实践，减少不同项目之间切换的学习成本。</p>
+<p>适合人群：Java 后端开发人员、架构师、技术管理者。</p>
+<h3 id="">开发工具</h3>
+<p>工欲善其事，必先利其器，为了进行高效的开发，选择好开发工具非常重要。对于 Spring Boot 开发而言，首选的 IDE 当然非 <a href="https://www.jetbrains.com/idea/download/">IntelliJ IDEA Ultimate</a> 莫属，功能强大，不过正版授权并不便宜；因此，我们也可以退而求其次，选择 Spring Boot 官方提供的开发工具 <a href="https://spring.io/tools">Spring Tools 4</a>，它本身不是独立的 IDE，而是以插件形式内嵌在其他开源 IDE 中的，目前有三个选择：</p>
+<ul>
+<li>Spring Tools 4 for Eclipse</li>
+<li>Spring Tools 4 for Visual Studio Code</li>
+<li>Spring Tools 4 for Atom IDE</li>
+</ul>
+<p>大家可以根据自己和团队的熟悉程度进行选择，不过从之前使用情况来看，性能上 Visual Studio Code 应该是首选。</p>
+<p><img src="https://images.gitbook.cn/424fc170-8c56-11e9-9869-ff00ca1261f0" alt="Spring Tools 4"></p>
+<h3 id="-1">构建工具</h3>
+<p>Java 后端开发的构建工具选择不多，从最开始发展到现在，也才出现三代构建工具，它们分别是：Ant、Maven 和 Gradle。其中 Ant 已经是一个被淘汰的构建工具，我们使用 <a href="https://start.spring.io/">Spring Initializr</a> 新建 Spring Boot 工程时，也只会有 Maven 和 Gradle 这两种工程类型可以选择，Ant 只能在一些遗留项目或者老项目中可以看到。</p>
+<p><img src="https://images.gitbook.cn/6a90c760-8c56-11e9-9aa2-f543c13cf434" alt="Spring Initializr"></p>
+<p>Maven 算是 Java 后端构建工具的老大，而且霸占这个位置已经很多年了，GitHub 上面主流 Java 开源项目大多数都是采用 Maven 作为构建工具；而 Gradle 作为新兴的构建工具，也是 Android 开发中默认的构建工具，但在 Java 后端开发中市场占有率和 Maven 相比还是差了很多，但它的未来是可期的，目前我们团队也是采用 Gradle 作为构建工具，使用起来也比 Maven 方便许多。</p>
+<p>因此作为后端开发，Maven 和 Gradle 这两种构建工具都是必须要会用的，对于新项目而言，建议直接上手 Gradle。</p>
+<p>关于这三个构建工具的进一步对比，可以参见 <a href="https://www.baeldung.com/ant-maven-gradle">Ant vs Maven vs Gradle</a> 这篇文章。</p>
+<h3 id="-2">工程结构</h3>
+<p>使用 Spring Initializr 生成的 Spring Boot 工程整体而言已经是非常标准的结构了，这里我们重点关注一下包的划分，大致上遵循阿里巴巴 Java 开发手册中的基本结构，下面是一个常见的包名划分：</p>
+<pre><code class="hljs css">├── <span class="hljs-selector-tag">main</span>
+│   ├── <span class="hljs-selector-tag">java</span>
+│   │   └── <span class="hljs-selector-tag">com</span>
+│   │       └── <span class="hljs-selector-tag">bestpractice</span>
+│   │           ├── <span class="hljs-selector-tag">config</span>
+│   │           ├── <span class="hljs-selector-tag">constants</span>
+│   │           ├── <span class="hljs-selector-tag">controller</span>
+│   │           ├── <span class="hljs-selector-tag">dao</span>
+│   │           ├── <span class="hljs-selector-tag">exception</span>
+│   │           ├── <span class="hljs-selector-tag">filter</span>
+│   │           ├── <span class="hljs-selector-tag">manager</span>
+│   │           ├── <span class="hljs-selector-tag">model</span>
+│   │           │   ├── <span class="hljs-selector-tag">bo</span>
+│   │           │   ├── <span class="hljs-selector-tag">dto</span>
+│   │           │   └── <span class="hljs-selector-tag">vo</span>
+│   │           ├── <span class="hljs-selector-tag">service</span>
+│   │           │   ├── <span class="hljs-selector-tag">impl</span>
+│   │           ├── <span class="hljs-selector-tag">task</span>
+│   │           ├── <span class="hljs-selector-tag">utils</span>
+│   │           └── <span class="hljs-selector-tag">BestPracticeApplication</span><span class="hljs-selector-class">.java</span>
+│   │
+│   └── <span class="hljs-selector-tag">resources</span>
+</code></pre>
+<p>其中，每个包下面存放的类或者接口的类型说明如下：</p>
+<ul>
+<li>config：存放配置相关的类，例如采用 @Configuration 注解的类都建议放这里，包括但不限于 Redis 配置类，RestTemplate 配置类，Swagger 配置类等。</li>
+<li>constants：存放常量类、枚举类等。</li>
+<li>controller：存放控制器类，工程对外的 RESTful 接口定义都在这个包中。</li>
+<li>dao：存放数据访问相关的类，例如与 MySQL、HBase、Elasticsearch 等的数据访问类。</li>
+<li>exception：存放全局异常处理类（使用 @ControllerAdvice 注解修饰），以及自定义的业务相关的异常类。</li>
+<li>manager：存放通用业务处理相关的类，例如对第三方系统接口的封装类、service 层通用能力的封装类（缓存方案等）、对 dao 层中多个类的组合复用等。</li>
+<li>model：存放 bean 的定义，根据领域模型层次的不同，bean 又可以进一步分为 DO、DTO、BO、AO、VO 等，具体可以参见阿里巴巴 Java 开发手册中的定义。</li>
+<li>service：存放业务逻辑相关的处理类，通常在 service 包下面会以 interface 的方式定义接口（例如 SmsService），然后在 service/impl 包下面实现对应的接口（例如 SmsServiceImpl），从而对 controller 层的类而言，看到的永远是接口，而不是具体的实现类，很好的实现层与层之间的解耦。</li>
+<li>task：存放定时任务相关的类。</li>
+<li>utils：存放工程中需要使用到的工具类。</li>
+</ul>
+<p>当然，上面的这种划分只是一种参考，你可以根据自己项目实际进行增删改，但建议一个团队要保持一致的风格。</p>
+<h3 id="-3">根据环境区分配置文件</h3>
+<p>我们开发的服务通常会部署在不同的环境中，例如开发环境、测试环境、预发布环境，生产环境等，而不同环境需要不同的配置，例如连接不同的 Redis、数据库、第三方服务等等。Spring Boot 默认的配置文件是 application.properties。那么如何实现不同的环境使用不同的配置文件呢？一个比较好的实践是为不同的环境定义不同的配置文件，如下所示：</p>
+<ul>
+<li>开发环境：application-dev.properties</li>
+<li>测试环境：application-test.properties</li>
+<li>预发布环境：application-stg.properties</li>
+<li>生产环境：application-prd.properties</li>
+</ul>
+<p>然后在启动服务时通过增加 <code>--spring.profiles.active</code> 参数来指定要启动哪个环境即可，例如启动生产环境，命令如下所示：</p>
+<pre><code class="sh language-sh hljs bash">java -jar sms.jar --spring.profiles.active=prd
+</code></pre>
+<p>关于 Spring Profiles 更多信息可以参见：<a href="https://www.baeldung.com/spring-profiles">Spring Profiles</a>。</p>
+<h3 id="-4">配置文件敏感字段加解密</h3>
+<p><a href="http://www.jasypt.org/">Jasypt</a> 是 Java Simplified Encryption 的缩写，旨在为 Java 开发提供方便的加解密功能，能够很好地集成进基于 Spring 的应用中，和 Spring Security 也可以做到无缝集成。</p>
+<p>在 Spring Boot 中，我们通常使用它来给 application.properties 配置文件中的敏感字段，例如数据库连接密码、Redis 连接密码等进行加密和解密，从而保证这些敏感信息只掌握在少数经过授权的人员手中，最大限度的保证系统安全。当然，在 Spring Boot 中如果直接使用 Jasypt 函数库来对配置文件中的敏感字段进行加解密的话，开发者自己还是要做很多工作的，因此我们通常会使用 ulisesbocchio 对 Jasypt 封装后的开源库 <a href="https://github.com/ulisesbocchio/jasypt-spring-boot">Jasypt Spring Boot</a>，Jasypt Spring Boot 是基于 Jasypt 实现 Spring Boot 配置文件属性值加解密的函数库。</p>
+<p>Jasypt Spring Boot 的使用很简单，首先引入依赖：</p>
+<pre><code class="gradle language-gradle">compile "com.github.ulisesbocchio:jasypt-spring-boot-starter:1.18"
+</code></pre>
+<p>然后有两种方式可以给敏感信息加密，分别是直接调用 JAR 包中提供的 API，或者直接运行 JAR 包。直接运行 JAR 包方式对敏感信息加密的命令如下所示：</p>
+<pre><code class="java language-java hljs">java -cp jasypt-<span class="hljs-number">1.9</span>.2.jar org.jasypt.intf.cli.JasyptPBEStringEncryptionCLI input=<span class="hljs-string">'asce1885$Opr06'</span> password=b3sybFCDnbRt algorithm=PBEWithMD5AndDES
+</code></pre>
+<p>其中，<code>input</code> 是要加密的敏感信息，<code>password</code> 是加密使用的盐，我们自己设定一个值就行，<code>algorithm</code> 是使用加密算法执行命令后，命令行中会打印类似如下信息：</p>
+<pre><code class="log language-log">----ENVIRONMENT-----------------
+Runtime: Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 25.162-b12
+
+----ARGUMENTS-------------------
+algorithm: PBEWithMD5AndDES
+input: asce1885$Opr06
+password: b3sybFCDnbRt
+
+----OUTPUT----------------------
+VI6Z9FL6UD/FIEMGcR4PI+SzRsejrQbV
+</code></pre>
+<p>其中 <code>OUTPUT</code> 就是加密后的密码。需要注意的是，上面生成密码命令中 <code>input='asce1885$Opr06'</code>，其中明文密码是 <code>asce1885$Opr06</code>，但我们在赋值给 <code>input</code> 字段时前后加了单引号，这是因为这个密码包含了特殊字符 <code>$</code>，如果没有包含特殊字符，单引号可以去掉。包含特殊字符的待加密明文不加单引号，Jasypt 在加密时解析存在问题，会把 <code>asce1885$Opr06</code> 解析成 <code>asce1885</code>。</p>
+<p>最后，将上面的 <code>password</code> 和 <code>OUTPUT</code> 配置到 <code>application.properties</code> 文件中，如下所示，为了对比，我把加密前和加密后的配置都列了出来：</p>
+<pre><code class="properties language-properties">## 加密前
+spring.datasource.password=asce1885$Opr06
+
+## 加密后
+spring.datasource.password=ENC(VI6Z9FL6UD/FIEMGcR4PI+SzRsejrQbV)
+jasypt.encryptor.password=b3sybFCDnbRt
+</code></pre>
+<p>可以看到，上面我们把 <code>jasypt.encryptor.password=b3sybFCDnbRt</code> 这个加密所用的盐也配置在 <code>application.properties</code> 文件中，这样当然是有问题的，因为别人拿到这个盐之后是可以直接解密出原来的敏感信息的，因此，<code>jasypt.encryptor.password</code> 通常会作为启动参数传入，从而避免把加密盐写死在配置文件中导致所有人都能获取到，如下所示：</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">java</span> -jar sms.jar --spring.profiles.active=prd --jasypt.encryptor.password=b3sybFCDnbRt
+</code></pre>
+<p>至此，Jasypt 配置完成，我们在配置文件中看不到原始数据库密码了。</p>
+<p>更多信息可以参考：</p>
+<ul>
+<li><a href="https://www.baeldung.com/jasypt">Intro to Jasypt</a></li>
+<li><a href="https://www.baeldung.com/spring-boot-jasypt">Spring Boot Configuration with Jasypt</a></li>
+</ul>
+<h3 id="http">替换底层的 HTTP 函数库</h3>
+<p>在 Spring Boot 项目中，底层涉及网络请求的组件有 RestTemplate、Feign 和 Zuul，它们分别有自己默认的 HTTP 请求客户端，很多时候为了获得更好的性能，我们需要替换底层默认的 HTTP 函数库，可选的有 Apache HttpClient 和 OkHttpClient，建议采用 OkHttpClient，下面也都是以 OkHttp 的替换为例进行说明。</p>
+<h4 id="resttemplate">RestTemplate</h4>
+<p>RestTemplate 默认使用的是 JDK 原生的 HttpURLConnection，使用 OkHttpClient 对其进行替换时，我们可以实现 Spring Cloud Commons 提供的 OkHttpClientFactory 并进行自定义的配置，如下所示：</p>
+<pre><code class="java language-java hljs"><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;
+<span class="hljs-keyword">import</span> okhttp3.ConnectionPool;
+<span class="hljs-keyword">import</span> okhttp3.ConnectionSpec;
+<span class="hljs-keyword">import</span> okhttp3.OkHttpClient;
+<span class="hljs-keyword">import</span> org.springframework.cloud.commons.httpclient.OkHttpClientFactory;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OkHttpClientFactoryImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">OkHttpClientFactory</span> </span>{
+  <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> OkHttpClient.<span class="hljs-function">Builder <span class="hljs-title">createBuilder</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> disableSslValidation)</span> </span>{
+    OkHttpClient.Builder builder = <span class="hljs-keyword">new</span> OkHttpClient.Builder();
+    ConnectionPool okHttpConnectionPool = <span class="hljs-keyword">new</span> ConnectionPool(<span class="hljs-number">50</span>, <span class="hljs-number">30</span>, TimeUnit.SECONDS);
+    builder.connectionPool(okHttpConnectionPool);
+    builder.connectTimeout(<span class="hljs-number">20</span>, TimeUnit.SECONDS);
+    builder.retryOnConnectionFailure(<span class="hljs-keyword">false</span>);
+    <span class="hljs-keyword">return</span> builder;
+  }
+}
+</code></pre>
+<p>然后，就可以在 RestTemplate 中配置使用 Okhttp，如下所示：</p>
+<pre><code class="java language-java hljs"><span class="hljs-meta">@Configuration</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RestTemplateConfig</span> </span>{
+
+  <span class="hljs-meta">@Autowired</span>
+  <span class="hljs-meta">@Qualifier</span>(<span class="hljs-string">"OKSpringCommonsRestTemplate"</span>)
+  ClientHttpRequestFactory okHttpRequestFactory;
+
+  <span class="hljs-meta">@Bean</span>
+  <span class="hljs-meta">@Qualifier</span>(<span class="hljs-string">"OKSpringCommonsRestTemplate"</span>)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> RestTemplate <span class="hljs-title">createOKCustomRestTemplate</span><span class="hljs-params">()</span> </span>{
+    RestTemplate restTemplate = <span class="hljs-keyword">new</span> RestTemplate();
+    restTemplate.setRequestFactory(okHttpRequestFactory);
+    <span class="hljs-keyword">return</span> restTemplate;
+  }
+}
+</code></pre>
+<p>更多信息可以参见这篇文章：<a href="https://www.bytesville.com/changing-httpclient-in-spring-resttemplate/">Changing HttpClient in Spring RestTemplate</a>。</p>
+<h4 id="feign">Feign</h4>
+<p>Feign 默认使用的是 JDK 原生的 HTTPURLConnection，我们可以使用 Apache HTTP Client 和 Okhttp 来进行替换，替换的步骤很简单，分为两步，首先引入相关的依赖库，然后修改配置。</p>
+<p>这里我们主要看看使用 Okhttp 替换默认 Http Client 的步骤，首先引入依赖如下所示：</p>
+<pre><code class="gradle language-gradle">compile group: 'io.github.openfeign', name: 'feign-okhttp', version: '10.2.3'
+</code></pre>
+<p>然后增加配置如下所示：</p>
+<pre><code class="properties language-properties">feign.okhttp.enabled=true #表示使用 OkHttpClient
+feign.httpclient.enabled=false #表示不使用 ApacheHttpClient
+</code></pre>
+<p>更多信息可以参见这篇文章：<a href="https://blog.csdn.net/wo18237095579/article/details/83377938">Feign 默认 Client 替换</a>。</p>
+<h4 id="zuul">Zuul</h4>
+<p>目前最新的 Zuul 使用的默认 HTTP 客户端是 Apache HTTP Client，旧版本使用的是已经废弃的 Ribbon RestClient。当然，我们也可以使用 Okhttp，要切换 Zuul 底层使用的 HTTP 客户端，只需要在配置文件中增加如下配置，并引入对应的依赖函数库即可：</p>
+<pre><code class="properties language-properties">ribbon.restclient.enabled=true #表示使用 Ribbon RestClient
+ribbon.okhttp.enabled=true # 表示使用 Okhttp
+</code></pre>
+<p>相关信息可以参见官方的说明：<a href="https://cloud.spring.io/spring-cloud-static/Greenwich.SR1/single/spring-cloud.html#_zuul_http_client">Zuul Http Client</a>。</p>
+<h3 id="apiapi">基于不同端口实现公有 API 和私有 API 的隔离</h3>
+<p>在微服务架构下，我们开发的后端服务可能存在需要提供外部接口供互联网上的终端用户访问，也需要提供内部接口供系统内其他服务调用。外部接口通常都需要添加认证和授权的逻辑，而内部接口通常无需认证即可访问。如果我们的服务只存在一个端口，例如 9002，那么从互联网上也可以通过这个端口对内部接口进行访问，这样就存在安全问题，内部接口永远只能对内部可见。</p>
+<p>那么如何解决这个问题呢？一种不错的方案就是我们的服务提供两个不同的端口，分别给外部接口和内部接口使用，给内部接口使用的端口我们可以通过防火墙将其和互联网隔离，从而达到保护的作用。具体到 Spring Boot 中，我们怎么实现一个服务支持两个端口呢？</p>
+<h4 id="-5">区分内部和外部接口</h4>
+<p>首先通过 URL 中的路径来区分外部接口和内部接口，如下所示：</p>
+<pre><code class="java language-java hljs"><span class="hljs-comment">// 外部接口的 URL 路径以 /external/ 作为前缀</span>
+<span class="hljs-meta">@Controller</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExternalApiController</span> </span>{
+    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/external/hello"</span>)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> ResponseEntity&lt;String&gt; <span class="hljs-title">hello</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> ResponseEntity.ok(<span class="hljs-string">"Hello stranger"</span>);
+    }
+}
+
+<span class="hljs-comment">// 内部接口的 URL 路径以 /internal/ 作为前缀</span>
+<span class="hljs-meta">@Controller</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InternalApiController</span> </span>{
+    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/internal/hello"</span>)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> ResponseEntity&lt;String&gt; <span class="hljs-title">hello</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> ResponseEntity.ok(<span class="hljs-string">"Hello friend"</span>);
+    }
+}
+</code></pre>
+<h4 id="-6">监听不同的端口</h4>
+<p>Spring Boot 应用默认只会监听一个端口，但我们可以通过修改底层使用的 Tomcat 容器的来增加监听的端口。如下所示，通过自定义 WebServerFactoryCustomizer 来实现：</p>
+<pre><code class="java language-java hljs"><span class="hljs-meta">@Configuration</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TrustedPortConfiguration</span> </span>{
+
+    <span class="hljs-comment">// 提供给外部接口使用的端口</span>
+    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"${server.port:8080}"</span>)
+    <span class="hljs-keyword">private</span> String serverPort;
+
+    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"${management.port:${server.port:8080}}"</span>)
+    <span class="hljs-keyword">private</span> String managementPort;
+
+    <span class="hljs-comment">// 提供给内部接口使用的端口</span>
+    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"${server.trustedPort:null}"</span>)
+    <span class="hljs-keyword">private</span> String trustedPort;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> WebServerFactoryCustomizer <span class="hljs-title">servletContainer</span><span class="hljs-params">()</span> </span>{
+        Connector[] additionalConnectors = <span class="hljs-keyword">this</span>.additionalConnector();
+
+        ServerProperties serverProperties = <span class="hljs-keyword">new</span> ServerProperties();
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> TomcatMultiConnectorServletWebServerFactoryCustomizer(serverProperties, additionalConnectors);
+    }
+
+    <span class="hljs-keyword">private</span> Connector[] additionalConnector() {
+        <span class="hljs-keyword">if</span> (StringUtils.isEmpty(<span class="hljs-keyword">this</span>.trustedPort) || <span class="hljs-string">"null"</span>.equals(trustedPort)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+        }
+
+        Set&lt;String&gt; defaultPorts = <span class="hljs-keyword">new</span> HashSet&lt;&gt;();
+        defaultPorts.add(serverPort);
+        defaultPorts.add(managementPort);
+
+        <span class="hljs-keyword">if</span> (!defaultPorts.contains(trustedPort)) {
+            Connector connector = <span class="hljs-keyword">new</span> Connector(<span class="hljs-string">"org.apache.coyote.http11.Http11NioProtocol"</span>);
+            connector.setScheme(<span class="hljs-string">"http"</span>);
+            connector.setPort(Integer.valueOf(trustedPort));
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Connector[]{connector};
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Connector[]{};
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TomcatMultiConnectorServletWebServerFactoryCustomizer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">TomcatServletWebServerFactoryCustomizer</span> </span>{
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Connector[] additionalConnectors;
+
+        TomcatMultiConnectorServletWebServerFactoryCustomizer(ServerProperties serverProperties, Connector[] additionalConnectors) {
+            <span class="hljs-keyword">super</span>(serverProperties);
+            <span class="hljs-keyword">this</span>.additionalConnectors = additionalConnectors;
+        }
+
+        <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">customize</span><span class="hljs-params">(TomcatServletWebServerFactory factory)</span> </span>{
+            <span class="hljs-keyword">super</span>.customize(factory);
+
+            <span class="hljs-keyword">if</span> (additionalConnectors != <span class="hljs-keyword">null</span> &amp;&amp; additionalConnectors.length &gt; <span class="hljs-number">0</span>) {
+                factory.addAdditionalTomcatConnectors(additionalConnectors);
+            }
+        }
+    }
+}
+</code></pre>
+<p>通过上面的配置，我们启动服务时，可以发现它已经支持两个端口了，但目前通过两个端口都可以访问服务所提供的所有接口，所以接下来我们要做一些限制。</p>
+<h4 id="url">基于 URL 路径和端口对请求进行过滤</h4>
+<p>通过 Spring 的过滤器可以实现请求的过滤，过滤器定义如下：</p>
+<pre><code class="java language-java hljs"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TrustedEndpointsFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Filter</span> </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> trustedPortNum = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">private</span> String trustedPathPrefix;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Logger log = LoggerFactory.getLogger(getClass().getName());
+
+    TrustedEndpointsFilter(String trustedPort, String trustedPathPrefix) {
+        <span class="hljs-keyword">if</span> (trustedPort != <span class="hljs-keyword">null</span> &amp;&amp; trustedPathPrefix != <span class="hljs-keyword">null</span> &amp;&amp; !<span class="hljs-string">"null"</span>.equals(trustedPathPrefix)) {
+            trustedPortNum = Integer.valueOf(trustedPort);
+            <span class="hljs-keyword">this</span>.trustedPathPrefix = trustedPathPrefix;
+        }
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doFilter</span><span class="hljs-params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="hljs-keyword">throws</span> IOException, ServletException </span>{
+        <span class="hljs-keyword">if</span> (trustedPortNum != <span class="hljs-number">0</span>) {
+            <span class="hljs-comment">// 通过外部端口试图访问内部接口，拒绝请求</span>
+            <span class="hljs-keyword">if</span> (isRequestForTrustedEndpoint(servletRequest) &amp;&amp; servletRequest.getLocalPort() != trustedPortNum) {
+                log.warn(<span class="hljs-string">"denying request for trusted endpoint on untrusted port"</span>);
+                ((ResponseFacade) servletResponse).setStatus(<span class="hljs-number">404</span>);
+                servletResponse.getOutputStream().close();
+                <span class="hljs-keyword">return</span>;
+            }
+
+            <span class="hljs-comment">// 通过内部端口试图访问外部接口，拒绝请求</span>
+            <span class="hljs-keyword">if</span> (!isRequestForTrustedEndpoint(servletRequest) &amp;&amp; servletRequest.getLocalPort() == trustedPortNum) {
+                log.warn(<span class="hljs-string">"denying request for untrusted endpoint on trusted port"</span>);
+                ((ResponseFacade) servletResponse).setStatus(<span class="hljs-number">404</span>);
+                servletResponse.getOutputStream().close();
+                <span class="hljs-keyword">return</span>;
+            }
+        }
+
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    <span class="hljs-comment">// 通过 URL 中的路径前缀来判断对应的接口是内部接口还是外部接口</span>
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isRequestForTrustedEndpoint</span><span class="hljs-params">(ServletRequest servletRequest)</span> </span>{
+        <span class="hljs-keyword">return</span> ((RequestFacade) servletRequest).getRequestURI().startsWith(trustedPathPrefix);
+    }
+}
+</code></pre>
+<p>为了使上面的 filter 生效，我们需要把它作为 bean 进行实例化，如下所示：</p>
+<pre><code class="java language-java hljs"><span class="hljs-meta">@Configuration</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WebConfig</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">WebMvcConfigurer</span> </span>{
+
+    <span class="hljs-comment">// 内部端口</span>
+    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"${server.trustedPort:null}"</span>)
+    <span class="hljs-keyword">private</span> String trustedPort;
+
+    <span class="hljs-comment">// 内部接口 URL 路径前缀</span>
+    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"${server.trustedPathPrefix:null}"</span>)
+    <span class="hljs-keyword">private</span> String trustedPathPrefix;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> FilterRegistrationBean&lt;TrustedEndpointsFilter&gt; <span class="hljs-title">trustedEndpointsFilter</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> FilterRegistrationBean&lt;&gt;(<span class="hljs-keyword">new</span> TrustedEndpointsFilter(trustedPort, trustedPathPrefix));
+    }
+}
+</code></pre>
+<p>最后，我们在 application.properties 文件中配置端口和 URL 路径前缀如下：</p>
+<pre><code class="properties language-properties">server.port=9002
+server.trustedPort=9003
+server.trustedPathPrefix=/internal/
+</code></pre>
+<h3 id="lombok">Lombok</h3>
+<p>Java 编程中经常需要写很多样板代码，不仅降低了开发效率而且也影响代码的可读性，Lombok 的引入能够很好地解决这个问题。Spring Initializr 默认也提供对 Lombok 的支持，可以在创建 Spring Boot 工程时勾选并引入。Lombok 提供了很多注解，能够方便的生成样板代码，例如：</p>
+<ul>
+<li>@Getter/@Setter：生成实体类的 getter 和 setter 方法。</li>
+<li>@ToString：生成实体类的 toString 方法。</li>
+<li>@EqualsAndHashCode：生成实体类的 hashCode 和 equals 方法。</li>
+<li>@NoArgsConstructor, @RequiredArgsConstructor and @AllArgsConstructor：为实体类生成指定类型的构造方法，分别是无参构造方法、指定部分参数的构造方法和带有所有参数的构造方法。</li>
+<li>@Data：@ToString、@EqualsAndHashCode、@Getter、@Setter 和 @RequiredArgsConstructor 叠加的效果。</li>
+<li>@Builder：按照 Builder 模式生成实体类的相关 Builder 类和方法。</li>
+<li>@Cleanup：实现自动资源管理功能，例如自动关闭 InputStream 等。</li>
+</ul>
+<p>更多信息可以参见这篇文章：<a href="https://www.baeldung.com/intro-to-project-lombok">Introduction to Project Lombok
+</a>。</p>
+<h3 id="-7">日志记录</h3>
+<p>Spring Boot 默认的日志记录框架使用的是 Logback，此外我们还可以选择 Log4j 和 Log4j2。其中 Log4j 可以认为是一个过时的函数库，不推荐使用，相比之下，性能和功能也是最差的。logback 虽然是 Spring Boot 默认的，但性能上还是不及 Log4j2，因此，在现阶段，日志记录首选 Log4j2。关于这三个日志记录框架的简单对比，可以参见这篇文章：<a href="https://stackify.com/compare-java-logging-frameworks/">Java Logging Frameworks: Log4j vs logback vs Log4j2</a>。</p>
+<p>当然，在实际项目开发中，我们不会直接调用上面三款日志框架的 API 去记录日志，因为这样如果要切换日志框架的话代码需要修改的地方太多。因此，最佳实践是采用 SLF4J 来进行日志记录，SLF4J 是基于门面模式实现的一个通用日志框架，它本身并没有日志记录的功能，实际的日志记录还是需要依赖 Log4j、logback 或者 Log4j2。使用 SLF4J，可以实现简单快速地替换底层的日志框架而不会导致业务代码需要做相应的修改。SLF4J + Log4j2 是我们推荐的日志记录选型。</p>
+<p>在使用 SLF4J 进行日志记录时，通常都需要在每个需要记录日志的类中定义 Logger 变量，如下所示：</p>
+<pre><code class="java language-java hljs"><span class="hljs-keyword">import</span> org.slf4j.Logger;
+<span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;
+
+<span class="hljs-meta">@RestController</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SmsController</span> </span>{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Logger LOGGER = LoggerFactory.getLogger(SmsController.class);
+    ...
+}
+</code></pre>
+<p>这显然属于重复性劳动，降低了开发效率，如果你在项目中引入了上节介绍的 Lombok，那么可以使用它提供的 @Slf4j 注解来自动生成上面那个变量，默认的变量名是 <code>log</code>，如果我们想采用惯用的 <code>LOGGER</code> 变量名，那么可以在工程的 main/java 目录中增加 lombok.config 文件，并在文件中增加 <code>lombok.log.fieldName=LOGGER</code> 的配置项即可。</p>
+<p>在微服务架构中，前端的一个请求往往会经过后端多个服务的处理才返回结果，因此，在出现问题需要定位时，需要跨多个服务的日志进行查询，那么如何定位到同一次请求对应的日志呢，这就需要有一个 traceId 将多个服务的日志串联起来。在 Spring Boot 开发中，我们可以在工程依赖中引入 Spring Cloud Sleuth 依赖：</p>
+<pre><code class="gradle language-gradle">dependencies {
+    implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
+}
+</code></pre>
+<p>然后在日志中配置文件中设置日志的 Pattern，这里以 Log4j2 为例，我们在 log4j2.xml 文件中配置如下：</p>
+<pre><code class="xml language-xml hljs"><span class="hljs-tag">&lt;<span class="hljs-name">PatternLayout</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Pattern</span>&gt;</span>[%d{yyyy-MM-dd HH:mm:ss,SSS}] [%t] [%X{X-B3-TraceId}] [%X{X-B3-SpanId}] [%X{X-B3-ParentSpanId}] [%-5level] [%class{36}] [%L] [%M] [%msg%xEx]%n<span class="hljs-tag">&lt;/<span class="hljs-name">Pattern</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">PatternLayout</span>&gt;</span>
+</code></pre>
+<p>Pattern 用来配置工程输出的日志格式，上面的配置基本上涵盖了日志输出所需内容。供参考，其中每个项的说明如下：</p>
+<ul>
+<li>%d{yyyy-MM-dd HH:mm:ss,SSS}：日志打印的日期</li>
+<li>%t：线程名</li>
+<li>%X{X-B3-TraceId}：Spring Cloud Sleuth 提供的，打印 traceId</li>
+<li>%X{X-B3-SpanId}：Spring Cloud Sleuth 提供的，打印 spanId</li>
+<li>%X{X-B3-ParentSpanId}：Spring Cloud Sleuth 提供的，打印 parentSpanId</li>
+<li>%-5level：日志级别</li>
+<li>%class{36}：类名</li>
+<li>%L：代码所在行数</li>
+<li>%M：方法名</li>
+<li>%msg%xEx：具体的日志信息</li>
+</ul>
+<p>其中 TraceI、SpanId 和 ParentSpanId 属于分布式链路追踪的范畴，如果你不熟悉想进一步了解，可以看看我的这篇文章：<a href="https://gitbook.cn/gitchat/activity/5c61054f0e0bc037e391ca6e">分布式链路追踪的前世今生</a>。</p>
+<h3 id="hutool">工具类采用 Hutool</h3>
+<p>无论大家从事哪一端的开发，不可避免地需要用到一系列的工具类，例如常见的有字符串处理、加解密、随机数生成、Bean 转为 Map 等。通常情况下，每个人或者每个团队都或多或少会维护自己的一套工具类，在不同项目之间共用（<del>或者拷贝</del>）。这种情况一来我们要自己维护一套工具类，存在成本问题；二来可能自己实现的还不一定完全正确或者最优，毕竟使用你这套工具类的人和项目还是有限的，因此，采用成熟的开源的工具类函数库是一个比较推荐的选择。</p>
+<p><a href="https://hutool.cn/docs/#/">Hutool</a> 就是其中的佼佼者，它的模块和功能分类如下所示：</p>
+<p><img src="https://images.gitbook.cn/a1cf6330-8c56-11e9-9869-ff00ca1261f0" alt="hutool"></p>
+<p>可以看到，功能还是很齐全的，在项目中可以根据需要进行部分引入，Hutool 中具备的功能就不要再自己造轮子了。始终要相信，代码越少，Bug 越少。</p>
+<h3 id="-8">技术选型</h3>
+<h4 id="redis">Redis 客户端</h4>
+<p>Redis 几乎是每个项目必备的一个中间件，为了对 Redis 服务器进行访问，我们当然需要在 Spring Boot 工程中集成 Redis 客户端，Java 语言实现的 Redis 客户端非常多，仅 <a href="https://redis.io/clients/#java">Redis 官网</a>列出的就有十一种。其中比较流行的有 Jedis、Redisson 和 Lettuce。</p>
+<p>其中 Jedis 是老牌的 Redis 客户端，也是 Spring Boot 1.x 默认的 Redis 客户端，它使用阻塞的 I/O，方法调用都是同步的，而且 Jedis 实例不是线程安全的，需要通过连接池来使用 Jedis。Redisson 和 Lettuce 底层都是基于 Netty，方法调用是异步的，它们两个的实例是线程安全的。</p>
+<p>从性能上看，Redisson 和 Lettuce 完败 Jedis，这也是为什么从 Spring Boot 2.x 开始，默认的 Redis 客户端换成了 Lettuce。从功能上看，Jedis 和 Lettuce 基本差不多，都只提供 对 Redis 命令的原始封装，是比较纯粹的 Redis 客户端；相比之下，Redisson 就显得很强大。我们可以认为 Jedis 和 Lettuce 提供的是低层的 API，而 Redisson 提供的是高层的 API，提供了诸如<a href="https://github.com/redisson/redisson/wiki/6.-%E5%88%86%E5%B8%83%E5%BC%8F%E5%AF%B9%E8%B1%A1">分布式对象</a>、<a href="https://github.com/redisson/redisson/wiki/7.-%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E5%90%88">分布式集合</a>、<a href="https://github.com/redisson/redisson/wiki/8.-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%92%8C%E5%90%8C%E6%AD%A5%E5%99%A8">分布式锁和同步器</a>、<a href="https://github.com/redisson/redisson/wiki/9.-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1">分布式服务</a>等等增强功能。</p>
+<p>在技术选型上，Jedis 完全不用考虑，如果不需要使用到诸如分布式锁等基于 Redis 实现的高级功能，那么选择 Lettuce 即可；否则选择 Redisson 会方便很多。</p>
+<h4 id="-9">缓存框架</h4>
+<p>现代后端开发中，对于查询类请求，通常会增加 Redis 作为一级缓存，避免每次查询都去操作数据库。当在 Redis 中查询不到时才会去数据库中查找，如果不使用下面要介绍的缓存框架，类似这样的逻辑我们需要每次都在代码中自己去进行判断。如果使用缓存框架，那么可以减少类似样板代码的编写，减少缓存使用的复杂度，提高代码可读性和提高开发效率。</p>
+<p>在 Spring Boot 开发中，可选的缓存框架主要有 Spring Cache 和 JetCache，其中 Spring Cache 是 Spring 官方提供的缓存方案，JetCache 是阿里巴巴开源的缓存框架。在功能上面，JetCache 要强大很多，它提供了比 Spring Cache 更加强大的注解，可以原生的支持 TTL、两级缓存、分布式自动刷新，还提供了 Cache 接口用于手工缓存操作。</p>
+<p>JetCache 连接 Redis 时支持 Jedis 和 Lettuce 两种客户端，目前不支持 Redisson。在技术选型上，没有特殊需求的情况下，建议优先选择 JetCache。</p>
+<h4 id="-10">定时任务框架</h4>
+<p>Spring Boot 中定时任务常见的实现方案有：</p>
+<ul>
+<li>Timer：JDK 自带的定时器，最简单的实现任务调度的方案，所有的任务都是由一个线程串行执行的，一般在 Web 开发中不建议使用。</li>
+<li>ScheduledExecutor/@Scheduled：Java 5 推出的基于线程池设计的定时任务实现方案，通过将每个任务分配给线程池中的一个线程实现任务的并行执行，互不干扰。Spring Boot 中可以采用 @Scheduled 注解实现定时任务。在分布式系统中，一个服务会在不同云主机上部署多个实例，因此，直接使用 @Scheduled 的话会导致同一个定时任务在多个实例上重复执行，为了保证同一时间只有一个定时任务执行，需要引入分布式锁。</li>
+<li>Quartz：功能完善的定时任务框架，支持分布式场景，使用时需要依赖 MySQL，本质上是通过数据库锁来避免同一个定时任务在多个实例上的重复执行，同时支持任务的失效转移。</li>
+</ul>
+<p>在技术选型上，对于要求严格的定时任务，推荐采用 Quartz；对于简单且定时执行要求不严格的场景，可以选择 @Scheduled 方案。</p>
+<h4 id="-11">熔断框架</h4>
+<p>微服务开发中，熔断是不可或缺的一种能力，目前常见的熔断框架选择有 Sentinel、Hystrix 和 Resilience4j，关于这三者的对比，我们通过 Sentinel 官网的一张表格进行了解，如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>Sentinel</th>
+<th>Hystrix</th>
+<th>Resilience4j</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>隔离策略</td>
+<td>信号量隔离（并发线程数限流）</td>
+<td>线程池隔离/信号量隔离</td>
+<td>信号量隔离</td>
+</tr>
+<tr>
+<td>熔断降级策略</td>
+<td>基于响应时间、异常比率、异常数</td>
+<td>基于异常比率</td>
+<td>基于异常比率、响应时间</td>
+</tr>
+<tr>
+<td>实时统计实现</td>
+<td>滑动窗口（LeapArray）</td>
+<td>滑动窗口（基于 RxJava）</td>
+<td>Ring Bit Buffer</td>
+</tr>
+<tr>
+<td>动态规则配置</td>
+<td>支持多种数据源</td>
+<td>支持多种数据源</td>
+<td>有限支持</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>多个扩展点</td>
+<td>插件的形式</td>
+<td>接口的形式</td>
+</tr>
+<tr>
+<td>基于注解的支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>限流</td>
+<td>基于 QPS，支持基于调用关系的限流</td>
+<td>有限的支持</td>
+<td>Rate Limiter</td>
+</tr>
+<tr>
+<td>流量整形</td>
+<td>支持预热模式、匀速器模式、预热排队模式</td>
+<td>不支持</td>
+<td>简单的 Rate Limiter 模式</td>
+</tr>
+<tr>
+<td>系统自适应保护</td>
+<td>支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>控制台</td>
+<td>提供开箱即用的控制台，可配置规则、查看秒级监控、机器发现等</td>
+<td>简单的监控查看</td>
+<td>不提供控制台，可对接其它监控系统</td>
+</tr>
+</tbody>
+</table>
+<p>从中可以看到，Sentinel 功能最强大，相比 Hystrix 而言，Sentinel 提供的控制台是一大亮点，而且，Sentinel 不止提供熔断功能，它的定位是面向分布式服务架构的轻量级流量控制框架，主要以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度来保护服务的稳定性。因此，在技术选型上，建议选择 Sentinel。</p>
+<h4 id="-12">数据库连接池</h4>
+<p>Spring Boot 默认支持的数据库连接池有 DBCP、DBCP 2、Tomcat JDBC Pool 和 HikariCP，其中，Spring Boot 1.x 默认使用的是 Tomcat JDBC Pool，Spring Boot 2.x 默认使用的是 HikariCP，DBCP 和 DBCP 2 目前不推荐使用。</p>
+<p>技术选型上，如果没有特殊原因，建议采用 HikariCP。当然你应该也听说过或者用过阿里巴巴开源的 <a href="https://github.com/alibaba/druid">Druid</a>，不熟悉的读者千万不要把它和实时大数据分析框架 <a href="https://github.com/apache/incubator-druid">Druid</a> 搞混。阿里巴巴 Druid 的定位是为监控而生的数据库连接池，也就是说它集成和数据库连接池和数据库监控两大功能，因此，也被不少人诟病功能的不纯粹。</p>
+<h4 id="-13">数据库重构工具</h4>
+<p>我们的代码都会通过 Git 进行版本管理，但通常情况下在项目迭代过程中数据库脚本的变更都是手工维护的，那么有没有类似 Git 这样的工具呢？答案当然是肯定的，目前有两种选择：<a href="https://flywaydb.org/">Flyway</a> 和 <a href="http://www.liquibase.org/">Liquibase</a>，在功能上，Liquibase 要强大一些，因此，推荐使用它。使用 Spring Initializr 创建 Spring Boot 工程时，默认支持这两个工具的导入。</p>
+<h3 id="-14">总结</h3>
+<p>以上便是本次 Chat 的主要内容，如果你有更多好的实践欢迎留言交流。</p>
+<h3 id="-15">参考文档</h3>
+<ul>
+<li><a href="https://fnordian.github.io/blog/2018/10/14/private-and-public-apis-on-different-ports-with-spring/">Spring 基于不同端口实现公有 API 和私有 API 的隔离</a></li>
+<li><a href="https://github.com/alibaba/Sentinel/wiki/Guideline:-%E4%BB%8E-Hystrix-%E8%BF%81%E7%A7%BB%E5%88%B0-Sentinel">Guideline：从 Hystrix 迁移到 Sentinel</a></li>
+</ul>
+<hr>
+</div>
+</body>
+</html>
