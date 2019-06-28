@@ -1,0 +1,322 @@
+---
+title: 数据结构
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据结构</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#211">21.1　数据结构</a></li>
+<li><a href="#212">21.2　栈</a></li>
+<li><a href="#213">21.3　使用栈逆转字符串</a></li>
+<li><a href="#214">21.4　队列</a></li>
+<li><a href="#215">21.5　购票队列</a></li>
+<li><a href="#216">21.6　术语表</a></li>
+<li><a href="#217">21.7　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“我从心底认为，优秀的程序员与平庸的程序员之间的区别，是在于认为自己的代码重要还是数据结构更加重要。平庸的程序员眼里只有代码，优秀的程序员则关注数据结构及之前的关系。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——林纳斯 · 托瓦兹（Linus Torvalds）</span></p>
+</blockquote>
+<h3 id="211">21.1　数据结构</h3>
+<p><strong>数据结构</strong>（data structure）是用来存储和组织信息的一种形式，对于编程来说是至关重要的，大多数编程语言也都自带了数据结构。本书前面的章节已经介绍了如何使用 Python 中自带的列表、元组和字典等多个数据结构。本章将学习如何创建两个新的数据结构：栈和队列。</p>
+<h3 id="212">21.2　栈</h3>
+<p><strong>栈</strong>（stack）是一种数据结构。与列表类似，我们可以向栈中添加或移除元素，但是不同的地方是，只能添加或移除最后一个元素。假设有一个列表 [1, 2, 3]，我们可以移除其中任意一个元素。但是对于内含相同元素的栈，则只能移除其中最后一个元素 3。移除 3 之后，栈就变成了 [1, 2]，这时只能移除 2。移除 2 之后，可以继续移除 1，这时栈变成了一个空栈。将元素从栈中移除，被称为<strong>出栈</strong>（popping）。如果将 1 放回栈中，则变成了 [1]；再将 2 放回，则是 [1, 2]。将元素放回栈中，被称为<strong>入栈</strong>（pushing）。这种最后一个放入的元素被第一个取出的数据结构，也被称为<strong>先进后出</strong>（LIFO）型数据结构。</p>
+<p>可以将 LIFO 数据结构想象为一堆盘子。如果将 5 个盘子堆在一起，必须将上方的所有的盘子移除之后，才能拿到底部的盘子。栈中每个数据元素，就好像一个盘子，若要获取该数据，则必须将在其顶部的数据全部移除。</p>
+<p>本节中我们将编写一个栈。Python 语言中有一个库已经包含了本章要介绍的两个数据结构，但是自己从头实现有助于理解背后的原理。栈有 5 个方法：<code>is_empty</code>、<code>push</code>、<code>pop</code>、<code>peek</code> 和 <code>size</code>。如果栈为空，<code>is_empty</code> 返回 <code>True</code>，反之则返回 <code>False</code>。<code>push</code> 向栈的顶部添加一个元素；<code>pop</code> 从顶部移除一个元素；<code>peek</code> 返回顶部的元素，但不会将其移除；<code>size</code> 返回一个表示栈中元素数量的整型数。下面是用 Python 实现的栈：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zk24ps6</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Stack</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.items = []
+<span class="hljs-number">07</span>
+08
+09      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">is_empty</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">10</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items == []
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, item)</span></span>:
+<span class="hljs-number">14</span>          <span class="hljs-keyword">self</span>.items.append(item)
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">pop</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">18</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items.pop()
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">peek</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">22</span>          last = len(<span class="hljs-keyword">self</span>.items)-<span class="hljs-number">1</span>
+<span class="hljs-number">23</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items[last]
+<span class="hljs-number">24</span>
+<span class="hljs-number">25</span>
+<span class="hljs-number">26</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">size</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">27</span>          <strong><span class="hljs-keyword">return</span></strong> len(<span class="hljs-keyword">self</span>.items)</code></pre>
+<p>新创建的栈是空的，<code>is_empty</code> 方法将返回 <code>True</code>：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/jfybm4v</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-built_in">stack</span> = Stack()
+<span class="hljs-number">5</span>  print(<span class="hljs-built_in">stack</span>.is_empty())
+
+&gt;&gt; True
+</code></pre>
+<p>向栈中添加新元素后，<code>is_empty</code> 返回的则是 <code>False</code>：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/zsexcal</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-built_in">stack</span> = Stack()
+<span class="hljs-number">5</span>  <span class="hljs-built_in">stack</span>.push(<span class="hljs-number">1</span>)
+<span class="hljs-number">6</span>  print(<span class="hljs-built_in">stack</span>.is_empty())
+
+&gt;&gt; False
+</code></pre>
+<p>调用 <code>pop</code> 方法从栈中移除一个元素，<code>is_empty</code> 方法的返回值又变成了 <code>True</code>：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/j72kswr</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-built_in">stack</span> = Stack()
+<span class="hljs-number">5</span>  <span class="hljs-built_in">stack</span>.push(<span class="hljs-number">1</span>)
+<span class="hljs-number">6</span>  item = <span class="hljs-built_in">stack</span>.pop()
+<span class="hljs-number">7</span>  print(item)
+<span class="hljs-number">8</span>  print(<span class="hljs-built_in">stack</span>.is_empty())
+
+&gt;&gt; <span class="hljs-number">1</span>
+&gt;&gt; True
+</code></pre>
+<p>最后，我们查看栈的内容并打印其大小：</p>
+<pre class="代码无行号"><code class="hljs cpp"><span class="hljs-number">01</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/zle7sno</span></span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <span class="hljs-built_in">stack</span> = Stack()
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong>in</strong> range(<span class="hljs-number">0</span>, <span class="hljs-number">6</span>):
+<span class="hljs-number">08</span>      <span class="hljs-built_in">stack</span>.push(i)
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  print(<span class="hljs-built_in">stack</span>.peek())
+<span class="hljs-number">12</span>  print(<span class="hljs-built_in">stack</span>.size())
+
+&gt;&gt; <span class="hljs-number">5</span>
+&gt;&gt; <span class="hljs-number">6</span></code></pre>
+<h3 id="213">21.3　使用栈逆转字符串</h3>
+<p>栈可用来逆转可迭代对象，因为所有放入栈中的元素都会逆序取出。本节中，我们将尝试解决一个常见的编程面试问题——使用栈逆转字符串，即将字符串中的字符依次放入栈，然后再取出。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zoosvqg</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Stack</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.items = []
+<span class="hljs-number">07</span>
+08
+09      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">is_empty</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">10</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items == []
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, item)</span></span>:
+<span class="hljs-number">14</span>          <span class="hljs-keyword">self</span>.items.append(item)
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">pop</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">18</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items.pop()
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">peek</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">22</span>          last = len(<span class="hljs-keyword">self</span>.items)-<span class="hljs-number">1</span>
+<span class="hljs-number">23</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items[last]
+<span class="hljs-number">24</span>
+<span class="hljs-number">25</span>
+<span class="hljs-number">26</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">size</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">27</span>          <strong><span class="hljs-keyword">return</span></strong> len(<span class="hljs-keyword">self</span>.items)
+<span class="hljs-number">28</span>
+<span class="hljs-number">29</span>
+<span class="hljs-number">30</span>  stack = Stack()
+<span class="hljs-number">31</span>  <strong><span class="hljs-keyword">for</span></strong> c <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-string">"Hello"</span>:
+<span class="hljs-number">32</span>      stack.push(c)
+<span class="hljs-number">33</span>
+<span class="hljs-number">34</span>
+<span class="hljs-number">35</span>  reverse = <span class="hljs-string">""</span>
+<span class="hljs-number">36</span>
+<span class="hljs-number">37</span>
+<span class="hljs-number">38</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(len(stack.items)):
+<span class="hljs-number">39</span>      reverse += stack.pop()
+<span class="hljs-number">40</span>
+<span class="hljs-number">41</span>
+<span class="hljs-number">42</span>  <strong>print</strong>(reverse)
+
+<span class="hljs-meta">&gt;&gt;</span> olleH</code></pre>
+<p>首先，将字符串 <code>"Hello"</code> 中的每个字符串放入栈。然后遍历创建的栈，取出栈中的元素并放入遍历 <code>reverse</code>。遍历完成后，原来的单词就被逆序了，程序的打印结果为 <code>olleH</code>。</p>
+<h3 id="214">21.4　队列</h3>
+<p><strong>队列</strong>（queue）也是一种数据结构。与列表也很相像，可以从中添加和移除元素。队列与栈也有类似的地方，因为只能按照特定的顺序添加和移除元素。与栈不同的是，队列是一个<strong>先进先出</strong>（FIFO）的数据结构：第一个添加的元素也是第一个移除的元素。</p>
+<p>可以将 FIFO 数据结构想象成一队等待购买电影票的人。队伍中的第一个人是第一个买到票的，第二个人是第二个买到票的，以此类推。</p>
+<p>本节中，我们将编写拥有 4 个方法的队列：<code>enqueue</code>、<code>dequeue</code>、<code>is_empty</code> 和 <code>size</code>。<code>enqueue</code> 向队列中添加一个新元素；<code>dequeue</code> 从队列中移除一个元素；<code>is_empty</code> 检查队列状态，队列为空时返回 <code>True</code>，反之则返回 <code>False</code>；<code>size</code> 返回队列中元素的数量。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zrg24hj</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Queue</span>:</span>
+<span class="hljs-number">05</span>     <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">06</span>         <span class="hljs-keyword">self</span>.items = []
+<span class="hljs-number">07</span>
+08
+09     <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">is_empty</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">10</span>         <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items == []
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>     <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, item)</span></span>:
+<span class="hljs-number">14</span>         <span class="hljs-keyword">self</span>.items.insert(<span class="hljs-number">0</span>, item)
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>     <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">dequeue</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">18</span>         <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items.pop()
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>     <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">size</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">22</span>         <strong><span class="hljs-keyword">return</span></strong> len(<span class="hljs-keyword">self</span>.items)</code></pre>
+<p>如果新建一个空队列，<code>is_empty</code> 方法返回 <code>True</code>：</p>
+<pre><code class="hljs php"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j3ck9jl</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  a_queue = Queue()
+<span class="hljs-number">5</span>  <span class="hljs-keyword">print</span>(a_queue.is_empty())
+
+&gt;&gt; <span class="hljs-keyword">True</span>
+</code></pre>
+<p>向队列中添加元素，然后检查队列的大小：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jzjrg8s</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  a_queue = Queue()
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">5</span>):
+08      a_queue.enqueue(i)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  print(a_queue.size())
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">5</span></code></pre>
+<p>依次移除队列中的元素：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jazkh8b</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  a_queue = Queue()
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">5</span>):
+08      a_queue.enqueue(i)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">5</span>):
+<span class="hljs-number">12</span>      print(a_queue.dequeue())
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  print()
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>  print(a_queue.size())
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">3</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+<span class="hljs-meta">&gt;&gt;</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span></code></pre>
+<h3 id="215">21.5　购票队列</h3>
+<p>队列可模拟等待购买电影票的队伍，示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jnw56zx</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong>import</strong> time
+<span class="hljs-number">05</span>  <strong>import</strong> random
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+08  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Queue</span>:</span>
+09      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">10</span>          <span class="hljs-keyword">self</span>.items = []
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">is_empty</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">14</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items == []
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">enqueue</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, item)</span></span>:
+<span class="hljs-number">18</span>          <span class="hljs-keyword">self</span>.items.insert(<span class="hljs-number">0</span>, item)
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">dequeue</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">22</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.items.pop()
+<span class="hljs-number">23</span>
+<span class="hljs-number">24</span>
+<span class="hljs-number">25</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">size</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">26</span>          <strong><span class="hljs-keyword">return</span></strong> len(<span class="hljs-keyword">self</span>.items)
+<span class="hljs-number">27</span>
+<span class="hljs-number">28</span>
+<span class="hljs-number">29</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">simulate_line</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, till_show, max_time)</span></span>:
+<span class="hljs-number">30</span>          pq = Queue()
+<span class="hljs-number">31</span>          tix_sold = []
+<span class="hljs-number">32</span>
+<span class="hljs-number">33</span>
+<span class="hljs-number">34</span>          <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">10</span>):
+<span class="hljs-number">35</span>              pq.enqueue(<span class="hljs-string">"person"</span> + str(i))
+<span class="hljs-number">36</span>
+<span class="hljs-number">37</span>
+<span class="hljs-number">38</span>          t_end = time.time() + till_show
+<span class="hljs-number">39</span>          now = time.time()
+<span class="hljs-number">40</span>          <strong><span class="hljs-keyword">while</span></strong> now &lt; t_end <strong><span class="hljs-keyword">and</span></strong> <strong><span class="hljs-keyword">not</span></strong> pq.is_empty():
+<span class="hljs-number">41</span>              now = time.time()
+<span class="hljs-number">42</span>              r = random.randint(<span class="hljs-number">0</span>, max_time)
+<span class="hljs-number">43</span>              time.sleep(r)
+<span class="hljs-number">44</span>              person = pq.dequeue()
+<span class="hljs-number">45</span>              print(person)
+<span class="hljs-number">46</span>              tix_sold.append(person)
+<span class="hljs-number">47</span>
+<span class="hljs-number">48</span>
+<span class="hljs-number">49</span>          <strong><span class="hljs-keyword">return</span></strong> tix_sold
+<span class="hljs-number">50</span>
+<span class="hljs-number">51</span>
+<span class="hljs-number">52</span>  queue = Queue()
+<span class="hljs-number">53</span>  sold = queue.simulate_line(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>)
+<span class="hljs-number">54</span><strong>  print</strong>(sold)
+
+<span class="hljs-meta">&gt;&gt;</span> person<span class="hljs-number">0</span>
+...
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'person0'</span>, <span class="hljs-string">'person1'</span>, <span class="hljs-string">'person2'</span>]</code></pre>
+<p>首先，我们创建了一个名为 <code>simulate_line</code> 的函数，模拟向队伍出售电影票的场景。该函数接受两个参数：<code>till_show</code> 和 <code>max_time</code>。第一个参数是整型数，表示离电影开始还有多少秒，是否还能买票；第二个参数也是整型数，表示排队购票最长需要花多少秒。</p>
+<p>在函数中，我们创建一个新的空队列和一个空列表。列表用来记录哪些人购买了电影票。接下来，向队列中添加 100 个字符串，从 <code>person0</code> 开始直到 <code>person99</code> 结束。队列中的每个字符串表示一个正在排队等待购票的人。</p>
+<p>内置的 <code>time</code> 模块中有一个叫 <code>time</code> 的函数，返回自 1970 年 1 月 1 日（<strong>Epoch</strong>）以来所流逝的时间（秒）。如果现在调用 <code>time</code> 函数，返回的结果将会是 <code>1481849664.256039</code>。一秒后再次调用的话，函数返回的值将会递增 <code>1</code>。</p>
+<p>变量 <code>t_end</code> 将 <code>time</code> 函数的结果，与 <code>till_show</code> 变量中保存的秒数相加，表示未来的一个时间点。</p>
+<p>只有 <code>time</code> 函数返回的结果大于 <code>t_end</code> 的值或者队列为空，<code>while</code> 循环才会停止运行。</p>
+<p>接下来，使用内置模块 <code>time</code> 中的 <code>sleep</code> 函数，让 Python 在 <code>0</code> 至 <code>max_time</code> 这段随机确定的时间内，不做任何操作。这样是为了模拟售票所需要的时间。Python 停止运行的时间是随机的，可以模拟出每张票出售所花的时间是不同的。</p>
+<p>之后，从队列中移除一个字符串，将其放入 <code>tix_sold</code> 列表中，表示这个人已经成功购票。</p>
+<p>代码最终的结果，是一个模拟售票的函数，根据传入的参数和随机概率出售电影票。</p>
+<h3 id="216">21.6　术语表</h3>
+<p><strong>数据结构</strong>：用来存储和组织信息的一种形式。</p>
+<p><strong>出栈</strong>：从栈中移除元素。</p>
+<p><strong>入栈</strong>：向栈中添加元素。</p>
+<p><strong>先进后出数据结构</strong>：最后放入的元素最先取出的一种数据结构。</p>
+<p><strong>LIFO</strong>：先进后出。</p>
+<p><strong>栈</strong>：一种先进后出的数据结构。</p>
+<p><strong>先进先出数据结构</strong>：最先放入的元素最先取出的一种数据结构。</p>
+<p><strong>FIFO</strong>：先进先出。</p>
+<p><strong>队列</strong>：一种先进先出的数据结构。</p>
+<p><strong>Epoch</strong>：一个用作参照的特定时间点。</p>
+<h3 id="217">21.7　挑战练习</h3>
+<p>1．使用栈对字符串 <code>"yesterday"</code> 进行逆序。</p>
+<p>2．使用栈创建一个新列表，将如下列表中的元素逆序排列：<code>[1, 2, 3, 4, 5]</code>。</p>
+</div></article>
+</body>
+</html>

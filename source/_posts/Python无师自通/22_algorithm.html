@@ -1,0 +1,229 @@
+---
+title: 算法
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>算法</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#221fizzbuzz">22.1　FizzBuzz</a></li>
+<li><a href="#222">22.2　顺序搜索</a></li>
+<li><a href="#223">22.3　回文词</a></li>
+<li><a href="#224">22.4　变位词</a></li>
+<li><a href="#225">22.5　计算字母频数</a></li>
+<li><a href="#226">22.6　递归</a></li>
+<li><a href="#227">22.7　术语表</a></li>
+<li><a href="#228">22.8　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“算法，就像一张菜谱。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——瓦辛 · 拉提夫（Waseem Latif）</span></p>
+</blockquote>
+<p>本章将简要介绍算法。<strong>算法</strong>（algorithm）是解决问题的一系列步骤。问题的类型多种多样，从列表检索到打印歌词都可以用算法解决。</p>
+<h3 id="221fizzbuzz">22.1　FizzBuzz</h3>
+<p>本节中，我们来学习如何应对面试中经常会问到的问题——FizzBuzz。</p>
+<p>编写一个程序，打印从 1 到 100 之间的数字。碰到 3 的倍数时，不打印数字，而是打印 <code>"Fizz"</code>；碰到 5 的倍数时，则打印 <code>"Buzz"</code>；如果是 3 和 5 共同的倍数，则打印 <code>"FizzBuzz"</code>。</p>
+<p>为了解决该问题，我们需要检查某个数字是否是 3、5 或二者共同的倍数。如果数字是 3 的倍数，那么将其除以 3，不会有余数。5 的倍数也适用该原则。取模运算符 <code>%</code> 的返回结果为余数。遍历 1 到 100 之间的数字，并检查每个数字是否能被 3、5 整除，或者能否被两个数字同时整除：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jroprmn</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">fizz_buzz</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">1</span>, <span class="hljs-number">101</span>):
+<span class="hljs-number">06</span>          <strong><span class="hljs-keyword">if</span></strong> i % <span class="hljs-number">3</span> == <span class="hljs-number">0</span> <strong><span class="hljs-keyword">and</span></strong> i % <span class="hljs-number">5</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">07</span>              print(<span class="hljs-string">"FizzBuzz"</span>)
+<span class="hljs-number">08</span>          <strong><span class="hljs-keyword">elif</span></strong> i % <span class="hljs-number">3</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">09</span>              <strong>print</strong>(<span class="hljs-string">"Fizz"</span>)
+<span class="hljs-number">10</span>          <strong><span class="hljs-keyword">elif</span></strong> i % <span class="hljs-number">5</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">11</span>              print(<span class="hljs-string">"Buzz"</span>)
+<span class="hljs-number">12</span>          <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">13</span>              print(i)
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  fizz_buzz()
+
+&gt;&gt; <span class="hljs-number">1</span>
+&gt;&gt; <span class="hljs-number">2</span>
+&gt;&gt; Fizz
+...</code></pre>
+<p>首先，遍历 1 到 100 之间的数字，检查是否能被 3 和 5 整除。第一步很重要，因为如果数字能被 3 和 5 同时整除，就需要打印 <code>"FizzBuzz"</code>，并进入下一次循环。如果第一步去检查数字能否被 3 或 5 中的一个数字整除，我们无法确定是打印 <code>"Fizz"</code> 还是 <code>"Buzz"</code>，因为数字有可能被 3 和 5 同时整除，这时只打印 <code>"Fizz"</code> 或 <code>"Buzz"</code> 就是错误的，应该打印 <code>"FizzBuzz"</code>。</p>
+<p>接下来两个检查的顺序就容易多了，因为我们已经确认数字无法被 3 和 5 同时整除。如果数字可以被 3 或 5 整除，则可以对应地打印 <code>"Fizz"</code> 或 <code>"Buzz"</code>。如果数字均不满足前面所列的 3 个条件，那就是不能被 3 和 5 整除，这时直接打印数字。</p>
+<h3 id="222">22.2　顺序搜索</h3>
+<p><strong>搜索算法</strong>（search algorithm）用来在列表等数据结构中查找信息。<strong>顺序搜索</strong>（sequential search）是一种简单的搜索算法，依次检查数据结构中的每个元素，判断其是否与查找的元素相匹配。</p>
+<p>如果你玩过纸牌游戏，想在牌堆中找一张特定的牌，那很可能是通过顺序搜索进行查找。你会将牌堆中的每张牌依次检查一遍，如果不是要找的牌，则会继续查看下一张。找到希望的牌之后，你会停止查找。如果将牌堆中所有的牌都检查完后，也没有发现希望的牌，那么也会停止查找，因为你会发现牌根本就不在牌堆里。下面是用 Python 实现的一个顺序搜索示例：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zer9esp</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">ss</span><span class="hljs-params">(number_list, n)</span>:</span>
+<span class="hljs-number">5</span>      found = <span class="hljs-keyword">False</span>
+<span class="hljs-number">6</span>      <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> number_list:
+<span class="hljs-number">7</span>          <strong><span class="hljs-keyword">if</span></strong> i == n:
+<span class="hljs-number">08</span>              found = <span class="hljs-keyword">True</span>
+<span class="hljs-number">09</span>              <strong><span class="hljs-keyword">break</span></strong>
+<span class="hljs-number">10</span>      <strong><span class="hljs-keyword">return</span></strong> found
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  numbers = range(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>)
+<span class="hljs-number">14</span>  s1 = ss(numbers, <span class="hljs-number">2</span>)
+<span class="hljs-number">15</span>  <strong>print</strong>(s1)
+<span class="hljs-number">16</span>  s2 = ss(numbers, <span class="hljs-number">202</span>)
+<span class="hljs-number">17</span>  print(s2)
+
+&gt;&gt; <span class="hljs-keyword">True</span>
+&gt;&gt; <span class="hljs-keyword">False</span></code></pre>
+<p>首先，将变量 <code>found</code> 设置为 <code>False</code>，用来记录算法是否找到了目标数字。然后，遍历列表中的每个数字，检查是否为目标数字。如果是，则将 <code>found</code> 置为 <code>True</code>，退出循环，并返回变量 <code>found</code>。</p>
+<p>如果没有找到目标数字，则继续检查列表中的下一个数字。如果遍历完列表中所有元素，则返回变量 <code>found</code>。这时，<code>found</code> 的值将为 <code>False</code>，因为目标数字不在列表中。</p>
+<h3 id="223">22.3　回文词</h3>
+<p><strong>回文词</strong>（palindrome）指的是逆序和正序拼写得出的单词都相同的词。我们可以写一个算法检查单词是否是回文词，只需要将单词中所有的字符逆序，并检查逆序后的单词是否与原本的单词相同即可实现。如果两个单词一模一样，那么该单词就是回文词：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jffr7pr</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">palindrome</span><span class="hljs-params">(word)</span></span>:
+<span class="hljs-number">05</span>      word = word.lower()
+<span class="hljs-number">06</span>      <strong><span class="hljs-keyword">return</span></strong> word[<span class="hljs-symbol">:</span><span class="hljs-symbol">:-</span><span class="hljs-number">1</span>] == word
+<span class="hljs-number">07</span>
+08
+09  print(palindrome(<span class="hljs-string">"Mother"</span>))
+<span class="hljs-number">10</span>  print(palindrome(<span class="hljs-string">"Mom"</span>))
+
+<span class="hljs-meta">&gt;&gt;</span> False
+<span class="hljs-meta">&gt;&gt;</span> True</code></pre>
+<p><code>lower</code> 方法将要检查的单词中所有大写字符调整为小写。在 Python 中，<code>M</code> 和 <code>m</code> 是不同的字符，但是我们希望将二者视为相同的字符。</p>
+<p>代码 <code>word[::-1]</code> 可将单词逆序。<code>[::-1]</code> 是 Python 中逆序返回可迭代对象的切片的语法。将单词逆序后，才能与原单词进行对比。如果两个单词相同，函数返回 <code>True</code>，因为该单词为回文词。如果不相同，则返回 <code>False</code>。</p>
+<h3 id="224">22.4　变位词</h3>
+<p><strong>变位词</strong>（anagram）是通过重新组合另一个单词的字母所组成的单词。iceman 就是 cinema 的一个变位词，因为我们可以对任意一个单词的字母进行重新排序，从而得到另一个单词。因此，通过将两个单词的字母按字母顺序进行排序，检查二者是否一致，就可以判断它们是不是变位词：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/hxplj3z</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">anagram</span><span class="hljs-params">(w1, w2)</span>:</span>
+<span class="hljs-number">05</span>      w1 = w1.lower()
+<span class="hljs-number">06</span>      w2 = w2.lower()
+<span class="hljs-number">07</span>      <strong><span class="hljs-keyword">return</span></strong> sorted(w1) == sorted(w2)
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  print(anagram(<span class="hljs-string">"iceman"</span>, <span class="hljs-string">"cinema"</span>))
+<span class="hljs-number">11</span>  print(anagram(<span class="hljs-string">"leaf"</span>, <span class="hljs-string">"tree"</span>))
+
+&gt;&gt; <span class="hljs-keyword">True</span>
+&gt;&gt; <span class="hljs-keyword">False</span></code></pre>
+<p>首先，对两个单词调用 <code>lower</code> 方法，避免大小写影响算法的结果。然后，将它们传入 Python 的 <code>sorted</code> 方法。该方法会返回一个以字母顺序排序的结果。最后，比较这两个返回值，如果相同，则算法返回 <code>True</code>；反之则返回 <code>False</code>。</p>
+<h3 id="225">22.5　计算字母频数</h3>
+<p>本节将写一个返回单词中每个字母出现次数的算法。该算法将遍历字符串中的每个字符，用字典记录每个字母出现的次数：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zknqlde</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">count_characters</span><span class="hljs-params">(string)</span>:</span>
+<span class="hljs-number">05</span>      count_dict = {}
+<span class="hljs-number">06</span>      <strong><span class="hljs-keyword">for</span></strong> c <strong><span class="hljs-keyword">in</span></strong> string:
+<span class="hljs-number">07</span>          <strong><span class="hljs-keyword">if</span></strong> c <strong><span class="hljs-keyword">in</span></strong> count_dict:
+<span class="hljs-number">08</span>              count_dict[c] += <span class="hljs-number">1</span>
+<span class="hljs-number">09</span>          <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">10</span>              count_dict[c] = <span class="hljs-number">1</span>
+<span class="hljs-number">11</span>      print(count_dict)
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>  count_characters(<span class="hljs-string">"Dynasty"</span>)
+
+&gt;&gt; {<span class="hljs-string">'D'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'t'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'n'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'a'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'s'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'y'</span>: <span class="hljs-number">2</span>}</code></pre>
+<p>在该算法中，我们遍历参数 <code>string</code> 中的每个字母，如果字母已经存在字典 <code>count_dict</code> 中，则将其对应的值递增 1。</p>
+<p>不在的话，则将字母添加到字典中，并将对应的值置为 1。<code>for</code> 循环执行结束之后，<code>count_dict</code> 将包含字符串中每个字母的键值对。每个键的值就是字符串中该字母所出现的次数。</p>
+<h3 id="226">22.6　递归</h3>
+<p><strong>递归</strong>（recursion）是将问题不断切分成更小的问题，直到小问题可以轻松解决的一种方法。目前，我们已经学习了使用<strong>迭代式算法</strong>（iterative algorithm）来解决问题。这种算法通常是使用循环不断地重复一个步骤来解决问题。<strong>递归式算法</strong>（recursive algorithm）则是通过调用自身的函数来实现。任何可以迭代式解决的问题，都可以递归式地解决；但是，有时候递归算法是更加优雅的解决方案。</p>
+<p>我们通过函数来实现递归算法。这个函数必须要有一个<strong>终止条件</strong>（base case）：一个终止递归算法，结束运行的条件。在函数内部，它会调用自身。每次函数调用自己的时候，会离终止条件越来越近。最终会满足终止条件，这时问题也得到了解决，函数停止调用自己。遵循这些规则的算法，要满足递归的 3 个条件。</p>
+<p>1．递归算法必须有终止条件。</p>
+<p>2．递归算法必须改变自己的状态，不断靠近终止条件。</p>
+<p>3．递归算法必须递归地不断调用自己。</p>
+<p>下面是一个递归算法，可以打印流行歌曲《墙上的 99 瓶啤酒》（99 Bottles of Beer on the Wall）的歌词：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/z49qe4s</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">bottles_of_beer</span><span class="hljs-params">(bob)</span>:</span>
+<span class="hljs-number">05</span>      <span class="hljs-string">""" Prints 99 Bottle
+06          of Beer on the
+07          Wall lyrics.
+08          :param bob: Must
+09          be a positive
+10          integer.
+11      """</span>
+<span class="hljs-number">12</span>      <strong><span class="hljs-keyword">if</span></strong> bob &lt; <span class="hljs-number">1</span>:
+<span class="hljs-number">13</span>          <strong>print</strong>(<span class="hljs-string">"""No more
+14                   bottles
+15                   of beer
+16                   on the wall.
+17                   No more
+18                   bottles of
+19                   beer."""</span>)
+<span class="hljs-number">20</span>          <strong><span class="hljs-keyword">return</span></strong>
+<span class="hljs-number">21</span>      tmp = bob
+<span class="hljs-number">22</span>      bob -= <span class="hljs-number">1</span>
+<span class="hljs-number">23</span>      <strong>print</strong>(<span class="hljs-string">"""{} bottles of
+24               beer on the
+25               wall. {} bottles
+26               of beer. Take one
+27               down, pass it
+28               around, {} bottles
+29               of beer on the
+30               wall.
+31            """</span>.format(tmp,
+<span class="hljs-number">32</span>                       tmp,
+<span class="hljs-number">33</span>                       bob))
+<span class="hljs-number">34</span>      bottles_of_beer(bob)
+<span class="hljs-number">35</span>
+<span class="hljs-number">36</span>
+<span class="hljs-number">37</span>
+<span class="hljs-number">38</span>
+<span class="hljs-number">39</span>  bottles_of_beer(<span class="hljs-number">99</span>)
+
+&gt;&gt; <span class="hljs-number">99</span> bottles of beer on the wall. <span class="hljs-number">99</span> bottles of beer. Take one down, <span class="hljs-keyword">pass</span> it around, <span class="hljs-number">98</span> bottles of beer on the wall. <span class="hljs-number">98</span> bottles of beer on the wall. <span class="hljs-number">98</span> bottles of beer.
+    Take one down, <span class="hljs-keyword">pass</span> it around, <span class="hljs-number">97</span> bottles of beer on the wall.
+    ...
+    No more bottles of beer on the wall. No more bottles of beer.</code></pre>
+<p>本例中，递归的第一个原则通过如下终止条件满足了：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/h4k3ytt</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-keyword">if</span></strong> bob &lt; <span class="hljs-number">1</span>:
+<span class="hljs-number">05</span>      print(<span class="hljs-string">"""No more
+06            bottles
+07            of beer
+08            on the wall.
+09            No more
+10            bottles of
+11            beer."""</span>)
+<span class="hljs-number">12</span>      <strong><span class="hljs-keyword">return</span></strong></code></pre>
+<p>变量 <code>bob</code> 的值小于 1 时，函数返回并停止调用自身。</p>
+<p><code>bob -= 1</code> 满足了递归的第二个原则，因为递减变量 <code>bob</code> 的值将使其不断接近终止条件。本例中，我们传入了数字 <code>99</code> 作为函数的参数。变量 <code>bob</code> 的值小于 <code>1</code> 时，满足终止条件，函数每调用一次自身，就离终止条件更近一步。</p>
+<p>递归的最后一个原则也满足了：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/j7zwm8t</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  bottles_of_beer(bob)
+</code></pre>
+<p>上面这行代码确保只要没有满足终止条件，函数将继续调用自身。每次调用后，会将已经递减 1 的变量 <code>bob</code> 传入作为参数，因此每次都会接近终止条件。第一次调用自身时，传入的 <code>bob</code> 参数的值为 <code>98</code>，然后是 <code>97</code>、<code>96</code>，直到最后传入小于 <code>1</code> 的值，这时就满足了终止条件，打印的内容为 <code>No more bottles of beer on the wall. No more bottles of beer</code>。然后函数执行 <code>return</code> 关键字，算法停止运行。</p>
+<p>递归是新手程序员最难理解的概念之一。如果你还感到疑惑，建议不断练习，并牢记：要想理解递归；首先，必须不断练习递归。</p>
+<h3 id="227">22.7　术语表</h3>
+<p><strong>算法</strong>：算法是解决问题的一系列步骤。</p>
+<p><strong>搜索算法</strong>：在数据结构中查找信息的一种算法。</p>
+<p><strong>顺序搜索</strong>：一种简单的搜索算法，依次检查数据结构中的每个元素，判断其是否与查找的元素相匹配。</p>
+<p><strong>回文词</strong>：逆序和顺序拼写均为同一个单词的单词。</p>
+<p><strong>变位词</strong>：通过重新组合另一个单词的字母所组成的单词。</p>
+<p><strong>递归</strong>：将问题不断切分成更小的问题，直到小问题可以被轻松解决的一种方法。</p>
+<p><strong>迭代式算法</strong>：迭代式算法使用循环不断地重复一个步骤来解决问题。</p>
+<p><strong>递归式算法</strong>：通过调用自身的函数来解决问题的算法。</p>
+<p><strong>终止条件</strong>：终止递归算法运行的条件。</p>
+<h3 id="228">22.8　挑战练习</h3>
+<p>在 http://leetcode.com 注册一个账号，并解决 3 个初级算法问题。</p></div></article>
+</body>
+</html>
