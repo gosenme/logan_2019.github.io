@@ -15,7 +15,7 @@ title: me
 ### 技术栈
 - Python、Golang基础知识扎实,熟悉常用的数据结构、多线程和协程;
 - 使用Keras、TensorFlow搭建神经网络,使用Pandas、Numpy处理数据;
-- 使用Sanic/Flask+Gunicorn+Docker提供HTTP接口服务;
+- Python使用Sanic/Flask+Gunicorn+Docker、Golang使用Gin/Beego提供HTTP接口服务;
 - 了解MySQL数据库多表联查,有Redis、MongoDB等非关系型数据库使用经验;
 - 了解Git和Linux操作系统。
 
