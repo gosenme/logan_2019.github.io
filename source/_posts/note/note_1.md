@@ -68,3 +68,26 @@ title: note_1
 - `3xx` 重定向状态码。这些状态码表示服务器已经接收到了客户端发送的请求，并且已经成功处理了请求，但为了完成请求指定的动作，客户端还需要再做一些其他工作。这类状态码大多用于实现 URL 重定向
 - `4xx` 客户端错误状态码。这类状态码说明客户端发送的请求出现了某些问题。在这一类型的状态码中，最常见的就是“404 Not Found”了，这个状态码表示服务器无法从请求指定的 URL 中找到客户端想要的资源
 - `5xx` 服务器错误状态码。当服务器因为某些原因而无法正确地处理请求时，服务器就会使用这类状态码来通知客户端。在这一类状态码中，最常见的就是“500 Internal Server Error”状态码了
+
+### HTTPS
+- https其实就是http在ssl/tls上通信
+- SSL（Secure Socket Layer，安全套接字层）是一种通过公钥基础设施（Public Key Infrastructure，PKI）为通信双方提供数据加密和身份验证的协议，其中通信的双方通常是客户端和服务器。
+- SSL 最初由 Netscape 公司开发，之后由 IETF（Internet Engineering Task Force，互联网工程任务组）接手并将其改名为 TLS（Transport Layer Security，传输层安全协议）。
+- 生成 SSL 证书和密钥的步骤并不是特别复杂。因为 SSL 证书实际上就是一个将扩展密钥用法（extended key usage）设置成了服务器身份验证操作的 X.509 证书
+- 程序在生成证书时使用了crypto/x509标准库。而创建证书需要用到私钥，所以程序在使用私钥成功创建证书之后，会将私钥单独保存在一个存放服务器私钥的文件里面。
+- 使用一个Certificate结构来对证书进行配置：
+    ```go
+    template := x509.Certificate{
+        SerialNumber: serialNumber,
+        Subject: subject,
+        NotBefore: time.Now(),
+        NotAfter: time.Now().Add(365*24*time.Hour),
+        KeyUsage: x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+        
+        // 表明此证书用于服务器身份证验证
+        ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+        
+        // 将证书设置只在127.0.0.1本地运行
+        IPAddresses: []net.IP{net.ParseIP("127.0.0.1")},
+    }
+    ```
