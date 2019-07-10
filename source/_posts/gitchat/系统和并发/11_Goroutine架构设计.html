@@ -1,0 +1,110 @@
+---
+title: Goroutine架构设计
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Goroutine架构设计</title>
+</head>
+<body>
+<article id="articleDiv" style="overflow: hidden;padding-bottom:20px;text-align: justify;"><div class="mazi-article-content dont-break-out"><p>本节内容：</p>
+<ul>
+<li>Goroutine 资源泄漏</li>
+<li>架构设计</li>
+</ul>
+<h3 id="goroutine">Goroutine 资源泄漏</h3>
+<p>我们提到无论同步方式还是异步方式都会有队列，队列决定了必须有另外一方唤醒才能从队列里解脱出来，如果没有另外一方唤醒，那可能就会出现资源泄露。资源泄露最常见的是 Goroutine 泄露，我们通常会把发送和接收分成两个并发单元，如果发送单元被放到队列休眠了，一堆发送单元都在这里休眠没有任何接收方来唤醒，那么这些 Goroutine 永远不会结束，这就是资源泄露。这种资源泄露可能觉得无所谓，每个才消耗 2k 内存，但积累很多的话所有栈空间需要扫描 GC 的根，最后会导致垃圾回收器效率会很低，一旦泄露非常严重的时候依然会导致很严重的问题，所以 Goroutine 发送和接收的平衡要非常的小心。</p>
+<p>下面用一个例子说明资源泄露怎么形成的：</p>
+<p>leak.go：</p>
+<pre><code class="go language-go">package main
+
+import (
+    "runtime"
+    "time"
+)
+
+func test() {
+    c := make(chan int)
+
+    for i := 0; i &lt; 500; i++ {
+        go func() {
+            c &lt;- 1
+        }()
+    }
+
+    // go func() {
+    //  for x := range c {
+    //      _ = x
+    //  }
+    // }()
+}
+
+func main() {
+    test()
+
+    for i := 0; i &lt; 60; i++ {
+        runtime.GC()
+        time.Sleep(time.Second)
+    }
+}
+</code></pre>
+<p>这是很简单的测试例子，先创建同步的通道<code>c</code>，然后创建 500 个发送方，没有任何的接收，也就意味着这 500 个发送方都在发送队列中进行休眠，因为没有任何人来唤醒它，这就形成很典型的资源泄露，资源泄露的话垃圾回收器是没有办法的。</p>
+<pre><code class="hljs bash">$ go build -o <span class="hljs-built_in">test</span> leak.go
+$ GODEBUG=<span class="hljs-string">"gctrace=1,schedtrace=1000,scheddetail=1"</span> ./<span class="hljs-built_in">test</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">SCHED</span> <span class="hljs-number">0ms</span>: gomaxprocs=<span class="hljs-number">1</span> idleprocs=<span class="hljs-number">0</span> threads=<span class="hljs-number">4</span> spinningthreads=<span class="hljs-number">0</span> idlethreads=<span class="hljs-number">2</span> runqueue=<span class="hljs-number">0</span> gcwaiting=<span class="hljs-number">0</span> nmidlelocked=<span class="hljs-number">0</span> stopwait=<span class="hljs-number">0</span> sysmonwait=<span class="hljs-number">0</span>
+  P0: status=<span class="hljs-number">1</span> schedtick=<span class="hljs-number">504</span> syscalltick=<span class="hljs-number">2</span> m=<span class="hljs-number">3</span> runqsize=<span class="hljs-number">0</span> gfreecnt=<span class="hljs-number">0</span>
+  M3: p=<span class="hljs-number">0</span> curg=<span class="hljs-number">504</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">1</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">false</span> lockedg=-<span class="hljs-number">1</span>
+  M2: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">0</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">true</span> lockedg=-<span class="hljs-number">1</span>
+  M1: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">1</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">false</span> lockedg=-<span class="hljs-number">1</span>
+  M0: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">0</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">true</span> lockedg=-<span class="hljs-number">1</span>
+  G1: status=<span class="hljs-number">4</span>(wait for GC cycle) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G2: status=<span class="hljs-number">4</span>(force gc (idle)) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G3: status=<span class="hljs-number">4</span>(GC sweep wait) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G4: status=<span class="hljs-number">4</span>(chan send) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G5: status=<span class="hljs-number">4</span>(chan send) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G504: status=<span class="hljs-number">2</span>(GC worker (idle)) m=<span class="hljs-number">3</span> lockedm=-<span class="hljs-number">1</span>
+gc <span class="hljs-number">1</span> @<span class="hljs-number">0</span>.<span class="hljs-number">000s</span> <span class="hljs-number">50</span>%: <span class="hljs-number">0</span>.<span class="hljs-number">002</span>+<span class="hljs-number">16</span>+<span class="hljs-number">0</span>.<span class="hljs-number">006</span> ms clock, <span class="hljs-number">0</span>.<span class="hljs-number">002</span>+<span class="hljs-number">0</span>/<span class="hljs-number">8</span>.<span class="hljs-number">7</span>/<span class="hljs-number">0</span>+<span class="hljs-number">0</span>.<span class="hljs-number">006</span> ms cpu, <span class="hljs-number">0</span>-&gt;<span class="hljs-number">0</span>-&gt;<span class="hljs-number">0</span> MB, <span class="hljs-number">4</span> MB goal, <span class="hljs-number">1</span> P (forced)
+</code></pre>
+<p>我们可以看到<code>status=4(chan send) m=-1 lockedm=-1</code>，有大量的 Goroutine 处于等待发送状态，<code>gc 1</code>垃圾回收器根本没有办法处理这些资源泄露。</p>
+<p>怎么样去处理资源泄露呢？对于这个例子，需要有对应的接收方，接收方数量和发送方数量可以是不相等，因为 Goroutine 并不关心有多少人发送多少人接收，只要能处理完就可以了。第一种方式需要有接收方，第二种方式发送方可以设计超时，发送的数据如果超过 10s 都没有办法接收的话那么就把 Goroutine 结束掉。</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">gc</span> <span class="hljs-number">1</span> @<span class="hljs-number">0</span>.<span class="hljs-number">000s</span> <span class="hljs-number">15</span>%: <span class="hljs-number">0</span>.<span class="hljs-number">003</span>+<span class="hljs-number">0</span>.<span class="hljs-number">15</span>+<span class="hljs-number">0</span>.<span class="hljs-number">003</span> ms clock, <span class="hljs-number">0</span>.<span class="hljs-number">003</span>+<span class="hljs-number">0</span>/<span class="hljs-number">0</span>.<span class="hljs-number">13</span>/<span class="hljs-number">0</span>+<span class="hljs-number">0</span>.<span class="hljs-number">003</span> ms cpu, <span class="hljs-number">0</span>-&gt;<span class="hljs-number">0</span>-&gt;<span class="hljs-number">0</span> MB, <span class="hljs-number">4</span> MB goal, <span class="hljs-number">1</span> P (forced)
+SCHED <span class="hljs-number">0ms</span>: gomaxprocs=<span class="hljs-number">1</span> idleprocs=<span class="hljs-number">0</span> threads=<span class="hljs-number">4</span> spinningthreads=<span class="hljs-number">0</span> idlethreads=<span class="hljs-number">2</span> runqueue=<span class="hljs-number">1</span> gcwaiting=<span class="hljs-number">0</span> nmidlelocked=<span class="hljs-number">0</span> stopwait=<span class="hljs-number">0</span> sysmonwait=<span class="hljs-number">0</span>
+  P0: status=<span class="hljs-number">1</span> schedtick=<span class="hljs-number">750</span> syscalltick=<span class="hljs-number">2</span> m=<span class="hljs-number">3</span> runqsize=<span class="hljs-number">0</span> gfreecnt=<span class="hljs-number">38</span>
+  M3: p=<span class="hljs-number">0</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">1</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">false</span> lockedg=-<span class="hljs-number">1</span>
+  M2: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">0</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">true</span> lockedg=-<span class="hljs-number">1</span>
+  M1: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">1</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">false</span> lockedg=-<span class="hljs-number">1</span>
+  M0: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">0</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">true</span> lockedg=-<span class="hljs-number">1</span>
+  G1: status=<span class="hljs-number">1</span>(wait for GC cycle) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G2: status=<span class="hljs-number">4</span>(force gc (idle)) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G3: status=<span class="hljs-number">1</span>(GC sweep wait) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G4: status=<span class="hljs-number">6</span>() m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  .........
+  G500: status=<span class="hljs-number">6</span>() m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G501: status=<span class="hljs-number">6</span>() m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G502: status=<span class="hljs-number">6</span>() m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G503: status=<span class="hljs-number">6</span>() m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G504: status=<span class="hljs-number">4</span>(chan receive) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G505: status=<span class="hljs-number">4</span>(GC worker (idle)) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+SCHED <span class="hljs-number">1003ms</span>: gomaxprocs=<span class="hljs-number">1</span> idleprocs=<span class="hljs-number">1</span> threads=<span class="hljs-number">4</span> spinningthreads=<span class="hljs-number">0</span> idlethreads=<span class="hljs-number">2</span> runqueue=<span class="hljs-number">0</span> gcwaiting=<span class="hljs-number">0</span> nmidlelocked=<span class="hljs-number">0</span> stopwait=<span class="hljs-number">0</span> sysmonwait=<span class="hljs-number">0</span>
+  P0: status=<span class="hljs-number">0</span> schedtick=<span class="hljs-number">802</span> syscalltick=<span class="hljs-number">3</span> m=-<span class="hljs-number">1</span> runqsize=<span class="hljs-number">0</span> gfreecnt=<span class="hljs-number">37</span>
+  M3: p=-<span class="hljs-number">1</span> curg=<span class="hljs-number">506</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">0</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">true</span> lockedg=-<span class="hljs-number">1</span>
+  M2: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">0</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">true</span> lockedg=-<span class="hljs-number">1</span>
+  M1: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">1</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">false</span> lockedg=-<span class="hljs-number">1</span>
+  M0: p=-<span class="hljs-number">1</span> curg=-<span class="hljs-number">1</span> mallocing=<span class="hljs-number">0</span> throwing=<span class="hljs-number">0</span> preemptoff= locks=<span class="hljs-number">0</span> dying=<span class="hljs-number">0</span> helpgc=<span class="hljs-number">0</span> spinning=<span class="hljs-literal">false</span> <span class="hljs-literal">blocked</span>=<span class="hljs-literal">true</span> lockedg=-<span class="hljs-number">1</span>
+  G1: status=<span class="hljs-number">4</span>(sleep) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G2: status=<span class="hljs-number">4</span>(force gc (idle)) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+  G3: status=<span class="hljs-number">4</span>(GC sweep wait) m=-<span class="hljs-number">1</span> lockedm=-<span class="hljs-number">1</span>
+</code></pre>
+<p>需要注意一点是，发送和接收必须要配对，至于多个人发送方发送一接收方接收循环没有关系，数量可以不相等，只要最终把所有排队的发送方配对消费完。第二种方式是没有接收方，发送方都有超时，就是发送方可以等，但是等 10s 以后依然没有配对的话那就放弃，这也是一种方式。</p>
+<h3 id="">架构设计</h3>
+<p>我们做任何东西架构逻辑上必须是完整的，如果架构逻辑上不完整，那么选择什么样的技术选择什么样的数据库没有任何意义。</p>
+<p>基于通道的方式或者基于消息队列的方式来实现消息的传递，我们管这种方式叫做 CSP 模型，CSP 模型简单来说用通讯来代替内存共享。因为通讯本身可以扩展的，最简单的通讯是发送一个事件或者发送一个信号，然后来复制内存，甚至不用复制内存。比如说发送方是生成接收方是消费，发送方和接收方发送消息，这个消息就是指针，当接收方确定接收到这个消息后，发送方就放弃这个指针，把这个指针交给接收方，这个内存块的唯一引用就从发送方变成接收方了。</p>
+<p>拷贝数据有两种方式来拷贝，一种方式拷贝是发送方把数据完整的复制一份交给接收方，实际上就是两块内存；第二种方式是使用同一块内存，发送方把指向内存的指针传给接收方，传给接收方以后发送方就不再持有这个指针，只有接收方持有这个指针。所以这也是一种类似于权限的转移方案。优点是当这个数据很大的时候可以避免内存复制的开销，也避免在堆上创建两个对象。数据拷贝方式肯定需要在堆上复制两个对象，对象接收以后，第一个对象肯定需要 GC 回收的。只有一块内存的话，我们只需要转移指针，把指针交给接收方就可以了。</p>
+<p>通讯代替内存共享并不意味着不用内存共享，所谓的内存共享指的是生产和消费同时持有某个数据才叫共享。如果同一块内存的引用转移给另外一方，这也叫一种通讯，不要很教条化的理解通讯，转移指针也是一种通讯。</p>
+<p>Go 语言从 Runtime 底层就支持并发模型，它大量使用类似 CSP 这种模型来实现很多的并发操作，因为包括 main() 函数就是一个 Goroutine，垃圾回收是 Goroutine，后台监控是 Goroutine，所有的东西都是 Goroutine。Goroutine 之间发送消息，它并没有像 Windows 消息通道一说，Windows 所有的窗体事件都是由消息来实现的，但是在 Go 语言终端层面并没有这种机制，所以必须有自己的方式实现消息通道，这种通道都是用 Channel 来实现的。CSP 模型虽然从底层实现上有些差别，但是原理上是非常类似，通过了解这种并发的操作转其他语言的时候会少很多的障碍。</p>
+<p>甚至这两套模型可以用在日常软件开发的架构层面上，就像很熟悉的管道 Pipeline，通常有两种方式来实现，第一种方式通过内存来实现，第二种方式通过文件来实现。本质上和通道非常的类似非常简单，无非是它得有一种方式来维持它的管道顺序，发送的时候必须保证每个 backblock 被消费掉，这种方式可以完全借鉴 Channel 通道模型，这种模型完全可以移植架构上面。</p></div></article>
+</body>
+</html>
