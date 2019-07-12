@@ -1,3 +1,7 @@
+---
+title: nlp之 stanfordnlp和CoreNLP
+---
+
 ### 下载CoreNLP
 - [下载地址](https://stanfordnlp.github.io/CoreNLP/index.html#download)
 - 使用`unzip`解压
