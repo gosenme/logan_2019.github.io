@@ -1,5 +1,5 @@
 ---
-title: Giligili项目学习
+title: 项目配置
 ---
 
 ### 初始化配置文件
@@ -57,6 +57,13 @@ services:
 ### 手动创建 test 数据库
 - 借助可视化工具进行操作
 - 使用命令
+
+### 容器管理可视化 
+- [文档](https://portainer.readthedocs.io/en/stable/deployment.html#quick-start)
+- docker volume create portainer_data
+- docker run -d -p 9000:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+### 使用腾讯云容器服务
 
 ### ssh-copy-id
 
