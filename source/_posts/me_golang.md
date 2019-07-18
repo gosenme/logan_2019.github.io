@@ -4,7 +4,7 @@ title: me-golang
 ### 个人信息
 - 姓名：欧阳举相
 - 手机：17673502448
-- 邮箱：oyjx0525@dingtalk.com
+- 邮箱：1005281342@qq.com
 - 求职意向：Golang 后端开发
 
 ### 教育背景
@@ -14,9 +14,9 @@ title: me-golang
 
 ### 技术栈
 - Golang、Python基础知识扎实,熟悉常用的数据结构、多线程和协程;
-- Golang使用grpc远程过程调用,使用Gin/Beego提供Http接口;
+- Golang使用Gin, Python使用Sanic/Flask提供Http接口;
 - 使用Keras、TensorFlow搭建神经网络,使用Pandas、Numpy处理数据;
-- 了解MySQL数据库多表联查与gorm的使用,有Redis、MongoDB等非关系型数据库使用经验;
+- 了解MySQL数据库多表联查,有Redis、MongoDB等非关系型数据库使用经验;
 - 了解Git和Linux操作系统。
 
 
@@ -34,7 +34,7 @@ title: me-golang
 
   > 1. 该项目主要功能是同步供应商业务数据，开发周期约1个月;
   > 2. 完成`xml`,`json`,`db`相关数据结构体定义与解析;
-  > 3. 使用Golang基于`go routine`和`channel`开发Koasys集团数据拉取工具;
+  > 3. 使用Golang基于`go routine`开发Koasys集团数据拉取工具;
   > 4. 使用Golang开发拉取报价、二次验价、订单创建、订单查询、订单取消接口;
   > 5. 供应商静态数据同步工具开发以及入库，本地功能单元测试，业务集成测试。
 
