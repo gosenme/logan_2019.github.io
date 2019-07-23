@@ -57,7 +57,7 @@ func UserPrint(a string, b string)  {
 - MySQL
 
 ## 数据结构
-- 跳表
+- [跳表](https://www.jianshu.com/p/dd01e8dc4d1f)
 - B+树
 
 ## 通信协议
