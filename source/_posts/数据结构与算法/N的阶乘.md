@@ -29,7 +29,7 @@ def mul_big_num(a: str, b: str):
     return s
 
 
-def stratum(n):
+def factorial(n):
     a = [1]
     for x in range(1, n + 1):
         a.append(mul_big_num(str(a[-1]), str(x)))
@@ -48,6 +48,6 @@ def test(n):
     return a[-1]                                       
     
     
-print(int(stratum(5)) == test(5) and int(stratum(15)) == test(15))
+print(int(factorial(5)) == test(5) and int(factorial(15)) == test(15))
 # True 
 ```
