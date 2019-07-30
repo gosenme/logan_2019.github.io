@@ -1,0 +1,577 @@
+---
+title: Go并发基础
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Go并发基础</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#">前言</a></li>
+<li><a href="#-1">并发与并行的本质区别</a></li>
+<li><a href="#-2">并发编程究竟难在哪里</a><ul>
+<li><a href="#-3">数据竞争的存在</a></li>
+<li><a href="#-4">操作的原子性</a></li>
+<li><a href="#-5">内存访问同步</a></li>
+</ul>
+</li>
+<li><a href="#go">常见的三种线程模型，以及 Go 独特的线程模型</a><ul>
+<li><a href="#-6">三种线程模型</a><ul>
+<li><a href="#-7">一对一模型</a></li>
+<li><a href="#-8">多对一模型</a></li>
+<li><a href="#-9">多对多模型</a></li>
+</ul>
+</li>
+<li><a href="#go-1">Go 线程模型</a></li>
+</ul>
+</li>
+<li><a href="#goroutine">Goroutine 轻量级线程</a><ul>
+<li><a href="#goroutine-1">goroutine</a></li>
+<li><a href="#goroutine-2">如何杀死一个 goroutine</a></li>
+</ul>
+</li>
+<li><a href="#go-2">Go 内存模型概述</a><ul>
+<li><a href="#happensbefore">Happens Before 原则</a></li>
+<li><a href="#synchronization">同步（Synchronization）</a><ul>
+<li><a href="#initialization">初始化（Initialization）</a></li>
+<li><a href="#goroutinegoroutinecreation">创建 goroutine（Goroutine creation）</a></li>
+<li><a href="#goroutinegoroutinedestruction">销毁 goroutine（Goroutine destruction）</a></li>
+</ul>
+</li>
+<li><a href="#-10">创建的变量是在栈还是堆上分配？</a></li>
+</ul>
+</li>
+<li><a href="#-11">参考</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<h3 id="">前言</h3>
+<p>Go 语言在被设计的时候，Java 和 C++ 是编写服务器程序最常用的语言（至少在 Google 是这样），这是因为使用这些语言可以高效的开发。但是 Go 设计者们觉得像 Java 和 C++ 这些语言需要开发者记忆太多的语法和规则，并且需要重复做的事情太多，这导致一些程序员开始转向更加动态、流畅的语言，如 Python。但是付出的是损失开发效率和对类型安全检查的缺失。Go 设计者们认为应该可以发明一种语言，这种语言集高效的开发、提供类型安全检查、简洁流畅的代码风格与一体，于是 Go 就诞生了。</p>
+<p>Go 在语言层面提供了内置的并发支持，其的应用范围越来越广，大名鼎鼎的容器化技术 Docker 以及号称分布式操作系统的 K8S 底层实现就是 Golang 来实现的，随着技术的快速发展，我们只有不断迭代自己的技术栈，才能不会被淘汰，而 Golang 将会是未来应用场景比较多的一种语言，各大公司也将会要求必须掌握 Golang 来进行快速开发高并发应用程序。</p>
+<p>本 chat 是作者对日常关于 go 并发编程学习的笔记的汇总整理，旨在以通俗易懂方式来把知识串起来，以便让新人快速入手，作为 Go 并发编程的基础篇，内容如下：</p>
+<ul>
+<li>并发与并行的本质区别</li>
+<li>并发编程究竟难在哪里</li>
+<li>常见的三种线程模型，以及 Go 独特的线程模型</li>
+<li>Goroutine 轻量级线程</li>
+<li>Go 内存模型概述</li>
+</ul>
+<h3 id="-1">并发与并行的本质区别</h3>
+<p>很多人会把并发与并行的概念弄混，有时候说并发有时候说并行，那么两者究竟有啥区别那，本节我们就来澄清下两者概念。</p>
+<p>首先我们先看下什么是进程，比如你打开的微信 app 就是一个进程、打开的手淘 App、记事本程序就是一个进程，在高级编程语言中你启动 main 函数运行后其实也启动了一个进程。</p>
+<p>进程（Process）是计算机中的程序在某数据集合上的一次运行活动，是系统进行资源分配和调度的基本单位，也就是说操作系统是以进程为单位进行资源分配的，但是 CPU 这个资源却比较特殊，CPU 的分配是以线程为单位的，这是因为具体占用 CPU 运行的是进程中的线程。</p>
+<p>一个进程中至少有一个线程，比如启动 main 函数运行的时候，main 函数所在线程就是该进程的主线程，在 go 中 main 函数所在线程的生命周期等于进程的生命周期，当 main 函数所在线程运行结束后，进程就退出了（这与 Java 中进程的生命周期不同，可以参考我的 Java 并发编程之美一书）。</p>
+<p><img src="https://images.gitbook.cn/74b7cb20-a511-11e9-9af1-a9d951303272" alt="enter image description here"></p>
+<p>如上图进程中包含进程控制块（PCB）和用户地址空间和很多线程：</p>
+<ul>
+<li><p>其中 PCB 用来保存进程的控制信息，比如每个 pc 上全局唯一的进程编号，进程的上下信息（当进程执行上下文切换时候要保存当前进程的上下文信息），控制信息（比如用来管理调度的进程的状态、进程间通信的信号量或消息队列信息、CPU 资源的使用情况等）</p></li>
+<li><p>用户地址空间则用来保存进程运行时需要的代码和数据等信息。</p></li>
+<li><p>每个进程中可以有多个线程，每个线程有自己的用户栈资源，用于存储该线程的局部变量，这些局部变量是该线程私有的，其它线程是访问不了的，另外栈还用来存放当前线程的函数调用栈帧信息，用户栈用来存放用户程序执行的一些信息，系统栈用来存放 native 调用的执行信息。</p></li>
+</ul>
+<p>并发是指同一个时间段内多个任务同时交叉执行，并且都没有执行结束，而并行是说在单位时间内多个任务同时在执行，并发任务强调在一个时间段内同时执行，而一个时间段有多个单位时间累积而成，所以说并发的多个任务在单位时间内不一定同时在执行。</p>
+<p>在单个 CPU 的时代多个任务同时运行都是并发，这是因为 CPU 同时只能执行一个任务，单个 CPU 时代多任务是共享一个 CPU 的，当一个任务占用 CPU 运行时候，其它任务就会被挂起，当占用 CPU 的任务时间片用完后，会把 CPU 让给其它任务来使用，所以在单 CPU 时代多线程编程是意义不大，并且线程间频繁的上下文切换还会带来开销。</p>
+<p>如下图单个 CPU 上运行两个线程，可知线程 A 和 B 是轮流使用 CPU 进行任务处理的，也就是同时 CPU 只在执行一个线程上面的任务，当前线程 A 的时间片用完后会进行线程上下文切换，也就是保存当前线程的执行线程，然后切换线程 B 占用 CPU 运行任务，线程 A 和线程 B 走走停停、交叉运行的，我们就说线程 A 和线程 B 是并发运行的</p>
+<p><img src="https://images.gitbook.cn/834bc9c0-a511-11e9-9af1-a9d951303272" alt="enter image description here"></p>
+<p>如下图双 CPU 时候，线程 A 和线程 B 各自在自己的 CPU 上执行任务，实现了真正的并行运行。</p>
+<p><img src="https://images.gitbook.cn/8d470660-a511-11e9-882e-fb3172d46a5c" alt="enter image description here"></p>
+<p>而在多线程编程实践中线程的个数往往多于 CPU 的个数，所以平时都是称多线程并发编程而不是多线程并行编程。</p>
+<p>随着多核 CPU 时代的到来，打破了单核 CPU 对多线程效能的限制，多个 CPU 意味着每个线程可以使用自己的 CPU 运行，这减少了线程上下文切换的开销，并且随着对应用系统性能和吞吐量的要求提高，还有海量数据处理和请求的要求，都对高并发编程有着迫切的需求。</p>
+<p>总结：并发强调多个任务在一个时间段内走走停停，交叉运行，并不要求多个任务在单位时间内同时运行，例如在单 CPU 上运行多个任务或者在任务数大于 CPU 个数时候使用分时复用 CPU 策略运行任务就是并发运行；而并行则强调多个任务同时运行。</p>
+<h3 id="-2">并发编程究竟难在哪里</h3>
+<p>编写正确的程序本身就不容易，编写正确的并发程序更是难中之难，那么并发编程究竟难道哪里那？本节我们就来一探究竟。</p>
+<h4 id="-3">数据竞争的存在</h4>
+<p>当两个或者多个线程（goroutine）在没有任何同步措施的情况下同时读写同一个共享资源时候，这多个线程（goroutine）就处于数据竞争状态，数据竞争会导致程序的运行结果超出写代码的人的期望。下面我们来看个例子：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+)</span>
+
+var a <span class="hljs-keyword">int</span>
+
+<span class="hljs-comment">//goroutine1</span>
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-comment">//1,gouroutine2</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span></span>{
+        a = <span class="hljs-number">1</span><span class="hljs-comment">//1.1</span>
+    }()
+
+    <span class="hljs-comment">//2</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-number">0</span> == a{<span class="hljs-comment">//2.1</span>
+        fmt.Println(a)<span class="hljs-comment">//2.2</span>
+    }
+}
+</code></pre>
+<ul>
+<li>如上代码首先创建了一个 int 类型的变量，默认被初始化为 0 值，运行 main 函数会启动一个进程和这个进程中的一个运行 main 函数的 goroutine(轻量级线程)</li>
+<li>在 main 函数内使用 go 语句创建了一个新的 goroutine（该 goroutine 运行匿名函数里面的内容）并启动运行，匿名函数内给变量 a 赋值为 1</li>
+<li>main 函数里面代码 2 判断如果变量 a 的值为 0，则打印 a 的值。</li>
+</ul>
+<p>运行 main 函数后，启动的进程里面存在两个并发运行的线程(goroutine)，分别是开启的新 goroutine(起名为 goroutine2)和 main 函数所在的 goroutine(起名为 goroutine1),前者试图修改共享变量 a,后者试图读取共享变量 a，也就是存在两个线程在没有任何同步的情况下对同一个共享变量进行读写访问，这就出现了数据竞争，由于数据竞争存在，导致上面程序可能会有下面三种输出:</p>
+<ul>
+<li>输出 0，由于运行时调度系统的随机性，会存在 goroutine1 的 2.2 代码比 goroutine2 的代码 1.1 先执行</li>
+<li>输出 1，当存在 goroutine1 先执行代码 2.1,然后 goroutine2 在执行代码 1.1，最后 goroutine1 在执行代码 2.2 的时候</li>
+<li>什么都不输出，当 goroutine2 执行先于 goroutine1 的 2.1 代码时候。</li>
+</ul>
+<p>由于数据竞争的存在上面一段很短的代码会有三种可能的输出，究其原因是 goroutine1 和 groutine2 的运行时序是不确定的，也就是没有对他们的操作做同步，以便让这些内存操作变为可以预知的顺序执行。</p>
+<p>这里编写程序者或许受单线程模型的影响认为代码 1.1 会先于代码 2.1 执行，当发现输出不符合预期时候，或许会在代码 2.1 前面让 goroutine1 休眠一会确保 goroutine2 执行完毕 1.1 后在让 goroutine1 执行 2.1，这看起来或许有效，但是这是非常低效，并且并不是所有情况下都可以解决的。</p>
+<p>正确的做法可以使用信号量等同步措施，保证 goroutine2 执行完毕再让 goroutine1 执行代码 2.1，如下面代码，我们使用 sync 包的 WaitGroup 来保证 goroutine2 执行完毕代码 2.1 后，goroutine1 才可以执行步骤 4.1,关于 WaitGroup 后面章节我们具体会讲解：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var a <span class="hljs-keyword">int</span>
+var wg sync.WaitGroup<span class="hljs-comment">//信号量</span>
+<span class="hljs-comment">//goroutine1</span>
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//1.</span>
+    wg.Add(<span class="hljs-number">1</span>);<span class="hljs-comment">//一个信号</span>
+
+    <span class="hljs-comment">//2. goroutine1</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span></span>{
+        a = <span class="hljs-number">1</span><span class="hljs-comment">//2.1</span>
+        wg.Done()
+    }()
+
+    wg.Wait()<span class="hljs-comment">//3. 等待 goroutine1 运行结束</span>
+
+    <span class="hljs-comment">//4</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-number">0</span> == a{<span class="hljs-comment">//4.1</span>
+        fmt.Println(a)<span class="hljs-comment">//4.2</span>
+    }
+}
+</code></pre>
+<h4 id="-4">操作的原子性</h4>
+<p>所谓原子性操作是指当执行一系列操作时候，这些操作那么全部被执行，那么全部不被执行，不存在只执行其中一部分的情况。在设计计数器时候一般都是先读取当前值，然后+1，然后更新，这个过程是读-改-写的过程，如果不能保证这个过程是原子性，那么就会出现线程安全问题。如下代码是线程不安全的，因为不能保证 a++是原子性操作:</p>
+<pre><code class="java language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var count int32
+var wg sync.WaitGroup <span class="hljs-comment">//信号量</span>
+<span class="hljs-keyword">const</span> THREAD_NUM </span>= <span class="hljs-number">1000</span>
+
+<span class="hljs-comment">//goroutine1</span>
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//1.信号</span>
+    wg.Add(THREAD_NUM)
+
+    <span class="hljs-comment">//2. goroutine</span>
+    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; THREAD_NUM; i++ {
+        <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+            count++<span class="hljs-comment">//2.1</span>
+            wg.Done()<span class="hljs-comment">//2.2</span>
+        }()
+    }
+
+    wg.Wait() <span class="hljs-comment">//3. 等待 goroutine 运行结束</span>
+
+    fmt.Println(count) <span class="hljs-comment">//4 输出计数</span>
+}
+</code></pre>
+<ul>
+<li>如上代码在 main 函数所在为 goroutine 内创建了 THREAD_NUM 个 goroutine，每个新的 goroutine 执行代码 2.1 对变量 count 计数增加 1。</li>
+<li>这里创建了 THREAD<em>NUM 个信号量，用来在代码 3 处等待 THREAD</em>NUM 个 goroutine 执行完毕，然后输出最终计数，执行上面代码我们 期望输出 1000，但是实际却不是。</li>
+</ul>
+<p>这是因为 a++操作本身不是原子性的，其等价于 b := count;b=b+1;count=b;是三步操作，所以可能导致导致计数不准确，如下表：
+<img src="https://images.gitbook.cn/e9d02470-a511-11e9-9811-cb5d7fd03b05" alt="enter image description here"></p>
+<p>假如当前 count=0 那么 t1 时刻线程 A 读取了 count 值到变量 countA,然后 t2 时刻递增 countA 值为 1，同时线程 B 读取 count 的值 0 放到内存 countB 值为 0（因为 countA 还没有写入主内存），t3 时刻线程 A 才把 countA 为 1 的值写入主内存，至此线程 A 一次计数完毕，同时线程 B 递增 CountB 值为 1，t4 时候线程 B 把 countB 值 1 写入内存，至此线程 B 一次计数完毕。明明是两次计数，最后结果是 1 而不是 2。</p>
+<p>上面的程序需要保证 count++的原子性才是正确的，后面章节会知道使用 sync/atomic 包的一些原子性函数或者锁可以解决这个问题。</p>
+<pre><code class="java  language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+    <span class="hljs-string">"sync/atomic"</span>
+)</span>
+
+var count int32
+var wg sync.WaitGroup <span class="hljs-comment">//信号量</span>
+<span class="hljs-keyword">const</span> THREAD_NUM </span>= <span class="hljs-number">1000</span>
+
+<span class="hljs-comment">//goroutine1</span>
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//1.信号</span>
+    wg.Add(THREAD_NUM)
+
+    <span class="hljs-comment">//2. goroutine</span>
+    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; THREAD_NUM; i++ {
+        <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-comment">//count++//</span>
+            atomic.AddInt32(&amp;count, <span class="hljs-number">1</span>)<span class="hljs-comment">//2.1</span>
+            wg.Done()<span class="hljs-comment">//2.2</span>
+        }()
+    }
+
+    wg.Wait() <span class="hljs-comment">//3. 等待 goroutine 运行结束</span>
+
+    fmt.Println(count) <span class="hljs-comment">//4 输出计数</span>
+}
+</code></pre>
+<p>如上代码使用原子性操作可以保证每次输出都是 1000</p>
+<h4 id="-5">内存访问同步</h4>
+<p>上节原子性操作第一个例子有问题是因为 count++操作是被分解为类似 b := count;b=b+1;count =b; 的三部操作，而多个 goroutine 同时执行 count++时候并不是顺序执行者三个步骤的，而是可能交叉访问的。所以如果能对内存变量的访问添加同步访问措施，就可以避免这个问题：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var count int32
+var wg sync.WaitGroup <span class="hljs-comment">//信号量</span>
+var lock sync.Mutex   <span class="hljs-comment">//互斥锁</span>
+<span class="hljs-keyword">const</span> THREAD_NUM </span>= <span class="hljs-number">1000</span>
+
+<span class="hljs-comment">//goroutine1</span>
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//1.信号</span>
+    wg.Add(THREAD_NUM)
+
+    <span class="hljs-comment">//2. goroutine</span>
+    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; THREAD_NUM; i++ {
+        <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+            lock.Lock()   <span class="hljs-comment">//2.1</span>
+            count++       <span class="hljs-comment">//2.2</span>
+            lock.Unlock() <span class="hljs-comment">//2.3</span>
+            wg.Done()     <span class="hljs-comment">//2.4</span>
+        }()
+    }
+
+    wg.Wait() <span class="hljs-comment">//3. 等待 goroutine 运行结束</span>
+
+    fmt.Println(count) <span class="hljs-comment">//4 输出计数</span>
+}
+</code></pre>
+<ul>
+<li>如上代码创建了一个互斥锁 lock,然后 goroutine 内在执行 count++前先获取锁，执行完毕后在释放锁。</li>
+<li>当 1000 个 goroutine 同时执行到代码 2.1 时候只有一个线程可以获取到锁，其他的线程被阻塞，直到获取到锁的 goroutine 释放了锁。也就是这 1000 个线程的并发行使用锁转换为了串行执行，也就是对共享内存变量的访问施加了同步措施。</li>
+</ul>
+<p>总结：本文我们从数据竞争、原子性操作、内存同步三个方面探索了并发编程到底难在哪里，后面章节我们会结合 go 的内存模型和 happen-before 原则在具体探索这些难点如何解决。</p>
+<h3 id="go">常见的三种线程模型，以及 Go 独特的线程模型</h3>
+<p>本节我们来探讨 Go 的线程模型，首先我们先来回顾下常见的三种线程模型，然后在介绍 Go 中独特的线程模型。</p>
+<h4 id="-6">三种线程模型</h4>
+<p>线程的并发执行是有操作系统来进行调度的，操作系统一般都都在内核提供对线程的支持。而我们在使用高级语言编写程序时候创建的线程是用户线程，那么用户线程与内核线程是什么关系那？其实下面将要讲解的三种线程模型就是根据用户线程与内核线程关系的不同而划分的。</p>
+<h5 id="-7"><strong>一对一模型</strong></h5>
+<p>这种线程模型下用户线程与内核线程是一一对应的，当从程序入口点（比如 main 函数）启动后，操作系统就创建了一个进程，这个 main 函数所在的线程就是主线程，在 main 函数内当我们使用高级语言创建一个用户线程的时候，其实对应创建了一个内核线程，如下图：</p>
+<p><img src="https://images.gitbook.cn/19cde8b0-a512-11e9-882e-fb3172d46a5c" alt="enter image description here"></p>
+<p>这种线程模型优点是在多处理器上，多个线程可以真正实现并行运行，并且当一个线程由于网络 IO 等原因被阻塞时候，其他的线程不受影响。</p>
+<p>缺点是由于一般操作系统会限制内核线程的个数，所以用户线程的个数会受到限制。另外由于用户线程与系统线程一一对应，当用户线程比如执行 Io 操作（执行系统调用）时候，需要从用户态的用户程序的执行切换到内核态执行内核操作，然后等执行完毕后又会从内核态切换到用户态执行用户程序，而这个切换操作开销是相对比较大的。</p>
+<p>另外这里提下高级语言 Java 的线程模型就是使用的这种一对一的模型，所以 Java 中多线程对共享变量使用锁同步时候会导致获取锁失败的线程进行上下文切换，而 JUC 包提供的无锁 CAS 操作则不会产生上下文切换。</p>
+<h5 id="-8"><strong>多对一模型</strong></h5>
+<p>多对一模型是指多个用户线程对应一个内核线程，同时同一个用户线程只能对应一个内核线程，这时候对应同一个内核线程的多个用户线程的上下文切换是由用户态的运行时线程库来做的，而不是由操作系统调度系统来做的，其模型如下：</p>
+<p><img src="https://images.gitbook.cn/313c4aa0-a512-11e9-9af1-a9d951303272" alt="enter image description here"></p>
+<p>这种模型好处是由于上下文切换在用户态，所以切换速度很快，开销很小；另外可创建的用户线程的数量可以很多，只受内存大小限制。</p>
+<p>这种模型由于多个用户线程对应一个内核线程，当该内核线程对应的一个用户线程被阻塞挂起时候，该内核线程对应的其他用户线程也不能运行了，因为这时候内核线程已经被阻塞挂起了。另外这种模型并不能很好的利用多核 CPU 进行并发运行。</p>
+<h5 id="-9"><strong>多对多模型</strong></h5>
+<p>多对多模型则结合一对一和多对一模型的特点，让大量的用户线程对应少数几个内核线程上，其模型图如下：</p>
+<p><img src="https://images.gitbook.cn/3e37a7e0-a512-11e9-882e-fb3172d46a5c" alt="enter image description here"></p>
+<p>这时候每个内核线程对应多个用户线程，每个用户线程有可以对应多个内核线程，当一个用户线程阻塞后，其对应的当前的内核线程会被阻塞，但是被阻塞的内核线程对应的其他用户线程可以切换到其他的内核线程上继续运行，所以多对多模型是可以充分利用多核 CPU 提升运行效能的。</p>
+<p>另外多对多模型也对用户线程个数没有限制，理论上只要内存够用可以无限创建。</p>
+<h4 id="go-1">Go 线程模型</h4>
+<p>Go 线程模型属于多对多线程模型，其模型如下：</p>
+<p><img src="https://images.gitbook.cn/543059c0-a512-11e9-92ff-03dc57f89d0c" alt="enter image description here"></p>
+<p>Go 中使用使用 go 语句创建的 goroutine 可以认为是轻量级的用户线程，go 线程模型包含三个概念：内核线程(M)，goroutine(G),逻辑处理器（P）,在 Go 中每个逻辑处理器(P)会绑定到某一个内核线程上,每个逻辑处理器（P）内有一个本地队列，用来存放 go 运行时分配的 goroutine。在上面介绍的多对多线程模型中是操作系统调度线程在物理 CPU 上运行，在 Go 中则是 Go 的运行时调度 goroutine 在逻辑处理器（P）上运行。</p>
+<p>在 go 中存在两级调度，一级是操作系统的调度系统，该调度系统调度逻辑处理器占用 CPU 时间片运行，一级是 go 的运行时调度系统，该调度系统调度某个 goroutine 在逻辑处理上运行。</p>
+<p>使用 go 语句创建一个 goroutine 后，创建的 goroutine 会被放入 go 运行时调度器的全局运行队列中，然后 go 运行时调度器会把全局队列中的 goroutine 分配给不同的逻辑处理器（P），分配的 goroutine 会被放到逻辑处理器（P)的本地队列中，当本地队列中某个 goroutine 就绪后待分配到时间片后就可以在逻辑处理器上运行了，如上图 goroutine1 当前正在占用逻辑处理器 1 运行。</p>
+<p>需要注意的是为了避免某些 goroutine 出现饥饿现象，被分配到某一个逻辑处理器（P)上的多个 goroutine 是分时在该逻辑处理器运行的，而不是独占运行直到结束，比如每个 goroutine 从开始到运行结束需要 10 分钟，那么当前逻辑处理器下的 goroutine1，goroutine2，goroutine3，并不是顺序执行，而是交叉并发运行的。</p>
+<p>goroutine 内部实现与在多个操作系统线程(Os 线程)之间复用的协程(coroutines)一样。 如果一个 goroutine 阻塞 OS 线程，例如等待输入，则该 OS 线程对应的逻辑处理器 P 中的其他 goroutine 将迁移到其他 OS 线程，以便它们可以继续运行:</p>
+<p><img src="https://images.gitbook.cn/6453d200-a512-11e9-92ff-03dc57f89d0c" alt="enter image description here"></p>
+<p>如上图左侧假设 goroutine1 在执行文件文件读取操作，则 goroutine1 会导致内核线程 1 阻塞，这时候 go 运行时调度器会把 goroutine1 所在的逻辑处理器 1 迁移到其他的内核线程上（这里是内核线程 2 上），这时候逻辑处理器 1 上的 goroutine2 和 goroutine3 就不会受 goroutine1 的影响了。等 goroutine1 文件读取操作完成后 goroutine1 又会被 go 运行时调度系统重新放入到逻辑处理器 1 的本地队列。</p>
+<p>需要注意的是 go 运行时内核线程(M)的数量默认是 10000 个，你可以使用 runtime/debug 包里面的 debug.SetMaxThreads(10000)来设置。</p>
+<p>默认情况下，Go 默认是给每个可用的物理处理器都分配一个逻辑处理器（p）,如果你需要修改逻辑处理器(P)个数可以使用 runtime 包的 runtime.GOMAXPROCS 函数设置.</p>
+<p>至于 goroutine（G）的数量则是由用户程序自己来确定，理论只要内存够大，可以无限制创建。</p>
+<p>总结：本节我们探讨了 go 的线程模型，讲解了 Go 中是多对多的线程模型，正是由于这种线程模型才让 go 中每台机器可以创建成千上万的 goroutine（轻量级线程），了解了 go 的线程模型，特别是其中的 MPG 概念，就可以随业务需要动态设置最优方案。 </p>
+<h3 id="goroutine">Goroutine 轻量级线程</h3>
+<p>在 go 中，使用 go 关键字跟上一个函数，就创建了一个 goroutine，每个 goroutine 可以认为是一个轻量级的线程，其占用更少的堆栈空间，并且其需要的堆栈空间大小可以随着程序的运行需要动态增加或者空闲回收。</p>
+<h4 id="goroutine-1">goroutine</h4>
+<p>goroutine 在 go 中是最小的运行单位，当我们启动了一个 go 程序后，运行 main 函数的就是一个 goroutine。</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var wg sync.WaitGroup
+
+<span class="hljs-comment">//goroutine1</span>
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    defer fmt.Println(<span class="hljs-string">"----main goroutine over---"</span>)
+
+    wg.Add(<span class="hljs-number">1</span>)
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{ <span class="hljs-comment">//goroutine2</span>
+        fmt.Println(<span class="hljs-string">"Im a goroutine"</span>)
+        wg.Done()
+    }()
+
+    fmt.Println(<span class="hljs-string">"----wait sub goroutine over---"</span>)
+    wg.Wait()
+    fmt.Println(<span class="hljs-string">"----sub goroutine over---"</span>)
+
+}
+</code></pre>
+<p>如上代码我们在 main 函数内使用 go 关键字创建了一个 goroutine 来运行匿名函数（需要注意不要忘记添加()），创建后的这个 goroutine 会与 main 函数所在的 goroutine 使用相同的地址空间（类似于 c 中调用 fork 创建子线程），并发运行，而不是串行的。</p>
+<p>另外我们也可以先创建一个函数，然后使用 go 关键字带上函数名就可以开启一个新 goroutine 来运行这个函数，如下代码创建了函数 printFunc，然后使用 go printFunc()来开启新 goroutine 来启动该函数：</p>
+<pre><code class="java language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var wg sync.WaitGroup
+
+func <span class="hljs-title">printFunc</span><span class="hljs-params">()</span> </span>{
+    fmt.Println(<span class="hljs-string">"Im a goroutine"</span>)
+    wg.Done()
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    defer fmt.Println(<span class="hljs-string">"----main goroutine over---"</span>)
+
+    wg.Add(<span class="hljs-number">1</span>)
+    <span class="hljs-function">go <span class="hljs-title">printFunc</span><span class="hljs-params">()</span><span class="hljs-comment">//goroutine2</span>
+
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(<span class="hljs-string">"----wait sub goroutine over---"</span>)</span>
+    wg.<span class="hljs-title">Wait</span><span class="hljs-params">()</span>
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(<span class="hljs-string">"----sub goroutine over---"</span>)</span>
+}
+</span></code></pre>
+<p>另外需要注意的是在 go 中整个进程的生命周期是与 main 函数所在 goroutine 一致的，只要 main 函数所在 goroutine 结束了，整个进程也就是结束了，而不管是否还有其他 goroutine 在运行：</p>
+<pre><code class="Java language-Java hljs">var wg sync.<span class="hljs-function">WaitGroup
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    defer fmt.Println(<span class="hljs-string">"----main goroutine over---"</span>)
+
+    wg.Add(<span class="hljs-number">1</span>)
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{ <span class="hljs-comment">//</span>
+        fmt.Println(<span class="hljs-string">"Im a goroutine"</span>)
+        wg.Done()
+        <span class="hljs-comment">//无限循环</span>
+        <span class="hljs-keyword">for</span>{
+            fmt.Println(<span class="hljs-string">"---sub goroutine---"</span>)
+        }
+    }()
+
+    fmt.Println(<span class="hljs-string">"----wait sub goroutine over---"</span>)
+    wg.Wait()
+    fmt.Println(<span class="hljs-string">"----sub goroutine over---"</span>)
+}
+</code></pre>
+<p>如上代码在使用 go 关键字创建的 goroutine 内新增了 for 无限循环打印输出，运行上面代码后会发现随着 main 函数所在 goroutine 销毁后进程就退出了，虽然新创建的 goroutine 还没运行完毕。这点与 java 不同，在 java 中存在 user 用户线程与 deamon 线程之分，当不存在用户线程时候，jvm 进程就退出了（而不管 main 函数所在线程是否已经结束），关于 Java 中并发深入学习，大家可以看我的《Java 并发编程之美》一书。</p>
+<p>goroutine 是轻量级线程，并不是操作系统线程，goroutine 与操作系统线程对应关系是 M：N，也就是 M 个 goroutine 对应 N 个操作系统线程，goroutine 内部实现与在多个操作系统线程(Os 线程)之间复用的协程(coroutines)一样。 如果一个 goroutine 阻塞 OS 线程，例如等待输入，则该 OS 线程中的其他 goroutine 将迁移到其他 OS 线程，以便它们可以继续运行。</p>
+<h4 id="goroutine-2">如何杀死一个 goroutine</h4>
+<p>为了让一个运行中的 goroutine 停止，我们可以让其在一个 channel 上监听停止信号，如下代码：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"time"</span>
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-comment">//1</span>
+    quit := make(chan struct{})
+    <span class="hljs-comment">//2</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">for</span> {
+            <span class="hljs-comment">//2.1</span>
+            select {
+            <span class="hljs-keyword">case</span> &lt;-quit: <span class="hljs-comment">//2.1.1</span>
+                fmt.Println(<span class="hljs-string">"sub goroutine is over"</span>)
+                <span class="hljs-keyword">return</span>
+            <span class="hljs-keyword">default</span>: <span class="hljs-comment">//2.1.2</span>
+
+                <span class="hljs-comment">//dosomething</span>
+                time.Sleep(time.Second)
+                fmt.Println(<span class="hljs-string">"sub goroutine do something"</span>)
+
+            }
+        }
+
+    }()
+
+    <span class="hljs-comment">//3.dosomething</span>
+    time.Sleep(time.Second * <span class="hljs-number">3</span>)
+
+    <span class="hljs-comment">//4.关闭通道 quit</span>
+    fmt.Println(<span class="hljs-string">"main gorutine start stop sub goroutine"</span>)
+    close(quit)
+
+    <span class="hljs-comment">//5</span>
+    time.Sleep(time.Second * <span class="hljs-number">10</span>)
+    fmt.Println(<span class="hljs-string">"main gorutine is over"</span>)
+}
+</code></pre>
+<ul>
+<li>如上代码 1 创建了一个无缓冲通道 quit 用来做反向通知子线程停止；代码 2 开启了一个 goroutine，该 goroutine 内使用了无限循环，内部代码 2.1 使用了 select 结构，其中第一个 case 是从通道 quit 内读取元素，由于 quit 通道一开始没有元素，所以这个 case 分支不会被执行，而是转向执行 defalut 分支；defalut 分支里面用来执行具体的业务，这里是休眠 1s 然后打印输出，这个 goroutine 的作用就是间隔 1s 执行打印输出，并且等 quit 通道内有元素时候执行 return 退出当前 goroutine</li>
+<li>代码 4 关闭通道 quit，关闭通道 quit 后会向通道 quit 内写入一个零值元素，这里代码 3 先让主 goroutine 休眠 3 秒是为了在关闭 quit 通道前让子 goroutine 有机会执行一些时间。</li>
+<li>代码 4 关闭通道 quit 后，子 goroutine 内的 select 语句的第一个 case 就会从 quit 读取操作中返回，然后子 goroutine 就执行 return 退出了。</li>
+</ul>
+<p>总结:本节我们探讨了 goroutine，可知其就是一个轻量级的线程，在 go 中使用关键字 go 就可以创建一个与调用 goroutine 并发运行的 goroutine,使用起来很是方便，在后面章节当我们提到轻量级的线程时候，除非特殊指明，否则都是指 goroutine。使用无缓冲通道和 select 结构在主 goroutine 内反向控制子 goroutine 的生命周期在 go 中是一个通用的做法。</p>
+<h3 id="go-2">Go 内存模型概述</h3>
+<p>Go 语言的内存模型规定了一个 goroutine 可以看到另外一个 goroutine 修改同一个变量的值的条件，这类似 java 内存模型中共享变量的内存可见性问题。</p>
+<p>当多个 goroutine 并发存取同一个数据时候必须把并发存取的操作顺序化，在 go 中可以实现操作顺序化的工具有高级的通道（channel）通信和低级的同步原语比如 sync 包中的 Mutex(互斥锁)、RWMutex(读写锁)或者 sync/atomic 中的原子操作。</p>
+<h4 id="happensbefore">Happens Before 原则</h4>
+<p>当程序里面只有一个 goroutine 时候，虽然编译器和 CPU 由于开启了优化功能可能调整读写内存操作的顺序，但是这个调整是不会影响程序执行的正确性的:</p>
+<pre><code class="Java language-Java hljs">a := <span class="hljs-number">1</span><span class="hljs-comment">//1</span>
+b := <span class="hljs-number">2</span><span class="hljs-comment">//2</span>
+c := a + b <span class="hljs-comment">//3</span>
+...
+</code></pre>
+<p>如上代码由于编译器和 CPU 的优化,实际运行时候可能代码（2）先运行，然后代码（1）后执行，但是由于代码（3）依赖代码（1）和代码（2）创建的变量，所以代码（1）和（2）不会被放到代码（3）后运行，也就是说编译器和 CPU 在不改变程序正确性的前提下才会对指令进行重排序，所以上面代码在单一 goroutine 时候并不会存在问题，也就是在单一 goroutine 中 Happens Before 所要表达的顺序就是程序执行的顺序。</p>
+<p>但是在多个 goroutine 时候就可能存在问题，比如下面代码：</p>
+<pre><code class="Java language-Java hljs">   <span class="hljs-comment">//变量 b 初始化为 0</span>
+    var b <span class="hljs-keyword">int</span>
+
+    <span class="hljs-comment">//goroutine A</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        a := <span class="hljs-number">1</span>     <span class="hljs-comment">//1</span>
+        b := <span class="hljs-number">2</span>     <span class="hljs-comment">//2</span>
+        c := a + b <span class="hljs-comment">//3</span>
+    }()
+
+    <span class="hljs-comment">//goroutine B</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> <span class="hljs-number">2</span> == b {<span class="hljs-comment">//4</span>
+            fmt.Println(a)<span class="hljs-comment">//5</span>
+        }
+    }()
+</code></pre>
+<ul>
+<li>如上代码变量 b 是一个全局变量，初始化为 0 值</li>
+<li>下面开启了两个 goroutine，假设 goroutine B 有机会输出值时候，那么它可能输出的值是多少那？其实可能是 0 也可能是 1，输出 1 大家可能会感到很直观，那么为何会输出 0 了？</li>
+<li>这是因为编译器或者 CPU 可能会对 goroutine A 中的指令做重排序，可能先执行了代码（2），然后在执行了代码（1）。假设当 goroutine A 执行代码（2）后，调度器调度了 goroutine B 执行代码 4 和 5，然后在执行了 goroutineA 的代码（1），则 goroutine B 这时候会输出 0。</li>
+</ul>
+<p>为了保证多 goroutine 下读取共享数据的正确性，go 中引入 happens before 原则，即在 go 程序中定义了多个内存操作执行的一种偏序关系。如果操作 e1 先于 e2 发生，我们说 e2 happens after e1,如果 e1 操作既不先于 e2 发生又不晚于 e2 发生，我们说 e1 操作与 e2 操作并发发生。</p>
+<p>在单一 goroutine 中 Happens Before 所要表达的顺序就是程序执行的顺序，happens before 原则指出在单一 goroutine 中当满足下面条件时候，对一个变量的写操作 w1 对读操作 r1 可见：</p>
+<ul>
+<li>读操作 r1 没有发生在写操作 w1 前</li>
+<li>在读操作 r1 之前，写操作 w1 之后没有其他的写操作 w2 对变量进行了修改</li>
+</ul>
+<p>在一个 goroutine 里面，不存在并发，所以对变量的读操作 r1 总是对最近的一个写操作 w1 的内容可见，但是在多 goroutine 下则需要满足下面条件才能保证写操作 w1 对读操作 r1 可见：</p>
+<ul>
+<li>写操作 w1 先于读操作 r1</li>
+<li>任何对变量的写操作 w2 要先于写操作 w1 或者晚于读操作 r1</li>
+</ul>
+<p>这两条条件相比第一组的两个条件更加严格，因为它要求没有任何写操作与 w1 或者读操作 r1 并发的运行，而是要求在 w1 操作前或读操作 r1 后发生。</p>
+<p>在一个 goroutine 时候，不存在与 w1 或者 r1 并发的写操作，所以前面两种定义是等价的：一个读操作 r1 总是对最近的一个对写操作 w1 的内容可见。但是当有多个 goroutines 并发访问变量时候，就需要引入同步机制来建立 happen-before 条件来确保读操作 r1 对写操作 w1 写的内容可见。</p>
+<p>需要注意的是在 go 内存模型中将多个 goroutine 中用到的全局变量初始化为它的类型零值在内被视为一次写操作，另外当读取一个类型大小比机器字长大的变量的值时候表现为是对多个机器字的多次读取，这个行为是未知的，但是在 go 中使用 sync/atomic 包中的 Load 和 Store 操作可以解决这个问题。</p>
+<h4 id="synchronization">同步（Synchronization）</h4>
+<h5 id="initialization"><strong>初始化（Initialization）</strong></h5>
+<p>程序的初始化是发生在一个 goroutine 内的，这个 goroutine 可以创建多个新的 goroutine，创建的 goroutine 和当前的 goroutine 可以并发的运行。</p>
+<p>如果在一个 goroutine 所在的源码包 p 里面通过 import 命令导入了包 q,那么 q 包里面 go 文件的初始化方法的执行会 happens before 于包 p 里面的初始化方法执行：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"main/hello"</span>
+)</span>
+
+func <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{
+    fmt.Println(<span class="hljs-string">"--main thread init---"</span>)
+}
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    fmt.Println(<span class="hljs-string">"---main func start----"</span>)
+    hello.SayHello()
+}
+</code></pre>
+<ul>
+<li>如上代码 main 包里面导入了 main/hello 包，后者里面含有一个 hello.go 的文件，内容如下：</li>
+</ul>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> hello
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+)</span>
+
+func <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{
+    fmt.Println(<span class="hljs-string">"--hello pkg init---"</span>)
+}
+
+<span class="hljs-function">func <span class="hljs-title">SayHello</span><span class="hljs-params">()</span> </span>{
+    fmt.Println(<span class="hljs-string">"--hello jiaduo---"</span>)
+
+}
+</code></pre>
+<ul>
+<li>main 包的 main 里面调用了包 hello 的 SayHello 方法。</li>
+</ul>
+<p>运行上面代码会输出:</p>
+<pre><code class="hljs diff"><span class="hljs-deletion">--hello pkg init---</span>
+<span class="hljs-deletion">--main thread init---</span>
+<span class="hljs-comment">---main func start----</span>
+<span class="hljs-deletion">--hello jiaduo---</span>
+</code></pre>
+<p>可知 hello 包的 init 方法 happen before main 包的 init 执行，main 包的 init 方法 happen berfore main 函数执行。</p>
+<h5 id="goroutinegoroutinecreation"><strong>创建 goroutine（Goroutine creation）</strong></h5>
+<p>go 语句启动一个新的 goroutine 的动作 happen before 该新 goroutine 的运行，例如下面程序：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var a string
+var wg sync.WaitGroup
+
+func <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>{
+    fmt.Print(a)
+    wg.Done()
+}
+
+<span class="hljs-function">func <span class="hljs-title">hello</span><span class="hljs-params">()</span> </span>{
+    a = <span class="hljs-string">"hello, world"</span>
+    <span class="hljs-function">go <span class="hljs-title">f</span><span class="hljs-params">()</span>
+}
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    wg.Add(<span class="hljs-number">1</span>)
+
+    hello()
+    wg.Wait()
+
+}
+</code></pre>
+<p>如上代码调用 hello 方法后肯定会输出"hello,world",虽然可能等 hello 方法执行完毕后才输出（由于调度的原因）。</p>
+<h5 id="goroutinegoroutinedestruction"><strong>销毁 goroutine（Goroutine destruction）</strong></h5>
+<p>一个 goroutine 的销毁操作并不能确保 happen before 程序中的任何事件，比如下面例子：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function">var a string
+
+func <span class="hljs-title">hello</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{ a = <span class="hljs-string">"hello"</span> }()
+    print(a)
+}
+</code></pre>
+<p>如上代码新开启的 goroutine 内对变量 a 的赋值并没有加任何同步措施，所以并能不保证 print 函数所在的 goroutine 对变量 a 的赋值可见。如果要确保一个 goroutine 对变量的修改对其他 goroutine 可见，必须使用一定的同步机制，比如锁、通道来建立对同一个变量读写的偏序关系。</p>
+<h4 id="-10">创建的变量是在栈还是堆上分配？</h4>
+<p>首先从程序运行是否正确的角度来看，用户根本不需要知道变量是在堆还是栈上分配。 在 Go 中只要某个变量还被引用，那么这个变量就一直存在，另外变量具体存放到哪里与 go 语言的语义无关，只是跟选择实现有关。</p>
+<p>但是变量的存储位置确实会影响程序执行的效率，如果可能的话，go 编译器会把在函数内创建的本地变量分配到该函数所在的栈帧上，但是如果编译器无法知道当前函数执行完毕后，其他地方是否还有对该变量的引用，编译器就会把该变量分配到堆上，以避免空指针异常，另外如果本地变量占用空间比较大，将他分配到堆上可能显得比分配到栈上更有意义。</p>
+<p>在 go 当前的编译器中，如果其他变量持有当前变量的地址，则该当前变量优先在堆上分配，但是一些基本的编译器分析可以发现在某些情况这些变量的引用不会超过函数的返回，这时候当前变量是可以在栈上分配的。</p>
+<p>总结:解决多 goroutine 下共享数据可见性问题的方法是在访问共享数据时候施加一定的同步措施，比如后面章节要讲的 sync 包下的锁和通道。</p>
+<p>其中锁用来解决多个 goroutine 并发访问共享内存变量时候实现内存操作同步，这类似 java 的内存模型（多线程以共享内存来通信）；而 go 也提供了其独特的通道同步措施，其倡导多线程以通信的方式来共享内存。</p>
+<p>在后面我们讲解完锁后会有一节专门讲解锁操作的 happen-before 语义，然后讲解完通道后会专门讲解通道的 happen-before 语义。</p>
+<h3 id="-11">参考</h3>
+<ul>
+<li>https://golang.org/doc/</li>
+<li>https://github.com/golang/go/wiki/LearnConcurrency</li>
+</ul></div>
+</body>
+</html>
