@@ -1,0 +1,910 @@
+---
+title: Go低级并发同步之锁
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Go并发通道之锁</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#">前言</a></li>
+<li><a href="#go">Go 中互斥锁</a><ul>
+<li><a href="#-1">概述</a></li>
+<li><a href="#-2">使用互斥锁实现原子计数器</a></li>
+</ul>
+</li>
+<li><a href="#go-1">Go 中读写锁的介绍，读写锁是互斥锁，是可重入锁?</a><ul>
+<li><a href="#-3">读写锁</a></li>
+<li><a href="#goroutine">验证多个 goroutine 可以同时获取读锁</a></li>
+<li><a href="#-4">读写锁是互斥锁</a></li>
+<li><a href="#-5">读锁是可重入锁</a></li>
+</ul>
+</li>
+<li><a href="#go-2">Go 中条件变量的支持，多个线程之间进行线程同步</a></li>
+<li><a href="#gocas">Go 中 CAS 操作的介绍</a></li>
+<li><a href="#gowaitgroup">Go 中 WaitGroup 的介绍</a></li>
+<li><a href="#gopool">Go 中 Pool 的介绍</a></li>
+<li><a href="#gohappenbefore">Go 中锁的 happen-before 语义</a><ul>
+<li><a href="#mutexrwmutex">Mutex 与 RWMutex</a></li>
+<li><a href="#once">一次执行（Once）</a></li>
+</ul>
+</li>
+<li><a href="#-6">参考</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<h3 id="">前言</h3>
+<p>Go 语言在被设计的时候，Java 和 C++ 是编写服务器程序最常用的语言（至少在 Google 是这样），这是因为使用这些语言可以高效的开发。但是 Go 设计者们觉得像 Java 和 C++ 这些语言需要开发者记忆太多的语法和规则，并且需要重复做的事情太多，这导致一些程序员开始转向更加动态、流畅的语言，如 Python。但是付出的是损失开发效率和对类型安全检查的缺失。Go 设计者们认为应该可以发明一种语言，这种语言集高效的开发、提供类型安全检查、简洁流畅的代码风格与一体，于是 Go 就诞生了。</p>
+<p>Go 在语言层面提供了内置的并发支持，其的应用范围越来越广，大名鼎鼎的容器化技术 Docker 以及号称分布式操作系统的 K8S 底层实现就是 Golang 来实现的，随着技术的快速发展，我们只有不断迭代自己的技术栈，才能不会被淘汰，而 Golang 将会是未来应用场景比较多的一种语言，各大公司也将会要求必须掌握 Golang 来进行快速开发高并发应用程序。</p>
+<p>前面我们讲解了 Go 并发编程基础 ,本课程作为 Go 并发编程的高级篇上篇，讲解 Go 中的低级并发编程原语锁相关，内容如下：</p>
+<ul>
+<li>Go 中互斥锁的介绍，包含互斥锁的两种模式：正常与饥饿模式的介绍以及相互转化</li>
+<li>Go 中读写锁的介绍，读写锁是互斥锁，是可重入锁?</li>
+<li>Go 中条件变量的支持，多个线程之间进行线程同步</li>
+<li>Go 中 CAS 操作的介绍，使用锁开销太大，CAS 来解决</li>
+<li>Go 中 WaitGroup 的介绍，如何让主 Goroutine 等待多个子 Goroutine 运行结束做些事情</li>
+<li>Go 中 Pool 的介绍，如何实现资源复用</li>
+<li>Go 中锁的 happen-before 语义</li>
+</ul>
+<h3 id="go">Go 中互斥锁</h3>
+<h4 id="-1">概述</h4>
+<p>go 语言为了保证多 goroutine 对同一个共享资源进行并发读写的安全性，提供了一些列用于多线程之间进行同步的措施，比如低级的同步措施有 锁、CAS、原子变量操作类，本节我们先来看看 go 中互斥锁</p>
+<p>在 go 中互斥锁是在 sync 包提供的，其是独占锁，同时只有一个线程可以获取该锁。当一个 goroutine 持有互斥锁时候，其他请求获取锁的 goroutine 会被阻塞挂起，等获取锁的 goroutine 释放锁后，阻塞的线程中的一个才可以被唤醒并获取锁。同时该锁是不可重入锁，当前 goroutine 在获取该锁后释放前再次尝试获取该锁会被阻塞。</p>
+<p>在 go 中使用 var mutex  sync.Mutex 就可以创建一个开箱即用的互斥锁，调用 mutex.Lock()尝试获取锁，调用 mutex.Unlock()释放锁，需要注意的是释放锁时候要保证某一个 goroutine 已经获取到了锁，如果在锁没有获取的情况下调用 mutex.Unlock()，会抛出错误：</p>
+<p><img src="https://images.gitbook.cn/054cda40-a5e4-11e9-92ff-03dc57f89d0c" alt="enter image description here"></p>
+<p>另外需要注意的是释放锁的 goroutine 不要求与获取锁的 goroutine 是同一个:</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    mutex sync.Mutex //互斥锁
+    wg    sync.WaitGroup
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    wg.Add(<span class="hljs-number">1</span>)
+    <span class="hljs-comment">//新 goroutine 获取锁</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        mutex.Lock()
+        wg.Done()
+    }()
+
+    wg.Wait()
+    <span class="hljs-comment">//主 goroutine 释放锁</span>
+    mutex.Unlock()
+}
+</code></pre>
+<p>如上代码在新开启的 goroutine 内获取锁，在主 goroutine 内释放锁是 OK 的，也就是互斥锁是与具体 goroutine 无关的，这与 Java 中的互斥锁不同，Java 中获取锁的线程是要记录锁的持有者，只有获取到锁的线程才可以释放锁。</p>
+<p>另外 go 中互斥锁分为两种模式：正常与饥饿模式。</p>
+<ul>
+<li>正常模式：</li>
+</ul>
+<blockquote>
+  <p>在正常模式中当多个 goroutine 同时获取同一个互斥锁时候，其中一个 goroutine 会获取到该锁，其他的 goroutine 则会被放入到与该锁维护的一个 FIFO 队列里面，然后被阻塞挂起。</p>
+  <p>当获取锁的 goroutine 释放锁后，该队列里面的某个等待的 goroutine 会被激活，激活的 goroutine 并不能马上获取到锁的所有权，这是因为当前可能有新创建的大量 goroutine 也需要获取该锁，这时候激活的 goroutine 就要与这些新的 goroutine 共同竞争锁的所有权，所以被激活的 goroutine 还是很有可能获取不到锁，如果发生了这种情况，则被激活的线程还是要被放到队列最前面（队首），最后如果一个被阻塞的 goroutine 尝试了 1ms 的时间还没获取到锁，则互斥锁的模式会被自动切换到饥饿模式</p>
+</blockquote>
+<ul>
+<li>饥饿模式</li>
+</ul>
+<blockquote>
+  <p>在饥饿模式下当多个 goroutine 同时获取同一个互斥锁时候，其中一个 goroutine 会获取到该锁，其他的 goroutine 则会被放入到与该锁维护的一个 FIFO 队列里面，然后被阻塞挂起</p>
+  <p>当获取锁的 goroutine 释放锁后，锁的所有权会被交给 FIFO 队列里面队首的 goroutine,新创建的 goroutine 尝试获取锁的时候，即使发现了当前锁是空闲的也不会去尝试获取，而是被放到锁维护的 FIFO 的队尾部。</p>
+  <p>如果一个激活的 goroutine 接受了锁的所有权，并且当发生了下面的某一个事情时候该锁从饥饿模式切换回正常模式：
+  1.当前激活的 goroutine 是 FIFO 队列最后一个；
+  2.当前激活的 goroutine 在 1ms 时间内就获取到了锁；</p>
+</blockquote>
+<p>锁的状态转换可以使用下面图来展示：</p>
+<p><img src="https://images.gitbook.cn/1ad739f0-a5e4-11e9-9af1-a9d951303272" alt="enter image description here"></p>
+<p>总：正常模式可以提供更好的性能，因为一个 goroutine 可以在有 goroutine 处于等待锁的条件下抢占式的去获取锁，而不需要遵循先来先到的原则；而饥饿模式则可以很好的预防锁的 FIFO 队列队尾部的 goroutine 一直获取不到锁的情况。</p>
+<h4 id="-2">使用互斥锁实现原子计数器</h4>
+<p>本节我们使用独占锁来实现一个线程安全的计数器：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    counter <span class="hljs-keyword">int</span>//计数器
+    wg      sync.WaitGroup//信号量
+    mutex   sync.Mutex//互斥锁
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//1.两个信号量</span>
+    wg.Add(<span class="hljs-number">2</span>)
+
+    <span class="hljs-comment">//2.开启两个线程</span>
+    <span class="hljs-function">go <span class="hljs-title">incCounter</span><span class="hljs-params">()</span>
+    go <span class="hljs-title">incCounter</span><span class="hljs-params">()</span>
+
+    <span class="hljs-comment">//3.等待子线程结束</span>
+    wg.<span class="hljs-title">Wait</span><span class="hljs-params">()</span>
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(counter)</span>
+}
+
+func <span class="hljs-title">incCounter</span><span class="hljs-params">()</span> </span>{
+    defer wg.Done()
+
+    <span class="hljs-comment">//2.1.获取锁</span>
+    mutex.Lock()
+
+    <span class="hljs-comment">//2.2.计数加 1</span>
+    counter++
+
+    <span class="hljs-comment">//2.3.释放独占锁</span>
+    mutex.Unlock()
+}
+</code></pre>
+<ul>
+<li>在 go 中使用  sync.Mutex 就可以获取一个开箱即用的互斥锁</li>
+<li>counter 是一个变量，这里用来存放计数</li>
+<li>wg 用来实现主线程等待子线程执行完毕，代码（2）设置信号为 2，因为本例子里面开启了两个字线程</li>
+<li>代码（2）开启了两个子线程，线程内首先获取互斥锁，然后累加计数，然后释放锁，最后递减信号量</li>
+<li>代码（3）等待子线程执行完毕后返回，然后打印计数</li>
+</ul>
+<p>总结：go 中互斥锁是独占锁，并且是不可重入锁，同一个线程并不可获取同一个锁多次，并且其锁模式提供了正常与饥饿模式，并在一定情况下自动进行转换，提高了锁的性能。</p>
+<h3 id="go-1">Go 中读写锁的介绍，读写锁是互斥锁，是可重入锁?</h3>
+<p>go 语言类似 Java JUC 包也提供了一些列用于多线程之间进行同步的措施，比如低级的同步措施有 锁、CAS、原子变量操作类。本节我们先来看看 go 中读写锁，读写锁相比互斥锁来说并发度更高，在读多写少情况下比较实用。</p>
+<h4 id="-3">读写锁</h4>
+<p>在 go 中可以使用 sync.RWMutex 获取一个读写锁，读写锁是读写互斥锁，读锁可以被任意多的读 goroutine 持有，但是写锁只能被某一个 goroutine 持有。当一个 goroutine 获取读锁后，其他 goroutine 也可以获取到读锁，但是如果这时候有 goroutine 尝试获取写锁，则获取写锁的线程将会被阻塞，这时候如果再有 goroutine 尝试获取读锁，则其也会被阻塞。</p>
+<p>当某个 goroutine 获取到写锁后，其后尝试获取读锁的 goroutine 都会被阻塞。</p>
+<p>另外读锁是可重入锁，也就是同一个 goroutine 可以在持有读锁的情况下再次获取读锁。</p>
+<p>在 go 中获取读锁和写锁方式如下：</p>
+<pre><code class="Java language-Java hljs">var rwLock sync.RWMutex
+rwLock.RLock()<span class="hljs-comment">//获取读锁</span>
+rwLock.RUnlock()<span class="hljs-comment">//释放读锁</span>
+
+rwLock.Lock()<span class="hljs-comment">//获取写锁</span>
+rwLock.Unlock()<span class="hljs-comment">//释放写锁</span>
+</code></pre>
+<h4 id="goroutine">验证多个 goroutine 可以同时获取读锁</h4>
+<p>首先我们来验证下多个 goroutine 可以同时获取读锁：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    wg      sync.WaitGroup //信号量
+)</span>
+var rwlock sync.RWMutex <span class="hljs-comment">//读写锁</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    wg.Add(<span class="hljs-number">1</span>)
+
+    <span class="hljs-comment">//1.</span>
+    rwlock.RLock()
+    fmt.Println(<span class="hljs-string">"--main goroutine get rlock---"</span>)
+    <span class="hljs-comment">//2.</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        rwlock.RLock()<span class="hljs-comment">//2.1</span>
+        fmt.Println(<span class="hljs-string">"--new goroutine get rlock---"</span>)
+        rwlock.RUnlock()<span class="hljs-comment">//2.2</span>
+
+        wg.Done()<span class="hljs-comment">//2.3</span>
+    }()
+
+    wg.Wait()<span class="hljs-comment">//2.4</span>
+    rwlock.RUnlock()<span class="hljs-comment">//2.5</span>
+}
+</code></pre>
+<ul>
+<li><p>如上代码首先创建了一个读写锁 rwlock，和一个同步用的 wg 对象</p></li>
+<li><p>main 函数所在 goroutine 内代码（1）获取到了读锁，然后开启了一个新的 goroutine，新 goroutine 内首先获取读锁，然后在释放，最后让信号量减去 1.</p></li>
+<li><p>main 函数所在 goroutine 在代码 2.4 等待新 goroutine 运行结束然后在释放读锁</p></li>
+<li><p>这里假设同时只有一个 goroutine 可以获取读锁，则由于 main 所在 goroutine 已经在代码 1 获取到了读锁，所以新 goroutine 的代码 2.1 必然被阻塞，所以代码 2.3 得不到执行，所以 main 所在 gouroutine 会一直阻塞到步骤 2.4，这两个 goroutine 就产生了死锁状态。</p></li>
+<li><p>而实际运行上面代码程序是可正常结束的，这验证了在 main 所在 goroutine 获取读锁后释放读锁前，新 goroutine 也获取到了读锁，也就是多个 goroutine 可以同时获取读锁。</p></li>
+</ul>
+<h4 id="-4">读写锁是互斥锁</h4>
+<p>本节我们来验证当一个 goroutine 获取到写锁后，其他获取读锁的线程将会被阻塞；当一个 goroutine 获取到读锁后，另外一个 goroutine 获取写锁将会被阻塞，如果这时候其他 goroutine 获取读锁，也会被阻塞</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    wg      sync.WaitGroup //信号量
+)</span>
+var rwlock sync.RWMutex <span class="hljs-comment">//读写锁</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    wg.Add(<span class="hljs-number">1</span>)
+    <span class="hljs-comment">//1.</span>
+    rwlock.Lock()
+    fmt.Println(<span class="hljs-string">"--main goroutine get wlock---"</span>)
+    <span class="hljs-comment">//2.</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        rwlock.RLock() <span class="hljs-comment">//2.1</span>
+        fmt.Println(<span class="hljs-string">"--new goroutine get rlock---"</span>)
+        rwlock.RUnlock() <span class="hljs-comment">//2.2</span>
+
+        wg.Done() <span class="hljs-comment">//2.3</span>
+    }()
+
+    wg.Wait()       <span class="hljs-comment">//2.4</span>
+    rwlock.Unlock() <span class="hljs-comment">//2.5</span>
+
+}
+</code></pre>
+<ul>
+<li>如上代码我们修改上面的例子让代码 1 获取写锁，然后代码 2.5 释放写锁，新 goroutine 内还是先获取读锁然后释放读锁。运行上面代码大家猜会输出什么？</li>
+<li>首先 main 所在 goroutine 获取了写锁，然后执行代码 2.4 等待新 goroutine 运行完毕后，释放写锁。</li>
+<li>新 goroutine 则是先尝试获取读锁，由于读写是互斥锁，而现在写锁已经被 main 所在 goroutine 持有了，所以新 goroutine 会阻塞到获取读锁的地方，而 main 所在 goroutine 会阻塞到代码 2.4，这时候就达到了循环等待的条件，两个 goroutine 就陷入了死锁状态。运行上面代码会输出：</li>
+</ul>
+<pre><code class="hljs cs">fatal error: all goroutines are asleep - deadlock!
+--main goroutine <span class="hljs-keyword">get</span> wlock---
+
+goroutine <span class="hljs-number">1</span> [semacquire]:
+sync.runtime_Semacquire(<span class="hljs-number">0x117ffd0</span>)
+    /usr/local/go/src/runtime/sema.go:<span class="hljs-number">56</span> +<span class="hljs-number">0x39</span>
+sync.(*WaitGroup).Wait(<span class="hljs-number">0x117ffc8</span>)
+    /usr/local/go/src/sync/waitgroup.go:<span class="hljs-number">130</span> +<span class="hljs-number">0x64</span>
+main.main()
+    /Users/luxu.zlx/workspace/learn/go/workspace/<span class="hljs-keyword">lock</span>/src/main/rwlock.go:<span class="hljs-number">29</span> +<span class="hljs-number">0xd4</span>
+
+goroutine <span class="hljs-number">5</span> [semacquire]:
+sync.runtime_SemacquireMutex(<span class="hljs-number">0x118001c</span>, <span class="hljs-number">0x0</span>)
+    /usr/local/go/src/runtime/sema.go:<span class="hljs-number">71</span> +<span class="hljs-number">0x3d</span>
+sync.(*RWMutex).RLock(<span class="hljs-number">0x1180010</span>)
+    /usr/local/go/src/sync/rwmutex.go:<span class="hljs-number">50</span> +<span class="hljs-number">0x4e</span>
+main.main.func1()
+    /Users/luxu.zlx/workspace/learn/go/workspace/<span class="hljs-keyword">lock</span>/src/main/rwlock.go:<span class="hljs-number">22</span> +<span class="hljs-number">0x31</span>
+created <span class="hljs-keyword">by</span> main.main
+    /Users/luxu.zlx/workspace/learn/go/workspace/<span class="hljs-keyword">lock</span>/src/main/rwlock.go:<span class="hljs-number">21</span> +<span class="hljs-number">0xc4</span>
+</code></pre>
+<p>上面例子我们验证了本节提的第一个问题，下面看第二个：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+    <span class="hljs-string">"time"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    wg      sync.WaitGroup //信号量
+)</span>
+var rwlock sync.RWMutex <span class="hljs-comment">//读写锁</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    wg.Add(<span class="hljs-number">1</span>)
+
+    rwlock.RLock() <span class="hljs-comment">//1</span>
+    <span class="hljs-comment">//2</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        fmt.Println(<span class="hljs-string">"--new goroutine1 try get wlock---"</span>)
+        rwlock.Lock() <span class="hljs-comment">//2.1</span>
+        fmt.Println(<span class="hljs-string">"--new goroutine1  got wlock---"</span>)
+        rwlock.Unlock() <span class="hljs-comment">//2.2</span>
+        fmt.Println(<span class="hljs-string">"--new goroutine1  release wlock---"</span>)
+
+    }()
+
+    time.Sleep(<span class="hljs-number">3</span> * time.Second) <span class="hljs-comment">//3</span>
+
+    <span class="hljs-comment">//4</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        rwlock.RLock() <span class="hljs-comment">//4.1</span>
+        fmt.Println(<span class="hljs-string">"--new goroutine2 get rlock---"</span>)
+        rwlock.RUnlock() <span class="hljs-comment">//4.2</span>
+
+        wg.Done() <span class="hljs-comment">//4.3</span>
+    }()
+
+    wg.Wait()        <span class="hljs-comment">//5</span>
+    rwlock.RUnlock() <span class="hljs-comment">//6</span>
+
+}
+</code></pre>
+<p>运行上面代码输出：</p>
+<pre><code class="Java language-Java hljs">--<span class="hljs-keyword">new</span> goroutine1 <span class="hljs-keyword">try</span> get wlock---
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine <span class="hljs-number">1</span> [semacquire]:
+sync.runtime_Semacquire(<span class="hljs-number">0x1180fd0</span>)
+    /usr/local/go/src/runtime/sema.go:<span class="hljs-number">56</span> +<span class="hljs-number">0x39</span>
+sync.(*WaitGroup).Wait(<span class="hljs-number">0x1180fc8</span>)
+    /usr/local/go/src/sync/waitgroup.go:<span class="hljs-number">130</span> +<span class="hljs-number">0x64</span>
+main.main()
+    /Users/luxu.zlx/workspace/learn/go/workspace/lock/src/main/rwlock.go:<span class="hljs-number">39</span> +<span class="hljs-number">0x98</span>
+
+goroutine <span class="hljs-number">5</span> [semacquire]:
+sync.runtime_SemacquireMutex(<span class="hljs-number">0x1181018</span>, <span class="hljs-number">0x0</span>)
+    /usr/local/go/src/runtime/sema.go:<span class="hljs-number">71</span> +<span class="hljs-number">0x3d</span>
+sync.(*RWMutex).Lock(<span class="hljs-number">0x1181010</span>)
+    /usr/local/go/src/sync/rwmutex.go:<span class="hljs-number">98</span> +<span class="hljs-number">0x74</span>
+main.main.func1()
+    /Users/luxu.zlx/workspace/learn/go/workspace/lock/src/main/rwlock.go:<span class="hljs-number">22</span> +<span class="hljs-number">0xaa</span>
+created by main.main
+    /Users/luxu.zlx/workspace/learn/go/workspace/lock/src/main/rwlock.go:<span class="hljs-number">20</span> +<span class="hljs-number">0x62</span>
+
+goroutine <span class="hljs-number">7</span> [semacquire]:
+sync.runtime_SemacquireMutex(<span class="hljs-number">0x118101c</span>, <span class="hljs-number">0x0</span>)
+    /usr/local/go/src/runtime/sema.go:<span class="hljs-number">71</span> +<span class="hljs-number">0x3d</span>
+sync.(*RWMutex).RLock(<span class="hljs-number">0x1181010</span>)
+    /usr/local/go/src/sync/rwmutex.go:<span class="hljs-number">50</span> +<span class="hljs-number">0x4e</span>
+main.main.func2()
+    /Users/luxu.zlx/workspace/learn/go/workspace/lock/src/main/rwlock.go:<span class="hljs-number">32</span> +<span class="hljs-number">0x31</span>
+created by main.main
+    /Users/luxu.zlx/workspace/learn/go/workspace/lock/src/main/rwlock.go:<span class="hljs-number">31</span> +<span class="hljs-number">0x88</span>
+</code></pre>
+<ul>
+<li>代码 1main goroutine 获取了读锁，然后代码 2 创建了 goroutine1 尝试获取写锁，代码 3 让 main goroutine 休眠 3s 以便让 goroutine1 阻塞到获取写锁后在继续向下运行，然后代码 4 创建了 goroutine2 尝试获取读锁，假设获取成功后则会释放读锁然后信号量减去 1，然后代码 5 就会返回，但是这里运行结果出现了死锁说明代码 4.1 获取读锁阻塞。</li>
+</ul>
+<h4 id="-5">读锁是可重入锁</h4>
+<p>读锁是可重入锁，同一个 goroutine 可以多次获取读锁</p>
+<pre><code class="java language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+)</span>
+
+var rwlock sync.RWMutex <span class="hljs-comment">//读写锁</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    rwlock.RLock() <span class="hljs-comment">//1</span>
+    rwlock.RLock() <span class="hljs-comment">//</span>
+    fmt.Printf(<span class="hljs-string">"i got read lock twice"</span>)
+    rwlock.RUnlock() <span class="hljs-comment">//2</span>
+    rwlock.RUnlock()
+}
+</code></pre>
+<ul>
+<li>如上代码 main 所在 goroutine 先两次获取读锁，然后打印输出，然后两次释放读锁，运行上面代码可以正常打印出 i got read lock twice 说明读锁是可重入锁。</li>
+</ul>
+<p>使用下面代码可以验证同一个线程的读锁，不能晋升为写锁：</p>
+<pre><code class="Java language-Java hljs">    lock.RLock()
+    lock.Lock()
+    fmt.Println(<span class="hljs-string">"test"</span>)
+    lock.Unlock()
+    lock.RUnlock()
+</code></pre>
+<p>上面代码执行会报错：</p>
+<p><img src="https://images.gitbook.cn/c0057360-a5e4-11e9-882e-fb3172d46a5c" alt="enter image description here"></p>
+<p>同理当一个线程获取到了写锁后尝试获取读锁也会造成 deadlock 错误</p>
+<p>总结：本节我们介绍了 sync 包中的读写锁，读写锁相比互斥锁来说，锁的粒度有所减少，这是因为读写锁，可以让多个读取共享资源的 goroutine 同时获取读锁，而对互斥锁来说即使是多个读取共享资源的 goroutine 也只有一个可以获取读锁，其他的都会被阻塞。</p>
+<h3 id="go-2">Go 中条件变量的支持，多个线程之间进行线程同步</h3>
+<p>go 语言类似 Java JUC 包（可以参考我的《Java 并发编程之美》一书）也提供了一些列用于多线程之间进行同步的措施，比如低级的同步措施有 锁、CAS、原子变量操作类。本节我们先来看看 go 中的条件变量,在 java 中条件变量是与具体的锁相关联的，在 go 中也是这样的。</p>
+<p>在 go 中使用 var cond sync. NewCond(l Locker)可以创建一个与锁 l 相关的条件变量 cond，这个锁 l 可以是 Mutex 或者 RWMutex 类型的锁，该方法会返回 Cond 类型的指针被称为条件变量。条件变量与 Java 中类似，主要是使用通知/等待做多线程之间的同步,Cond 类型主要有三个方法：</p>
+<ul>
+<li>(c *Cond) Wait()：等待方法，当一个 goroutine 调用 cond 的 Wait()方法后，当前 goroutine 会被阻塞，直到有其他 goroutine 调用了该 cond 变量的 Signal()或者 Broadcast()方法；需要注意的是调用 Wait()方法前，当前 goroutine 要通过 cond.l.Lock() 先获取与 cond 关联的锁 l，否则会抛出异常<code>fatal error: sync: unlock of unlocked mutex</code>,这点与 java 相同:</li>
+</ul>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    lock sync.Mutex            //互斥锁
+    cond = sync.NewCond(&amp;lock)</span> <span class="hljs-comment">//条件变量</span>
+)
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    cond.Wait()
+}
+</code></pre>
+<p>另外某个 goroutine 调用条件变量的 Wait（）方法是为了等待某个事件的发生，而当其他 goroutine 调用该条件变量的 Singal()或者 Broadcast（）方法时候，等待的 goroutine 就会被唤醒，但是这时候等待的 goroutine 的事件未必已经发生了，所以一般 goroutine 调用条件变量的 Wait()方法时候都是使用循环检查条件是否达到的方式：</p>
+<pre><code class="java  language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    lock sync.Mutex            //互斥锁
+    cond = sync.NewCond(&amp;lock)</span> <span class="hljs-comment">//条件变量</span>
+)
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    cond.L.Lock() <span class="hljs-comment">//1 获取条件变量关联的锁</span>
+
+    <span class="hljs-comment">//2 循环判断自己需要的事情是否发生</span>
+    <span class="hljs-keyword">for</span> !condition() {
+        cond.Wait()
+    }
+
+    <span class="hljs-comment">//3.获取到自己需要的事件后做一些事情 dosometing</span>
+
+    <span class="hljs-comment">//4.释放锁</span>
+    cond.L.Unlock()
+}
+
+<span class="hljs-function">func <span class="hljs-title">condition</span><span class="hljs-params">()</span> bool </span>{
+    <span class="hljs-comment">//</span>
+    <span class="hljs-keyword">if</span> 判断自己需要的事件已经发生 {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>
+    }
+}
+</code></pre>
+<p>如上代码 main 内使用 condition（）方法判断自己需要的事件是否发生，如果没有则阻塞自己进行等待。如果其他调用该条件变量的 Singal()或者 Broadcast（）方法时候，等待的 goroutine 会被唤醒，然后循环一次再次调用 condition（）方法判断自己需要的事件是否达到了，如果没有则继续调用条件变量的 Wait()方法阻塞自己，否则就继续向下运行。</p>
+<p>另外需要注意的是当某个 goroutine 调用了条件变量的 Wait()方法后，当前 goroutine 会先释放获取的与该条件变量相关的锁，然后在阻塞自己。</p>
+<ul>
+<li>(c *Cond) Signal()，通知方法，当一个 goroutine 调用了条件变量 c 的该方法后，就会激活一个由于调用 c 的 Wait()方法而被阻塞的 goroutine。需要注意的是在调用 c.Signal()方法前，不需要先获取与 c 关联的锁，这点与调用 c.Wait()方法不同.</li>
+</ul>
+<pre><code class="java  language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+    <span class="hljs-string">"sync/atomic"</span>
+    <span class="hljs-string">"time"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    lock sync.Mutex            //互斥锁
+    cond = sync.NewCond(&amp;lock)</span> <span class="hljs-comment">//条件变量</span>
+
+    flag int32 <span class="hljs-comment">//标签</span>
+)
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    cond.L.Lock() <span class="hljs-comment">//1 获取条件变量关联的锁</span>
+
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">//休眠 5 秒，模拟远程调用</span>
+        time.Sleep(<span class="hljs-number">5</span> * time.Second)
+        <span class="hljs-comment">//设置条件完成</span>
+        atomic.CompareAndSwapInt32(&amp;flag, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+        cond.Signal() <span class="hljs-comment">//通知</span>
+
+        fmt.Println(<span class="hljs-string">"---sub goroutine  rpc call done---"</span>)
+
+    }()
+
+    <span class="hljs-comment">//2 循环判断自己需要的事情是否发生</span>
+    fmt.Println(<span class="hljs-string">"---main wait rpc call over---"</span>)
+    <span class="hljs-keyword">for</span> !condition() {
+        cond.Wait()
+    }
+    fmt.Println(<span class="hljs-string">"---main  do something---"</span>)
+
+    <span class="hljs-comment">//3.获取到自己需要的事件后做一些事情 dosometing</span>
+
+    <span class="hljs-comment">//4.释放锁</span>
+    cond.L.Unlock()
+}
+
+<span class="hljs-function">func <span class="hljs-title">condition</span><span class="hljs-params">()</span> bool </span>{
+
+    <span class="hljs-keyword">if</span> <span class="hljs-number">1</span> == atomic.LoadInt32(&amp;flag) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>
+    }
+
+}
+</code></pre>
+<p>如上例子 main goroutine 代码 1 先获取了锁，然后代码 2 开启了一个子 goroutine，其内部使用 sleep 函数模拟了一次远程 rpc 调用，等调用完成后，原子性更新 flag 变量的值从 0 变为 1，标识 rpc 已经完成,然后调用条件变量的 Signal 方法激活阻塞的一个 goroutine。需要注意的是这里子 goroutine 在调用条件变量 Signal 方法前并没获取条件变量关联的锁。</p>
+<p>main goroutine 内代码 3 使用经典的循环方式等待 rpc 的调用完成，条件是 condition() 函数，由于一开始 flag 的初始化值为 0，所以 main goroutine 调用了条件变量的 Wait()方法阻塞了自己。当子 goroutine 完成 rpc 调用，调用条件变量的 Signal 方法后，main goroutine 就返回了，然后再次调用 condition() 方法发现 flag 为 true 了说明自己等待的 rpc 已经完成了，就继续向下执行。</p>
+<ul>
+<li>(c *Cond) Broadcast() 通知方法，当一个 goroutine 调用了条件变量 c 的该方法后，就会激活所有由于调用 c 的 Wait()方法而被阻塞的 goroutine。需要注意的是在调用 c.Broadcast()方法前，不需要先获取与 c 关联的锁，这点与调用 c.Wait()方法不同.</li>
+</ul>
+<pre><code class="hljs cs"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> (<span class="hljs-params">
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+    <span class="hljs-string">"time"</span>
+</span>)
+
+<span class="hljs-title">var</span> (<span class="hljs-params">
+    <span class="hljs-keyword">lock</span> sync.Mutex            //互斥锁
+    cond = sync.NewCond(&amp;<span class="hljs-keyword">lock</span></span>) <span class="hljs-comment">//条件变量</span>
+
+    wg sync.WaitGroup
+)
+
+func <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+
+    wg.Add(<span class="hljs-number">2</span>)
+    <span class="hljs-comment">//1.</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
+        cond.L.Lock()
+        fmt.Println(<span class="hljs-string">"---sub goroutine1  got lock and wait---"</span>)
+        cond.Wait()
+        fmt.Println(<span class="hljs-string">"---sub goroutine1  wait return---"</span>)
+        cond.L.Unlock()
+
+    }()
+
+    <span class="hljs-comment">//2.</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
+        cond.L.Lock()
+        fmt.Println(<span class="hljs-string">"---sub goroutine2  got lock and wait---"</span>)
+        cond.Wait()
+        fmt.Println(<span class="hljs-string">"---sub goroutine2  wait return---"</span>)
+        cond.L.Unlock()
+
+    }()
+
+    <span class="hljs-comment">//3.</span>
+    time.Sleep(<span class="hljs-number">3</span> * time.Second)
+    <span class="hljs-comment">//4.</span>
+    cond.Signal()
+
+    <span class="hljs-comment">//5</span>
+    time.Sleep(<span class="hljs-number">5</span> * time.Second)
+
+}
+</code></pre>
+<p>如上代码我们开启了两个 goroutine 分别调用条件变变量的 Wait()方法，然后在 main 函数里面调用条件变量的 Signal()方法，运行上面代码会发现只有一个 goroutine 会打印出 sub *  wait return。如果把代码 4 修改为 cond.Broadcast()则会发现两个 goroutine 都会打印出 return 说明两个 goroutine 都被通知返回了。</p>
+<p>总结：go 中条件变量与 Java 中条件变量类似，但是也有不同，相同在于条件变量都是与锁关联的，并且只有当线程获取到锁后才可以调用其关联的条件变量的 wait 方法，否则会抛出异常；另外当线程阻塞到 wait 方法后，当前线程会释放已经获取的锁。不同在于 Java 中只有当线程获取到锁后才可以调用其关联的条件变量的 signal 方法，否则会抛出异常,但是在 go 中调用线程调用 signal 前获取锁不是必须的。有关 Java 并发的深入知识可以观看《Java 并发编程之美》一书。</p>
+<h3 id="gocas">Go 中 CAS 操作的介绍</h3>
+<p>go 语言类似 Java JUC 包（可以参考《Java 并发并发编程之美》一书）也提供了一些列用于多线程之间进行同步的措施，比如低级的同步措施有 锁、CAS、原子变量操作类。相比 Java 来说 go 提供了独特的基于通道的同步措施。本节我们先来看看 go 中 CAS 操作</p>
+<p>go 中的 Cas 操作与 java 中类似，都是借用了 CPU 提供的原子性指令来实现。CAS 操作修改共享变量时候不需要对共享变量加锁，而是通过类似乐观锁的方式进行检查，本质还是不断的占用 CPU 资源换取加锁带来的开销（比如上下文切换开销）。下面一个例子使用 CAS 来实现计数器</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+    <span class="hljs-string">"sync/atomic"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    counter int32          //计数器
+    wg      sync.WaitGroup //信号量
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    threadNum := <span class="hljs-number">5</span>
+
+    <span class="hljs-comment">//1. 五个信号量</span>
+    wg.Add(threadNum)
+
+    <span class="hljs-comment">//2.开启 5 个线程</span>
+    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; threadNum; i++ {
+        <span class="hljs-function">go <span class="hljs-title">incCounter</span><span class="hljs-params">(i)</span>
+    }
+
+    <span class="hljs-comment">//3.等待子线程结束</span>
+    wg.<span class="hljs-title">Wait</span><span class="hljs-params">()</span>
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(counter)</span>
+}
+
+func <span class="hljs-title">incCounter</span><span class="hljs-params">(index <span class="hljs-keyword">int</span>)</span> </span>{
+    defer wg.Done()
+
+    spinNum := <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> {
+        <span class="hljs-comment">//2.1 原子操作</span>
+        old := counter
+        ok := atomic.CompareAndSwapInt32(&amp;counter, old, old+<span class="hljs-number">1</span>)
+        <span class="hljs-keyword">if</span> ok {
+            <span class="hljs-keyword">break</span>
+        } <span class="hljs-keyword">else</span> {
+            spinNum++
+        }
+    }
+
+    fmt.Printf(<span class="hljs-string">"thread,%d,spinnum,%d\n"</span>,index,spinNum)
+
+}
+</code></pre>
+<ul>
+<li><p>如上代码 main 线程首先创建了 5 个信号量，然后开启五个线程执行 incCounter 方法</p></li>
+<li><p>incCounter 内部执行代码 2.1 使用 cas 操作递增 counter 的值， atomic.CompareAndSwapInt32 具有三个参数，第一个是变量的地址，第二个是变量当前值，第三个是要修改变量为多少，该函数如果发现传递的 old 值等于当前变量的值，则使用第三个变量替换变量的值并返回 true，否则返回 false。</p></li>
+<li><p>这里之所以使用无限循环是因为在高并发下每个线程执行 CAS 并不是每次都成功，失败了的线程需要重新获取变量当前的值，然后重新执行 CAS 操作。读者可以把线程数改为 10000 或者更多会发现输出 thread,5329,spinnum,1 其中 1 说明该线程尝试了两个 CAS 操作，第二次才成功。</p></li>
+</ul>
+<p>总结：go 中 CAS 操作具有原子性，在解决多线程操作共享变量安全上可以有效的减少使用锁所带来的开销，但是这是使用 cpu 资源做交换的。</p>
+<p>对于 CAS 操作有个经典的 ABA 问题，具体如下,假如线程 I 使用 CAS 修改初始值为 A 的变量 X，那么线程 I 会首先去获取当前变量 X 的值为 A，然后使用 CAS 操作尝试修改 X 的值为 B，如果使用 CAS 操作成功了，那么程序运行一定是正确的？其实未必，这是因为有可能在线程 I 获取变量 X 的值为 A 后，执行 CAS 前，线程 II 使用 CAS 修改了变量 X 的值为 B，然后又使用 CAS 修改了变量 X 的值为 A。所以虽然线程 I 执行 CAS 时候 X 的值是 A，但是这个 A 已经不是线程 A 获取时候的 A 了。这就是 ABA 问题。</p>
+<p>有关 Java 并发中 CAS 的深入知识可以观看《Java 并发编程之美》一书。</p>
+<h3 id="gowaitgroup">Go 中 WaitGroup 的介绍</h3>
+<p>go 语言类似 Java JUC 包也提供了一些列用于多线程之间进行同步的措施，比如低级的同步措施有 锁、CAS、原子变量操作类。相比 Java 来说 go 提供了独特的基于通道的同步措施。本节我们先来看看 go 中 WaitGroup</p>
+<p>在日常开发中经常会遇到这样的情况，就是一个线程需要等其他几个线程执行完毕后在执行一件事，比如常见的是在一个线程中切分一个大任务为几个小任务，然后多个子任务并发运行，切分线程则需要等子任务全部运行完毕后做汇总。</p>
+<p>在 go 中 sync 包中的 WaitGroup 就可以来做多 goroutine 之间的同步，WaitGroup 类似 Java JUC 包中的 CyclicBarrier 、CountDownLatch、Semaphore（可以参考《Java 并发编程之美》一书）。</p>
+<p>在 go 中使用 wg   sync.WaitGroup 就可以创建一个 WaitGroup 组，其方法<code>func (wg *WaitGroup) Add(delta int)</code>作用可以认为是设置信号量个数，<code>(wg *WaitGroup) Done()</code>可以认为是让信号量个数减去 1， <code>(wg *WaitGroup) Wait()</code>方法会一直阻塞，直到信号量变为了 0。</p>
+<p>需要注意调用 Add 方法时候如果 delta 传递为负数会抛出异常<code>panic: sync: negative WaitGroup counter</code>。另外调用 Add 设置信号量的个数必须先于 goroutine 调用其 Wait 方法。</p>
+<p>下面我们看一个例子：</p>
+<pre><code class="java language-java hljs"> <span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    wg   sync.WaitGroup //信号量
+    task []<span class="hljs-keyword">int</span>//任务切片
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-comment">//1. threadNum 个信号量</span>
+    wg.Add(<span class="hljs-number">2</span>)
+
+    task := []<span class="hljs-keyword">int</span>{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>}
+
+    <span class="hljs-comment">//2.开启 2 个 goroutine</span>
+    <span class="hljs-function">go <span class="hljs-title">subTask</span><span class="hljs-params">(task, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>)</span>
+    go <span class="hljs-title">subTask</span><span class="hljs-params">(task, <span class="hljs-number">6</span>, <span class="hljs-number">10</span>)</span>
+
+    <span class="hljs-comment">//3.等待子任务执行完毕</span>
+    wg.<span class="hljs-title">Wait</span><span class="hljs-params">()</span>
+
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(<span class="hljs-string">"task over"</span>)</span>
+
+}
+
+func <span class="hljs-title">subTask</span><span class="hljs-params">(task []<span class="hljs-keyword">int</span>, start <span class="hljs-keyword">int</span>, end <span class="hljs-keyword">int</span>)</span> </span>{
+    defer wg.Done()
+
+    <span class="hljs-keyword">for</span> i := start - <span class="hljs-number">1</span>; i &lt;= end-<span class="hljs-number">1</span>; i++ {
+        fmt.Println(task[i])
+    }
+
+}
+</code></pre>
+<ul>
+<li>如上代码首先创建了 2 个信号量和一个切片</li>
+<li>然后开启了两个 goroutine 分别执行 subTask 函数，subTask 函数第一个参数是任务切片，后两个参数是要该方法访问切片中那些元素的索引范围</li>
+<li>subTask 内打印完对应的元素后，让信号量减去 1，代码 3 则等待两个 goroutine 执行完毕后返回。</li>
+</ul>
+<p>另外如果需要复用 WaitGroup，需要确保调用 Add 方法要晚于原来的 Wait 方法返回：</p>
+<pre><code class="java  language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+<span class="hljs-title">var</span> <span class="hljs-params">(
+    wg   sync.WaitGroup //信号量
+    task []<span class="hljs-keyword">int</span>          //任务切片
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-comment">//1. threadNum 个信号量</span>
+    wg.Add(<span class="hljs-number">2</span>)
+
+    task := []<span class="hljs-keyword">int</span>{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>}
+
+    <span class="hljs-comment">//2.开启 2 个 goroutine</span>
+    <span class="hljs-function">go <span class="hljs-title">subTask</span><span class="hljs-params">(task, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>)</span>
+    go <span class="hljs-title">subTask</span><span class="hljs-params">(task, <span class="hljs-number">6</span>, <span class="hljs-number">10</span>)</span>
+
+    <span class="hljs-comment">//3.等待子任务执行完毕</span>
+    wg.<span class="hljs-title">Wait</span><span class="hljs-params">()</span>
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(<span class="hljs-string">"-----"</span>)</span>
+
+    <span class="hljs-comment">//4.复用 wg,创建三个信号量</span>
+    wg.<span class="hljs-title">Add</span><span class="hljs-params">(<span class="hljs-number">3</span>)</span>
+    go <span class="hljs-title">subTask</span><span class="hljs-params">(task, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>)</span>
+    go <span class="hljs-title">subTask</span><span class="hljs-params">(task, <span class="hljs-number">4</span>, <span class="hljs-number">6</span>)</span>
+    go <span class="hljs-title">subTask</span><span class="hljs-params">(task, <span class="hljs-number">7</span>, <span class="hljs-number">10</span>)</span>
+
+    <span class="hljs-comment">//5.等待 3 个任务执行完毕</span>
+    wg.<span class="hljs-title">Wait</span><span class="hljs-params">()</span>
+
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(<span class="hljs-string">"task over"</span>)</span>
+
+}
+
+func <span class="hljs-title">subTask</span><span class="hljs-params">(task []<span class="hljs-keyword">int</span>, start <span class="hljs-keyword">int</span>, end <span class="hljs-keyword">int</span>)</span> </span>{
+    defer wg.Done()
+
+    <span class="hljs-keyword">for</span> i := start - <span class="hljs-number">1</span>; i &lt;= end-<span class="hljs-number">1</span>; i++ {
+        fmt.Println(task[i])
+    }
+
+}
+</code></pre>
+<p>如上代码 4 复用了 wg，这个发生在代码 3 返回后。</p>
+<p>总结：在 go 中 sync 包中的 WaitGroup 就可以来做多 goroutine 之间的同步，WaitGroup 类似 Java JUC 包中的 CyclicBarrier 、CountDownLatch、Semaphore。</p>
+<h3 id="gopool">Go 中 Pool 的介绍</h3>
+<p>go 语言类似 Java JUC 包也提供了一些列用于多线程之间进行同步的措施，比如低级的同步措施有 锁、CAS、原子变量操作类。在 Java 中为了复用线程资源 JUC 里面提供了线程池（可以参考《Java 并发编程之美》一书）。本节我们先来看看 go 中 Pool</p>
+<p>在 go 中 Pool 是 sync 包提供的一种资源复用措施，Pool 是个池子，里面管理了一些能够被多个 goroutine 并发安全访问的共享的资源。Pool 的目的是用来缓存已经分配的目前没有使用，但是随后的一段时间可能会使用的资源，用来减少频繁的创建和销毁对象，也有利于减轻垃圾回收的压力。</p>
+<p>一个很好的例子使用 Pool 复用资源的是 fmt 包，其维护了一个动态大小的池子用来缓存输出缓存对象,下面看下其实现。</p>
+<p>在 go 中我们调用    fmt.Println("task over")打印输出，其中 Println 方法代码如下：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function">func <span class="hljs-title">Println</span><span class="hljs-params">(a ...interface{})</span> <span class="hljs-params">(n <span class="hljs-keyword">int</span>, err error)</span> </span>{
+    <span class="hljs-keyword">return</span> Fprintln(os.Stdout, a...)
+}
+
+<span class="hljs-function">func <span class="hljs-title">Fprintln</span><span class="hljs-params">(w io.Writer, a ...interface{})</span> <span class="hljs-params">(n <span class="hljs-keyword">int</span>, err error)</span> </span>{
+    p := newPrinter()<span class="hljs-comment">//1</span>
+    p.doPrintln(a)<span class="hljs-comment">//2</span>
+    n, err = w.Write(p.buf)
+    p.free()<span class="hljs-comment">//3</span>
+    <span class="hljs-keyword">return</span>
+}
+</code></pre>
+<ul>
+<li>这里代码（1）newPrinter 内容如下：</li>
+</ul>
+<pre><code class="Java language-Java hljs"><span class="hljs-function">func <span class="hljs-title">newPrinter</span><span class="hljs-params">()</span> *pp </span>{
+    p := ppFree.Get().(*pp)<span class="hljs-comment">//1.1</span>
+    p.panicking = <span class="hljs-keyword">false</span>
+    p.erroring = <span class="hljs-keyword">false</span>
+    p.fmt.init(&amp;p.buf)
+    <span class="hljs-keyword">return</span> p
+}
+</code></pre>
+<p>其中代码 1.1 中 ppFree 的定义如下：</p>
+<pre><code class="hljs php"><span class="hljs-keyword">var</span> ppFree = sync.Pool{
+    <span class="hljs-keyword">New</span>: func() <span class="hljs-class"><span class="hljs-keyword">interface</span></span>{} { <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span>(pp) },
+}
+</code></pre>
+<p>如上代码就是创建了一个 Pool，这里创建的时候传递了 New: func() interface{} { return new(pp)作用是调用 ppFree 的 get（）方法时候返回新创建的 pp 的实例，那么 pp 的定义如下：</p>
+<pre><code class="hljs cs">type pp <span class="hljs-keyword">struct</span> {
+    buf buffer
+
+    <span class="hljs-comment">// arg holds the current item, as an interface{}.</span>
+    arg <span class="hljs-keyword">interface</span>{}
+
+    <span class="hljs-comment">// value is used instead of arg for reflect values.</span>
+    <span class="hljs-keyword">value</span> reflect.Value
+
+    <span class="hljs-comment">// fmt is used to format basic items such as integers or strings.</span>
+    fmt fmt
+
+    <span class="hljs-comment">// reordered records whether the format string used argument reordering.</span>
+    reordered <span class="hljs-keyword">bool</span>
+    <span class="hljs-comment">// goodArgNum records whether the most recent reordering directive was valid.</span>
+    goodArgNum <span class="hljs-keyword">bool</span>
+    <span class="hljs-comment">// panicking is set by catchPanic to avoid infinite panic, recover, panic, ... recursion.</span>
+    panicking <span class="hljs-keyword">bool</span>
+    <span class="hljs-comment">// erroring is set when printing an error string to guard against calling handleMethods.</span>
+    erroring <span class="hljs-keyword">bool</span>
+}
+</code></pre>
+<p>pp 被用来存放一个 printer 的状态并且被放到 sync.Pool 里面复用，以避免每次都分配和销毁回收的开销。</p>
+<p>现在回到代码 1.1 可知 ppFree.Get().(*pp)就是返回 Pool 里面创建的一个 pp 对象实例。也就是代码 1 返回了 pp 对象的一个实例，代码 2 则使用 pp 对象进行打印输出。</p>
+<p>代码 3 调用了 pp 的 free 方法，其代码如下：</p>
+<pre><code class="Java language-Java hljs">func (p *pp) free() {
+    p.buf = p.buf[:<span class="hljs-number">0</span>]
+    p.arg = nil
+    p.value = reflect.Value{}
+    ppFree.Put(p)<span class="hljs-comment">//4</span>
+}
+</code></pre>
+<p>如上代码 free 函数的作用主要是回收 pp 对象到创建的 Pool 类型的实例 ppFree 中，其中代码 4 就是把使用完毕的 pp 对象通过 Pool 对象的 Put 方法，放入到了池子。</p>
+<p>需要注意的是使用 Pool 缓存对象时候，当调用多次 Put()方法放入多个资源到 pool 后，使用 get（）方法返回的对象，并不确定是多个资源中的哪一个。</p>
+<p>总结:Pool 的目的是用来缓存已经分配的目前没有使用，但是随后的一段时间可能会使用的资源，用来减少频繁的创建和销毁对象，也有利于减轻垃圾回收的压力。但是需要注意的是使用 Pool 缓存对象时候，当调用多次 Put()方法放入多个资源到 pool 后，使用 get（）方法返回的对象，并不确定是多个资源中的哪一个。</p>
+<h3 id="gohappenbefore">Go 中锁的 happen-before 语义</h3>
+<p>在 go 中锁类似 java 中的锁用来解决多线程并发访问共享变量的安全性，go 中 sync 包实现了两个锁类型，分别为 sync.Mutex（互斥锁）和 sync.RWMutex（读写锁），本节我们来探讨锁的 happen-before 内存语义</p>
+<h4 id="mutexrwmutex">Mutex 与 RWMutex</h4>
+<p>对应任何 sync.Mutex or sync.RWMutex 类型的变量 I 来说调用 n 次 l.Unlock() 操作 happen before 调用 m 次 l.Lock()操作返回，其中 n&lt;m，我们看下面程序：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var l sync.Mutex
+var a string
+
+func <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>{
+    a = <span class="hljs-string">"hello, world"</span> <span class="hljs-comment">//1</span>
+    l.Unlock()         <span class="hljs-comment">//2</span>
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    l.Lock()     <span class="hljs-comment">//3</span>
+    <span class="hljs-function">go <span class="hljs-title">f</span><span class="hljs-params">()</span>       <span class="hljs-comment">//4</span>
+    l.<span class="hljs-title">Lock</span><span class="hljs-params">()</span>     <span class="hljs-comment">//5</span>
+    fmt.<span class="hljs-title">Print</span><span class="hljs-params">(a)</span> <span class="hljs-comment">//6</span>
+}
+</span></code></pre>
+<p>运行上面代码可以确保输出"hello, world"，其中对变量 a 的赋值操作（1） happen before 步骤（2），第一次调用 l.Unlock()的操作（2） happen before 第二次调用 l.Lock()的操作（5），操作（5） happen before 打印输出操作（6），由于 happen before 具有传递性，所以步骤 1 happen before 步骤 6.</p>
+<p>另外对任何一个 sync.RWMutex 类型的变量 l 来说，存在一个次数 n,调用 l.RLock 操作 happens after 调用 n 次 l. Unlock（释放写锁）并且相应的 l.RUnlock  happen before 调用 n+1 次 l.Lock（写锁）</p>
+<pre><code class="java  language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)</span>
+
+var l sync.RWMutex
+var a string
+
+func <span class="hljs-title">unlock</span><span class="hljs-params">()</span> </span>{
+    a = <span class="hljs-string">"unlock"</span> <span class="hljs-comment">//1</span>
+    l.Unlock()   <span class="hljs-comment">//2</span>
+}
+
+<span class="hljs-function">func <span class="hljs-title">runlock</span><span class="hljs-params">()</span> </span>{
+    a = <span class="hljs-string">"runlock"</span> <span class="hljs-comment">//3</span>
+    l.RUnlock()   <span class="hljs-comment">//4</span>
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    l.Lock()    <span class="hljs-comment">//5</span>
+    <span class="hljs-function">go <span class="hljs-title">unlock</span><span class="hljs-params">()</span> <span class="hljs-comment">//6</span>
+
+    l.<span class="hljs-title">RLock</span><span class="hljs-params">()</span>      <span class="hljs-comment">//7</span>
+    fmt.<span class="hljs-title">Println</span><span class="hljs-params">(a)</span> <span class="hljs-comment">//8</span>
+    go <span class="hljs-title">runlock</span><span class="hljs-params">()</span>   <span class="hljs-comment">//9</span>
+
+    l.<span class="hljs-title">Lock</span><span class="hljs-params">()</span>     <span class="hljs-comment">//10</span>
+    fmt.<span class="hljs-title">Print</span><span class="hljs-params">(a)</span> <span class="hljs-comment">//11</span>
+    l.<span class="hljs-title">Unlock</span><span class="hljs-params">()</span>
+}
+</span></code></pre>
+<ul>
+<li>运行上面代码一定会输出如下：</li>
+</ul>
+<pre><code class="hljs nginx"><span class="hljs-attribute">unlock</span>
+runlock
+</code></pre>
+<ul>
+<li>如上代码 （1）对 a 的赋值 happen before 代码（2），而对 l.RLock() （代码 7） 的调用 happen after 对 l.Unlock()（代码 2）的第 1 次调用，所以代码（8）输出 unlock。</li>
+<li>而对代码（7）l.RLock()  的调用 happen after 对 l.Unlock()（代码 2） 的第 1 次调用，相应的有对 l.RUnlock() （代码 4）的调用 happen before 第 2 次对 l.Lock()（代码 4）的调用，所以代码（11）输出 runlock</li>
+</ul>
+<p>也就是这里对任何一个 sync.RWMutex 类型的变量 l 来说，存在一个次数 1,调用 l.RLock 操作 happens after 调用 1 次 l. Unlock（释放写锁）并且相应的 l.RUnlock  happen before 调用 2 次 l.Lock（写锁）</p>
+<h4 id="once">一次执行（Once）</h4>
+<p>sync 包提供了在多个 goroutine 存在的情况下进行安全初始化的一种机制，这个机制也就是提供的 Once 类型。多（goroutine）下多个 goroutine 可以同时执行 once.Do(f)方法，其中 f 是一个函数，但是同时只有一个 goroutine 可以真正运行传递的 f 函数，其他的 goroutine 则会阻塞直到运行 f 的 goroutine 运行 f 完毕。</p>
+<p>多 goroutine 下同时调用 once.Do(f)时候，真正执行 f()函数的 goroutine， happen before 任何其他由于调用 once.Do(f)而被阻塞的 goroutine 返回：</p>
+<pre><code class="java language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+    <span class="hljs-string">"time"</span>
+)</span>
+
+var a string
+var once sync.Once
+var wg sync.WaitGroup
+
+func <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>{
+    time.Sleep(time.Second * <span class="hljs-number">2</span>) <span class="hljs-comment">//1</span>
+    a = <span class="hljs-string">"hello, world"</span>
+    fmt.Println(<span class="hljs-string">"setup over"</span>) <span class="hljs-comment">//2</span>
+}
+
+<span class="hljs-function">func <span class="hljs-title">doprint</span><span class="hljs-params">()</span> </span>{
+    once.Do(setup) <span class="hljs-comment">//3</span>
+    fmt.Println(a) <span class="hljs-comment">//4</span>
+    wg.Done()
+}
+
+<span class="hljs-function">func <span class="hljs-title">twoprint</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">go <span class="hljs-title">doprint</span><span class="hljs-params">()</span>
+    go <span class="hljs-title">doprint</span><span class="hljs-params">()</span>
+}
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    wg.Add(<span class="hljs-number">2</span>)
+    twoprint()
+
+    wg.Wait()
+}
+</code></pre>
+<p>如上代码运行会输出：
+ setup over
+hello, world
+hello, world</p>
+<ul>
+<li>上面代码使用 wg sync.WaitGroup 等待两个 goroutine 运行完毕，由于 setup over 只输出一次，所以 setup 方法只运行了一次</li>
+<li>由于输出了两次 hello, world 说明当一个 goroutine 在执行 setup 方法时候，另外一个在阻塞。</li>
+</ul>
+<h3 id="-6">参考</h3>
+<ul>
+<li>https://github.com/golang/go/wiki/LearnConcurrency</li>
+</ul></div>
+</body>
+</html>
