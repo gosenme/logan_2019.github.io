@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>top</title>
+</head>
+<body>
+<div data-v-48678fa6="" data-id="5d5aa49ae51d4561c75f2808" itemprop="articleBody" class="article-content"><p></p><figure><img class="lazyload inited loaded" data-src="https://user-gold-cdn.xitu.io/2019/8/18/16ca3b4554c46604?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" data-width="495" data-height="317" src="https://user-gold-cdn.xitu.io/2019/8/18/16ca3b4554c46604?imageView2/0/w/1280/h/960/format/webp/ignore-error/1"><figcaption></figcaption></figure><p></p>
+<p>后端们最怕的事情之一就是服务器的负载突然飙升，这可能又意味着一个个夺目Call马上要打过来了。碰到这种情况怎么办，大家第一反应一定是登陆到服务器上，先敲一个top命令看看Load Average吧。今天这篇文章和大家说说怎么看这个“Load Average”。</p>
+<h2 class="heading" data-id="heading-0">Load Average</h2>
+<p></p><figure><img alt="先敲一个top瞅瞅" class="lazyload inited loaded" data-src="https://user-gold-cdn.xitu.io/2019/8/19/16ca9ce3b5b8fbae?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" data-width="982" data-height="472" src="https://user-gold-cdn.xitu.io/2019/8/19/16ca9ce3b5b8fbae?imageView2/0/w/1280/h/960/format/webp/ignore-error/1"><figcaption></figcaption></figure><p></p>
+<p>很多人说Load Average这一个指标就能说明系统负载高了，这句话是对的。那么具体是哪里压力大了呢？这三个数值是怎么计算出来的呢？可能很多人一下子都说不上来。</p>
+<p>先来说说定义吧：<b>在一段时间内，CPU正在处理以及等待CPU处理的进程数之和。</b>三个数字分别代表了1分钟，5分钟，15分钟的统计值。</p>
+<p>所以，这个数值的确能反应服务器的负载情况。但是，这个数值高了也并不能直接代表这台机器的性能有问题。可能是因为正在进行CPU密集型的计算，也有可能是因为I/O问题导致运行队列堵了。所以，当我们看到这个数值飙升的时候，还得具体问题具体分析。直接升级机器是简单粗暴，但是治标不治本。</p>
+<h2 class="heading" data-id="heading-1">top命令一行一行看</h2>
+<p>top命令输出了很多参数，真正的服务器负载情况我们要综合其他参数一起看。</p>
+<pre><code class="hljs bash copyable" lang="bash">第一行：
+
+top - 20:41:08 up 18 days,  5:24,  2 users,  load average: 0.04, 0.03, 0.05
+
+top：当前时间
+up：机器运行了多少时间
+users：当前有多少用户
+load average：分别是过去1分钟，5分钟，15分钟的负载
+
+<span class="copy-code-btn"></span></code></pre><p>具体需要关注的果然还是load average这三个数值。大家都知道，一个CPU在一个时间片里面只能运行一个进程，CPU核数的多少直接影响到这台机器在同时间能运行的进程数。所以一般来说Load Average的数值别超过这台机器的总核数，就基本没啥问题。</p>
+<pre><code class="hljs bash copyable" lang="bash">第二行：
+
+Tasks: 216 total,   1 running, 215 sleeping,   0 stopped,   0 zombie
+
+Tasks：当前有多少进程
+running：正在运行的进程
+sleeping：正在休眠的进程
+stopped：停止的进程
+zombie：僵尸进程
+
+<span class="copy-code-btn"></span></code></pre><p>running越多，服务器自然压力越大。</p>
+<pre><code class="hljs bash copyable" lang="bash">第三行：
+
+%Cpu(s):  0.2 us,  0.1 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+
+us: 用户进程占CPU的使用率
+sy: 系统进程占CPU的使用率
+ni: 用户进程空间改变过优先级
+id: 空闲CPU占用率
+wa: 等待输入输出的CPU时间百分比
+hi: 硬件的中断请求
+si: 软件的中断请求
+st: steal time
+
+<span class="copy-code-btn"></span></code></pre><p>这一行代表了CPU的使用情况，us长期过高，表明用户进程占用了大量的CPU时间。us+sy如果长期超过80或者90，可能就代表了CPU性能不足，需要加CPU了。</p>
+<pre><code class="hljs bash copyable" lang="bash">第四行&amp;第五行
+KiB Mem : 65810456 total, 30324416 free,  9862224 used, 25623816 buff/cache
+KiB Swap:  7999484 total,  7999484 free,        0 used. 54807988 avail Mem
+
+total：内存总量
+free：空闲内存
+used：使用的
+buffer/cache： 写缓存/读缓存
+<span class="copy-code-btn"></span></code></pre><p>第四第五行分别是内存信息和swap信息。所有程序的运行都是在内存中进行的，所以内存的性能对与服务器来说非常重要。不过当内存的free变少的时候，其实我们并不需要太紧张。真正需要看的是Swap中的used信息。Swap分区是由硬盘提供的交换区，当物理内存不够用的时候，操作系统才会把暂时不用的数据放到Swap中。所以当这个数值变高的时候，说明内存是真的不够用了。</p>
+<pre><code class="hljs bash copyable" lang="bash">
+第五行往下
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+19868 root      20   0 19.733g 369980  15180 S   0.7  0.6 129:53.91 java
+19682 root      20   0 19.859g 5.766g  22252 S   0.3  9.2 139:42.81 java
+54625 100       20   0   50868  33512   4104 S   0.3  0.1   0:04.68 fluentd
+
+PID:进程id
+USER:进程所有者
+PR:优先级。数值越大优先级越高
+NI:nice值，负值表示高优先级，正值表示低优先级
+VIRT:进程使用的虚拟内存总量
+SWAP:进程使用的虚拟内存中被换出的大小
+RES:进程使用的、未被换出的物理内存大小
+SHR:共享内存大小
+SHR:共享内存大小
+S：进程状态。D表示不可中断的睡眠状态；R表示运行；S表示睡眠；T表示跟踪/停止；Z表示僵尸进程。
+%CPU:上次更新到现在的CPU占用百分比 ；
+%MEM:进程使用的物理内存百分比 ；
+TIME+:进程使用的CPU时间总计，单位1/100秒；
+COMMAND:命令名/命令行
+
+<span class="copy-code-btn"></span></code></pre><p>这些就是进程信息了，从这里可以看到哪些进程占用系统资源的概况。</p>
+<h2 class="heading" data-id="heading-2">其他命令</h2>
+<p>top当然是我们最常见的查看系统状况的命令。其他命令还有很多。vmstat，w，uptime ，iostat这些都是常用的命令。</p>
+<h2 class="heading" data-id="heading-3">综上</h2>
+<p>看懂这些具体参数以后，就知道自己的代码到底哪方面需要改进了，是优化内存消耗，还是优化你的代码逻辑，当然无脑堆机器也可以，只要你说服的了老板！</p>
+<p></p><figure><img class="lazyload inited loaded" data-src="https://user-gold-cdn.xitu.io/2019/8/19/16caa11ddea0e64e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" data-width="1012" data-height="528" src="https://user-gold-cdn.xitu.io/2019/8/19/16caa11ddea0e64e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1"><figcaption></figcaption></figure><p></p>
+</div>
+</body>
+</html>
