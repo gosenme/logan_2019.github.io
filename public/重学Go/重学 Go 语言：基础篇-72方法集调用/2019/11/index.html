@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="方法集调用N类型，有两个方法，当我们用N类型调用的时候，理论上只执行String，但是如果我们用N类型调用Inc是不是合法的呢？type N intfunc (n N) Inc() {     n++}func (n N) String() string {    return strconv.Itoa(int(n))}func main() {    var n N = 100    (N).I">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-72">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="方法集调用N类型，有两个方法，当我们用N类型调用的时候，理论上只执行String，但是如果我们用N类型调用Inc是不是合法的呢？type N intfunc (n N) Inc() {     n++}func (n N) String() string {    return strconv.Itoa(int(n))}func main() {    var n N = 100    (N).I">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:16.348Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-72">
+<meta name="twitter:description" content="方法集调用N类型，有两个方法，当我们用N类型调用的时候，理论上只执行String，但是如果我们用N类型调用Inc是不是合法的呢？type N intfunc (n N) Inc() {     n++}func (n N) String() string {    return strconv.Itoa(int(n))}func main() {    var n N = 100    (N).I">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-72</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&text=重学 Go 语言：基础篇-72"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&is_video=false&description=重学 Go 语言：基础篇-72"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-72&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&name=重学 Go 语言：基础篇-72&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">方法集调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tt"><span class="toc-number">1.2.</span> <span class="toc-text">方法集区分基础类型T和指针类型T</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-72
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:16.348Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>方法集调用</h3><br><p>N类型，有两个方法，当我们用N类型调用的时候，理论上只执行String，但是如果我们用N类型调用Inc是不是合法的呢？</p><br><pre><code class="go language-go">type N int<br><br>func (n <em>N) Inc() {
+    </em>n++<br>}<br><br>func (n N) String() string {<br>    return strconv.Itoa(int(n))<br>}<br><br>func main() {<br>    var n N = 100<br><br>    (<em>N).Inc(&amp;n)<br><br>    s := (</em>N).String(&amp;n)<br>    println(s)<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build -gcflags “-l” -o test call.go<br>$ go tool objdump -s “main.main” test<br></code></pre><br><p>我们注意到<code>CALL main.(<em>N).Inc(SB)</em></code>调用方式并没有运行期的行为，都是静态绑定。因为调用的哪些方法虽然源码不存在但是编译器生成了，这个方法实际上已经存在了，我们刚刚看到编译器实际上替我们生成了这些间接调用，既然说这个函数或者方法已经存在了，那直接用call间接方法就可以了。</p><br><p>如果A嵌入B，B有个方法叫x，那么编译器会自动帮我们生成A.X方法，方法内部调用A.B.X方法，这实际上是编译器自动生成的。如果我们源码里写A.X的话实际上会被编译器翻译成对自动包装函数的调用，所以从语法上A.X看上去好像A继承X方法，实际上是因为编译器翻译成A.B.X的调用。</p><br><h3 id="tt">方法集区分基础类型T和指针类型T</h3><br><p>看看编译器怎么做这事情的？</p><br><pre><code class="go language-go">type N int<br><br>func (n <em>N) Inc() {
+    </em>n++<br>}<br><br>func (n N) String() string {<br>    return strconv.Itoa(int(n))<br>}<br><br>func listMethods(a interface{}) {<br>    t := reflect.TypeOf(a)<br>    fmt.Printf(“\n— %v ———\n”, t)<br><br>    for i := 0; i &lt; t.NumMethod(); i++ {<br>        m := t.Method(i)<br>        fmt.Printf(“%s: %v\n”, m.Name, m.Type)<br>    }<br>}<br><br>func main() {<br>    var n N<br><br>    listMethods(n)<br>    listMethods(&amp;n)<br>}<br></code></pre><br><p>listMethods方法是利用反射把当前方法的方法集全部列出来。方法集具体的区别在于Go语言很大的不同在于可以显式的提供参数，提供参数可以指定类型的<em>N或者N。这地方就会形成这样一个概念。</em></p><br><p>比如声明类型<code>N</code>，假如说有两个方法A、B，但是它们的this参数可以是<code>N</code>也可以是指针<code>N</code>，这样的话A和B就会属于不同的类型，一个是N，一个是N的指针。一个类型和一个类型的指针属于两种类型，<code><em>N</em></code>长度是8，<code>N</code>长度是32,64之类的，虽然类型不是一回事，一个是指针一个是普通类型，这就造成实现方法的时候，是针对<code>N</code>实现的还是针对<code>N</code>实现的，这就造成了<code>N</code>的方法集和<code><em>N</em></code>的方法集是不一样的。</p><br><p>上面代码定义类型N，实现了两个方法，一个方法针对<code>N</code>本身实现，一个方法针对<code>N</code>实现。我们分别列出它们的方法集究竟有哪些。在main函数中定义了N实例，分别列出<code>N</code>和<code><em>N</em></code>有哪些方法集。</p><br><pre><code>— main.N ———<br>String: func(main.N) string<br><br>— main.N ———<br>Inc: func(<em>main.N)<br>String: func(</em>main.N) string<br></code></pre><br><p>我们可以看到<code>N</code>方法集就有1个<code>N</code>基础类型的方法，<code><em>N</em></code>方法集除了<code>N</code>类型的方法以外还包含<code>N</code>类型的方法。<code>func(<em>main.N) string</em></code>做了类型转换。</p><br><p>简单的来说，我们有个类型<code>T</code>，<code>T</code>的方法集只包含<code>T</code>自身的，但是<code>T</code>方法集等于<code>T</code>+<code><em>T</em></code>的方法，这就是差别。</p><br><p>不同的语言在这块的做法会有一些细微的差别。Java和C#为什么没有这东西，因为它们默认的话this就有一种引用方式，没有说把this分为引用和值两种方式。就是你引用实例，说白了就相当于只有<code>T</code>没有<code>T</code>，指针类型和指针的基础类型不是一回事。</p><br><p>当我们拿到一个对象指针<code><em>T</em></code>的时候，调用对象T的方法是不是安全的呢？因为我们可以把指针里面数据取出来，然后作为T参数。但是我们拥有T，未必就能获得T的指针<code>T</code>，因为它有可能是个临时对象，临时对象是没有办法取得它的指针的，指针也就意味着这个对象肯定是在栈上或者堆上分配过的，但是拥有临时对象的实例未必能拿到临时对象的指针，不见得是合法的。我们假如访问字典里面一个元素，如果编译器对字典元素本身做了不允许访问地址，那访问元素的时候拿不到指针的，这时候获取到它的指针没有意义，还有跨栈帧获取指针也没有意义。所以说用指针获取指针目标是安全的，用目标未必能获得它的指针。这是因为内存安全模型决定的，因为Go语言并不完全区分值类型和引用类型，它是由编译器决定对象到底分配到哪。</p><br><p><code>String: func(<em>main.N) string</em></code>方法哪里来的？</p><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l” -o test test.go #编译<br>$ nm test | grep “[^.]main.“ #输出符号<br></code></pre><br><p>输出</p><br><pre><code>T main.init<br>B main.initdone.<br>T main.listMethods<br>T main.main<br>T main.(N).Inc<br>T main.(<em>N).String<br>T main.N.String<br></em></code></pre><br><p>我们注意到String有两个，<code>main.(N).String</code>和<code>main.N.String</code>，<code>main.N.String</code>是我们自己定义的，<code>main.(<em>N).String</em></code>是程序执行时候输出的，两个地址都不一样，这表明最终生成机器代码的时候是存在两个这样函数，很显然<code>main.(N).String</code>是编译器生成的。</p><br><p>反汇编看看到底什么样的：</p><br><pre><code>$ go tool objdump -s “main.“ test | grep “TEXT.<em>autogenerated”<br></em></code></pre><br><pre><code>TEXT main.(N).String(SB) &lt;autogenerated&gt;<br></code></pre><br><p><code>main.(*N).String(SB)</code>是机器生成的，地址是<code>00000000004b1f60</code>和符号表里面一致，实际上在符号表里面已经打上了<code>&lt;autogenerated&gt;</code>标记。为什么打上这个标记，因为我们自己写的代码在符号表里面有信息可以对应到哪一行，但是很显然有些东西不是我们写的，所以从源码上没有办法对应关系，所以符号表标记这些信息由编译器生成的。</p><br><p>现在知道，当我们想实现一个方法集的时候，源码层面和机器码层面其实是不一样的，因为源码层面嵌入一个类型的时候会自动拥有它的方法。对于机器码来说，调用函数必须给一个合法的地址，这个合法的地址必须生成对应的代码，这个代码高级语言称之为规则，规则就是编译器支持这种理论，编译器替我们完成这些。</p><br><p>所谓的方法集就是嵌入一个类型的时候，就拥有它的方法，准确的说，编译器自动生成嵌入类型的方法。</p><br><p>Go语言虽然没有继承的概念，编译器替我们补全了这种间接调用。这样一来有点类似于A继承B的方法，但是这不是继承，因为是继承的话就不会有自动代码生成，直接通过类型表去调用。Go语言所谓的自动拥有方法集不是继承而是语法糖层面上的代码补全。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">方法集调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tt"><span class="toc-number">1.2.</span> <span class="toc-text">方法集区分基础类型T和指针类型T</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&text=重学 Go 语言：基础篇-72"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&is_video=false&description=重学 Go 语言：基础篇-72"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-72&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&title=重学 Go 语言：基础篇-72"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/&name=重学 Go 语言：基础篇-72&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

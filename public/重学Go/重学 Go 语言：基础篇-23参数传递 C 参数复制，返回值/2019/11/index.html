@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="参数传递 C 参数复制，返回值先看下 C 语言代码例子。#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;attribute((noinline)) void info(int x){    printf(“info %d\n”, x);}attribute((noinline)) int add(int x, int y){    int z =">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-23">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="参数传递 C 参数复制，返回值先看下 C 语言代码例子。#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;attribute((noinline)) void info(int x){    printf(“info %d\n”, x);}attribute((noinline)) int add(int x, int y){    int z =">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:07.506Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-23">
+<meta name="twitter:description" content="参数传递 C 参数复制，返回值先看下 C 语言代码例子。#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;attribute((noinline)) void info(int x){    printf(“info %d\n”, x);}attribute((noinline)) int add(int x, int y){    int z =">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-23</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-24优化模式对参数传递的影响/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-22调用堆栈和堆栈帧/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&text=重学 Go 语言：基础篇-23"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&is_video=false&description=重学 Go 语言：基础篇-23"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-23&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&name=重学 Go 语言：基础篇-23&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#c"><span class="toc-number">1.1.</span> <span class="toc-text">参数传递 C 参数复制，返回值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-number">1.1.1.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gbd"><span class="toc-number">1.1.2.</span> <span class="toc-text">使用 GBD 调试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#go"><span class="toc-number">1.2.</span> <span class="toc-text">参数传递 Go 参数复制，返回值</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-23
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:07.505Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id="c">参数传递 C 参数复制，返回值</h3><br><p>先看下 C 语言代码例子。</p><br><pre><code class="c language-c">#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br><br><strong>attribute</strong>((noinline)) void info(int x)<br>{<br>    printf(“info %d\n”, x);<br>}<br><br><strong>attribute</strong>((noinline)) int add(int x, int y)<br>{<br>    int z = x + y;<br>    info(z);<br><br>    return z;<br>}<br><br>int main(int argc, char **argv)<br>{<br>    int x = 0x100;<br>    int y = 0x200;<br>    int z = add(x, y);<br><br>    printf(“%d\n”, z);<br><br>    return 0;<br>}<br></code></pre><br><p>三个变量：x、y、z。</p><br><h4 id>编译</h4><br><pre><code class="bash language-bash">$ gcc -g -O0 -o test test.c #编译，去掉优化<br></code></pre><br><h4 id="gbd">使用 GBD 调试</h4><br><pre><code class="bash language-bash">$ gdb test<br>$ b main #符号名上加上断点，main 函数加上断点<br>$ r #执行，这时在 main 函数上中断了<br>$ set disassembly-flavor intel #设置 intel 样式<br>$ disass #反汇编<br></code></pre><br><p>注意 main 函数不是程序真正的入口，而是用户代码的入口，因为大部分程序在执行 main 函数之前，会有其它初始化的操作。</p><br><pre><code class="bash language-bash">Dump of assembler code for function main:<br>   0x0000000000400570 &lt;+0&gt;:    push   rbp<br>   0x0000000000400571 &lt;+1&gt;:    mov    rbp,rsp<br>   0x0000000000400574 &lt;+4&gt;:    sub    rsp,0x20 #给main函数分配了16进制20字节的栈桢空间。<br>   0x0000000000400578 &lt;+8&gt;:    mov    DWORD PTR [rbp-0x14],edi<br>   0x000000000040057b &lt;+11&gt;:    mov    QWORD PTR [rbp-0x20],rsi<br>=&gt; 0x000000000040057f &lt;+15&gt;:    mov    DWORD PTR [rbp-0xc],0x100<br>   0x0000000000400586 &lt;+22&gt;:    mov    DWORD PTR [rbp-0x8],0x200<br>   0x000000000040058d &lt;+29&gt;:    mov    edx,DWORD PTR [rbp-0x8]<br>   0x0000000000400590 &lt;+32&gt;:    mov    eax,DWORD PTR [rbp-0xc]<br>   0x0000000000400593 &lt;+35&gt;:    mov    esi,edx<br>   0x0000000000400595 &lt;+37&gt;:    mov    edi,eax<br>   0x0000000000400597 &lt;+39&gt;:    call   0x400548 &lt;add&gt;<br>   0x000000000040059c &lt;+44&gt;:    mov    DWORD PTR [rbp-0x4],eax<br>   0x000000000040059f &lt;+47&gt;:    mov    eax,DWORD PTR [rbp-0x4]<br>   0x00000000004005a2 &lt;+50&gt;:    mov    esi,eax<br>   0x00000000004005a4 &lt;+52&gt;:    mov    edi,0x40064d<br>   0x00000000004005a9 &lt;+57&gt;:    mov    eax,0x0<br>   0x00000000004005ae &lt;+62&gt;:    call   0x400400 &lt;printf@plt&gt;<br>   0x00000000004005b3 &lt;+67&gt;:    mov    eax,0x0<br>   0x00000000004005b8 &lt;+72&gt;:    leave<br>   0x00000000004005b9 &lt;+73&gt;:    ret<br>End of assembler dump.<br></code></pre><br><p>我们看到所有的空间都是基于 BP 寄存器的寻址。我们重点分析下 Go 语言的例子。</p><br><h3 id="go">参数传递 Go 参数复制，返回值</h3><br><p>看下 Go 语言代码例子。</p><br><pre><code class="go language-go">func info(x int) {<br>    log.Printf(“info %d\n”, x)<br>}<br><br>func add(x, y int) int {<br>    z := x + y<br>    info(z)<br><br>    return z<br>}<br><br>func main() {<br>    x, y := 0x100, 0x200<br>    z := add(x, y)<br><br>    println(z)<br>}<br></code></pre><br><p>编译：</p><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l” -o test test.go<br></code></pre><br><p>GBD 调试：</p><br><pre><code class="bash language-bash">$ gdb test<br>$ b main.main #打断点<br>$ r #运行<br>$ set disassembly-flavor intel #设置 intel 样式<br>$ disass #反汇编<br></code></pre><br><pre><code class="bash language-bash">=&gt; 0x0000000000401140 &lt;+0&gt;:    mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x0000000000401149 &lt;+9&gt;:    cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x000000000040114d &lt;+13&gt;:    jbe    0x4011a9 &lt;main.main+105&gt;<br>   0x000000000040114f &lt;+15&gt;:    sub    rsp,0x30 #首先为这个空间分配了 48 字节栈桢空间<br>   0x0000000000401153 &lt;+19&gt;:    mov    QWORD PTR [rsp+0x28],0x100 #sp+28 位置存储局部变量 x<br>   0x000000000040115c &lt;+28&gt;:    mov    QWORD PTR [rsp+0x20],0x200 #sp+20 位置存储局部变量 y<br>   0x0000000000401165 &lt;+37&gt;:    mov    rax,QWORD PTR [rsp+0x28]<br>   0x000000000040116a &lt;+42&gt;:    mov    QWORD PTR [rsp],rax #x 参数复制到 rsp+0 位置<br>   0x000000000040116e &lt;+46&gt;:    mov    rax,QWORD PTR [rsp+0x20]<br>   0x0000000000401173 &lt;+51&gt;:    mov    QWORD PTR [rsp+0x8],rax #y 参数复制到 rsp+8 位置<br>   0x0000000000401178 &lt;+56&gt;:    call   0x4010f0 &lt;main.add&gt;<br>   0x000000000040117d &lt;+61&gt;:    mov    rax,QWORD PTR [rsp+0x10]<br>   0x0000000000401182 &lt;+66&gt;:    mov    QWORD PTR [rsp+0x18],rax<br>   0x0000000000401187 &lt;+71&gt;:    call   0x425380 &lt;runtime.printlock&gt;<br>   0x000000000040118c &lt;+76&gt;:    mov    rax,QWORD PTR [rsp+0x18]<br>   0x0000000000401191 &lt;+81&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000401195 &lt;+85&gt;:    call   0x425a10 &lt;runtime.printint&gt;<br>   0x000000000040119a &lt;+90&gt;:    call   0x4255b0 &lt;runtime.printnl&gt;<br>   0x000000000040119f &lt;+95&gt;:    call   0x425400 &lt;runtime.printunlock&gt;<br>   0x00000000004011a4 &lt;+100&gt;:    add    rsp,0x30<br>   0x00000000004011a8 &lt;+104&gt;:    ret<br>   0x00000000004011a9 &lt;+105&gt;:    call   0x44b160 &lt;runtime.morestack_noctxt&gt;<br>   0x00000000004011ae &lt;+110&gt;:    jmp    0x401140 &lt;main.main&gt;<br></code></pre><br><p>参考汇编代码画出内存示意图如下：</p><br><pre><code>|———+—sp<br>| x100    |<br>|———|—+8<br>| y200    |<br>|———|–+10<br>|         |<br>|———|–+18<br>|         |<br>|———|–+20<br>| y=200   |<br>|———|–+28<br>| x=100   |<br>|———|–+30<br></code></pre><br><p>Go 语言基于 SP 做加法，因为在 Go 语言里不使用 BP 寄存器，它把 BP 寄存器当作普通寄存器来用，不用 BP 寄存器来维持一个栈桢，只用 SP 指向栈顶就可以了，这跟它的内存管理策略有关系。</p><br><p>在 add 函数执行之前，首先做了参数复制，就是说<strong>函数调用时候参数是被复制的</strong>。理论上所有参数都是复制的，传指针复制的是指针而不是指针指向的目标，指针本身是被复制的，通过这个代码我们就看到复制过程。</p><br><p>接下来调用 add 方法。</p><br><pre><code class="bash language-bash">$ b main.add #打断点<br>$ c #运行<br>$ set disassembly-flavor intel #设置 intel 样式<br>$ disass #反汇编<br></code></pre><br><pre><code class="bash language-bash">=&gt; 0x00000000004010f0 &lt;+0&gt;:    mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x00000000004010f9 &lt;+9&gt;:    cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x00000000004010fd &lt;+13&gt;:    jbe    0x401136 &lt;main.add+70&gt;<br>   0x00000000004010ff &lt;+15&gt;:    sub    rsp,0x10 #分配 10 这样的空间<br>   0x0000000000401103 &lt;+19&gt;:    mov    QWORD PTR [rsp+0x28],0x0 #初始化操作，<br>   # Go 语言有这样的规则它会把所有的变量初始化为二进制 0<br>   0x000000000040110c &lt;+28&gt;:    mov    rax,QWORD PTR [rsp+0x18]<br>   0x0000000000401111 &lt;+33&gt;:    mov    rcx,QWORD PTR [rsp+0x20]<br>   0x0000000000401116 &lt;+38&gt;:    add    rax,rcx<br>   0x0000000000401119 &lt;+41&gt;:    mov    QWORD PTR [rsp+0x8],rax<br>   0x000000000040111e &lt;+46&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000401122 &lt;+50&gt;:    call   0x401000 &lt;main.info&gt;<br>   0x0000000000401127 &lt;+55&gt;:    mov    rax,QWORD PTR [rsp+0x8]<br>   0x000000000040112c &lt;+60&gt;:    mov    QWORD PTR [rsp+0x28],rax<br>   0x0000000000401131 &lt;+65&gt;:    add    rsp,0x10 #把 add 函数所需要的栈桢空间释放掉<br>   0x0000000000401135 &lt;+69&gt;:    ret    #把 ip pop 出来<br>   0x0000000000401136 &lt;+70&gt;:    call   0x44b160 &lt;runtime.morestack_noctxt&gt;<br>   0x000000000040113b &lt;+75&gt;:    jmp    0x4010f0 &lt;main.add&gt;<br></code></pre><br><p>参考汇编代码画出内存示意图如下：</p><br><pre><code>|———+—sp<br>| 300     |<br>|———+—+8<br>| 300     |<br>|———|—+10<br>| ip      |<br>|———+—+18<br>| 100     |<br>|———|—+20<br>| 200     |<br>|———|–—+28<br>| 0       |<br>|———|<br></code></pre><br><p>很显然，Go 语言调用一个方法的时候，首先在栈顶的位置按顺序准备好参数同时给返回值存储空间，100 和 200 是参数，300 是返回值的空间。所以 Go 语言调用函数的时候，是由调用方来准备参数和返回值的空间。</p><br><pre><code>|———+—sp<br>| 100     |<br>|———|—+8<br>| 200     |<br>|———|–+10<br>| 300     |<br>|———|–+18<br>|         |<br>|———|–+20<br>| y=200   |<br>|———|–+28<br>| x=100   |<br>|———|–+30<br></code></pre><br><pre><code class="bash language-bash">$ b 20 #打断点<br>$ c #运行<br>$ set disassembly-flavor intel #设置 intel 样式<br>$ disass #反汇编<br></code></pre><br><pre><code class="bash language-bash">   0x0000000000401140 &lt;+0&gt;:    mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x0000000000401149 &lt;+9&gt;:    cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x000000000040114d &lt;+13&gt;:    jbe    0x4011a9 &lt;main.main+105&gt;<br>   0x000000000040114f &lt;+15&gt;:    sub    rsp,0x30<br>   0x0000000000401153 &lt;+19&gt;:    mov    QWORD PTR [rsp+0x28],0x100<br>   0x000000000040115c &lt;+28&gt;:    mov    QWORD PTR [rsp+0x20],0x200<br>   0x0000000000401165 &lt;+37&gt;:    mov    rax,QWORD PTR [rsp+0x28]<br>   0x000000000040116a &lt;+42&gt;:    mov    QWORD PTR [rsp],rax<br>   0x000000000040116e &lt;+46&gt;:    mov    rax,QWORD PTR [rsp+0x20]<br>   0x0000000000401173 &lt;+51&gt;:    mov    QWORD PTR [rsp+0x8],rax<br>   0x0000000000401178 &lt;+56&gt;:    call   0x4010f0 &lt;main.add&gt;<br>   0x000000000040117d &lt;+61&gt;:    mov    rax,QWORD PTR [rsp+0x10] #返回值<br>   0x0000000000401182 &lt;+66&gt;:    mov    QWORD PTR [rsp+0x18],rax #返回值 z<br>=&gt; 0x0000000000401187 &lt;+71&gt;:    call   0x425380 &lt;runtime.printlock&gt;<br>   0x000000000040118c &lt;+76&gt;:    mov    rax,QWORD PTR [rsp+0x18]<br>   0x0000000000401191 &lt;+81&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000401195 &lt;+85&gt;:    call   0x425a10 &lt;runtime.printint&gt;<br>   0x000000000040119a &lt;+90&gt;:    call   0x4255b0 &lt;runtime.printnl&gt;<br>   0x000000000040119f &lt;+95&gt;:    call   0x425400 &lt;runtime.printunlock&gt;<br>   0x00000000004011a4 &lt;+100&gt;:    add    rsp,0x30<br>   0x00000000004011a8 &lt;+104&gt;:    ret<br>   0x00000000004011a9 &lt;+105&gt;:    call   0x44b160 &lt;runtime.morestack_noctxt&gt;<br></code></pre><br><pre><code>|———+—sp<br>| 100     |<br>|———|—+8<br>| 200     |<br>|———|–+10<br>| 300     |<br>|———|–+18<br>| z=300   |<br>|———|–+20<br>| y=200   |<br>|———|–+28<br>| x=100   |<br>|———|–+30<br></code></pre><br><p>Go 语言执行一个函数的时候，它的栈桢空间实际上分成两大块，上面 sp 至 sp+18 一整块是用来调用其它函数所需要的空间，因为<strong>Go 语言调用函数的时候得为函数准备参数和返回值的空间</strong>，所以上面一块是为调用其它函数所需要使用的空间。</p><br><p>下面 sp+18 到 sp+30 是当前函数局部变量的空间。注意到下面的区间空间肯定比较固定的，而上面空间的大小和其它函数调用是复用的，所以这个空间的大小是当前函数里面调用所需要空间最多的函数空间，比如调用 add 需要三个，调用 div 需要四个，上面就至少分配四个，否则的话就不够用。那么这样一来，想计算一下一个函数栈桢需要多大空间其实就很简单了，把下面的和上面的相加就知道栈桢到底有多大。</p><br><p>知道了调用函数的时候是怎么样复制参数的，然后怎么样返回值的，同时栈里面参数的顺序是什么样的。另外怎么样通过 IP 寄存器来确定，基于 SP 做偏移量，SP 做加法就知道具体指向哪个地址。</p><br><p>我们看了当调用函数的时候，这些汇编指令都没有复杂的操作，都是很简单的把数据从一个地址搬到另外一个地址，无非中间通过某个寄存器交换一次，它没有很复杂的操作，完全需要我们耐心。</p><br><p>如果第一次看汇编不熟悉，你就像上面一样画出格子，把偏移量记下来，自己画出这个过程看汇编代码就知道究竟干什么。</p><br><p>到目前为止，这些汇编代码除了恢复现场以外，大部分都是做一些简单的数据搬移操作，我们要确定栈桢空间位置，从类似 <code>sub rsp,0x30</code> 的指令来确定。为当前这个栈桢分配多大空间，到 ret 结束，这段中间就是函数执行的那段代码。其他代码并不要做太多的关注。</p><br><p>对象分配到栈上的时候，我们知道它是用什么样的方式来寻址，如果基于 SP 或者 BP 方式寻址，那么这个对象本身肯定是在栈上的。而判断一个地址可以做很简单的加法或者减法，比如说：</p><br><pre><code class="bash language-bash">$ p/x $rsp #开始地址<br>$ p/x $rsp+0x30 #结束地址<br></code></pre><br><p>如果地址不在这中间，那么就不在这个栈桢里。要不然在上一级栈桢里，要不然就在堆上面，而且在堆上面的时候根据不同的语言可能没有办法通过 <code>info proc mappings</code> 来确定，因为 Go 语言并不使用这个 heap，它使用的是自己管理的。</p><br><p>因为不同的语言对这个方式管理不太一样。所以要确定是否在栈上，可以通过 rsp 寄存器减去栈桢空间，你可以知道开始位置和结束位置以此来判断。</p><br><p>就这个例子而言：</p><br><pre><code class="bash language-bash">$ info locals #输出变量<br>$ p/x &amp;z #z的地址<br></code></pre><br><p>很显然，我们通过这样操作来确定是否在一个栈桢内，就可以确定在栈上还是在堆上分配。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#c"><span class="toc-number">1.1.</span> <span class="toc-text">参数传递 C 参数复制，返回值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-number">1.1.1.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gbd"><span class="toc-number">1.1.2.</span> <span class="toc-text">使用 GBD 调试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#go"><span class="toc-number">1.2.</span> <span class="toc-text">参数传递 Go 参数复制，返回值</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&text=重学 Go 语言：基础篇-23"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&is_video=false&description=重学 Go 语言：基础篇-23"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-23&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&title=重学 Go 语言：基础篇-23"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-23参数传递 C 参数复制，返回值/2019/11/&name=重学 Go 语言：基础篇-23&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

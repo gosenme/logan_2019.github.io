@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="匿名函数在 JS 中我们在大量使用匿名函数，Java 或者 C# 类似 Lambda 表达式也是匿名函数，匿名函数已经成为现代语言很重点的标志。为什么会出现匿名函数呢？匿名函数自从 JS 流行以后使用有点泛滥的趋势，很多人都习惯使用匿名函数，因为写出来代码比较酷。简单与看上去好看不是一回事，简单是阅读代码没有太大干扰，同时可以把被调用的函数搬移到另外文件或者包中，甚至很容易替换，最关键对编译器友好">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-26">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="匿名函数在 JS 中我们在大量使用匿名函数，Java 或者 C# 类似 Lambda 表达式也是匿名函数，匿名函数已经成为现代语言很重点的标志。为什么会出现匿名函数呢？匿名函数自从 JS 流行以后使用有点泛滥的趋势，很多人都习惯使用匿名函数，因为写出来代码比较酷。简单与看上去好看不是一回事，简单是阅读代码没有太大干扰，同时可以把被调用的函数搬移到另外文件或者包中，甚至很容易替换，最关键对编译器友好">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:11.787Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-26">
+<meta name="twitter:description" content="匿名函数在 JS 中我们在大量使用匿名函数，Java 或者 C# 类似 Lambda 表达式也是匿名函数，匿名函数已经成为现代语言很重点的标志。为什么会出现匿名函数呢？匿名函数自从 JS 流行以后使用有点泛滥的趋势，很多人都习惯使用匿名函数，因为写出来代码比较酷。简单与看上去好看不是一回事，简单是阅读代码没有太大干扰，同时可以把被调用的函数搬移到另外文件或者包中，甚至很容易替换，最关键对编译器友好">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-26</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-25用 GDB 查看调用堆栈，输出堆栈桢信息/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&text=重学 Go 语言：基础篇-26"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&is_video=false&description=重学 Go 语言：基础篇-26"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-26&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&name=重学 Go 语言：基础篇-26&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">匿名函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.1.1.</span> <span class="toc-text">匿名函数不匿名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.1.2.</span> <span class="toc-text">匿名函数会有性能问题吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">1.1.3.</span> <span class="toc-text">匿名函数原理</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-26
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:11.786Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>匿名函数</h3><br><p>在 JS 中我们在大量使用匿名函数，Java 或者 C# 类似 Lambda 表达式也是匿名函数，匿名函数已经成为现代语言很重点的标志。为什么会出现匿名函数呢？</p><br><p>匿名函数自从 JS 流行以后使用有点泛滥的趋势，很多人都习惯使用匿名函数，因为写出来代码比较酷。简单与看上去好看不是一回事，简单是阅读代码没有太大干扰，同时可以把被调用的函数搬移到另外文件或者包中，甚至很容易替换，最关键对编译器友好，因为写代码往往逻辑非常复杂，现在编译器处理不了复杂的逻辑。我们追求的目标是简单，因为简单才是最好看的。你会注意到高手写出来代码都是平平淡淡的。</p><br><p>匿名函数的优点是用组装的方式把代码分成一段一段的，还可以直接访问外面变量，形成代码分离，有独立的上下文和作用域。另外可以形成独立代码段。</p><br><h4 id="-1">匿名函数不匿名</h4><br><pre><code class="go language-go">func main() {<br>    f := func() { println(“a”) }<br>    f()<br>    func(s string) { println(s) }(“b”)<br>}<br></code></pre><br><pre><code>$ go build -gcflags “-N -l -S” 2&gt;a.txt<br></code></pre><br><p>匿名函数是不存在的，理论上没有匿名函数。编译的时候必须把函数编译成符号，链接的时候把这个符号转换成一个地址。匿名函数是 Go 语言语法上的抽象概念，从实现层面上不存在匿名函数一说。</p><br><p>匿名函数有两种写法，第一种把匿名函数赋值给变量，用变量调用。第二种方式直接定义匿名函数直接调用。</p><br><p>匿名函数命名是当前包的名字 + 当前所处函数名字 + func 随机序号 + 赋值变量名尾缀，链接器根据这个名字分配 .text 段里面的一个地址。</p><br><h4 id="-2">匿名函数会有性能问题吗？</h4><br><pre><code class="go language-go">func main() {<br>    add := func(x, y int) int {<br>        return x + y<br>    }<br><br>    println(add(1, 2))<br>}<br></code></pre><br><pre><code>$ go build -gcflags “-S” main.go<br></code></pre><br><p>关键在于匿名函数能否内联，为什么不能内联？</p><br><p>用普通函数的好处隐藏实现，对编译器友好。编译器首先会做内联处理，然后会做额外优化操作。但是使用匿名函数，从代码上看属于 main 函数私有的，作用域限制在 main 函数里面，对其他地方有干扰，更大的原因是编译器对它没法优化。</p><br><p>匿名函数赋值给变量，匿名函数名随机名 main.func1，变量是可寻址的，变量的结构组成指向 .text 段指针和附加的信息，很显然它的行为决定了编译器没有办法把匿名函数内联。</p><br><p>不内联就需要传参和函数调用处理返回值，它所付出的代价比较大。</p><br><h4 id="-3">匿名函数原理</h4><br><p>匿名函数编译器会生成随机的符号名，调用上会有差别么？普通函数和匿名函数会有性能差别？</p><br><p>Go 语言算是规则比较少的语言，用 Go 语言作为例子：</p><br><pre><code class="go language-go">func test() func(int) int {<br>    return func(x int) int {<br>        x += 100<br>        return x<br>    }<br>}<br><br>func main() {<br>//    func() {<br>//        println(“hello, world!”);<br>//    }()<br><br>    f := test()<br>    z := f(100)<br>    println(z)<br>}<br></code></pre><br><p>这是很简单匿名函数做法，test 返回一个匿名函数，然后调用这个匿名函数。</p><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l -m” -o test test.go #执行编译，-m 输出哪些优化信息<br></code></pre><br><p>查看匿名函数符号：</p><br><pre><code class="bash language-bash">$ nm test | grep “main.“ #查看符号<br></code></pre><br><p>输出符号信息：</p><br><pre><code>0000000000450a80 T main.init<br>00000000004c9800 B main.initdone.<br>00000000004509d0 T main.main<br>00000000004509b0 T main.test<br>0000000000450a40 T main.test.func1<br>00000000004476e0 T runtime.main.func1<br>0000000000447730 T runtime.main.func2<br></code></pre><br><p>带 runtime 的不管，main.init、main.initdone 是系统生成的不管，main.main、main.test 是代码里有的。T 代表 text 代表代码，R 代表 readonly 代表数据。main.test.func1 就是由编译器生成的随机的符号名。所以我们知道了匿名函数有符号名字的，区别是，这个符号名是由编译器提供的，还是我们自己定义的。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">匿名函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.1.1.</span> <span class="toc-text">匿名函数不匿名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.1.2.</span> <span class="toc-text">匿名函数会有性能问题吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">1.1.3.</span> <span class="toc-text">匿名函数原理</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&text=重学 Go 语言：基础篇-26"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&is_video=false&description=重学 Go 语言：基础篇-26"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-26&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&title=重学 Go 语言：基础篇-26"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/&name=重学 Go 语言：基础篇-26&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

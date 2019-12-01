@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="穷举来源 每个状态有 5 个类型 每个类型又要对 5 个值进行排列组合 穷举实现 根据状态分布，有3个类型是有值在固定位置的 则对于国籍需要对4个位置进行排列 对于颜色 由于5间房子排成一排 所以 蓝色固定在第二间房  而 绿和白存在绑定关系 则对3个位置进行排列 对于饮料 住中间位置的人 喝牛奶 则需要对 4 个位置进行排列  剪枝操作 --。感觉智商不够用 使用Python语言实现123456">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爱因斯坦的思考题 下">
+<meta property="og:url" content="http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="穷举来源 每个状态有 5 个类型 每个类型又要对 5 个值进行排列组合 穷举实现 根据状态分布，有3个类型是有值在固定位置的 则对于国籍需要对4个位置进行排列 对于颜色 由于5间房子排成一排 所以 蓝色固定在第二间房  而 绿和白存在绑定关系 则对3个位置进行排列 对于饮料 住中间位置的人 喝牛奶 则需要对 4 个位置进行排列  剪枝操作 --。感觉智商不够用 使用Python语言实现123456">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.119Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="爱因斯坦的思考题 下">
+<meta name="twitter:description" content="穷举来源 每个状态有 5 个类型 每个类型又要对 5 个值进行排列组合 穷举实现 根据状态分布，有3个类型是有值在固定位置的 则对于国籍需要对4个位置进行排列 对于颜色 由于5间房子排成一排 所以 蓝色固定在第二间房  而 绿和白存在绑定关系 则对3个位置进行排列 对于饮料 住中间位置的人 喝牛奶 则需要对 4 个位置进行排列  剪枝操作 --。感觉智商不够用 使用Python语言实现123456">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>爱因斯坦的思考题 下</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/训练营/穷举搜索法05/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/训练营/穷举搜索法07/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&text=爱因斯坦的思考题 下"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&is_video=false&description=爱因斯坦的思考题 下"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=爱因斯坦的思考题 下&body=Check out this article: http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&name=爱因斯坦的思考题 下&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        爱因斯坦的思考题 下
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.119Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>穷举来源</p>
+<pre><code>每个状态有 5 个类型
+每个类型又要对 5 个值进行排列组合
+</code></pre><p>穷举实现</p>
+<pre><code>根据状态分布，有3个类型是有值在固定位置的
+则对于国籍需要对4个位置进行排列
+对于颜色 由于5间房子排成一排
+所以 蓝色固定在第二间房 
+而 绿和白存在绑定关系 则对3个位置进行排列
+对于饮料 住中间位置的人 喝牛奶
+则需要对 4 个位置进行排列
+
+剪枝操作 --。感觉智商不够用
+</code></pre><p>使用Python语言实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> permutations</span><br><span class="line"><span class="keyword">from</span> copy <span class="keyword">import</span> deepcopy</span><br><span class="line"></span><br><span class="line"><span class="comment">#  房子      国籍     饮料     宠物     烟</span></span><br><span class="line"><span class="comment"># 初始化5个组 用以代表5个人以及5个属性</span></span><br><span class="line">map_info = [</span><br><span class="line">    [<span class="string">''</span>] * <span class="number">5</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">5</span>)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据线索9 得到</span></span><br><span class="line">map_info[<span class="number">0</span>][<span class="number">1</span>] = <span class="string">'挪威'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据 房间排成一排 与线索14 得到</span></span><br><span class="line">map_info[<span class="number">1</span>][<span class="number">0</span>] = <span class="string">'蓝色'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据 线索8 得到</span></span><br><span class="line">map_info[<span class="number">2</span>][<span class="number">2</span>] = <span class="string">'牛奶'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 线索绑定 s4 得到 绿色白色为一体</span></span><br><span class="line"><span class="comment"># 并且只能在2，3 或3，4位置，0开始</span></span><br><span class="line"><span class="comment"># s1 = ['红色', '英国', '', '', '']</span></span><br><span class="line"><span class="comment"># s2 = ['', '瑞典', '', '狗', '']</span></span><br><span class="line"><span class="comment"># s3 = ['', '丹麦', '茶', '', '']</span></span><br><span class="line"><span class="comment"># s5 = ['绿色', '', '咖啡', '', '']</span></span><br><span class="line"><span class="comment"># s6 = ['', '', '', '鸟', 'PallMall']</span></span><br><span class="line"><span class="comment"># s7 = ['黄色', '', '', '', 'Dunhill']</span></span><br><span class="line"><span class="comment"># s12 = ['', '', '啤酒', '', 'BlueMaster']</span></span><br><span class="line"><span class="comment"># s13 = ['', '德国', '', '', 'Prince']</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#    # s11 10, 15</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从颜色开始，绿白只能或3，4位置 绿房 喝 咖啡</span></span><br><span class="line"><span class="comment"># 2位置已经固定为牛奶了 s5</span></span><br><span class="line">map_info[<span class="number">3</span>][<span class="number">0</span>] = <span class="string">'绿色'</span></span><br><span class="line">map_info[<span class="number">3</span>][<span class="number">2</span>] = <span class="string">'咖啡'</span></span><br><span class="line">map_info[<span class="number">4</span>][<span class="number">0</span>] = <span class="string">'白色'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 结合国籍看 那么剩下颜色中间位置</span></span><br><span class="line">map_info[<span class="number">2</span>][<span class="number">0</span>] = <span class="string">'红色'</span></span><br><span class="line">map_info[<span class="number">2</span>][<span class="number">1</span>] = <span class="string">'英国'</span></span><br><span class="line">map_info[<span class="number">0</span>][<span class="number">0</span>] = <span class="string">'黄色'</span></span><br><span class="line"><span class="comment"># print(map_info)</span></span><br><span class="line"><span class="comment"># todo ---以上 颜色排列完整</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># s7 绑定 Dunhill</span></span><br><span class="line">map_info[<span class="number">0</span>][<span class="number">4</span>] = <span class="string">'Dunhill'</span></span><br><span class="line"><span class="comment"># s11 养马的人和抽 Dunhill 牌香烟的人相邻</span></span><br><span class="line">map_info[<span class="number">1</span>][<span class="number">3</span>] = <span class="string">'马'</span></span><br><span class="line"><span class="comment"># print(map_info)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对剩下的7个线索做为消费数据对象</span></span><br><span class="line"><span class="comment"># 对剩下的4个类型作为排列对象生产数据</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 消费数据</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span><span class="params">(map_info_test)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> map_info_test[i][<span class="number">1</span>] == <span class="string">'瑞典'</span> <span class="keyword">and</span> map_info_test[i][<span class="number">3</span>] != <span class="string">'狗'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> map_info_test[i][<span class="number">1</span>] == <span class="string">'丹麦'</span> <span class="keyword">and</span> map_info_test[i][<span class="number">2</span>] != <span class="string">'茶'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> map_info_test[i][<span class="number">3</span>] == <span class="string">'鸟'</span> <span class="keyword">and</span> map_info_test[i][<span class="number">4</span>] != <span class="string">'PallMall'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> map_info_test[i][<span class="number">2</span>] == <span class="string">'啤酒'</span> <span class="keyword">and</span> map_info_test[i][<span class="number">4</span>] != <span class="string">'BlueMaster'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> map_info_test[i][<span class="number">1</span>] == <span class="string">'德国'</span> <span class="keyword">and</span> map_info_test[i][<span class="number">4</span>] != <span class="string">'Prince'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> map_info_test[i][<span class="number">4</span>] == <span class="string">'Blends'</span>:</span><br><span class="line">            status = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">if</span> map_info_test[i - <span class="number">1</span>][<span class="number">3</span>] == <span class="string">'猫'</span>:</span><br><span class="line">                    status = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">if</span> map_info_test[i + <span class="number">1</span>][<span class="number">3</span>] == <span class="string">'猫'</span>:</span><br><span class="line">                    status = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            <span class="keyword">if</span> status <span class="keyword">is</span> <span class="literal">False</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> map_info_test[i][<span class="number">4</span>] == <span class="string">'Blends'</span>:</span><br><span class="line"></span><br><span class="line">            status = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">if</span> map_info_test[i - <span class="number">1</span>][<span class="number">2</span>] == <span class="string">'水'</span>:</span><br><span class="line">                    status = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">if</span> map_info_test[i + <span class="number">1</span>][<span class="number">2</span>] == <span class="string">'水'</span>:</span><br><span class="line">                    status = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            <span class="keyword">if</span> status <span class="keyword">is</span> <span class="literal">False</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="comment"># 通过校验</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生产数据</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">1. 国籍 1，3，4 -- 丹麦、德国、瑞典</span></span><br><span class="line"><span class="string">2. 饮料 0，1，4 -- 水、茶、啤酒</span></span><br><span class="line"><span class="string">3. 宠物 0，2，3，4 -- 猫、鸟、鱼、狗</span></span><br><span class="line"><span class="string">4. 烟 1，2，3，4 -- Blends、PallMall、Prince、BlueMaster</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line">res = []</span><br><span class="line"><span class="keyword">for</span> g <span class="keyword">in</span> permutations(&#123;<span class="string">'丹麦'</span>, <span class="string">'德国'</span>, <span class="string">'瑞典'</span>&#125;, <span class="number">3</span>):</span><br><span class="line">    map_info[<span class="number">1</span>][<span class="number">1</span>], map_info[<span class="number">3</span>][<span class="number">1</span>], map_info[<span class="number">4</span>][<span class="number">1</span>] = g</span><br><span class="line">    <span class="comment"># print(map_info)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> yl <span class="keyword">in</span> permutations(&#123;<span class="string">'水'</span>, <span class="string">'茶'</span>, <span class="string">' 啤酒'</span>&#125;, <span class="number">3</span>):</span><br><span class="line">        map_info[<span class="number">0</span>][<span class="number">2</span>], map_info[<span class="number">1</span>][<span class="number">2</span>], map_info[<span class="number">4</span>][<span class="number">2</span>] = yl</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> permutations(&#123;<span class="string">'猫'</span>, <span class="string">'鸟'</span>, <span class="string">'鱼'</span>, <span class="string">'狗'</span>&#125;, <span class="number">4</span>):</span><br><span class="line">            map_info[<span class="number">0</span>][<span class="number">3</span>], map_info[<span class="number">2</span>][<span class="number">3</span>], map_info[<span class="number">3</span>][<span class="number">3</span>], map_info[<span class="number">4</span>][<span class="number">3</span>] = c</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> y <span class="keyword">in</span> permutations(&#123;<span class="string">'Blends'</span>, <span class="string">'PallMall'</span>, <span class="string">'Prince'</span>, <span class="string">'BlueMaster'</span>&#125;, <span class="number">4</span>):</span><br><span class="line">                map_info[<span class="number">1</span>][<span class="number">4</span>], map_info[<span class="number">2</span>][<span class="number">4</span>], map_info[<span class="number">3</span>][<span class="number">4</span>], map_info[<span class="number">4</span>][<span class="number">4</span>] = y</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> check(map_info):</span><br><span class="line">                    res.append(deepcopy(map_info))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> res:</span><br><span class="line">    print(r)</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&text=爱因斯坦的思考题 下"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&is_video=false&description=爱因斯坦的思考题 下"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=爱因斯坦的思考题 下&body=Check out this article: http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&title=爱因斯坦的思考题 下"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/穷举搜索法06/2019/09/&name=爱因斯坦的思考题 下&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

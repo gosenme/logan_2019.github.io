@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="字符串内部实现看 runtime 源码找字符串的定义：grep -n “type string” type stringStruct struct {    str unsafe.Pointer    len int}            uintptr与unsafe.Pointer区别，uintptr保存的是整数，并不能保证目标不会被垃圾回收，不能保证它持有对象的引用。      uint与i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-50">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="字符串内部实现看 runtime 源码找字符串的定义：grep -n “type string” type stringStruct struct {    str unsafe.Pointer    len int}            uintptr与unsafe.Pointer区别，uintptr保存的是整数，并不能保证目标不会被垃圾回收，不能保证它持有对象的引用。      uint与i">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://logan_2019.github.io/重学Go/重学%20Go%20语言：基础篇-50字符串内部实现/2019/11/images/string_c_go.png">
+<meta property="og:image" content="https://asciinema.org/a/j9DUgxtWf2HAcNJvCX8ApzrfU.png">
+<meta property="og:updated_time" content="2019-11-30T10:53:45.559Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-50">
+<meta name="twitter:description" content="字符串内部实现看 runtime 源码找字符串的定义：grep -n “type string” type stringStruct struct {    str unsafe.Pointer    len int}            uintptr与unsafe.Pointer区别，uintptr保存的是整数，并不能保证目标不会被垃圾回收，不能保证它持有对象的引用。      uint与i">
+<meta name="twitter:image" content="http://logan_2019.github.io/重学Go/重学%20Go%20语言：基础篇-50字符串内部实现/2019/11/images/string_c_go.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-50</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-51/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-49/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&text=重学 Go 语言：基础篇-50"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&is_video=false&description=重学 Go 语言：基础篇-50"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-50&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&name=重学 Go 语言：基础篇-50&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">字符串内部实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13gocchar"><span class="toc-number">1.2.</span> <span class="toc-text">13 Go字符串和C char的差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13"><span class="toc-number">1.3.</span> <span class="toc-text">13 不可变类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.3.1.</span> <span class="toc-text">池化共享</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maphashcode"><span class="toc-number">1.3.2.</span> <span class="toc-text">map[hashcode]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.3.3.</span> <span class="toc-text">安全性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1"><span class="toc-number">1.4.</span> <span class="toc-text">13 不可以取元素地址</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-50
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:45.559Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>字符串内部实现</h3><br><p>看 runtime 源码找字符串的定义：</p><br><pre><code class="bash language-bash">grep -n “type string” <em><br></em></code></pre><br><pre><code class="go language-go">type stringStruct struct {<br>    str unsafe.Pointer<br>    len int<br>}<br></code></pre><br><blockquote><br>  <blockquote><br>    <blockquote><br>      <p><code>uintptr</code>与<code>unsafe.Pointer</code>区别，<code>uintptr</code>保存的是整数，并不能保证目标不会被垃圾回收，不能保证它持有对象的引用。</p><br>      <p><code>uint</code>与<code>int</code>区别，跟汇编指令优化有关系，<code>int</code>类型是汇编处理默认类型，汇编对于数字是有类型的，在内核层面以性能为优先，并不在乎业务实现。暴露给用户的是公开接口，内部性能优先。不同类型CPU架构处理方式不一样，所以会选择默认类型。</p><br>    </blockquote><br>  </blockquote><br></blockquote><br><h3 id="13gocchar">13 Go字符串和C char的差异</h3><br><p>C语言中<code>*char</code>代表字符串，一个字节数组加个一个结束符。Go语言字符串底层是字节数组，字节数组保存数据但没有结束信息。它单独会构建一个头信息，头信息开始位置是个指针指向字节数组起始位置，后面用一个长度表达有多长。所以说存在很大的差别：C语言字符串是连续的内存块。Go语言里字符串很显然是个<code>复合结构</code>，由两块内存组成的，一个是字符串头信息，一个是数据体。那么当我们复制字符串的时候，我们到底复制的是哪部分？</p><br><p><img src="images/string_c_go.png" alt></p><br><p>Go语言判断字符串的长度，<code>sizeof</code>处理的是返回类型的长度，类型长度都是固定的，大多时候这种复合结构返回类型长度只有头信息。这里需要注意返回实例长度和返回类型的长度不是一回事。</p><br><p>类型长度和实例长度例子：</p><br><pre><code class="go language-go">func main() {<br>    s := “abcdefg”<br>    println(unsafe.Sizeof(s), len(s)) //16 7<br>}<br></code></pre><br><p><code>unsafe.Sizeof(s)</code>返回的是字符串类型的长度，<code>len(s)</code>返回的是实例的长度。</p><br><p>所以Go语言中字符串是指针和长度两个字段构成，长度是16字节。至于指针指向什么地方是实例的属性和类型无关，类型里面只看到一个指针。</p><br><p>查看内部结构</p><br><pre><code class="bash language-bash">$ go build -o test -gcflags “-N -l” test.go<br>$ gdb test<br>$ l<br>$ b 9<br>$ r<br>$ ptype s #输出字符串类型信息，看到字符串标准类型是由一个指针加上一个整数组成的。至于指针指向什么地方是实例的内容。<br>$ x/2xg &amp;s #查看s的实例信息，第一块是指针，第二块是长度，字符串地址是在栈上面<br>$ x/s 0x0000000000472288 #这个是底层字节数组<br>$ info files #对比地址指向rodata里，字面量abcdefg保存在rodata里。<br>$ p/x $rsp<br>$ p/x &amp;s #字符串地址是在栈上面<br></code></pre><br><p>字符串标准结构是指针和长度，指针指向字节数组，字节数组在.rodata段里。那么我们动态构建一个字符串信息，字节数组会不会在.rodata段里？</p><br><pre><code class="go language-go">func main() {<br>    s := strings.Repeat(“a”, 3)<br>    println(unsafe.Sizeof(s), len(s))<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build -o test -gcflags “-N -l” test.go<br>$ gdb test<br>$ l<br>$ b 10<br>$ r<br>$ p/x &amp;s #字符串对象是在堆上<br>$ p/x $rsp #用rsp对比<br>$ x/2xg &amp;s #查看字符串内容，第一块是地址不属于rodata，是堆的地址，第二块是长度。<br></code></pre><br><blockquote><br>  <p>需要注意的是预编译的地址基本上都是短地址</p><br></blockquote><br><p>我们这时观察到动态构建的字符串是分配在堆上的，为什么分配在堆上而不分配在栈上？这个字符串是由<code>strings.Repeat</code>函数生成的，函数返回局部变量的时候有两种可能，第一种原因是这个函数被内联了直接在当前栈桢分配，如果不能内联返回一个失效栈桢里面的数据是不安全的，只能把这个数据扔到堆上。第二种原因是很多语言对于字符串特殊处理，在大部分语言字符串都是一种很特殊的数据类型。</p><br><p>视频演示：</p><br><p><a href="https://asciinema.org/a/j9DUgxtWf2HAcNJvCX8ApzrfU" target="_blank" rel="noopener"><img src="https://asciinema.org/a/j9DUgxtWf2HAcNJvCX8ApzrfU.png" alt="asciicast"></a></p><br><h3 id="13">13 不可变类型</h3><br><p>早期比如像c语言中没有像字符串这种东西，实际上把它就当作一个字节数组，只不过字符串比较特殊的地方在于这里面的字符都可以打印的。因为我们知道ASCII字符其实可以分为控制符、可以被打印机打印出来的还有一些不可以打印的。我们通常情况下字符串处理的时候这里面存的都是可打印字符，人类可以阅读的。实际上在早期没有专门字符串这种东西。</p><br><p>我们使用字符串量比较大，频繁复制可能导致性能问题和安全问题。</p><br><p>在很多语言里，字符串都有几个特征，其中一个重要特征是字符串都是不可变类型。即一旦生成了字符串以后就不能对这个字符串进行修改，修改的前提需要将其转换或者重新拼一个新的字符串出来。很多语言都有这样的限制，为什么要把字符串实现成不可变类型，我们知道像Python、go、java、c#字符串是不可变的。下面来看看字符串实现成不可变类型的原因。</p><br><h4 id="-1">池化共享</h4><br><blockquote><br>  <p>任何语言里面的优化基本原则都是基于一定统计的基础。</p><br></blockquote><br><p>字符串类型是我们日常工作当中使用频率非常高的数据类型，这种类型的特点是不定长的，对于字符串处理往往非常复杂。如果由你来设计这种数据结构如何实现呢？核心问题是需要提高它的处理效率，我们会尽可能的把它缓存起来。比如说多个人使用同一个字符串的时候或者字符串在不同函数中传递的时候，希望要么复制、要么不可变。字符串被大量引用的情况下最好的方式是它是数据安全的、不可变的。这样的好处是不管引用多少次，我只需要保留一份副本。当对其进行修改的时候就创建一个新的。所以我们可以把它进行池化操作，尤其像动态语言Python中所有的名字空间里面都是用字符串来实现的。这些字符串会被大量的使用，如果每次都创建新的对象那内存管理就什么都不用干了全变成零零碎碎的了。所以对字符串做池化处理来减少相同字符串在内存当中的副本数量。</p><br><h4 id="maphashcode">map[hashcode]</h4><br><p>假如我们自己写个算法比较两个字符串是否相等什么方式最快，最简单的做法直接比较hashcode，当我们每个字符串生成了以后，这个字符串如果是不可变的情况下，生成完了之后立即计算它的hashcode，把hashcode作为这个字符串对象的一部分，那么接下来只要判断hashcode是否相同，如果相同也有可能不一样因为有哈希碰撞问题。所以在很多语言里，每个字符串都会生成后立即把hashcode计算出来。因为这两个hashcode不同的话这两个字符串肯定不一样，如果hashcode相同，再去比较它们字符这样来避免哈希碰撞问题。前三个条件可以减少我们低效率操作。这也是让字符串变成不可变类型的原因。</p><br><h4 id="-2">安全性</h4><br><p>在有些DSL语言有考虑安全性因素，绝大部分编程语言都没有这样考虑。比如我们调用sql操作，当我们把select语句扔进去的时候，如果这个字符串类型是只读的可以避免这个字符串对象被修改，因为一旦字符串被修改了以后它和原来的字符串就不属于同一块，那么可以验证字符串在中途是否变更过来避免一些非安全的注入。有些像sql引擎它会做这样的操作，它会验证sql语句是否被修改过，最好的办法是这个字符串对象是只读的。因为这块内存是只读的情况下对这块内存访问会触发一些安全机制，那么不可写肯定是没有办法修改，没有办法注入非安全的东西，因为很多时候它是支持插件机制的。但这种东西比较少见，只是在一些引擎或者DSL里面见过。</p><br><h3 id="13-1">13 不可以取元素地址</h3><br><p>我们可以通过索引号去读没有问题，任何时候取地址意味着可以修改，字符串放到rodata取地址以后根本没有办法修改。读和写在编译器层面是两回事。</p><br><p>在内部用黑盒方式来实现功能，这些功能按照需求分为几块，我们知道任何代码都可以分为IO密集型和CPU密集型，第一块是IO类型的、第二块CPU类型的，最好在写程序时候把这两样东西分开，因为CPU密集型代码的写法和IO密集型的写法是不一样的，IO密集型对于性能要求优化放松一点，因为优化再好IO跟不上没用。而CPU密集型要求比较高，我们举个简单例子比如要写个html编码解密操作，在内存中对数据块处理它就属于CPU密集型，所以这一块它的权重是性能优先，而IO块可以体现接口对外公开阅读性做的更好一点。IO块可能用python来写，因为它IO等待时间超出虚拟机执行的时间，基于维护的角度。但是CPU密集型性能要求很高，python跟不上，我们可能用c和go来写python扩展，因为这种语言不是虚拟机这种，对内存分配效率比较高。这给我们的启示是平时写程序包括重构时候，你得区分出来哪些是IO密集型哪些是CPU密集型，你把CPU密集型代码单独摘出来打包到函数内部或者是一个model内部，这段代码最好做出类似黑匣子把它修改权限控制在极少数手中，一切目的为了提高性能，CPU密集型代码一定要控制它的量，因为这东西弄得被扩散到整个项目里去到最后很容易失控。所以我们很多时候把CPU密集型代码从标准包里拿出来作为第三方扩展包放进来，这个东西我们把它实现两个版本，因为时间原因第一个版本用python写，写好可以立马工作，有时间用go或者c重构另外一个版本，写好以后替换掉。用第三方扩展包的好处是从主项目中剥离出去成为一个黑匣子，这样对于代码来说到一定程度它冻结的时间和时机好控制。对于大多数程序来说，CPU密集型的代码往往一旦写好之后很长时间不会再动它，对于很多逻辑有关的代码冻结很难，会随着业务修改而修改。</p><br><p>所以这就会造成一些问题，如果CPU密集型的代码分散到业务逻辑内部，那么一来对业务逻辑的阅读维护造成麻烦，CPU密集型的代码优化时策略没法统一。需要搞清楚CPU密集型和IO密集型是有区别的。最终最好的方式独立成第三方包，独立出去以后让专门的人处理。这也是很常见的重构技巧，有一些维度，这里是CPU和IO维度，还有复杂度比较高的，比如说加密函数对复杂度要求比较高，先可以完成des加密存在交换key时候安全性比较差，然后再基于rsa+3des加上key管理这种方式实现一个复杂版本把安全性提高。这个对于项目来说算法是不能暴露出去的。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">字符串内部实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13gocchar"><span class="toc-number">1.2.</span> <span class="toc-text">13 Go字符串和C char的差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13"><span class="toc-number">1.3.</span> <span class="toc-text">13 不可变类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.3.1.</span> <span class="toc-text">池化共享</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maphashcode"><span class="toc-number">1.3.2.</span> <span class="toc-text">map[hashcode]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.3.3.</span> <span class="toc-text">安全性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1"><span class="toc-number">1.4.</span> <span class="toc-text">13 不可以取元素地址</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&text=重学 Go 语言：基础篇-50"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&is_video=false&description=重学 Go 语言：基础篇-50"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-50&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&title=重学 Go 语言：基础篇-50"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/&name=重学 Go 语言：基础篇-50&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

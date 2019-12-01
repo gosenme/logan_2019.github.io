@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="go语言垃圾回收实现   本节内容：  Go 三色标记 + 写屏障模式如何实现并发标记和并发清理 控制器和辅助回收的作用  Go 三色标记 + 写屏障模式如何实现并发标记和并发清理 我们大概了解垃圾回收的基本原理，现在来看在回收时候怎么扫描这些对象呢。 早期的做法是在扫描之前执行 STW（Stop The World） 操作，就是 Runtime 把所有的线程全部冻结掉，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go语言垃圾回收实现">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="go语言垃圾回收实现   本节内容：  Go 三色标记 + 写屏障模式如何实现并发标记和并发清理 控制器和辅助回收的作用  Go 三色标记 + 写屏障模式如何实现并发标记和并发清理 我们大概了解垃圾回收的基本原理，现在来看在回收时候怎么扫描这些对象呢。 早期的做法是在扫描之前执行 STW（Stop The World） 操作，就是 Runtime 把所有的线程全部冻结掉，">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.086Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go语言垃圾回收实现">
+<meta name="twitter:description" content="go语言垃圾回收实现   本节内容：  Go 三色标记 + 写屏障模式如何实现并发标记和并发清理 控制器和辅助回收的作用  Go 三色标记 + 写屏障模式如何实现并发标记和并发清理 我们大概了解垃圾回收的基本原理，现在来看在回收时候怎么扫描这些对象呢。 早期的做法是在扫描之前执行 STW（Stop The World） 操作，就是 Runtime 把所有的线程全部冻结掉，">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>go语言垃圾回收实现</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/gitchat/系统和并发/9_协程和上下文切换/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/gitchat/系统和并发/5_Goroutine调度/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&text=go语言垃圾回收实现"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&is_video=false&description=go语言垃圾回收实现"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=go语言垃圾回收实现&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&name=go语言垃圾回收实现&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#go"><span class="toc-number">1.</span> <span class="toc-text">Go 三色标记 + 写屏障模式如何实现并发标记和并发清理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">2.</span> <span class="toc-text">控制器和辅助回收的作用</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        go语言垃圾回收实现
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.086Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>go语言垃圾回收实现</title>
+</head>
+<body>
+<article id="articleDiv" style="overflow: hidden;padding-bottom:20px;text-align: justify;"><div class="mazi-article-content dont-break-out"><p>本节内容：</p>
+<ul>
+<li>Go 三色标记 + 写屏障模式如何实现并发标记和并发清理</li>
+<li>控制器和辅助回收的作用</li>
+</ul>
+<h3 id="go">Go 三色标记 + 写屏障模式如何实现并发标记和并发清理</h3>
+<p>我们大概了解垃圾回收的基本原理，现在来看在回收时候怎么扫描这些对象呢。</p>
+<p>早期的做法是在扫描之前执行 STW（Stop The World） 操作，就是 Runtime 把所有的线程全部冻结掉，所有的线程全部冻结掉意味着用户逻辑肯定都是暂停的，所有的用户对象都不会被修改了，这时候去扫描肯定是安全的，对象要么活着要么死着，所以会造成在 STW 操作时所有的线程全部暂停，用户逻辑全部停掉，中间暂停时间可能会很长，用户逻辑对于用户的反应就中止了。</p>
+<p>假如玩游戏的话，拿一把狙瞄一个人正准备开枪之前后台垃圾回收了，就卡在那儿，因为用户线程被暂停了，那回收完了不知道哪个线程会被先激活，也许正好是瞄准的对手的线程先激活了结果先开枪，那就会造成原本的用户逻辑没有办法保障，还有会造成玩游戏的延迟很高，所以大家对 STW 其实都比较反感。</p>
+<p>如何减短这个过程呢，STW 过程中有两部分逻辑可以分开处理。我们看黑白对象，扫描完结束以后对象只有黑白对象，黑色对象是接下来程序恢复之后需要使用的对象，如果不碰黑色对象只回收白色对象的话肯定不会给用户逻辑产生关联，因为白色对象肯定不会被用户线程引用的，所以回收操作实际上可以和用户逻辑并发的，因为可以保证回收的所有目标都不会被用户线程使用，所以第一步<strong>回收操作和用户逻辑可以并发</strong>，因为我们回收的是白色对象，扫描完以后白色对象不会被全局变量引用、线程栈引用。回收白色对象肯定不会对用户线程产生竞争，首先回收操作肯定可以并发的，既然可以和用户逻辑并发，这样回收操作不放在 STW 时间段里面缩短 STW 时间。</p>
+<p>扫描操作还是要执行 STW，不 STW 怎么扫描，刚把一个对象标记为白色的，用户逻辑执行了突然引用了它，或者说刚刚扫描了 100 个对象正准备回收结果又创建了 1000 个对象在里面，因为没法结束没办法扫描状态不稳定，像扫描操作就比较麻烦。像 Go 语言早期扫描操作一直处于 STW 状态，大家对这个抱怨非常的深，就是因为扫描操作要冻结用户的内存状态不冻结没法扫描，后来引入了写屏障的技术。</p>
+<p>什么叫写屏障，先做一次很短暂的 STW，为什么需要很短暂的呢，它首先要执行一些简单的状态处理，接下来对内存进行扫描，这个时候用户逻辑也可以执行。用户所有新建的对象认为就是黑色的，这次不扫描了下次再说，新建对象不关心了，剩下来处理已经扫描过的对象是不是可能会出问题，已经扫描后的对象可能因为用户逻辑造成对象状态发生改变，所以<strong>对扫描过后的对象使用操作系统写屏障功能用来监控用户逻辑这段内存</strong>。任何时候这段内存发生引用改变的时候就会造成写屏障发生一个信号，垃圾回收器会捕获到这样的信号后就知道这个对象发生改变，然后重新扫描这个对象，看看它的引用或者被引用是否被改变，这样利用状态的重置从而实现当对象状态发生改变的时候依然可以判断它是活着的还是死的，这样扫描操作实际上可以做到一定程度上的并发，因为它没有办法完全屏蔽 STW 起码它当开始启动先拿到一个状态，但是它的确可以把扫描时间缩短，现在知道了扫描操作和回收操作都可以用户并发。</p>
+<p>很多人就认为这个很好，的确它单次暂停的时间变短，但是实际上把单次暂停时间分散掉了，本来程序执行可能是“用户逻辑、大段 GC、用户逻辑”，那么分散以后实际上变成了“用户逻辑、小段 GC、用户逻辑、小段 GC、用户逻辑”这样。其实这个很难说 GC 快了。因为被分散各个地方以后可能会频繁的保存用户状态，因为垃圾回收之前要保证用户状态是稳定的，原来只需要保存一次就可以了现在需要保存多次，很难说这种方式就一定让程序变的快了，所以有些时候像 Go 语言提供了一种控制，可以控制是否使用并发扫描，它为什么提供这种控制，因为你得看用户逻辑更适合哪一种回收方式。</p>
+<h3 id>控制器和辅助回收的作用</h3>
+<p>Go 语言“一段用户逻辑，一段并发扫描 Scan，一段并发回收 Collect”，那可能会造成这种状态。扫描的速度跟不上用户分配的速度，会造成扫描永远结束不了，结束不了的情况下很大的麻烦在于垃圾回收就会出问题，用户内存膨胀，必须在性能和内存膨胀之间做出平衡。</p>
+<p>所以 Go 语言如果发现扫描后回收的速度跟不上分配的速度它依然会把用户逻辑暂停，用户逻辑暂停了以后也就意味着不会有新的对象出现，同时会把用户线程抢过来加入到垃圾回收里面加快垃圾回收的速度。因为并行有四个核，有三个核用户线程执行只有一个核在做垃圾回收，那一个核就有可能跑不过三个核，那把那三个核也抢过来做垃圾回收。这样一来原来的并发还是变成了 STW，还是得把用户线程暂停掉，要不然扫描和回收没完没了了停不下来，因为新分配对象比回收快，所以这种东西叫做辅助回收。</p>
+<p>这个道理就像我们很难说一个东西真的并发回收并发扫描，它在某些时候依然会把并发变成串行，依然会执行很长时间段 STW 操作，这种动态调度很多时候是不可控的，也就意味着垃圾回收很大时候根本控制不了，因为垃圾回收算法不够智能。</p>
+<p>这就是任何时候写每行代码必须要知道不能给垃圾回收器增加负担，垃圾回收器在只是完成一些有限的简单的辅助工作，它没有办法让程序变的更智能效率更高，它只是帮你完成一些辅助操作。</p>
+<p>很多语言比如 Java 对垃圾回收器做了很多控制开关，是因为那些算法未必适合当前的这种算法，有些语言比较适合并发扫描有些语言不适合，甚至是像做大数据计算完全把 GC 关掉就是一直把内存用完了导致系统崩溃了为止，只不过崩溃之前保证把状态保存然后重新执行这个进程然后进行密集计算，把垃圾回收那段时间抢出来用来做密集计算。所以说垃圾回收器的算法不是万能的，它也没有办法做到真正意义上的智能，当前的用户逻辑到底适合什么样的算法是很难说的，你需要了解垃圾回收器甚至了解一下它到底怎么工作的，这样来决定选择什么样的垃圾回收算法最合理，像 Java、Go 语言都有垃圾回收预值，甚至来决定预值什么时候启动垃圾回收，像 Go 语言有百分比来控制到底有多大合适，这个 GC 堆到底分配多大合理，这都需要在了解垃圾回收器原理情况下做动态调节。因为我们的服务程序很复杂，在服务器上可能长时间运行，垃圾回收器算法对性能影响很关键的，你一定去了解当前用的语言垃圾回收到底是怎么工作的。</p>
+<p>Go 语言垃圾回收器一直被大家说实现的是原始版，因为 Go 早期版本对垃圾回收器预值怎么触发的特别蠢，第一次回收的时候回收完了剩下来对象是 2M，那么下次垃圾回收的内存消耗变成 4M，假设第一次回收之前内存是 100G，下次回收可能就变成 200G，可问题是下次回收用不了 200G，可能第一次回收用的 100G 是引用了大字典，在下次回收之前这字典清空了接下来一直用几十 M，垃圾回收器很难启动，所以 Go 语言在后台用一个循环线程扫描，每2分钟发现不执行就强制回收一次，这样的做法显然比较蠢。后来在 1.5 版本引入一个控制器，控制器有点像 Java 语言动态概念，当这次回收释放比例、或者是这些对象相关一些数据，来对预值动态调整决定下次回收。</p>
+<p>预值毕竟是很简单的统计不是 AI 人工智能，所以做不到真正意义上的快速垃圾回收，任何语言像 Java 发展十几年了垃圾回收依然会很傻，例如用大数据处理的时候无数的人都在抱怨 Java 语言 GC 很蠢，很容易出问题。在超大内存中内存里可能有几千万个对象上亿个对象扫描一次都很傻，任何时候不管用什么语言都有责任减少对象的数量，怎么减少，<strong>一尽可能分配到堆上面，二自己创建大数组然后自己重复使用这个数组。</strong>这样的话对于垃圾回收来说数组只有一个对象，它有点像块的概念，每个块都需要扫描的，但是我们逻辑中知道怎么处理大数组，不需要它扫描。所以这就是我们一直强调任何时候了解底层都很重要，只有这样程序才能非常好的执行。就算你有天大的 idea 都需要有踏实的机制去完成。在栈上分配的东西得搞清楚整个栈是一个对象，整个线程栈是一个对象，因为线程栈上面的内存是在重复使用的，但是线程栈可以引用堆上的对象，可以在线程栈用一个指针引用堆上对象，并不是意味这需要扫描线程栈对象，只需要检查线程栈引用了谁，整个线程栈是一个对象，因为垃圾回收只处理堆上对象不处理栈上对象，栈上对象一种会重复使用，每次函数调用重复使用那些内存，执行结束之后直接调整寄存器修改现在使用的位置，那个内存对于垃圾回收器来说要么不扫描要么只扫描一次，因为它只是一个对象。所以记住任何时候都应该想办法确保你的对象要么分配在栈上，要么尽可能把多个对象合并让它们重复使用一块内存。因为那一块内存相对于垃圾回收器来说只用扫描一次，任何时候对于性能的调优都是重要的，每写一行代码都应该记得这行代码到底会引发多少后台操作。</p>
+<p>不要想当然以为这门语言很牛叉有垃圾回收有很高性能内存分配就觉得万事大吉。假设一个函数每秒被请求几十万次假如每次操作在堆上分配 10 个对象几十万次放大了以后有没有想过垃圾回收器多大的负担，单次来说没有什么了不起的。任何时候要把自己训练成初级的编译器，这一行代码写出来到底会影响多少东西，第一个保证用户逻辑是对的，第二个保证这算法写法性能最好的，第三保证相关成本是最低的包括内存分配成本垃圾回收成本。所以很多时候我们说测试性能本身有点不公平，为什么不公平，假如说你测试性能跑完了以后还没有说触发垃圾回收那你这数字看上去的确很好看，可如果放到运行生产环境你频繁的引发垃圾回收应该放到成本里面，可能在性能测试里没有算上。这也就告诉我们另外一点写性能测试的时候其实能不能正确的测试一个算法你得把垃圾回收成本和内存分配成本算进去，像之前强调的垃圾分配分配多少次，分配多少次也就意味着调用多少次的内存分配就得执行多少次的内存扫描就得执行多少次的垃圾回收，这些都是成本。关于内存分配和垃圾回收具体的代码属于阅读源码剖析的内容。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#go"><span class="toc-number">1.</span> <span class="toc-text">Go 三色标记 + 写屏障模式如何实现并发标记和并发清理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">2.</span> <span class="toc-text">控制器和辅助回收的作用</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&text=go语言垃圾回收实现"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&is_video=false&description=go语言垃圾回收实现"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=go语言垃圾回收实现&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&title=go语言垃圾回收实现"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/&name=go语言垃圾回收实现&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

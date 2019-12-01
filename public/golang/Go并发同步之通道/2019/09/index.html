@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Go并发同步之通道       前言 通道 无缓冲通道 有缓冲通道   Channel 结合 timer 包实现超时等待 Channel 的 happen-before 语义 有缓冲通道 无缓冲通道 规则抽象   context 包以及如何与 Channel 配套使用 Context 包-变量 Context 包-方法   参考        前言 Go 语言在被设计的时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go并发同步之通道">
+<meta property="og:url" content="http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="Go并发同步之通道       前言 通道 无缓冲通道 有缓冲通道   Channel 结合 timer 包实现超时等待 Channel 的 happen-before 语义 有缓冲通道 无缓冲通道 规则抽象   context 包以及如何与 Channel 配套使用 Context 包-变量 Context 包-方法   参考        前言 Go 语言在被设计的时">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/6a4da680-a6c6-11e9-9bd0-eff500145073">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.090Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go并发同步之通道">
+<meta name="twitter:description" content="Go并发同步之通道       前言 通道 无缓冲通道 有缓冲通道   Channel 结合 timer 包实现超时等待 Channel 的 happen-before 语义 有缓冲通道 无缓冲通道 规则抽象   context 包以及如何与 Channel 配套使用 Context 包-变量 Context 包-方法   参考        前言 Go 语言在被设计的时">
+<meta name="twitter:image" content="https://images.gitbook.cn/6a4da680-a6c6-11e9-9bd0-eff500145073">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Go并发同步之通道</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/golang/Go_Map/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/golang/Go低级并发同步之锁/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&text=Go并发同步之通道"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&is_video=false&description=Go并发同步之通道"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Go并发同步之通道&body=Check out this article: http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&name=Go并发同步之通道&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">通道</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">2.1.</span> <span class="toc-text">无缓冲通道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">2.2.</span> <span class="toc-text">有缓冲通道</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#channeltimer"><span class="toc-number">3.</span> <span class="toc-text">Channel 结合 timer 包实现超时等待</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#channelhappenbefore"><span class="toc-number">4.</span> <span class="toc-text">Channel 的 happen-before 语义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-4"><span class="toc-number">4.1.</span> <span class="toc-text">有缓冲通道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-5"><span class="toc-number">4.2.</span> <span class="toc-text">无缓冲通道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-6"><span class="toc-number">4.3.</span> <span class="toc-text">规则抽象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contextchannel"><span class="toc-number">5.</span> <span class="toc-text">context 包以及如何与 Channel 配套使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#context"><span class="toc-number">5.1.</span> <span class="toc-text">Context 包-变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#context-1"><span class="toc-number">5.2.</span> <span class="toc-text">Context 包-方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-7"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Go并发同步之通道
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.089Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>Go并发同步之通道</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#">前言</a></li>
+<li><a href="#-1">通道</a><ul>
+<li><a href="#-2">无缓冲通道</a></li>
+<li><a href="#-3">有缓冲通道</a></li>
+</ul>
+</li>
+<li><a href="#channeltimer">Channel 结合 timer 包实现超时等待</a></li>
+<li><a href="#channelhappenbefore">Channel 的 happen-before 语义</a><ul>
+<li><a href="#-4">有缓冲通道</a></li>
+<li><a href="#-5">无缓冲通道</a></li>
+<li><a href="#-6">规则抽象</a></li>
+</ul>
+</li>
+<li><a href="#contextchannel">context 包以及如何与 Channel 配套使用</a><ul>
+<li><a href="#context">Context 包-变量</a></li>
+<li><a href="#context-1">Context 包-方法</a></li>
+</ul>
+</li>
+<li><a href="#-7">参考</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<h3 id>前言</h3>
+<p>Go 语言在被设计的时候，Java 和 C++ 是编写服务器程序最常用的语言（至少在 Google 是这样），这是因为使用这些语言可以高效的开发。但是 Go 设计者们觉得像 Java 和 C++ 这些语言需要开发者记忆太多的语法和规则，并且需要重复做的事情太多，这导致一些程序员开始转向更加动态、流畅的语言，如 Python。但是付出的是损失开发效率和对类型安全检查的缺失。Go 设计者们认为应该可以发明一种语言，这种语言集高效的开发、提供类型安全检查、简洁流畅的代码风格与一体，于是 Go 就诞生了。</p>
+<p>Go 在语言层面提供了内置的并发支持，其的应用范围越来越广，大名鼎鼎的容器化技术 Docker 以及号称分布式操作系统的 K8S 底层实现就是 Golang 来实现的，随着技术的快速发展，我们只有不断迭代自己的技术栈，才能不会被淘汰，而 Golang 将会是未来应用场景比较多的一种语言，各大公司也将会要求必须掌握 Golang 来进行快速开发高并发应用程序。</p>
+<p>前面我们讲解了<a href="https://gitbook.cn/gitchat/activity/5d2745df329a601d1d6749e3" target="_blank" rel="noopener">《Go 并发编程低级同步原语锁》</a> ，本课程作为 Go 并发编程的高级篇下篇，讲解 Go 中的高级并发编程原语通道相关，内容如下：</p>
+<ul>
+<li>Go 中 Channel 的概念，种类，关闭操作等</li>
+<li>Go 中 Channel 结合 timer 包实现超时等待</li>
+<li>Go 中 Channel 的 happen-before 语义</li>
+<li>Go 中 context 包以及如何与 Channel 配套使用</li>
+</ul>
+<h3 id="-1">通道</h3>
+<p>传统的线程模型，比如经常使用 Java、C++、Python 编程的时候，需要多个线程之间通过共享内存（比如在堆上创建的共享变量）来通信。这时候为保证线程安全，多线程共享的数据结构需要使用锁来保护，多线程访问共享数据结构时候需要竞争获取锁，只有获取到锁的线程才可以存取共享数据。</p>
+<p>前面章节我们讲解了 Go 中提供的低级同步原语-锁，其实 Go 的并发原语 - goroutines 和 channels  提供了一种优雅而独特的结构化开发并发软件的方式。 Go 鼓励使用通道在 goroutine 之间传递对共享数据的引用，而不是明确地使用锁来保护对共享数据的访问。 这种方法确保在给定时间只有一个 goroutine 可以访问共享数据。 这个理念被总结为：不要通过共享内存来通信，而要通过通信来共享内存。</p>
+<p>本章我们就来讲解有关 Channel 的知识，我们可以把通道理解为一个并发安全的队列，生产者 goroutine 可以向通道里面放入元素，消费者 goroutine 可以从通道里面获取元素。</p>
+<p>从队列大小来看通道可以分为有缓冲通道和无缓冲通道，无缓冲通道里面最多有一个元素，有缓冲通道里面可以有很多元素。</p>
+<p>另外通道还是有方向的，如果一个通道只允许向通道里面放元素，但是不允许从通道里面取元素，则我们称之为单向的发送通道（向通道里面写元素），例如 var ch chan &lt;-int 声明了一个发送通道；如果一个通道只允许从通道里面获取元素，而不允许向其中写入元素，则称之为接受通道（从通道里面读取元素），例如 var ch &lt;-chan int 声明了一个接受通道；如果一个通道既可以从中读取元素，又可以向其中写入元素，则称之为双向通道，例如 var ch chan int 声明了一个双向通道。</p>
+<p>另外通道是可以被关闭的，当调用 close(ch)关闭了通道 ch 后，不能再向通道 ch 写入元素，但是可以从通道读取元素。</p>
+<h4 id="-2">无缓冲通道</h4>
+<p>在 go 中创建一个无缓冲的通道可以使用下面两种方式：</p>
+<pre><code class="java language-java hljs">  var c chan <span class="hljs-keyword">int</span>
+   c = make(chan <span class="hljs-keyword">int</span>)
+</code></pre>
+<p>或者</p>
+<pre><code class="java language-java hljs">   c := make(chan <span class="hljs-keyword">int</span>)
+</code></pre>
+<p>如上创建了一个 int 类型的无缓冲通道 c，其中第一种方式是先声明，然后在初始化；第二种是简短式声明和初始化一步完成，也就推荐的方式；</p>
+<p>向通道 c 内写入获取读取元素可以使用&lt;-符号，比如向通道 c 写入元素 12，c&lt;-12；从通道 c 中读取元素可以使用&lt;-c，比如从通道读取一个元素到变量 w,w := &lt;-c；当没有向通道内写入元素时候，试图从通道内读取元素的 goroutine 会被阻塞；对应无缓冲通道，当试图向没有 goroutine 正在从通道读取元素的通道写入元素时候，写入的 goroutine 会被阻塞。</p>
+<p>需要注意的是这里的 make 和 chan 都是内置的语言层面的关键字，当我们创建具体类型的通道时候只需要替换 int 就可以了。</p>
+<p>下面我们看个例子：</p>
+<pre><code class="java language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sort"</span>
+)</span>
+
+var c chan <span class="hljs-keyword">int</span>
+var nums []<span class="hljs-keyword">int</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//1.初始化通道</span>
+    c = make(chan <span class="hljs-keyword">int</span>)
+
+    nums = []<span class="hljs-keyword">int</span>{<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">7</span>, <span class="hljs-number">2</span>, <span class="hljs-number">9</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>}
+    <span class="hljs-comment">//2.开启 goroutine 排序</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">//2.1</span>
+        sort.Ints(nums)
+
+        <span class="hljs-comment">//2.2</span>
+        c &lt;- <span class="hljs-number">1</span>
+
+    }()
+
+    <span class="hljs-comment">//3.阻塞，直到通道内有元素</span>
+    &lt;-c
+    fmt.Println(nums)
+}
+</code></pre>
+<ul>
+<li>如上首先创建了一个无缓冲通道 c,和一个切片 nums</li>
+<li>代码 2 开启了一个 goroutine1</li>
+<li>代码 3 企图从通道内读取一个元素，当通道内没有元素时候，代码 3 所在的
+goroutine 就会被阻塞，goroutine1 执行完毕 2.1 对元素排序后，会执行代码 2.2
+向通道写入一元素，这时候代码 3 就会返回，然后打印排序后的切片内容</li>
+<li>这里我们使用无缓冲通道实现了之前使用 WaitGroup 来实现主 goroutine 等待子 goroutine 执行完毕的方式。</li>
+</ul>
+<h4 id="-3">有缓冲通道</h4>
+<p>在 go 中创建一个有缓冲的通道使用下面两种方式：</p>
+<pre><code class="java language-java hljs">var c chan <span class="hljs-keyword">int</span>
+c = make(chan <span class="hljs-keyword">int</span>, <span class="hljs-number">1</span>)
+</code></pre>
+<p>或者</p>
+<pre><code class="java language-java hljs">   c := make(chan <span class="hljs-keyword">int</span>, <span class="hljs-number">1</span>)
+</code></pre>
+<p>如上创建了一个 int 类型的缓冲队列为 1 通道 c，其中第一种方式是先声明，然后在初始化；第二种是简短式声明和初始化一步完成，也就推荐的方式；</p>
+<p>有缓冲通道当缓冲有空间时候，向里面放入元素会马上返回，当缓冲满了的时候在放入元素调用 goroutine 会被阻塞；当通道内没有元素时候尝试从通道获取元素会被阻塞。</p>
+<p>下面看一个使用有缓冲通道实现生产消费模型：</p>
+<pre><code class="java language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+)</span>
+
+func <span class="hljs-title">printer</span><span class="hljs-params">(ch &lt;-chan <span class="hljs-keyword">int</span>, wg chan&lt;- <span class="hljs-keyword">int</span>)</span> </span>{
+    <span class="hljs-comment">//3.1</span>
+    <span class="hljs-keyword">for</span> i := range ch {
+        fmt.Println(i)
+    }
+    <span class="hljs-comment">//3.2</span>
+    wg &lt;- <span class="hljs-number">1</span>
+    close(wg)
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-comment">//1.创建缓冲通道</span>
+    ch := make(chan <span class="hljs-keyword">int</span>, <span class="hljs-number">10</span>)
+
+    <span class="hljs-comment">//2.创建同步用的无缓冲通道</span>
+    wg := make(chan <span class="hljs-keyword">int</span>)
+    <span class="hljs-comment">//3.开启 go 协程</span>
+    <span class="hljs-function">go <span class="hljs-title">printer</span><span class="hljs-params">(ch, wg)</span>
+
+    <span class="hljs-comment">//4.写入到通道</span>
+    <span class="hljs-keyword">for</span> i :</span>= <span class="hljs-number">1</span>; i &lt; <span class="hljs-number">100</span>; i++ {
+        ch &lt;- i
+    }
+
+    <span class="hljs-comment">//5.关闭协程</span>
+    close(ch)
+
+    fmt.Println(<span class="hljs-string">"wait sub goroutine over"</span>)
+    <span class="hljs-comment">//6.等待子 goroutine 结束</span>
+    &lt;-wg
+    fmt.Println(<span class="hljs-string">"main goroutine over"</span>)
+
+}
+</code></pre>
+<ul>
+<li><p>如上代码 1 创建另一个含有 10 个 int 类型的元素的有缓冲通道 ch,代码 2 创建了一个无缓冲通道 wg 用来做线程间同步</p></li>
+<li><p>代码 3 开启新 goroutine 执行函数 printer,其内部从通道 ch 读取元素，一开始 ch 内没有元素，则当前 goroutine 会被阻塞</p></li>
+<li><p>代码 4 则向通道 ch 写入 100 个元素，当 ch 里面有元素时候，新 goroutine 就会被激活，然后从通道里面跌打出元素进行打印</p></li>
+<li><p>代码 5 则当向 ch 写入 100 个元素后关闭通道，关闭后不能再向通道写入元素，但是通道内的元素还是会被读取的，代码 6 则试图从通道 wg 读取元素，一开始通道内无元素
+所以 main groutine 阻塞到这里。</p></li>
+<li><p>等新 goroutine 代码 3.1 把通道 ch 里面元素全部迭代完毕后，执行代码 3.2 向通道 wg 写入一个元素然后关闭通道，这时候 main goroutine 则会从代码 6 中返回。</p></li>
+</ul>
+<p>Go 中以消息进行通信的方式允许程序员安全地协调多个并发任务，并且容易理解语义和控制流，这通常比其他语言比如 Java 中的回调函数（callbacks）或共享内存方式更优雅简单。</p>
+<p>总结：Go 的并发原语 - goroutines 和 channels 提供了一种优雅而独特的结构化开发并发软件的方式。 Go 鼓励使用通道在 goroutine 之间传递对共享数据的引用，而不是明确地使用锁来保护对共享数据的访问。 这种方法确保在给定时间只有一个 goroutine 可以访问共享数据。 这个理念被总结为：不要通过共享内存来通信，而要通过通信来共享内存</p>
+<h3 id="channeltimer">Channel 结合 timer 包实现超时等待</h3>
+<p>在 go 并发编程中 time 包是比较常用的，比如执行一个需要在指定时间内完成的任务，可以使用 time 包结合通道来做，比如使用 time 包的定时器用来做超时等待。</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-comment">//1</span>
+var timeout &lt;-chan time.<span class="hljs-function">Time
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//2</span>
+    timeout = time.After(time.Second * <span class="hljs-number">3</span>)
+
+    <span class="hljs-comment">//3</span>
+    fmt.Println(&lt;-timeout)
+}
+</code></pre>
+<ul>
+<li>如上代码 1 声明了一个 Time 类型的通道，并且这个通道是单向的接受通道</li>
+<li>代码 2 调用 time.After 给 timeout 变量初始化，time.After 创建了一个定时器，这个定时器会在 3 秒后向通道 timeout 写入当前的时间，After 函数的定义如下：</li>
+</ul>
+<pre><code class="Java language-Java hljs"><span class="hljs-function">func <span class="hljs-title">After</span><span class="hljs-params">(d Duration)</span> &lt;-chan Time </span>{
+    <span class="hljs-keyword">return</span> NewTimer(d).C
+}
+</code></pre>
+<p>可知其返回的是单向接受通道，这也是为何我们的 timeout 声明也是单向接受通道</p>
+<ul>
+<li>代码 3 则从通道 timeout 中读取一个元素，运行上面代码会在 3s 后输出当前时间。</li>
+</ul>
+<p>timer 的定时器功能一般和 select 命令一块使用,用来检查任务执行是否超时了：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"time"</span>
+)</span>
+
+<span class="hljs-comment">//1</span>
+var timeout &lt;-chan time.Time
+var result chan <span class="hljs-keyword">int</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//2</span>
+    timeout = time.After(time.Second * <span class="hljs-number">3</span>)
+    result = make(chan <span class="hljs-keyword">int</span>)
+
+    <span class="hljs-comment">//3</span>
+    <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">//3.1</span>
+        fmt.Println(<span class="hljs-string">"---begin do task---"</span>)
+        time.Sleep(time.Second * <span class="hljs-number">1</span>)
+        fmt.Println(<span class="hljs-string">"---end do task---"</span>)
+        <span class="hljs-comment">//3.2</span>
+        result &lt;- <span class="hljs-number">1</span>
+
+    }()
+
+    <span class="hljs-comment">//4</span>
+    select {
+    <span class="hljs-keyword">case</span> e := &lt;-result:
+        fmt.Printf(<span class="hljs-string">"get result:%d"</span>, e)
+
+    <span class="hljs-keyword">case</span> &lt;-timeout:
+        fmt.Println(<span class="hljs-string">"get result timeout"</span>)
+    }
+}
+</code></pre>
+<ul>
+<li><p>如上代码 1 声明了了两个通道，其中 timeout 是一个 Time 类型的单向的接受通道，result 是一个 int 类型的双向通道</p></li>
+<li><p>代码 2 则使用 time.After 初始化 timeout,这里是作用是等 3s 后向 timeout 写入当前时间，然后初始化了通道 result.</p></li>
+<li><p>代码 3 开启一个 goroutine，其内部首先休眠几秒以模拟任务执行，休眠后代码 3.2 向通道 result 写入了一个元素 1 以模拟任务运行的结果</p></li>
+<li><p>代码 4 使用 select 结构等待检查任务的状态，这里第一个 case 里面尝试从通道 result 获取任务执行的结果，第二个 case 尝试从 timeout 通道读取元素以便判断当前任务是否超时了；如果这两个 case 都没读取到元素则 main goroutine 会被阻塞。执行上面代码由于超时时间是 3 秒，而子 goroutine 休眠了 1s,所以 goroutine 在休眠后向通道 result 写入了 1，所以 main groutine 从第一个 case 中返回，然后打印 get result:1。如果把子 goroutine 里面的休眠 1s 修改为 5s,则会在 3s 后向 timeout 通道写入当前时间，这时候 main goroutine 会从第二个 case 返回，然后输出 get result timeout</p></li>
+</ul>
+<p>上面代码我们设置任务执行的超时时间为 3s,如果任务在 3s 内执行完毕，则会打印出任务执行的结果；如果任务超过 3 秒还没执行完毕，则其就超时了，就打印出超时信息</p>
+<p>总结：在 go 并发编程中 time 包是比较常用的，比如执行一个需要在指定时间内完成的任务、使用 time 包的定时器用来做超时等待。</p>
+<h3 id="channelhappenbefore">Channel 的 happen-before 语义</h3>
+<p>在 go 中通道是用来解决多个 goroutines 之间进行同步的主要措施，在多个 goroutines 中，每个对通道进行写操作的 goroutine 都对应着一个从通道读操作的 goroutine。</p>
+<h4 id="-4">有缓冲通道</h4>
+<p>在有缓冲的通道时候向通道写入一个数据总是 happen before 这个数据被从通道中读取完成，如下例子：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+)</span>
+
+var c </span>= make(chan <span class="hljs-keyword">int</span>, <span class="hljs-number">10</span>)
+<span class="hljs-function">var a string
+
+func <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>{
+    a = <span class="hljs-string">"hello, world"</span> <span class="hljs-comment">//1</span>
+    c &lt;- <span class="hljs-number">0</span>             <span class="hljs-comment">//2</span>
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">go <span class="hljs-title">f</span><span class="hljs-params">()</span>   <span class="hljs-comment">//3</span>
+    &lt;-c      <span class="hljs-comment">//4</span>
+    fmt.<span class="hljs-title">Print</span><span class="hljs-params">(a)</span> <span class="hljs-comment">//5</span>
+}
+</span></code></pre>
+<p>如上代码运行后可以确保输出"hello, world",这里对变量 a 的写操作（1） happen before 向通道写入数据的操作（2），而向通道写入数据的操作（2）happen before 从通道读取数据完成的操作（4）,而步骤（4）happen before 步骤（5）的打印输出，所以步骤（1）happen before 步骤（5）</p>
+<p>另外关闭通道的操作 happen before 从通道接受 0 值（关闭通道后会向通道发送一个 0 值），修改上面代码（2）如下：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+)</span>
+
+var c </span>= make(chan <span class="hljs-keyword">int</span>, <span class="hljs-number">10</span>)
+<span class="hljs-function">var a string
+
+func <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>{
+    a = <span class="hljs-string">"hello, world"</span> <span class="hljs-comment">//1</span>
+    close(c)            <span class="hljs-comment">//2</span>
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">go <span class="hljs-title">f</span><span class="hljs-params">()</span>   <span class="hljs-comment">//3</span>
+    &lt;-c      <span class="hljs-comment">//4</span>
+    fmt.<span class="hljs-title">Print</span><span class="hljs-params">(a)</span> <span class="hljs-comment">//5</span>
+}
+</span></code></pre>
+<p>然后在运行也可以确保输出"hello, world"。</p>
+<p>注：在有缓冲通道中通过向通道写入一个数据总是 happen before 这个数据被从通道中读取完成，这个 happen before 规则使多个 goroutine 中对共享变量的并发访问变成了可预见的串行化操作。</p>
+<h4 id="-5">无缓冲通道</h4>
+<p>对应无缓冲的通道来说从通道接受（获取叫做读取）元素 happen before 向通道发送（写入）数据完成，看下下面代码：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+)</span>
+
+var c </span>= make(chan <span class="hljs-keyword">int</span>)
+<span class="hljs-function">var a string
+
+func <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>{
+    a = <span class="hljs-string">"hello, world"</span> <span class="hljs-comment">//1</span>
+    &lt;-c                <span class="hljs-comment">//2</span>
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">go <span class="hljs-title">f</span><span class="hljs-params">()</span>       <span class="hljs-comment">//3</span>
+    c &lt;- 0       <span class="hljs-comment">//4</span>
+    fmt.<span class="hljs-title">Print</span><span class="hljs-params">(a)</span> <span class="hljs-comment">//5</span>
+}
+</span></code></pre>
+<p>如上代码运行也可保证输出"hello, world"，注意改程序相比上一个片段，通道改为了无缓冲，并向通道发送数据与读取数据的步骤（2）（4）调换了位置。</p>
+<p>在这里写入变量 a 的操作（1）happen before 从通道读取数据完毕的操作（2），而从通道读取数据的操作 happen before 向通道写入数据完毕的操作（4），而步骤（4） happen before 打印输出步骤（5）。</p>
+<p>注：在无缓冲通道中从通道读取数据的操作 happen before 向通道写入数据完毕的操作，这个 happen before 规则使多个 goroutine 中对共享变量的并发访问变成了可预见的串行化操作。</p>
+<p>如上代码如果换成有缓冲的通道，比如 c = make(chan int, 1)则就不能保证一定会输出"hello, world"。</p>
+<h4 id="-6">规则抽象</h4>
+<p>从容量为 C 的通道接受第 K 个元素 happen before 向通道第 k+C 次写入完成，比如从容量为 1 的通道接受第 3 个元素 happen before 向通道第 3+1 次写入完成。</p>
+<p>这个规则对有缓冲通道和无缓冲通道的情况都适用，有缓冲的通道可以实现信号量计数的功能，比如通道的容量可以认为是最大信号量的个数，通道内当前元素个数可以认为是剩余的信号量个数，向通道写入（发送）一个元素可以认为是获取一个信号量，从通道读取（接受）一个元素可以认为是释放一个信号量，所以有缓冲的通道可以作为限制并发数的一个通用手段：</p>
+<pre><code class="java  language-java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"time"</span>
+)</span>
+
+var limit </span>= make(chan <span class="hljs-keyword">int</span>, <span class="hljs-number">3</span>)
+
+<span class="hljs-function">func <span class="hljs-title">sayHello</span><span class="hljs-params">(index <span class="hljs-keyword">int</span>)</span></span>{
+    fmt.Println(index )
+}
+
+var work []func(<span class="hljs-keyword">int</span>)
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    work := append(work,sayHello,sayHello,sayHello,sayHello,sayHello,sayHello)
+
+    <span class="hljs-keyword">for</span> i, w := range work {
+        <span class="hljs-function">go <span class="hljs-title">func</span><span class="hljs-params">(w func(<span class="hljs-keyword">int</span>)</span>,index <span class="hljs-keyword">int</span>) </span>{
+            limit &lt;- <span class="hljs-number">1</span>
+            w(index)
+            &lt;-limit
+        }(w,i)
+    }
+
+    time.Sleep(time.Second * <span class="hljs-number">10</span>)
+}
+</code></pre>
+<p>如上代码 main goroutine 里面为 work 列表里面的每个方法的执行开启了一个单独的 goroutine，这里有 6 个方法，正常情况下这 6 个 goroutine 可以并发运行，但是本程序使用缓存大小为 3 的通道来做并发控制，导致同时只有 3 个 goroutine 可以并发运行。</p>
+<p>总结：通过上面所有的例子，不难看出解决多 goroutine 下共享数据可见性问题的方法是在访问共享数据时候施加一定的同步措施。</p>
+<h3 id="contextchannel">context 包以及如何与 Channel 配套使用</h3>
+<p>在 Go 服务器中，对于每个新来的请求都会开启新的 goroutine 来进行处理，每个请求处理器通常又会开另外的新 goroutine 来访问后端服务（比如数据库和 rpc 服务）。</p>
+<p><img src="https://images.gitbook.cn/6a4da680-a6c6-11e9-9bd0-eff500145073" alt="enter image description here"></p>
+<p>处理每个请求的这些 goroutine 集合通常会需要存取请求级别的变量（类似于 Java 中 threadlocal 类型的变量），比如标识请求用户身份的 userId,鉴权 token,请求的超时时间等。</p>
+<p>当一个请求被取消或者超时，所有为这个请求服务的 goroutine 集合应该迅速的终止以便系统能及时回收他们使用的这些资源。</p>
+<p>在 go 语言中,提供了一个 context 包，context 包定义了 Context 类型，这个类型内部携带了处理一个请求过程中所有 goroutines 涉及的请求作用域的变量、取消信号、请求截止日期信息。</p>
+<p>Context 中定义了下面方法，这些方法是可以被多个 goroutine 同时调用的（线程安全的）</p>
+<pre><code class="hljs cs">type Context <span class="hljs-keyword">interface</span> {
+
+        <span class="hljs-comment">//返回两个参数，第一个是返回什么时候工作被完成（这代表了上下文被取消了）;第二参数当没有设置截止时间时候返回 false</span>
+        Deadline() (deadline time.Time, ok <span class="hljs-keyword">bool</span>)
+
+
+        <span class="hljs-comment">//1. 返回一个通道，这个通道当上下文被取消或者到了截止时间会被关闭。</span>
+        <span class="hljs-comment">//2. 当使用 WithCancel 返回的上下文时候 ，Done 通道当 cancel 方法被调用后会被关闭 </span>
+        <span class="hljs-comment">//3. 当使用 WithDeadline 返回的上下文时候，Done 通道当达到截止时间后会被关闭; </span>
+        <span class="hljs-comment">//4. 当使用 WithTimeout 返回的上下文时候，Done 通道当 timeout 超时后会被关闭.</span>
+        <span class="hljs-comment">//5. Done 一般被用在 select 语句:    </span>
+        Done() &lt;-chan <span class="hljs-keyword">struct</span>{}
+
+        <span class="hljs-comment">//1.如果 Done 通道没有被关闭，则调用 err 方法返回 nil</span>
+        <span class="hljs-comment">//2.如果 Done 通道被关闭，则 Err 返回一个非 nil 的错误，这个错误解释关闭的原因：或者是由于上下文被关闭了，或者是因为截止时间到期了</span>
+        <span class="hljs-comment">//3.</span>
+        Err() error
+
+
+        <span class="hljs-comment">// 返回与上下文关联的 key 的值，或者返回 nil 如果该 key 没有关联到该上下文</span>
+        <span class="hljs-comment">// 一般用上下文 value 仅仅是为了在多个 goroutine 间传递请求作用域的变量。</span>
+        Value(key <span class="hljs-keyword">interface</span>{}) <span class="hljs-keyword">interface</span>{}
+}
+</code></pre>
+<p>go 服务器每当接受新的请求时候就会创建一个 Context 对象，当服务器接受请求后交给请求处理器进行处理时候要把创建的 Context 传递下去。整个请求处理的函数调用链中必须要把 Context 对象传递下去，另外传递过程中 Context 对象可以使用其子类比如 WithCancel, WithDeadline, WithTimeout,  WithValue 创建的 Context 对象替换；当一个 Context 被取消了，那么所有从其派生的子类的 Context 也会被取消。</p>
+<p>函数 WithCancel, WithDeadline,  WithTimeout 入参是一个 Context 对象，返回值有两个：一个派生于入参的子 Context 和一个 CancelFunc 函数。调用 CancelFunc 函数会取消子 Context 和其子 Context 对象（如果其有子对象的话），并且会从其父 Context 中移除对该子 Context 的引用，停止与其关联的 timer 对象。如果忘记调用 CancelFunc 方法会导致子 Context 和子 Context 的子 Context 泄漏，但是这个泄漏会被避免，如果其父 Context 被取消了或者 timer 超时激活了。</p>
+<p>为了保持接口一致性和能够使用静态分析工具检查 Context 传播链路，在使用 Context 时候需要遵循下面的规则：不要存储 Context 对象在一个结构体类型内部，而是要显示的传递 Context 对象在每个需要他的函数的入参内，另外一般 Context 对象作为入参的第一个参数，并且命名为 ctx:</p>
+<pre><code class="hljs cpp"><span class="hljs-function">func <span class="hljs-title">DoSomething</span><span class="hljs-params">(ctx context.Context, arg Arg1,arg Arg2)</span> error </span>{
+    <span class="hljs-comment">// ... use ctx ...</span>
+}
+</code></pre>
+<h4 id="context">Context 包-变量</h4>
+<ul>
+<li>Canceled 变量</li>
+</ul>
+<pre><code class="hljs php"><span class="hljs-keyword">var</span> Canceled = errors.<span class="hljs-keyword">New</span>(<span class="hljs-string">"context canceled"</span>)
+</code></pre>
+<p>当一个 context 对象被取消后 Context.Err 会返回这个错误</p>
+<ul>
+<li>DeadlineExceeded 变量</li>
+</ul>
+<pre><code class="hljs nginx"><span class="hljs-attribute">var</span> DeadlineExceeded <span class="hljs-literal">error</span> = deadlineExceededError{}
+</code></pre>
+<p>当一个 context 的 deadline 到后（超时了）会从 Context.Err 返回这个错误</p>
+<h4 id="context-1">Context 包-方法</h4>
+<ul>
+<li>WithCancel 方法</li>
+</ul>
+<pre><code class="hljs nginx"><span class="hljs-attribute">func</span> WithCancel(parent Context) (ctx Context, cancel CancelFunc)
+</code></pre>
+<p>WithCancel 返回 parent 的一个复制对象，并且这个复制对象里面含有一个新的 Done 通道，另外还返回一个 cancel 的函数；如果返回的 cancel 函数被调用或者 parent 的 context 的 Done 通道被关闭，则该函数返回的 context 的 Done 通道会被关闭；</p>
+<p>关闭返回的 context 会释放与其关联的资源，因此写代码时候应该在使用完毕 context 对象后，尽早取消 context 对象。</p>
+<p>下面看个示例以便加深理解：</p>
+<pre><code class="hljs cs"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> (<span class="hljs-params">
+    <span class="hljs-string">"context"</span>
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"time"</span>
+</span>)
+
+func <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+
+    <span class="hljs-comment">// 1.gen 函数在新的 goroutine 内产生整数，并发送这些整数到返回的无缓冲通道内</span>
+    gen := func(ctx context.Context) &lt;-chan <span class="hljs-keyword">int</span> {
+        dst := make(chan <span class="hljs-keyword">int</span>)
+        n := <span class="hljs-number">1</span>
+        <span class="hljs-function">go <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">for</span> {
+                <span class="hljs-keyword">select</span> {
+                <span class="hljs-keyword">case</span> &lt;-ctx.Done(): <span class="hljs-comment">//1.1 阻塞直到 ctx 的 Done 通道被取消</span>
+                    fmt.Println(ctx.Err()) <span class="hljs-comment">//1.2ctx 被取消后，打印错误信息</span>
+                    <span class="hljs-keyword">return</span>                 <span class="hljs-comment">//</span>
+                <span class="hljs-keyword">case</span> dst &lt;- n: <span class="hljs-comment">//1.3 向返回的通道写入数据</span>
+                    n++ <span class="hljs-comment">//1.4 递增数据</span>
+                }
+            }
+        }()
+        <span class="hljs-keyword">return</span> dst
+    }
+
+    <span class="hljs-comment">//2.创建一个可以被取消的 context</span>
+    ctx, cancel := context.WithCancel(context.Background())
+
+    <span class="hljs-comment">//3.从 gen 函数返回的通道内读取 5 个元素并打印</span>
+    <span class="hljs-keyword">for</span> n := <span class="hljs-function">range <span class="hljs-title">gen</span>(<span class="hljs-params">ctx</span>) </span>{
+        fmt.Println(n)
+        <span class="hljs-keyword">if</span> n == <span class="hljs-number">5</span> {
+            cancel() <span class="hljs-comment">//3.1 如果到了第 5 个元素则取消 ctx，则 ctx 的 Done 通道会被取消并返回 0 值</span>
+            <span class="hljs-keyword">break</span>
+        }
+    }
+    <span class="hljs-comment">//4.main 函数所在 goroutine 休眠 1s</span>
+    time.Sleep(<span class="hljs-number">1</span> * time.Second)
+
+}
+</code></pre>
+<p>如上代码 gen 函数在新的 goroutine 内产生整数，并发送这些整数到返回的无缓冲通道内</p>
+<p>main 函数代码 2 创建一个可以被取消的 ctx，然后从 gen 函数返回的通道内读取元素，当读取完毕 5 个元素后，调用了 3.1 取消了 ctx,取消 ctx 后，ctx 管理的 Done 通道就会被关闭，所以 gen 函数中的代码 1.1 就会执行，然后打印输出错误信息，然后 gen 内开启的 goroutine 就正常退出了，以避免 gen 函数内的 goroutine 泄漏。运行上面代码会输出：</p>
+<pre><code class="hljs">1
+2
+3
+4
+5
+context canceled
+</code></pre>
+<ul>
+<li>WithDeadline 方法</li>
+</ul>
+<pre><code class="hljs css"><span class="hljs-selector-tag">func</span> <span class="hljs-selector-tag">WithDeadline</span>(<span class="hljs-selector-tag">parent</span> <span class="hljs-selector-tag">Context</span>, <span class="hljs-selector-tag">d</span> <span class="hljs-selector-tag">time</span><span class="hljs-selector-class">.Time</span>) (<span class="hljs-selector-tag">Context</span>, <span class="hljs-selector-tag">CancelFunc</span>)
+</code></pre>
+<p>WithDeadline 返回父上下文 parent 的副本，其截止日期调整为不晚于参数 d。如果父级的截止日期早于 d，则 WithDeadline（parent，d）在语义上等同于 parent。返回的上下文的 Done 通道会被关闭当下面情况发生时候：截止时间到期了、调用返回的取消函数 CancelFunc 时或父上下文 p 的 Done 通道关闭时。</p>
+<p>关闭返回的 context 会释放与其关联的资源，因此写代码时候应该在使用完毕 context 对象后，尽早取消 context 对象。</p>
+<p>下面看个示例以便加深理解：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-keyword">import</span> (
+    <span class="hljs-string">"context"</span>
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"time"</span>
+)
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//1.截止时间为当前时间加上 100ms</span>
+    d := time.Now().Add(<span class="hljs-number">100</span> * time.Millisecond)
+
+    <span class="hljs-comment">//2.基于空 context 创建一个 deadline 上下文</span>
+    ctx, cancel := context.WithDeadline(context.Background(), d)
+
+    <span class="hljs-comment">//3.等 main 函数结束后，上下文会被关闭，如果不及时关闭会导致上下文 ctx 和其父 context 存在的周期比我们想要的长</span>
+    <span class="hljs-function">defer <span class="hljs-title">cancel</span><span class="hljs-params">()</span>
+
+    <span class="hljs-comment">//4.select 块</span>
+    select </span>{
+    <span class="hljs-keyword">case</span> &lt;-time.After(<span class="hljs-number">1</span> * time.Second):<span class="hljs-comment">//4.1 如果 1s 上下文还没被取消，则超时打印</span>
+        fmt.Println(<span class="hljs-string">"overslept"</span>)
+    <span class="hljs-keyword">case</span> &lt;-ctx.Done():<span class="hljs-comment">//4.2 如果上下文 ctx 在 1s 内被取消或者超时了，则打印错误</span>
+        fmt.Println(ctx.Err())
+    }
+
+}
+</code></pre>
+<p>上面代码 1 创建了一个截止时间，也就是从当前时间等待 100ms 就过期。
+代码 2 则基于空 context 和截止时间创建了一个子上下文 ctx。
+代码 3 则等 main 函数结束后取消上下文 ctx。</p>
+<p>代码 4 的 select 块作用是阻塞 main 函数所在 goroutine，解除阻塞条件是 case1 等待 1s 超时后，或者 case2 当 ctx 被主动取消或者被动超时（超时时间为 100ms）。</p>
+<p>运行上面代码，由于 ctx 截止时间为当前时间加上 100ms,所以 ctx 会在 100ms 后超时，然后 Done 通道会被关闭，所以 case2 会返回，然后通过 ctx.Err 获取错误信息："context deadline exceeded"</p>
+<ul>
+<li>WithTimeout 方法</li>
+</ul>
+<pre><code class="hljs css"><span class="hljs-selector-tag">func</span> <span class="hljs-selector-tag">WithTimeout</span>(<span class="hljs-selector-tag">parent</span> <span class="hljs-selector-tag">Context</span>, <span class="hljs-selector-tag">timeout</span> <span class="hljs-selector-tag">time</span><span class="hljs-selector-class">.Duration</span>) (<span class="hljs-selector-tag">Context</span>, <span class="hljs-selector-tag">CancelFunc</span>)
+</code></pre>
+<p>WithTimeout 等价于  WithDeadline(parent, time.Now().Add(timeout)) </p>
+<p>关闭返回的 context 会释放与其关联的资源，因此写代码时候应该在使用完毕 context 对象后，尽早取消 context 对象。</p>
+<p>WithDeadline 中的例子等价于下面例子：</p>
+<pre><code class="Java language-Java hljs"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+    <span class="hljs-string">"context"</span>
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"time"</span>
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-comment">//1.基于空 context 创建一个 deadline 上下文</span>
+    ctx, cancel := context.WithTimeout(context.Background(), <span class="hljs-number">100</span>*time.Millisecond)
+
+    <span class="hljs-comment">//2.等 main 函数结束后，上下文会被关闭，如果不及时关闭会导致上下文 ctx 和其父 context 存在的周期比我们想要的长</span>
+    <span class="hljs-function">defer <span class="hljs-title">cancel</span><span class="hljs-params">()</span>
+
+    <span class="hljs-comment">//3.select 块</span>
+    select </span>{
+    <span class="hljs-keyword">case</span> &lt;-time.After(<span class="hljs-number">1</span> * time.Second):<span class="hljs-comment">//3.1 如果 1s 上下文还没被取消，则超时打印</span>
+        fmt.Println(<span class="hljs-string">"overslept"</span>)
+    <span class="hljs-keyword">case</span> &lt;-ctx.Done():<span class="hljs-comment">//3.2 如果上下文 ctx 在 1s 内被取消或者超时了，则打印错误</span>
+        fmt.Println(ctx.Err())
+    }
+}
+</code></pre>
+<ul>
+<li>Background 方法</li>
+</ul>
+<pre><code class="hljs nginx"><span class="hljs-attribute">func</span> Background() Context
+</code></pre>
+<p>Background 返回一个非 nil 的空 Context。它永远不会被取消，没有关联的 value，也没有截止日期。它通常由主函数，初始化和测试使用，并作为传入请求的顶级 Context。</p>
+<ul>
+<li>WithValue 方法</li>
+</ul>
+<pre><code class="hljs php">func WithValue(<span class="hljs-keyword">parent</span> Context, key, val <span class="hljs-class"><span class="hljs-keyword">interface</span></span>{}) Context
+</code></pre>
+<p>WithValue 方法返回一个父上下文 parent 的拷贝，这个拷贝内关联了 key 对应的 val </p>
+<p>使用上下文值仅仅被用于在多 goroutine 间传递请求作用域的值，另外上下文中的 key 必须是可比较的，另外为了避免 context 包之间的冲突，key 不应该是字符串类型或任何其他内置类型.
+WithValue 的用户应该为 key 键定义他们自己的类型。</p>
+<pre><code class="hljs javascript">package main
+
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">"context"</span>
+    <span class="hljs-string">"fmt"</span>
+    <span class="hljs-string">"sync"</span>
+)
+
+func main() {
+
+    <span class="hljs-keyword">var</span> wg sync.WaitGroup
+    wg.Add(<span class="hljs-number">2</span>)
+    <span class="hljs-comment">//1.自定义类型</span>
+    type <span class="hljs-built_in">String</span> string
+
+    <span class="hljs-comment">//2.创建函数，内部从 ctx 内获取变量 k 的值并打印</span>
+    f := func(ctx context.Context, k <span class="hljs-built_in">String</span>) {
+        defer wg.Done()
+
+        <span class="hljs-keyword">if</span> v := ctx.Value(k); v != nil {
+            fmt.Println(<span class="hljs-string">"found value:"</span>, v)
+            <span class="hljs-keyword">return</span>
+        }
+        fmt.Println(<span class="hljs-string">"key not found:"</span>, k)
+    }
+    <span class="hljs-comment">//3.创建 k，并关联到上下文</span>
+    k := <span class="hljs-built_in">String</span>(<span class="hljs-string">"language"</span>)
+    ctx := context.WithValue(context.Background(), k, <span class="hljs-string">"Go"</span>)
+
+    <span class="hljs-comment">//4.开启 gorutine</span>
+    go f(ctx, k)
+    go f(ctx, <span class="hljs-built_in">String</span>(<span class="hljs-string">"color"</span>))
+
+    wg.Wait()
+}
+</code></pre>
+<p>如上代码 1 自定义了一个类型 String</p>
+<p>代码 2 创建了一个函数 f,其作用是从参数 1 上下文对象 ctx 中查找 key 为 k 的变量的值，如果存在则打印</p>
+<p>代码 3 使用自定义类型创建了一个变量，并关联 k 到上下文上，并返回一个新的上下文对象</p>
+<p>代码 4 开启两个 goroutine 调用函数 f</p>
+<p>另外这里使用 sync.WaitGroup 做同步，main 所在 gorotine 等两个开启的 gorotine 结束后才结束。</p>
+<p>运行上面代码会输出：</p>
+<pre><code class="Java language-Java hljs">found value: Go
+key not found: color
+</code></pre>
+<p>总结：在 go 语言中,提供了一个 context 包，context 包定义了 Context 类型，这个类型内部携带了处理一个请求过程中所有 goroutines 涉及的请求作用域的变量、取消信号、请求截止日期信息。</p>
+<h3 id="-7">参考</h3>
+<ul>
+<li>https://github.com/golang/go/wiki/LearnConcurrency</li>
+<li>https://blog.golang.org/context</li>
+</ul></div>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">通道</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">2.1.</span> <span class="toc-text">无缓冲通道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">2.2.</span> <span class="toc-text">有缓冲通道</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#channeltimer"><span class="toc-number">3.</span> <span class="toc-text">Channel 结合 timer 包实现超时等待</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#channelhappenbefore"><span class="toc-number">4.</span> <span class="toc-text">Channel 的 happen-before 语义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-4"><span class="toc-number">4.1.</span> <span class="toc-text">有缓冲通道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-5"><span class="toc-number">4.2.</span> <span class="toc-text">无缓冲通道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-6"><span class="toc-number">4.3.</span> <span class="toc-text">规则抽象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contextchannel"><span class="toc-number">5.</span> <span class="toc-text">context 包以及如何与 Channel 配套使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#context"><span class="toc-number">5.1.</span> <span class="toc-text">Context 包-变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#context-1"><span class="toc-number">5.2.</span> <span class="toc-text">Context 包-方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-7"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&text=Go并发同步之通道"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&is_video=false&description=Go并发同步之通道"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Go并发同步之通道&body=Check out this article: http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&title=Go并发同步之通道"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/golang/Go并发同步之通道/2019/09/&name=Go并发同步之通道&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

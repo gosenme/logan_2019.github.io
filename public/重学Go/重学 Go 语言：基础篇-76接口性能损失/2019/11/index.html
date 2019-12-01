@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="接口性能损失type Xer interface {    A(a int)}type X intfunc (X) A(b int) { println(“a”) }func main() {    var o X    var e Xer = &amp;amp;o    o.A(1)    e.A(1)}$ go build &amp;amp;&amp;amp; go tool objdump -s “main.mai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-76">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="接口性能损失type Xer interface {    A(a int)}type X intfunc (X) A(b int) { println(“a”) }func main() {    var o X    var e Xer = &amp;amp;o    o.A(1)    e.A(1)}$ go build &amp;amp;&amp;amp; go tool objdump -s “main.mai">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:22.183Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-76">
+<meta name="twitter:description" content="接口性能损失type Xer interface {    A(a int)}type X intfunc (X) A(b int) { println(“a”) }func main() {    var o X    var e Xer = &amp;amp;o    o.A(1)    e.A(1)}$ go build &amp;amp;&amp;amp; go tool objdump -s “main.mai">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-76</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-7714 空接口/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&text=重学 Go 语言：基础篇-76"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&is_video=false&description=重学 Go 语言：基础篇-76"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-76&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&name=重学 Go 语言：基础篇-76&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">接口性能损失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13"><span class="toc-number">1.2.</span> <span class="toc-text">13 接口调用与直接调用的性能差异</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-76
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:22.183Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>接口性能损失</h3><br><pre><code class="go language-go">type Xer interface {<br>    A(a int)<br>}<br>type X int<br><br>func (X) A(b int) { println(“a”) }<br>func main() {<br>    var o X<br>    var e Xer = &amp;o<br>    o.A(1)<br>    e.A(1)<br>}<br></code></pre><br><pre><code>$ go build &amp;&amp; go tool objdump -s “main.main” test<br></code></pre><br><blockquote><br>  <p>动态调用消耗不大，主要影响是对象逃逸和无法内联。</p><br></blockquote><br><p>使用接口的时候，从静态绑定变成动态绑定不会有很大的性损失，动态查找的过程实际上很精简无非十几条指令。接口造成的性能损失不是动态调用。主要的损失可能会导致内存逃逸，对象复制，如果指针传递可能导致对象本来在栈上结果在另外地方有一个指针去引用它，可能导致对象从栈上跑到堆上。内存逃逸会导致性能损失，因为在堆上分配对象代价比较大。还有就是方法需要动态调用可能造成没有办法内联。原来方法调用是可以内联的通过接口调用不能内联可能会带来一定的性能损失。</p><br><p>先通过方法来调用，A可以内联的也没有发生逃逸行为。如果通过接口来调用的时候发现有逃逸。内联可能就取消了。</p><br><p>关于接口什么时候该用什么时候不该用的问题。假设一开始是在一个设计层面上，在设计的时候很少会涉及到细节，更多是基于比较大的模块去设计，设计的时候，往往是由单个人和单个团队完成的。在编码上由单个人完成的时候，最大的要求是性能，很多优化的细节是尽可能的减少额外中间环节，因为整个代码权在个人的控制范围之内，而且内部的细节没有必要公开。当设计这样一个模块时候，涉及到内部的构造不应该用接口，中间环节越少越好，因为整个代码都在控制范围之内。</p><br><p>设计上很多时候不要过度设计，不要把一些莫名其妙的东西加进来。不要因为接口有解耦的能力就什么时候都用。在设计模式上有很多情况下，听到另外一个词叫反模式，甚至拒绝使用设计模式。比如在系统设计领域很讨厌设计模式，因为它会增加很多额外的负担。接口很大程度上是用来做组合的，在对性能要求非常高的领域不愿意用接口。</p><br><h3 id="13">13 接口调用与直接调用的性能差异</h3><br><p>直接调用是静态绑定，接口调用是动态绑定，因为接口调用的地址是在运行期从栈帧里面取的。很显然动态绑定的性能低于静态绑定。我们对比一下接口调用到底有多大的性能损失。</p><br><pre><code class="go language-go">type N int<br><br>func (n N) A() int {<br>    c := 0<br>    for i := 0; i &lt; 1&lt;&lt;20; i++ {<br>        c += i<br>    }<br><br>    return c<br>}<br><br>type Ner interface {<br>    A() int<br>}<br><br>func BenchmarkCall(b <em>testing.B) {<br>    var n N = 0x100<br><br>    for i := 0; i &lt; b.N; i++ {<br>        _ = n.A()<br>    }<br>}<br><br>func BenchmarkIface(b </em>testing.B) {<br>    var n N = 0x100<br>    var e Ner = &amp;n<br><br>    for i := 0; i &lt; b.N; i++ {<br>        _ = e.A()<br>    }<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go test -v -bench . -benchmem<br></code></pre><br><pre><code>BenchmarkCall          5000        290851 ns/op           0 B/op          0 allocs/op<br>BenchmarkIface         3000        339684 ns/op           0 B/op          0 allocs/op<br>PASS<br></code></pre><br><p>从汇编角度，动态绑定肯定没有静态绑定块，因为还涉及到二次寻址操作，把一个地址从某个地方读出来。为什么测试结果不一样？究竟怎么测试才是最准确的。</p><br><p>其实OOP这块概念非常的多，正因为这样，OOP现在被很多人批判，因为觉得把事情搞得太复杂。跟OOP诞生的大量设计模式，这些设计模式都会大量的运用接口来实现，形成一种抽象。因为接口实际上是从类型耦合拆解出来。当你依赖于接口的时候你就不用依赖于某个具体的类型。但如果你依赖某个类型，哪怕是抽象类型，那你也必须依赖于某条继承树。这样就造成OOP复杂度非常的高，而且随着程序的维护这种复杂度越来越复杂，中间的耦合度越来越高。现在语言里会大幅度简化OOP的概念，因为用其它方式来模拟OOP概念的话没必要搞成那么复杂。一来可以在编译器实现上可以做的更优化更简单，第二对于指令的优化可以做的很简单。OOP对于我们日常编程来说，既方便又复杂，方便把一些数据抽象成个体。新的语言多半是为了解决一些老的语言的弊端。</p><br><p>在耦合中有两种关系，第一种是是什么(is)，第二种是有什么(has)。第一种是知道你是谁，为什么调用代码是知道那个函数干什么的。第二种是你有什么符合我的条件，这种耦合关系不是强制性，任何一个你符合什么你有什么的。</p><br><p>对于第一种，主动调用，就构成耦合关系。第二种是调用者必须知道被调用方有什么，被调用方就知道调用方需要什么，被调用方任何修改都会造成关联反映。</p><br><p>is关系，是a依赖于b的个体或者家族。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">接口性能损失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13"><span class="toc-number">1.2.</span> <span class="toc-text">13 接口调用与直接调用的性能差异</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&text=重学 Go 语言：基础篇-76"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&is_video=false&description=重学 Go 语言：基础篇-76"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-76&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&title=重学 Go 语言：基础篇-76"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/&name=重学 Go 语言：基础篇-76&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

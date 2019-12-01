@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="内置数据结构文档  常用内置数据结构12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455import collections# 具名元祖Point = collections.namedtuple(&apos;Point&apos;, &apos;x, y&apos;)p = Point(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常考的内置数据结构与算法">
+<meta property="og:url" content="http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="内置数据结构文档  常用内置数据结构12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455import collections# 具名元祖Point = collections.namedtuple(&apos;Point&apos;, &apos;x, y&apos;)p = Point(">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/img/Python常用内置数据结构与算法.jpg">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.067Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常考的内置数据结构与算法">
+<meta name="twitter:description" content="内置数据结构文档  常用内置数据结构12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455import collections# 具名元祖Point = collections.namedtuple(&apos;Point&apos;, &apos;x, y&apos;)p = Point(">
+<meta name="twitter:image" content="http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/img/Python常用内置数据结构与算法.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>常考的内置数据结构与算法</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/gitchat/algorithm_1/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python无师自通/9_file/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&text=常考的内置数据结构与算法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&is_video=false&description=常考的内置数据结构与算法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=常考的内置数据结构与算法&body=Check out this article: http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&name=常考的内置数据结构与算法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#常用内置数据结构"><span class="toc-number">1.</span> <span class="toc-text">常用内置数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-Dict-底层结构"><span class="toc-number">2.</span> <span class="toc-text">Python Dict 底层结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LRUCache"><span class="toc-number">3.</span> <span class="toc-text">LRUCache</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        常考的内置数据结构与算法
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.067Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><a href="https://docs.python.org/3.6/library/collections.html?highlight=coll#module-collections" target="_blank" rel="noopener">内置数据结构文档</a></p>
+<p><img src="../../img/Python常用内置数据结构与算法.jpg" alt></p>
+<h3 id="常用内置数据结构"><a href="#常用内置数据结构" class="headerlink" title="常用内置数据结构"></a>常用内置数据结构</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"></span><br><span class="line"><span class="comment"># 具名元祖</span></span><br><span class="line">Point = collections.namedtuple(<span class="string">'Point'</span>, <span class="string">'x, y'</span>)</span><br><span class="line">p = Point(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">print(p.x)</span><br><span class="line">print(p.y)</span><br><span class="line">print(p[<span class="number">0</span>])</span><br><span class="line">print(p[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 双端队列</span></span><br><span class="line">de = collections.deque()</span><br><span class="line">de.append(<span class="number">1</span>)</span><br><span class="line">de.appendleft(<span class="number">0</span>)</span><br><span class="line">print(de)</span><br><span class="line">de.pop()</span><br><span class="line">print(de)</span><br><span class="line">de.append(<span class="number">22</span>)</span><br><span class="line">de.popleft()</span><br><span class="line">print(de)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计数器</span></span><br><span class="line">c = collections.Counter(<span class="string">'aabbccdeef'</span>)</span><br><span class="line">print(c)</span><br><span class="line">print(c.get(<span class="string">'a'</span>))</span><br><span class="line">print(c.most_common()) <span class="comment"># 从大到小的顺序来获取信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 按Key插入先后有序的OrderDict</span></span><br><span class="line">od = collections.OrderedDict()</span><br><span class="line">od[<span class="string">'c'</span>] = <span class="string">'c'</span></span><br><span class="line">od[<span class="string">'a'</span>] = <span class="string">'a'</span></span><br><span class="line">od[<span class="string">'b'</span>] = <span class="string">'b'</span></span><br><span class="line">print(od.keys())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 带默认值的字典 </span></span><br><span class="line">dd = collections.defaultdict()</span><br><span class="line">dd[<span class="string">'a'</span>]</span><br><span class="line">dd[<span class="string">'b'</span>] += <span class="number">1</span></span><br><span class="line">print(dd)</span><br><span class="line"></span><br><span class="line"><span class="comment"># list和tuple</span></span><br><span class="line"><span class="comment"># 都是线性结构，支持下标访问</span></span><br><span class="line"><span class="comment"># list是可变对象, tuple保存的引用不可变</span></span><br><span class="line">t = ([<span class="number">1</span>], <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    t[<span class="number">2</span>] = <span class="number">33</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(e)</span><br><span class="line">t[<span class="number">0</span>].append(<span class="number">11</span>)</span><br><span class="line">print(t)</span><br><span class="line"><span class="comment"># 保存的引用不可变指的是你没法替换掉这个对象，</span></span><br><span class="line"><span class="comment"># 但是如果被操作的子对象本身是一个可变对象，</span></span><br><span class="line"><span class="comment"># 这个引用所指向的可变对象是可以修改的</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># list不能用作dict的key, 而tuple可以, 原因是可变对象不可hash</span></span><br></pre></td></tr></table></figure>
+<h3 id="Python-Dict-底层结构"><a href="#Python-Dict-底层结构" class="headerlink" title="Python Dict 底层结构"></a>Python Dict 底层结构</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 底层使用哈希表，支持快速查找，平均复杂度为O(1), Cython解释器使用二次探查解决哈希冲突问题</span></span><br><span class="line"><span class="comment"># 常考哈希冲突和扩容</span></span><br></pre></td></tr></table></figure>
+<h3 id="LRUCache"><a href="#LRUCache" class="headerlink" title="LRUCache"></a>LRUCache</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 是一种缓存剔除策略，缓存剔除则是指当缓存空间不够用的时候需要一种方式剔除key</span></span><br><span class="line"><span class="comment"># 常见策略有LRU、LFU</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># LRU通过使用一个循环双端队列不断把最新访问的key放在表头实现，这样最远使用的就在后面。</span></span><br><span class="line"><span class="comment"># 字典来做缓存，循环双端列表用来记录访问顺序</span></span><br><span class="line"><span class="comment"># 利用Python内置的dict、collections.OrderDict实现</span></span><br><span class="line"><span class="comment"># dict用来当作k/v键值对的缓存</span></span><br><span class="line"><span class="comment"># 使用OrderDict用来更新最近访问的key</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> OrderedDict</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span><span class="params">(object)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, capacity=<span class="number">128</span>)</span>:</span></span><br><span class="line">        self.od = OrderedDict()</span><br><span class="line">        self.capacity = capacity</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 每次访问更新最新使用的key    </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> self.od:</span><br><span class="line">            val = self.od[key]</span><br><span class="line">            self.od.move_to_end(key=key)</span><br><span class="line">            <span class="keyword">return</span> val</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 更新k/v</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, key, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> self.od:</span><br><span class="line">            <span class="keyword">del</span>  self.od[key]</span><br><span class="line">            self.od[key] = value    <span class="comment"># 更新key到表头</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.od[key] = value    <span class="comment"># 直接将key插入表头</span></span><br><span class="line">            <span class="comment"># 判断当前容量是否已满</span></span><br><span class="line">            <span class="keyword">if</span> len(self.od) &gt; self.capacity:</span><br><span class="line">                <span class="comment"># 删除最早的元素</span></span><br><span class="line">                self.od.popitem(last=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#常用内置数据结构"><span class="toc-number">1.</span> <span class="toc-text">常用内置数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-Dict-底层结构"><span class="toc-number">2.</span> <span class="toc-text">Python Dict 底层结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LRUCache"><span class="toc-number">3.</span> <span class="toc-text">LRUCache</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&text=常考的内置数据结构与算法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&is_video=false&description=常考的内置数据结构与算法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=常考的内置数据结构与算法&body=Check out this article: http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&title=常考的内置数据结构与算法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python服务端面试/常考的内置结构与算法/2019/09/&name=常考的内置数据结构与算法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

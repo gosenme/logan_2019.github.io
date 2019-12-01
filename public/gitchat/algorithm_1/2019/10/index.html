@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="算法面试1                                                                                                                          1 位运算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法面试1">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/algorithm_1/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="算法面试1                                                                                                                          1 位运算">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/2d5cfd80-9680-11e9-863a-0ba1841fdad5">
+<meta property="og:image" content="https://images.gitbook.cn/7503a4a0-95d0-11e9-9681-bf7cab02732c">
+<meta property="og:image" content="https://images.gitbook.cn/4d7acb20-95d0-11e9-9798-d9f969a53bc0">
+<meta property="og:image" content="https://images.gitbook.cn/31fe33f0-95d0-11e9-84a9-87e2c5db4878">
+<meta property="og:image" content="https://images.gitbook.cn/aa6a1320-95d2-11e9-9681-bf7cab02732c">
+<meta property="og:image" content="https://images.gitbook.cn/a5d38920-95d4-11e9-84a9-87e2c5db4878">
+<meta property="og:image" content="https://images.gitbook.cn/f2d24530-95d5-11e9-9798-d9f969a53bc0">
+<meta property="og:image" content="https://images.gitbook.cn/881733c0-95d7-11e9-a28f-e32286283ffc">
+<meta property="og:image" content="https://images.gitbook.cn/eacc1950-976b-11e9-949b-a35e3e200084">
+<meta property="og:image" content="https://images.gitbook.cn/a51dfa00-976f-11e9-b832-bd43f398eec9">
+<meta property="og:image" content="https://images.gitbook.cn/68188ec0-97b7-11e9-a772-637cb12b480b">
+<meta property="og:image" content="https://images.gitbook.cn/b6deeb70-97b8-11e9-bc97-93abff33030c">
+<meta property="og:image" content="https://images.gitbook.cn/2cf014f0-97bf-11e9-b265-f1f3c6cbb1c4">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.210Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法面试1">
+<meta name="twitter:description" content="算法面试1                                                                                                                          1 位运算">
+<meta name="twitter:image" content="https://images.gitbook.cn/2d5cfd80-9680-11e9-863a-0ba1841fdad5">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>算法面试1</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/git/commit/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python服务端面试/常考的内置结构与算法/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&text=算法面试1"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&is_video=false&description=算法面试1"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法面试1&body=Check out this article: http://logan_2019.github.io/gitchat/algorithm_1/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&name=算法面试1&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">1.</span> <span class="toc-text">1 位运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">移位运算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">状态压缩问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">关于异或</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">2.</span> <span class="toc-text">2 前缀和</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">2.1.</span> <span class="toc-text">前缀和</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-4"><span class="toc-number">2.2.</span> <span class="toc-text">差分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-5"><span class="toc-number">2.3.</span> <span class="toc-text">真题演练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">3.</span> <span class="toc-text">3 二分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-6"><span class="toc-number">3.1.</span> <span class="toc-text">真题演练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4"><span class="toc-number">4.</span> <span class="toc-text">4 排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-7"><span class="toc-number">4.1.</span> <span class="toc-text">快排思想变形</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-8"><span class="toc-number">4.2.</span> <span class="toc-text">归并思想变形</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-9"><span class="toc-number">4.3.</span> <span class="toc-text">字典序排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5"><span class="toc-number">5.</span> <span class="toc-text">5 搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-10"><span class="toc-number">5.1.</span> <span class="toc-text">深度优先搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dfs"><span class="toc-number">5.2.</span> <span class="toc-text">DFS 真题演练</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-11"><span class="toc-number">5.3.</span> <span class="toc-text">广度优先搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bfs"><span class="toc-number">5.4.</span> <span class="toc-text">BFS 真题演练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-number">6.</span> <span class="toc-text">6 动态规划</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dp"><span class="toc-number">6.1.</span> <span class="toc-text">线性 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dp-1"><span class="toc-number">6.2.</span> <span class="toc-text">区间 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dp-2"><span class="toc-number">6.3.</span> <span class="toc-text">状压 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-12"><span class="toc-number">6.4.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7"><span class="toc-number">7.</span> <span class="toc-text">7 结语</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        算法面试1
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.210Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>算法面试1</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out"><p></p>
+    <div class="toc">
+        <ul>
+            <li>
+                <ul>
+                    <li>
+                        <ul>
+                            <li><a href="#1">1 位运算</a>
+                                <ul>
+                                    <li><a href="#">移位运算</a></li>
+                                    <li><a href="#-1">状态压缩问题</a></li>
+                                    <li><a href="#-2">关于异或</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#2">2 前缀和</a>
+                                <ul>
+                                    <li><a href="#-3">前缀和</a></li>
+                                    <li><a href="#-4">差分</a></li>
+                                    <li><a href="#-5">真题演练</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#3">3 二分</a>
+                                <ul>
+                                    <li><a href="#-6">真题演练</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#4">4 排序</a>
+                                <ul>
+                                    <li><a href="#-7">快排思想变形</a></li>
+                                    <li><a href="#-8">归并思想变形</a></li>
+                                    <li><a href="#-9">字典序排序</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#5">5 搜索</a>
+                                <ul>
+                                    <li><a href="#-10">深度优先搜索</a></li>
+                                    <li><a href="#dfs">DFS 真题演练</a></li>
+                                    <li><a href="#-11">广度优先搜索</a></li>
+                                    <li><a href="#bfs">BFS 真题演练</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#6">6 动态规划</a>
+                                <ul>
+                                    <li><a href="#dp">线性 DP</a></li>
+                                    <li><a href="#dp-1">区间 DP</a></li>
+                                    <li><a href="#dp-2">状压 DP</a></li>
+                                    <li><a href="#-12">总结</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#7">7 结语</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <p></p>
+    <p>随着进入互联网公司的毕业生越来越多，人才选拔的标准也一再提高。而算法题，作为对思维能力和 Coding
+        技能的综合考查，常常是大厂面试中“香饽饽”。甚至许多知名外企的面试只考查算法题。因此，在互联网招聘行业曾有一句话“得算法题者得天下”。</p>
+    <p>对于之前没有算法基础的同学来说，如何在校招准备的“黄金 2 个月”内有所突破，是决定能否去心仪公司的关键。本次 Chat
+        中，我将结合自己原来打比赛的一些经历，以及今年实习生招聘中所遇到的一些算法考查，来跟同学们聊一聊在校招面试中常出现的高频算法。</p>
+    <p>注：因为校招不同于 ACM，对算法的考查以基础为主，所以这里介绍的内容也是点到为止，主要针对萌新，大佬请绕道。</p>
+    <h3 id="1">1 位运算</h3>
+    <h4 id>移位运算</h4>
+    <ul>
+        <li>左移运算低位以 0 填充，高位越界后舍弃</li>
+        <li>右移运算，高位以符号位填充，低位越界后舍弃</li>
+    </ul>
+    <p>我们来看这样一个问题：</p>
+    <blockquote>
+        <p>求 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-1-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mi>X</mi><mi>p</mi></msup></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-1" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-2" class="mjx-mrow"><span id="MJXc-Node-3" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.024em;"><span id="MJXc-Node-4" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em; padding-right: 0.024em;">X</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.513em; padding-left: 0.115em; padding-right: 0.071em;"><span id="MJXc-Node-5" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.218em; padding-bottom: 0.488em;">p</span></span></span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>X</mi><mi>p</mi></msup></math></span></span>
+            <script type="math/tex" id="MathJax-Element-1">X^p</script>
+        </p>
+    </blockquote>
+    <p>显然这个问题直接做很简单，但是复杂度是 O(p) 的，有没有可能让它更快一点呢？我们像这样思考，把 p 拆成二进制的表现形式，则 p 只会在二进制位为 1 的地方才会把乘积累积到答案中去，在二进制位为 0
+        的地方，进行乘积的累积。于是基于这样的优化，我们可以把取幂的复杂度优化到 O(logp)，通过下面代码进行一下理解。</p>
+    <p><img src="https://images.gitbook.cn/2d5cfd80-9680-11e9-863a-0ba1841fdad5" alt="enter image description here"></p>
+    <h4 id="-1">状态压缩问题</h4>
+    <p>二进制状态压缩，是指将一个长度为 m 的 bool 数组用一个 m 位的二进制整数表示并存储的方法，主要有以下几种操作：</p>
+    <ul>
+        <li>(n&gt;&gt; k) &amp;1：n 在二进制下的第 k 位</li>
+        <li>n &amp; ((1 &lt;&lt; k)-1)：n 在二进制下的 0~k-1 位</li>
+        <li>n xor (1 &lt;&lt; k)：n 在二进制下的第 k 位取反</li>
+        <li>n | (1 &lt;&lt; k)：n 在二进制下的第 k 位赋 1</li>
+        <li>n &amp; (~ (1 &lt;&lt; k))：n 在二进制下的第 k 位赋 0</li>
+    </ul>
+    <p>在 STL 里面，可以用 bitset 去实现，这部分很推荐大家去网上学习以下。</p>
+    <p>状态压缩常用于对一些全排列问题的优化，比如说常见的 TSP 问题，可以通过状态压缩，把复杂度优化到 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-2-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>O</mi><mo stretchy=&quot;false&quot;>(</mo><msup><mn>2</mn><mi>n</mi></msup><mo>&amp;#x00D7;</mo><mi>n</mi><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-6" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-7" class="mjx-mrow"><span id="MJXc-Node-8" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.326em;">O</span></span><span id="MJXc-Node-9" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">(</span></span><span id="MJXc-Node-10" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-11" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">2</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.591em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-12" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.218em; padding-bottom: 0.272em;">n</span></span></span></span><span id="MJXc-Node-13" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-14" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.218em; padding-bottom: 0.272em;">n</span></span><span id="MJXc-Node-15" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mi>n</mi></msup><mo>×</mo><mi>n</mi><mo stretchy="false">)</mo></math></span></span>
+        <script type="math/tex" id="MathJax-Element-2">O(2^n \times n)</script>
+        ，这部分我将会在后续的动态规划部分详细阐述。
+    </p>
+    <h4 id="-2">关于异或</h4>
+    <p>异或是一种很神奇的运算，在面试中也是经常被考查到的热点。异或最神奇的性质就是一个数异或自己为 0。</p>
+    <p>利用这个性质，我们可以解决一道非常经典的面试题。</p>
+    <blockquote>
+        <p>给定 N 个数，N 是奇数，在这 N 个数中，只有一个数出现 1 次，其他数都出现 2 次，求出这个数。</p>
+    </blockquote>
+    <p>显然，利用异或的性质，把所有数异或一遍即可。因为相同的数，异或为 0，最后剩下的，一定是那个只出现了 1 次的数。</p>
+    <h3 id="2">2 前缀和</h3>
+    <p>前缀和是算法竞赛中较为常用的一种优化手段，掌握前缀和相关的知识非常重要。在这一节中我会跟大家一起学习前缀和以及差分相关的一些问题。</p>
+    <h4 id="-3">前缀和</h4>
+    <p>首先我们先来看下面一个问题：给你一个有 N 个数组成的数组 X，其中每个数记为 X[1],X[2],X[3],…,X[N]，现在我有 m 个查询操作，每次查询会给你一个区间 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-3-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mo stretchy=&quot;false&quot;>(</mo><msub><mi>L</mi><mi>i</mi></msub><mo>,</mo><msub><mi>R</mi><mi>i</mi></msub><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-16" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-17" class="mjx-mrow"><span id="MJXc-Node-18" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">(</span></span><span id="MJXc-Node-19" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-20" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">L</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-21" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.434em; padding-bottom: 0.272em;">i</span></span></span></span><span id="MJXc-Node-22" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.541em;">,</span></span><span id="MJXc-Node-23" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-24" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">R</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-25" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.434em; padding-bottom: 0.272em;">i</span></span></span></span><span id="MJXc-Node-26" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><msub><mi>L</mi><mi>i</mi></msub><mo>,</mo><msub><mi>R</mi><mi>i</mi></msub><mo stretchy="false">)</mo></math></span></span>
+        <script type="math/tex" id="MathJax-Element-3">(L_i,R_i)</script>
+        ，要求你每次查询输出 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-4-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><munderover><mo>&amp;#x2211;</mo><mrow class=&quot;MJX-TeXAtom-ORD&quot;><msub><mi>L</mi><mi>i</mi></msub></mrow><mrow class=&quot;MJX-TeXAtom-ORD&quot;><msub><mi>R</mi><mi>i</mi></msub></mrow></munderover><mi>X</mi></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-27" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-28" class="mjx-mrow"><span id="MJXc-Node-29" class="mjx-munderover"><span class="mjx-base"><span id="MJXc-Node-30" class="mjx-mo"><span class="mjx-char MJXc-TeX-size1-R" style="padding-top: 0.541em; padding-bottom: 0.541em;">∑</span></span></span><span class="mjx-stack" style="vertical-align: -0.31em;"><span class="mjx-sup" style="font-size: 70.7%; padding-bottom: 0.265em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-36" class="mjx-texatom" style><span id="MJXc-Node-37" class="mjx-mrow"><span id="MJXc-Node-38" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-39" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">R</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-40" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.434em; padding-bottom: 0.272em;">i</span></span></span></span></span></span></span><span class="mjx-sub" style="font-size: 70.7%; padding-right: 0.071em;"><span id="MJXc-Node-31" class="mjx-texatom" style><span id="MJXc-Node-32" class="mjx-mrow"><span id="MJXc-Node-33" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-34" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">L</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-35" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.434em; padding-bottom: 0.272em;">i</span></span></span></span></span></span></span></span></span><span id="MJXc-Node-41" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em; padding-right: 0.024em;">X</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><munderover><mo>∑</mo><mrow class="MJX-TeXAtom-ORD"><msub><mi>L</mi><mi>i</mi></msub></mrow><mrow class="MJX-TeXAtom-ORD"><msub><mi>R</mi><mi>i</mi></msub></mrow></munderover><mi>X</mi></math></span></span>
+        <script type="math/tex" id="MathJax-Element-4">\sum_{L_i}^{R_i} X</script>
+        。
+    </p>
+    <p>很显然，这个题如果暴力去做的话，复杂度是 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-5-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>O</mi><mo stretchy=&quot;false&quot;>(</mo><mi>N</mi><mo>&amp;#x00D7;</mo><mi>M</mi><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-42" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-43" class="mjx-mrow"><span id="MJXc-Node-44" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.326em;">O</span></span><span id="MJXc-Node-45" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">(</span></span><span id="MJXc-Node-46" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em; padding-right: 0.085em;">N</span></span><span id="MJXc-Node-47" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-48" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em; padding-right: 0.081em;">M</span></span><span id="MJXc-Node-49" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo>×</mo><mi>M</mi><mo stretchy="false">)</mo></math></span></span>
+        <script type="math/tex" id="MathJax-Element-5">O(N \times M)</script>
+        的，那我们可以想想是否有更快的方法呢？
+    </p>
+    <p>假设我们定义 dp[i] 表示前 i 个数的和，那对于一个区间 [L,R] 的和，是不是就可以表示成为 dp[R]-dp[L-1]，这样我们就可以在 O(M) 的时间内完成这 M 次查询操作，极大提高了效率。</p>
+    <p><img src="https://images.gitbook.cn/7503a4a0-95d0-11e9-9681-bf7cab02732c" alt="enter image description here"></p>
+    <p>前缀和是不是看上去很简单呢？没错，它就是如此简单的一个小 trick。</p>
+    <h4 id="-4">差分</h4>
+    <p>继续上面的问题，我如果将题目改成我有 M 个修改操作。操作有 2 种，第一种，将区间 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-6-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mo stretchy=&quot;false&quot;>(</mo><msub><mi>L</mi><mi>i</mi></msub><mo>,</mo><msub><mi>R</mi><mi>i</mi></msub><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation" style="font-size: 117%; position: relative;"><span id="MJXc-Node-50" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-51" class="mjx-mrow"><span id="MJXc-Node-52" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">(</span></span><span id="MJXc-Node-53" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-54" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">L</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-55" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span></span></span><span id="MJXc-Node-56" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.158em; padding-bottom: 0.537em;">,</span></span><span id="MJXc-Node-57" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-58" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.323em;">R</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-59" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span></span></span><span id="MJXc-Node-60" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><msub><mi>L</mi><mi>i</mi></msub><mo>,</mo><msub><mi>R</mi><mi>i</mi></msub><mo stretchy="false">)</mo></math></span></span>
+        <script type="math/tex" id="MathJax-Element-6">(L_i,R_i)</script>
+        每个数都加上 P；第二种，将区间 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-7-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mo stretchy=&quot;false&quot;>(</mo><msub><mi>L</mi><mi>i</mi></msub><mo>,</mo><msub><mi>R</mi><mi>i</mi></msub><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation" style="font-size: 117%; position: relative;"><span id="MJXc-Node-61" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-62" class="mjx-mrow"><span id="MJXc-Node-63" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">(</span></span><span id="MJXc-Node-64" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-65" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">L</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-66" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span></span></span><span id="MJXc-Node-67" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.158em; padding-bottom: 0.537em;">,</span></span><span id="MJXc-Node-68" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-69" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.323em;">R</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-70" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span></span></span><span id="MJXc-Node-71" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><msub><mi>L</mi><mi>i</mi></msub><mo>,</mo><msub><mi>R</mi><mi>i</mi></msub><mo stretchy="false">)</mo></math></span></span>
+        <script type="math/tex" id="MathJax-Element-7">(L_i,R_i)</script>
+        每个数都减去 P。最后我只有一次查询，求 X [1],X [2],X [3],…,X [N] 的每一个数。
+    </p>
+    <p>显然，这个题目直接用上面的知识不能直接解决了，这时候我们就需要引入差分的思想。我们会开一个 DP 数组，来储存每一次的修改操作，最后求前缀和的时候统计一下就能快速的得到正确答案了。</p>
+    <p>什么意思呢？比如说我需要对一个区间 [L,R] 中的每一个元素都加上 p，那根据差分的原理，其实我们只需要标记这一段的开始位置和这一段的结束位置，于是我们令 dp[L]+=p,dp[R+1]-=p。最后我们对 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-8-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><munderover><mo>&amp;#x2211;</mo><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mn>1</mn></mrow><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mi>i</mi></mrow></munderover><mi>d</mi><mi>p</mi></math>" role="presentation" style="font-size: 117%; position: relative;"><span id="MJXc-Node-72" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-73" class="mjx-mrow"><span id="MJXc-Node-74" class="mjx-munderover"><span class="mjx-base"><span id="MJXc-Node-75" class="mjx-mo"><span class="mjx-char MJXc-TeX-size1-R" style="padding-top: 0.537em; padding-bottom: 0.537em;">∑</span></span></span><span class="mjx-stack" style="vertical-align: -0.31em;"><span class="mjx-sup" style="font-size: 70.7%; padding-bottom: 0.422em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-79" class="mjx-texatom" style><span id="MJXc-Node-80" class="mjx-mrow"><span id="MJXc-Node-81" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span></span></span></span><span class="mjx-sub" style="font-size: 70.7%; padding-right: 0.071em;"><span id="MJXc-Node-76" class="mjx-texatom" style><span id="MJXc-Node-77" class="mjx-mrow"><span id="MJXc-Node-78" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">1</span></span></span></span></span></span></span><span id="MJXc-Node-82" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.003em;">d</span></span><span id="MJXc-Node-83" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.483em;">p</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><munderover><mo>∑</mo><mrow class="MJX-TeXAtom-ORD"><mn>1</mn></mrow><mrow class="MJX-TeXAtom-ORD"><mi>i</mi></mrow></munderover><mi>d</mi><mi>p</mi></math></span></span>
+        <script type="math/tex" id="MathJax-Element-8">\sum_{1}^{i} dp</script>
+        ，就可以得到修改结束后 i 位置的值
+    </p>
+    <p><img src="https://images.gitbook.cn/4d7acb20-95d0-11e9-9798-d9f969a53bc0" alt="enter image description here"></p>
+    <p>利用差分的思想就可以很方便地解决这一类相关的问题。</p>
+    <h4 id="-5">真题演练</h4>
+    <p>今年某大厂出了这样一个算法问题：</p>
+    <blockquote>
+        <p>给你一些数，每个数出现的次数都可能不止 1 次，让你用上述条件，设计一个加权随机数算法。</p>
+    </blockquote>
+    <p>如果懂得前缀和思想的话，可以首先统计每个数出现的次数，然后对这些次数做一个前缀和，然后我们 random 一个 (1, 总数) 之间的随机数，然后去二分答案，看这个数落在哪个区间。就可以非常容易地解决掉这个问题。</p>
+    <h3 id="3">3 二分</h3>
+    <p>二分是一个非常基础的算法，相信大家都非常熟悉，关于二分的写法，也各人有各人的习惯，这里我就不再展开。在这里我主要跟大家讨论的是二分答案。</p>
+    <p>什么是二分答案呢？简单地说，就是我通过二分的方法，去枚举一个值，然后根据这个值和我实际要求的结果做比对，通过比对，我决定下一步是在左半区间继续去枚举，还是在右半区间继续去枚举。</p>
+    <p>一般的套路是我们会有一个 judge 函数，里面会写一些我们希望他满足的条件，通过 judge 函数返回的值为 true 或者 false，code 框架一般如下所示：</p>
+    <p><img src="https://images.gitbook.cn/31fe33f0-95d0-11e9-84a9-87e2c5db4878" alt="enter image description here"></p>
+    <h4 id="-6">真题演练</h4>
+    <p>今年某公司曾出了这样的一个算法问题：</p>
+    <blockquote>
+        <p>假设有 M 块的蛋糕，我们可以对蛋糕进行合并，最后合并成为 N 份，不必均匀合并。其中最小的一份的大小记为 K，我们要使得这个 K 最大，应该怎么做？</p>
+    </blockquote>
+    <p>显然我们可以很容易想到上面提到过的二分答案问题，那我们如何去设计这个 judge 函数呢？很简单，我们每次可以去二分一个值，然后看以这个值为最小值的情况下，M 个能不能合并出 N 份。如果可以的话，说明这个 K
+        可以继续增大，如果不行的话，说明这个 K 过大了，我们需要减小这个 K。</p>
+    <p><img src="https://images.gitbook.cn/aa6a1320-95d2-11e9-9681-bf7cab02732c" alt="enter image description here"></p>
+    <p>二分答案是一种非常有用的思想，精髓就在于对于 judge 函数的设计，这部分需要多练习才会有灵感。</p>
+    <h3 id="4">4 排序</h3>
+    <p>
+        说到几大基本的排序算法及其应用场景，稳定性等问题，我相信大家背得都比我熟。但排序作为一种最最基础的算法，往往是在校招中被面试官考查得最多的。我们不仅仅应该掌握记住排序算法的复杂度，更重要的是，我们需要更深入地去理解排序算法背后的思想，以及这种思想可能产生的一些变形。</p>
+    <h4 id="-7">快排思想变形</h4>
+    <p>说到快排，大家都非常熟悉，但不知道大家有没有考虑过这样一个问题。</p>
+    <blockquote>
+        <p>给你一个无序数组 X，如何求出其中第 K 大的元素？</p>
+    </blockquote>
+    <p>当然直接做排序是一种思路，复杂度是 O(NlogN)
+        的。但是可不可以做到更快一些呢？我们想一下逆序快排的过程，每次将一个元素固定好以后，左半区间，一定都是比它大的，而右半区间一定都是比它小的。那如果我们的基准元素位于的位置大于
+        K，那我们下一次是不是只需要在左半区间进行递归就行了，而不需要去递归右半区间；同理，如果小于 K，只需要递归右半区间就好了。这样的话，期望复杂度可以做到<span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-9-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>O</mi><mo stretchy=&quot;false&quot;>(</mo><mi>N</mi><mo stretchy=&quot;false&quot;>)</mo><mo>+</mo><mi>O</mi><mo stretchy=&quot;false&quot;>(</mo><mfrac><mn>2</mn><mi>N</mi></mfrac><mo stretchy=&quot;false&quot;>)</mo><mo>+</mo><mi>O</mi><mo stretchy=&quot;false&quot;>(</mo><mfrac><mn>4</mn><mi>N</mi></mfrac><mo stretchy=&quot;false&quot;>)</mo><mo>+</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>&amp;lt;</mo><mi>O</mi><mo stretchy=&quot;false&quot;>(</mo><mn>2</mn><mo>&amp;#x00D7;</mo><mi>N</mi><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation" style="font-size: 117%; position: relative;"><span id="MJXc-Node-84" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-85" class="mjx-mrow"><span id="MJXc-Node-86" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.323em;">O</span></span><span id="MJXc-Node-87" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">(</span></span><span id="MJXc-Node-88" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.085em;">N</span></span><span id="MJXc-Node-89" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">)</span></span><span id="MJXc-Node-90" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">+</span></span><span id="MJXc-Node-91" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.323em;">O</span></span><span id="MJXc-Node-92" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">(</span></span><span id="MJXc-Node-93" class="mjx-mfrac"><span class="mjx-box MJXc-stacked" style="width: 0.769em; padding: 0px 0.12em;"><span class="mjx-numerator" style="font-size: 70.7%; width: 1.088em; top: -1.301em;"><span id="MJXc-Node-94" class="mjx-mn" style><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">2</span></span></span><span class="mjx-denominator" style="font-size: 70.7%; width: 1.088em; bottom: -0.611em;"><span id="MJXc-Node-95" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.085em;">N</span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.283em; width: 0.769em;"></span></span><span class="mjx-vsize" style="height: 1.352em; vertical-align: -0.432em;"></span></span><span id="MJXc-Node-96" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">)</span></span><span id="MJXc-Node-97" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">+</span></span><span id="MJXc-Node-98" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.323em;">O</span></span><span id="MJXc-Node-99" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">(</span></span><span id="MJXc-Node-100" class="mjx-mfrac"><span class="mjx-box MJXc-stacked" style="width: 0.769em; padding: 0px 0.12em;"><span class="mjx-numerator" style="font-size: 70.7%; width: 1.088em; top: -1.312em;"><span id="MJXc-Node-101" class="mjx-mn" style><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">4</span></span></span><span class="mjx-denominator" style="font-size: 70.7%; width: 1.088em; bottom: -0.611em;"><span id="MJXc-Node-102" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.085em;">N</span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.283em; width: 0.769em;"></span></span><span class="mjx-vsize" style="height: 1.359em; vertical-align: -0.432em;"></span></span><span id="MJXc-Node-103" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">)</span></span><span id="MJXc-Node-104" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">+</span></span><span id="MJXc-Node-105" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.158em; padding-bottom: 0.323em;">.</span></span><span id="MJXc-Node-106" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.158em; padding-bottom: 0.323em;">.</span></span><span id="MJXc-Node-107" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.158em; padding-bottom: 0.323em;">.</span></span><span id="MJXc-Node-108" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.158em; padding-bottom: 0.323em;">.</span></span><span id="MJXc-Node-109" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.158em; padding-bottom: 0.323em;">.</span></span><span id="MJXc-Node-110" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.27em; padding-bottom: 0.377em;">&lt;</span></span><span id="MJXc-Node-111" class="mjx-mi MJXc-space3"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.323em;">O</span></span><span id="MJXc-Node-112" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">(</span></span><span id="MJXc-Node-113" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">2</span></span><span id="MJXc-Node-114" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.216em; padding-bottom: 0.323em;">×</span></span><span id="MJXc-Node-115" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.085em;">N</span></span><span id="MJXc-Node-116" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo>+</mo><mi>O</mi><mo stretchy="false">(</mo><mfrac><mn>2</mn><mi>N</mi></mfrac><mo stretchy="false">)</mo><mo>+</mo><mi>O</mi><mo stretchy="false">(</mo><mfrac><mn>4</mn><mi>N</mi></mfrac><mo stretchy="false">)</mo><mo>+</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>&lt;</mo><mi>O</mi><mo stretchy="false">(</mo><mn>2</mn><mo>×</mo><mi>N</mi><mo stretchy="false">)</mo></math></span></span>
+        <script type="math/tex" id="MathJax-Element-9">O(N)+O(\frac{2}{N})+O(\frac{4}{N})+.....<O(2\times N)</script>
+        。
+    </p>
+    <p><img src="https://images.gitbook.cn/a5d38920-95d4-11e9-84a9-87e2c5db4878" alt="enter image description here"></p>
+    <h4 id="-8">归并思想变形</h4>
+    <p>同样，大家在学习归并排序的时候有没有思考过这么一个问题。</p>
+    <blockquote>
+        <p>给你一个无序数组 X，求出其中的逆序对有多少对？</p>
+    </blockquote>
+    <p>显然，这个题目如果暴力去做还是简单的，但是复杂度是<span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-10-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>O</mi><mo stretchy=&quot;false&quot;>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-117" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-118" class="mjx-mrow"><span id="MJXc-Node-119" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.326em;">O</span></span><span id="MJXc-Node-120" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">(</span></span><span id="MJXc-Node-121" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-122" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.218em; padding-bottom: 0.272em;">n</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.513em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-123" class="mjx-mn" style><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">2</span></span></span></span><span id="MJXc-Node-124" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.595em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></math></span></span>
+        <script type="math/tex" id="MathJax-Element-10">O(n^2)</script>
+        数量级的，可不可以再优化优化呢？我们考虑归并排序的过程。在对 2 个有序数组进行归并的时候，如果 high 指针对应的数比 low 指针对应要小，则说明从 low 到 mid 这一段都比 high 要大，则对整体的贡献为
+        mid-low+1。结合下面代码看看，这部分很容易理解的。
+    </p>
+    <p><img src="https://images.gitbook.cn/f2d24530-95d5-11e9-9798-d9f969a53bc0" alt="enter image description here"></p>
+    <h4 id="-9">字典序排序</h4>
+    <p>这是一类很有趣的问题，在招聘当中也出现过。</p>
+    <blockquote>
+        <p>给你一个数 N，按照字典序从小到大的顺序，输出 1-N 的所有数。</p>
+    </blockquote>
+    <p>这类题目和上述题目完全是用不一样的思路了。这类题目主要是用枚举的方法去解决。我们从高位到低位，对每一位，按照从小到大进行枚举，如果出现产生进位的情况，则找到第一个非零的最低位，并把它加 1。结合下面的代码很容易理解。</p>
+    <p><img src="https://images.gitbook.cn/881733c0-95d7-11e9-a28f-e32286283ffc" alt="enter image description here"></p>
+    <p>排序算法还有其他更多的变种，这儿没法一一列举，但万变不离其中，首先一定要深度理解排序的过程，掌握各类算法的背后的实质，然后多加练习，才能在实际中不怕面试官的新题。</p>
+    <h3 id="5">5 搜索</h3>
+    <p>
+        搜索问题在一些大厂中经常出现，因为搜索问题，对于确实是短时间内对于面试者代码水平和思维能力综合考核最佳的方法。搜索问题，不仅仅综合了对常用数据结构栈、队列等的深入理解，同时也能考量面试者对于递归的理解。在我学习程序设计竞赛的时候，总感觉递归是个坎，也花了比较多的时间去理解。</p>
+    <h4 id="-10">深度优先搜索</h4>
+    <p>众所周知，深度优先搜索底层的数据结构是栈。DFS 的非递归实现就是通过入栈和出栈来完成的。在校招中，DFS 是一个高频考点，对递归的理解，对搜索状态的设计，都能很好地考查被面试者的思维。下面来看一个很简单的问题。</p>
+    <blockquote>
+        <p>打印 1–N 的全排列</p>
+    </blockquote>
+    <p>这里，我们的 vis[i] 这一位是否被访问过，如果当前为是没有被访问过，则对当前位进行 DFS，若不满足状态，进行回溯，同时修改 vis[i] 的标记状态。</p>
+    <p><img src="https://images.gitbook.cn/eacc1950-976b-11e9-949b-a35e3e200084" alt="enter image description here"></p>
+    <h4 id="dfs">DFS 真题演练</h4>
+    <p>今年在某互联网公司的面试中，出现过这样一个问题，给你一个<span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-11-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>N</mi><mo>&amp;#x00D7;</mo><mi>M</mi></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-125" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-126" class="mjx-mrow"><span id="MJXc-Node-127" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em; padding-right: 0.085em;">N</span></span><span id="MJXc-Node-128" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-129" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em; padding-right: 0.081em;">M</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi><mo>×</mo><mi>M</mi></math></span></span>
+        <script type="math/tex" id="MathJax-Element-11">N \times M</script>
+        的格子，然后其中有一些格子被标记为 0，有些格子被标记为 1。每个格子只能和其 8 个方向的格子连通，标记为 1 的被认为是重要格子。(1) 求联通快的数量 (2) 求联通快的面积 (3) 求联通快的周长。
+    </p>
+    <p>很显然，掌握了 DFS 的知识，我们就可以很容易解决这个问题。从第一次找到第一个未访问的 1 的开始 DFS，设置一个访问数组 vis[i][j]，每次访问过这个位置，且为 1，就标记为已访问。在边 DFS
+        的同时，边统计联通快的数量和联通块的面积。对于周长的求解，就要稍微麻烦一些。我们在 DFS 到联通块内每一块的时候，只要对每个位置看看其四周是否不为 1，如果是，周长加 1。如此下去即可。</p>
+    <h4 id="-11">广度优先搜索</h4>
+    <p>不同于深度优先搜索，广度优先搜索常用的数据结构是队列。广度优先搜索最经典的问题，就是解决从 A 到 B，按照一定的走法，最少需要多少步。因为 BFS 的过程是一圈一圈往外扩的，所以当第一次触到 B
+        时，也就是所需的最少步数。常规的套路一般如下：</p>
+    <p><img src="https://images.gitbook.cn/a51dfa00-976f-11e9-b832-bd43f398eec9" alt="enter image description here"></p>
+    <p>掌握 BFS 思想，对于解决一些类似的问题也非常有帮助，比如有这样一个问题。请求出二叉树层序遍历的最左边一个结点。</p>
+    <p>这题做法也非常的显然，因为我们众所周知，树的层序遍历是 BFS，那我们可以每层进行层序遍历的时候，记录这一层的结点个数 len，然后每次取出第一个结点，然后把 len-1
+        个结点跑空，这样得到的一个是每一层最左边的结点。</p>
+    <h4 id="bfs">BFS 真题演练</h4>
+    <p>一般来说，BFS 在校招中的考查非常简单，问题也非常水，只要理解 BFS 框架，基本就能解决问题，来看今年的一个问题。</p>
+    <blockquote>
+        <p>我们在象棋中都知道马是怎么走的，给定马的起点和终点，求马从起点到终点，最少需要经过多少步？</p>
+    </blockquote>
+    <p>很显然，只要掌握了前面的框架，这道题就只需要修改 dx 和 dy 数组，为对应的马的走法即可，非常好做。</p>
+    <h3 id="6">6 动态规划</h3>
+    <p>
+        关于动态规划的概念，其实也不需要再赘述，百度和谷歌上已经介绍得非常详细。而动态规划，作为校招当中的热点和难点，并不像普通算法，有规律可循。它并没有啥固定的套路，更多的需要我们当时的灵感。而这种灵感，来自于平时大量的练习和总结。在这部分，我会为大家介绍一些动态规划的类型，以及一些常见的模型，同时会推荐一些比较适合入门的资料。希望能在校招中对大家有所帮助。</p>
+    <h4 id="dp">线性 DP</h4>
+    <p>线性 DP 属于最常见的一种 DP，也是最基础的一种 DP。</p>
+    <p>线性 DP 主要就是在数组上搞，有点类似于我们高中学的数列求通项公式，只是线性 DP 通常不是一维就能记录状态的，很多时候需要多维才能记录。我们来看一些经典问题加深对线性 DP 的理解</p>
+    <blockquote>
+        <p>给定一个长度 n 的数列 A，求单调递增的子序列的长度最长是多少？</p>
+    </blockquote>
+    <p>这个题的状态非常好设计，令 dp[i] 表示前 i 个最长上升子序列的长度，则 dp[i] 一定有它之前比它小的数的 dp 最大值转移过来。即 dp[i]=max {dp[j],j=1,2,3…,i}，最后我们再统计最大的
+        dp[i] 即可。</p>
+    <p><img src="https://images.gitbook.cn/68188ec0-97b7-11e9-a772-637cb12b480b" alt="enter image description here"></p>
+    <p>再来看一个类似的问题：</p>
+    <blockquote>
+        <p>给出两个字符串，求出这样的一个最长的公共子序列的长度</p>
+    </blockquote>
+    <p>这题跟上面的题目类似，但显然一维没法记录状态，也就是我们上面提到的，需要多维数组来记录。设 dp[i][j] 表示第 1 个字符串的前 i 位和第 2 个字符串前 j 位的最长公共子序列。然后我们来看看转移。如果第一个的第 i
+        位和第二个的第 j 位相等，则 dp[i][j] 可由 dp[i-1][j-1] 转移过来，否则有 dp[i-1][j] 和 dp[i][j-1] 二者的最大值转移过来。</p>
+    <p><img src="https://images.gitbook.cn/b6deeb70-97b8-11e9-bc97-93abff33030c" alt="enter image description here"></p>
+    <p>对线性 DP 状态的设计，重要的是多加练习，多加总结，一些经典的题型还包括<strong>数字三角形问题、最大子矩阵和问题</strong>，都是一样的套路，希望大家能下去搞懂。</p>
+    <p>最后会为大家推荐一个线性 DP 的练习专题：</p>
+    <blockquote>
+        <p><a href="https://vjudge.net/contest/68966" target="_blank" rel="noopener">线性 DP 进阶练习推荐</a></p>
+    </blockquote>
+    <p>另外关于背包问题，非常推荐大家去看背包九讲，里面不仅仅介绍了最基础的各种背包问题，更囊括了背包问题的各种变式。</p>
+    <h4 id="dp-1">区间 DP</h4>
+    <p>与区间相关的 DP 模型也是经常被考查到的。解决这类问题，我们一般需要设计一个二维的 DP
+        状态，然后将问题划分为两个子问题，也就是将一段区间分成左右两个区间。最后将左右两个区间合并到整个区间。也就是我们所说的把局部最优解合并成为全局最优解。</p>
+    <p>下面我们来看这样一个问题：</p>
+    <blockquote>
+        <p>给定 n 个矩阵 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-12-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>&amp;#xFF5B;</mo></mrow><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><msub><mi>A</mi><mn>2</mn></msub><mo>,</mo><mo>&amp;#x2026;</mo><mo>,</mo><msub><mi>A</mi><mi>n</mi></msub><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>&amp;#xFF5D;</mo></mrow></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-130" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-131" class="mjx-mrow"><span id="MJXc-Node-132" class="mjx-texatom"><span id="MJXc-Node-133" class="mjx-mrow"><span id="MJXc-Node-134" class="mjx-mo"><span class="mjx-char" style="padding-top: 0.541em; padding-bottom: 0.218em;"><span class="mjx-charbox MJXc-TeX-unknown-R" style="padding-bottom: 0.307em; width: 1.002em;">｛</span></span></span></span></span><span id="MJXc-Node-135" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-136" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-137" class="mjx-mn" style><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">1</span></span></span></span><span id="MJXc-Node-138" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.541em;">,</span></span><span id="MJXc-Node-139" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-140" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-141" class="mjx-mn" style><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">2</span></span></span></span><span id="MJXc-Node-142" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.541em;">,</span></span><span id="MJXc-Node-143" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.326em;">…</span></span><span id="MJXc-Node-144" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.541em;">,</span></span><span id="MJXc-Node-145" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-146" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-147" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.218em; padding-bottom: 0.272em;">n</span></span></span></span><span id="MJXc-Node-148" class="mjx-texatom"><span id="MJXc-Node-149" class="mjx-mrow"><span id="MJXc-Node-150" class="mjx-mo"><span class="mjx-char" style="padding-top: 0.541em; padding-bottom: 0.218em;"><span class="mjx-charbox MJXc-TeX-unknown-R" style="padding-bottom: 0.307em; width: 1.002em;">｝</span></span></span></span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow class="MJX-TeXAtom-ORD"><mo>｛</mo></mrow><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><msub><mi>A</mi><mn>2</mn></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>A</mi><mi>n</mi></msub><mrow class="MJX-TeXAtom-ORD"><mo>｝</mo></mrow></math></span></span>
+            <script type="math/tex" id="MathJax-Element-12">｛A_1,A_2,…,A_n｝</script>
+            ，其中，<span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-13-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msub><mi>A</mi><mi>i</mi></msub></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-151" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-152" class="mjx-mrow"><span id="MJXc-Node-153" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-154" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-155" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.434em; padding-bottom: 0.272em;">i</span></span></span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>A</mi><mi>i</mi></msub></math></span></span>
+            <script type="math/tex" id="MathJax-Element-13">A_i</script>
+            与 <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-14-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msub><mi>A</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></math>" role="presentation" style="font-size: 116%; position: relative;"><span id="MJXc-Node-156" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-157" class="mjx-mrow"><span id="MJXc-Node-158" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-159" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-160" class="mjx-texatom" style><span id="MJXc-Node-161" class="mjx-mrow"><span id="MJXc-Node-162" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.434em; padding-bottom: 0.272em;">i</span></span><span id="MJXc-Node-163" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.272em; padding-bottom: 0.434em;">+</span></span><span id="MJXc-Node-164" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">1</span></span></span></span></span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>A</mi><mrow class="MJX-TeXAtom-ORD"><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></math></span></span>
+            <script type="math/tex" id="MathJax-Element-14">A_{i+1}</script>
+            是可乘的，(i=1,2 ,…,n-1)。用加括号的方法表示矩阵连乘的次序，不同的计算次序计算量（乘法次数）是不同的，找出一种加括号的方法，使得矩阵连乘的次数最小。
+        </p>
+    </blockquote>
+    <p>本题任务是设计一个表达式。在表达式中，一定有一个“最后一次乘法”，我们不妨设为第 k 个乘号，则在此之前已经算出了</p>
+    <p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-15-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" style="font-size: 116%; text-align: center; position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;><mi>P</mi><mo>=</mo><msub><mi>A</mi><mn>1</mn></msub><mo>&amp;#x00D7;</mo><msub><mi>A</mi><mn>2</mn></msub><mo>&amp;#x00D7;</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>&amp;#x00D7;</mo><msub><mi>A</mi><mi>k</mi></msub><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>$</mo></mrow><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>&amp;#xFF0C;</mo></mrow><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>$</mo></mrow><mi>Q</mi><mo>=</mo><msub><mi>A</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>&amp;#x00D7;</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>&amp;#x00D7;</mo><msub><mi>A</mi><mi>n</mi></msub></math>" role="presentation"><span id="MJXc-Node-165" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-166" class="mjx-mrow"><span id="MJXc-Node-167" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em; padding-right: 0.109em;">P</span></span><span id="MJXc-Node-168" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.057em; padding-bottom: 0.326em;">=</span></span><span id="MJXc-Node-169" class="mjx-msubsup MJXc-space3"><span class="mjx-base"><span id="MJXc-Node-170" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-171" class="mjx-mn" style><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">1</span></span></span></span><span id="MJXc-Node-172" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-173" class="mjx-msubsup MJXc-space2"><span class="mjx-base"><span id="MJXc-Node-174" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-175" class="mjx-mn" style><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">2</span></span></span></span><span id="MJXc-Node-176" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-177" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.326em;">.</span></span><span id="MJXc-Node-178" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.326em;">.</span></span><span id="MJXc-Node-179" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.326em;">.</span></span><span id="MJXc-Node-180" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-181" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-182" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-183" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">k</span></span></span></span><span id="MJXc-Node-184" class="mjx-texatom"><span id="MJXc-Node-185" class="mjx-mrow"><span id="MJXc-Node-186" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.38em;">$</span></span></span></span><span id="MJXc-Node-187" class="mjx-texatom"><span id="MJXc-Node-188" class="mjx-mrow"><span id="MJXc-Node-189" class="mjx-mo"><span class="mjx-char" style="padding-top: 0.541em; padding-bottom: 0.218em;"><span class="mjx-charbox MJXc-TeX-unknown-R" style="padding-bottom: 0.307em; width: 1.002em;">，</span></span></span></span></span><span id="MJXc-Node-190" class="mjx-texatom"><span id="MJXc-Node-191" class="mjx-mrow"><span id="MJXc-Node-192" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.488em; padding-bottom: 0.38em;">$</span></span></span></span><span id="MJXc-Node-193" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.488em;">Q</span></span><span id="MJXc-Node-194" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.057em; padding-bottom: 0.326em;">=</span></span><span id="MJXc-Node-195" class="mjx-msubsup MJXc-space3"><span class="mjx-base"><span id="MJXc-Node-196" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-197" class="mjx-texatom" style><span id="MJXc-Node-198" class="mjx-mrow"><span id="MJXc-Node-199" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">k</span></span><span id="MJXc-Node-200" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.272em; padding-bottom: 0.434em;">+</span></span><span id="MJXc-Node-201" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.38em; padding-bottom: 0.326em;">1</span></span></span></span></span></span><span id="MJXc-Node-202" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-203" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.326em;">.</span></span><span id="MJXc-Node-204" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.326em;">.</span></span><span id="MJXc-Node-205" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="margin-top: -0.159em; padding-bottom: 0.326em;">.</span></span><span id="MJXc-Node-206" class="mjx-mo MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.218em; padding-bottom: 0.326em;">×</span></span><span id="MJXc-Node-207" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-208" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.488em; padding-bottom: 0.272em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-209" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.218em; padding-bottom: 0.272em;">n</span></span></span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>P</mi><mo>=</mo><msub><mi>A</mi><mn>1</mn></msub><mo>×</mo><msub><mi>A</mi><mn>2</mn></msub><mo>×</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>×</mo><msub><mi>A</mi><mi>k</mi></msub><mrow class="MJX-TeXAtom-ORD"><mo>$</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>，</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>$</mo></mrow><mi>Q</mi><mo>=</mo><msub><mi>A</mi><mrow class="MJX-TeXAtom-ORD"><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>×</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>×</mo><msub><mi>A</mi><mi>n</mi></msub></math></span></span></span>
+        <script type="math/tex; mode=display" id="MathJax-Element-15">
+            P=A_1 \times A_2 \times ...\times A_k$，$Q=A_{k+1} \times ... \times A_n
+        </script>
+    </p>
+    <p>显然 P 和 Q 的过程互相不干预，而且无论按照什么样的顺序，P 和 Q 的值都不会发生改变，因此只需让 P 和 Q 分别按照最优的方案计算即可。首先我们定义 dp[i][j] 为从 i 到 j
+        需要做多少次乘法，则根据我们上面的分析，我们知道需要把区间 (i,j) 分为两部分 (i,k) 和 (k+1,j)，我们最后的答案为这两部分的和。</p>
+    <p>最后我们就可以设计出状态转移方程了：
+        <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-16-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" style="font-size: 117%; text-align: center; position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;><mi>d</mi><mi>p</mi><mo stretchy=&quot;false&quot;>[</mo><mi>i</mi><mo stretchy=&quot;false&quot;>]</mo><mo stretchy=&quot;false&quot;>[</mo><mi>j</mi><mo stretchy=&quot;false&quot;>]</mo><mo>=</mo><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy=&quot;false&quot;>(</mo><mi>d</mi><mi>p</mi><mo stretchy=&quot;false&quot;>[</mo><mi>i</mi><mo stretchy=&quot;false&quot;>]</mo><mo stretchy=&quot;false&quot;>[</mo><mi>k</mi><mo stretchy=&quot;false&quot;>]</mo><mo>+</mo><mi>d</mi><mi>p</mi><mo stretchy=&quot;false&quot;>[</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy=&quot;false&quot;>]</mo><mo stretchy=&quot;false&quot;>[</mo><mi>j</mi><mo stretchy=&quot;false&quot;>]</mo><mo>+</mo><msub><mi>A</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mi>i</mi><mo>&amp;#x2212;</mo><mn>1</mn></mrow></msub><msub><mi>A</mi><mi>k</mi></msub><msub><mi>A</mi><mi>j</mi></msub><mo stretchy=&quot;false&quot;>)</mo></math>" role="presentation"><span id="MJXc-Node-210" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-211" class="mjx-mrow"><span id="MJXc-Node-212" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.003em;">d</span></span><span id="MJXc-Node-213" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.483em;">p</span></span><span id="MJXc-Node-214" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">[</span></span><span id="MJXc-Node-215" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span><span id="MJXc-Node-216" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">]</span></span><span id="MJXc-Node-217" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">[</span></span><span id="MJXc-Node-218" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.483em;">j</span></span><span id="MJXc-Node-219" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">]</span></span><span id="MJXc-Node-220" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.056em; padding-bottom: 0.323em;">=</span></span><span id="MJXc-Node-221" class="mjx-mi MJXc-space3"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.27em;">m</span></span><span id="MJXc-Node-222" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span><span id="MJXc-Node-223" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.27em;">n</span></span><span id="MJXc-Node-224" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">(</span></span><span id="MJXc-Node-225" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.003em;">d</span></span><span id="MJXc-Node-226" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.483em;">p</span></span><span id="MJXc-Node-227" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">[</span></span><span id="MJXc-Node-228" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span><span id="MJXc-Node-229" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">]</span></span><span id="MJXc-Node-230" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">[</span></span><span id="MJXc-Node-231" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">k</span></span><span id="MJXc-Node-232" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">]</span></span><span id="MJXc-Node-233" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">+</span></span><span id="MJXc-Node-234" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em; padding-right: 0.003em;">d</span></span><span id="MJXc-Node-235" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.483em;">p</span></span><span id="MJXc-Node-236" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">[</span></span><span id="MJXc-Node-237" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">k</span></span><span id="MJXc-Node-238" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">+</span></span><span id="MJXc-Node-239" class="mjx-mn MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">1</span></span><span id="MJXc-Node-240" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">]</span></span><span id="MJXc-Node-241" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">[</span></span><span id="MJXc-Node-242" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.483em;">j</span></span><span id="MJXc-Node-243" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">]</span></span><span id="MJXc-Node-244" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">+</span></span><span id="MJXc-Node-245" class="mjx-msubsup MJXc-space2"><span class="mjx-base"><span id="MJXc-Node-246" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-247" class="mjx-texatom" style><span id="MJXc-Node-248" class="mjx-mrow"><span id="MJXc-Node-249" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.27em;">i</span></span><span id="MJXc-Node-250" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">−</span></span><span id="MJXc-Node-251" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">1</span></span></span></span></span></span><span id="MJXc-Node-252" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-253" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-254" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">k</span></span></span></span><span id="MJXc-Node-255" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-256" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">A</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-257" class="mjx-mi" style><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.43em; padding-bottom: 0.483em;">j</span></span></span></span><span id="MJXc-Node-258" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.483em; padding-bottom: 0.59em;">)</span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>d</mi><mi>p</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo><mo stretchy="false">[</mo><mi>j</mi><mo stretchy="false">]</mo><mo>=</mo><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mi>d</mi><mi>p</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo><mo stretchy="false">[</mo><mi>k</mi><mo stretchy="false">]</mo><mo>+</mo><mi>d</mi><mi>p</mi><mo stretchy="false">[</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy="false">]</mo><mo stretchy="false">[</mo><mi>j</mi><mo stretchy="false">]</mo><mo>+</mo><msub><mi>A</mi><mrow class="MJX-TeXAtom-ORD"><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>A</mi><mi>k</mi></msub><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="false">)</mo></math></span></span></span>
+        <script type="math/tex; mode=display" id="MathJax-Element-16">dp[i][j]=min(dp[i][k]+dp[k+1][j]+A_{i-1}A_kA_j)
+        </script>
+        界是 dp[i][i]=0。最后 dp[1][n] 就是所求。
+    </p>
+    <p>关于区间 DP，经典的问题还有<strong>切蛋糕、括号序列</strong>等。都是一样的思路，希望大家能下去完成。</p>
+    <p>最后推荐一个区间 DP 的进阶专题练习：</p>
+    <blockquote>
+        <p><a href="https://vjudge.net/contest/77874" target="_blank" rel="noopener">区间 DP 进阶</a></p>
+    </blockquote>
+    <h4 id="dp-2">状压 DP</h4>
+    <p>还记得我们在第一章当中讲过的二进制问题嘛，没错，状态压缩 DP 是利用计算机二进制的性质来描述状态的一种 DP 方式。来看这样一个问题。</p>
+    <blockquote>
+        <p>给定一张 n (n≤20) 个点的带权无向图，点从 0~n-1 标号，求起点 0 到终点 n-1 的最短 Hamilton 路径。 Hamilton 路径的定义是从 0 到 n-1
+            不重不漏地经过每个点恰好一次。</p>
+    </blockquote>
+    <p>这个题的暴力做法，大家一定都会，枚举全排列，然后判断哪一种 1~n-1 的路径是最优的，然而我们来看看数据范围 20。我们都知道，全排列的复杂度是 n!。那 20! 将是一个非常大的数，我们想想能不能优化呢？</p>
+    <p>我们是不是可以用二进制上的数代表一个点的状态，取（1）或不取（0）。题目让求从点 1 到 n 的最短汉密顿路径，即经过每个点一次，这时的状态用二进制表示就是 (1 &lt;&lt; n)-1 （n 个 1）。用
+        dp[i][j] 表示在状态 i 下，从 1 到 j 的最短汉密顿路径。则 dp[i][j] 可由上一个状态（上一状态就是把 j 从当前状态中去掉）dp[i^(1 &lt;&lt; (j-1))][k] 得到，其中保证 k
+        是中存在的点，即 (i&gt;&gt;k)&amp;1。则状态转移方程为：dp[i][j]=min {dp [i^(1 &lt;&lt; j)][k]+mate [k][j]}(k=1~n)，其含义就是枚举到达点 j
+        之前的前一个点 k，取其最短；</p>
+    <p><img src="https://images.gitbook.cn/2cf014f0-97bf-11e9-b265-f1f3c6cbb1c4" alt="enter image description here"></p>
+    <p>照例，最后向大家推荐一下状态 DP 的进阶练习：</p>
+    <blockquote>
+        <p><a href="https://vjudge.net/contest/195271" target="_blank" rel="noopener">状压 DP 进阶</a></p>
+    </blockquote>
+    <h4 id="-12">总结</h4>
+    <p>基本来说，在校招当中遇到的 DP 还是以上面三类为主，也很少设计到用数据结构对 DP 状态的一些优化，以及一些树形 DP、概率 DP 或者插头 DP 的内容。如果感兴趣，网上有很多优秀的资料，供大家进一步去学习。</p>
+    <h3 id="7">7 结语</h3>
+    <p>
+        上面跟大家谈到的东西很多是我个人在今年实习面试中遇到的一些问题及知识点，希望能对大家秋招有一定的帮助。当然，上面谈到的内容并不包含全部的高频考点，比如说诸如链表、二叉树等，因为太过于常规，一方面，大家对于这样的题型本身就很熟悉，另一方面，网上这样的资料也很多，许多大佬写的博客水平也远胜于我。</p>
+    <p>另外，我要给大家说的是，校招的算法题偏向基础，大家一定要打好基础，推荐大家可以多刷一刷 LeetCode 上面的前 200
+        题，对于每一道题，希望大家不仅仅是把答案记住了，一定要做到对算法真正的理解，不然如果换一道题可能又写不出来了，毕竟刷题的质量，一定是胜过数量的。</p>
+    <p>最后也希望大家不要忽视对基础知识的掌握，牢固的计算机基础知识永远都是你通往成功的不二法门。最后祝大家秋招顺利，找到自己心仪的工作。</p></div>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">1.</span> <span class="toc-text">1 位运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">移位运算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">状态压缩问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">关于异或</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">2.</span> <span class="toc-text">2 前缀和</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">2.1.</span> <span class="toc-text">前缀和</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-4"><span class="toc-number">2.2.</span> <span class="toc-text">差分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-5"><span class="toc-number">2.3.</span> <span class="toc-text">真题演练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">3.</span> <span class="toc-text">3 二分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-6"><span class="toc-number">3.1.</span> <span class="toc-text">真题演练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4"><span class="toc-number">4.</span> <span class="toc-text">4 排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-7"><span class="toc-number">4.1.</span> <span class="toc-text">快排思想变形</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-8"><span class="toc-number">4.2.</span> <span class="toc-text">归并思想变形</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-9"><span class="toc-number">4.3.</span> <span class="toc-text">字典序排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5"><span class="toc-number">5.</span> <span class="toc-text">5 搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-10"><span class="toc-number">5.1.</span> <span class="toc-text">深度优先搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dfs"><span class="toc-number">5.2.</span> <span class="toc-text">DFS 真题演练</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-11"><span class="toc-number">5.3.</span> <span class="toc-text">广度优先搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bfs"><span class="toc-number">5.4.</span> <span class="toc-text">BFS 真题演练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-number">6.</span> <span class="toc-text">6 动态规划</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dp"><span class="toc-number">6.1.</span> <span class="toc-text">线性 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dp-1"><span class="toc-number">6.2.</span> <span class="toc-text">区间 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dp-2"><span class="toc-number">6.3.</span> <span class="toc-text">状压 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-12"><span class="toc-number">6.4.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7"><span class="toc-number">7.</span> <span class="toc-text">7 结语</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&text=算法面试1"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&is_video=false&description=算法面试1"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法面试1&body=Check out this article: http://logan_2019.github.io/gitchat/algorithm_1/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&title=算法面试1"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/algorithm_1/2019/10/&name=算法面试1&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

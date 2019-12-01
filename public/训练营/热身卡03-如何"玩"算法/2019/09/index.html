@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="目标 1. 对遇到的特殊的问题要能够设计出算法实现 2. 对原理公开的知名算法，要能够翻译成具体的算法代码 3. 对已有具体实现的算法，要能够设计出合适的数学模型，将算法应用到实际问题中。 条件 1. 了解算法设计的常用思想和模式，并将题目转换成数据模型 2. 进一步用数据结构实现数据模型的一般方法。 将问题抽象成数据模型 信息数据化：把自然语言描述转换成方便代码数据模型表达的数字化信息。 类比和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何&quot;玩&quot;算法">
+<meta 2019 property="og:url" content="http://logan_2019.github.io/训练营/热身卡03-如何" 玩"算法 09 index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="目标 1. 对遇到的特殊的问题要能够设计出算法实现 2. 对原理公开的知名算法，要能够翻译成具体的算法代码 3. 对已有具体实现的算法，要能够设计出合适的数学模型，将算法应用到实际问题中。 条件 1. 了解算法设计的常用思想和模式，并将题目转换成数据模型 2. 进一步用数据结构实现数据模型的一般方法。 将问题抽象成数据模型 信息数据化：把自然语言描述转换成方便代码数据模型表达的数字化信息。 类比和">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.118Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何&quot;玩&quot;算法">
+<meta name="twitter:description" content="目标 1. 对遇到的特殊的问题要能够设计出算法实现 2. 对原理公开的知名算法，要能够翻译成具体的算法代码 3. 对已有具体实现的算法，要能够设计出合适的数学模型，将算法应用到实际问题中。 条件 1. 了解算法设计的常用思想和模式，并将题目转换成数据模型 2. 进一步用数据结构实现数据模型的一般方法。 将问题抽象成数据模型 信息数据化：把自然语言描述转换成方便代码数据模型表达的数字化信息。 类比和">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>如何&#34;玩&#34;算法</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/训练营/热身卡01-开篇词：算法是程序的灵魂/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/训练营/穷举搜索卡01/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&text=如何&#34;玩&#34;算法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&is_video=false&description=如何&#34;玩&#34;算法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=如何&#34;玩&#34;算法&body=Check out this article: http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&name=如何&#34;玩&#34;算法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        如何&#34;玩&#34;算法
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.118Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>目标</p>
+<pre><code>1. 对遇到的特殊的问题要能够设计出算法实现
+2. 对原理公开的知名算法，要能够翻译成具体的算法代码
+3. 对已有具体实现的算法，要能够设计出合适的数学模型，将算法应用到实际问题中。
+</code></pre><p>条件</p>
+<pre><code>1. 了解算法设计的常用思想和模式，并将题目转换成数据模型
+2. 进一步用数据结构实现数据模型的一般方法。
+</code></pre><p>将问题抽象成数据模型</p>
+<pre><code>信息数据化：把自然语言描述转换成方便代码数据模型表达的数字化信息。
+类比和转化：像使用模式一样使用那些经典的或常用的模型，
+          或者根据不同对象的某些相似性，借用已知领域的模型。
+</code></pre><p>堆[深有体会。某游戏公司有考察]</p>
+<pre><code>在问题规模比较大的时候，每次查找dist数组中的最小值可能会成为效率的瓶颈，
+可以用最小的堆来维护dist的结果，使得每次取出最小值的操作为O(1)时间复杂度，
+因为堆顶即为最小值。
+</code></pre><p>穷举法[想法简单, 遗漏情况]</p>
+<pre><code>尽管部分人看不起穷举法，但是不可否认，有些人却连基本的穷举算法都设计不出来。
+</code></pre><p>需要刻意补充的知识点</p>
+<pre><code>区间树
+有向图
+</code></pre><p>需要刻意练习的算法</p>
+<pre><code>图论
+</code></pre>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&text=如何&#34;玩&#34;算法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&is_video=false&description=如何&#34;玩&#34;算法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=如何&#34;玩&#34;算法&body=Check out this article: http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&title=如何&#34;玩&#34;算法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/热身卡03-如何&#34;玩&#34;算法/2019/09/&name=如何&#34;玩&#34;算法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="5-12 gdb接口内部结构type N intfunc (N) A() { println(“N.A”) }func (N) B() { println(“N.B”) }func (N) C() { println(“N.C”) } // N = N + N  = A+B+C   // N = Atype Ner interface {    A()    B()}func main() {">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-75">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="5-12 gdb接口内部结构type N intfunc (N) A() { println(“N.A”) }func (N) B() { println(“N.B”) }func (N) C() { println(“N.C”) } // N = N + N  = A+B+C   // N = Atype Ner interface {    A()    B()}func main() {">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:20.781Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-75">
+<meta name="twitter:description" content="5-12 gdb接口内部结构type N intfunc (N) A() { println(“N.A”) }func (N) B() { println(“N.B”) }func (N) C() { println(“N.C”) } // N = N + N  = A+B+C   // N = Atype Ner interface {    A()    B()}func main() {">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-75</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-76接口性能损失/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-74接口/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&text=重学 Go 语言：基础篇-75"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&is_video=false&description=重学 Go 语言：基础篇-75"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-75&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&name=重学 Go 语言：基础篇-75&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#512gdb"><span class="toc-number">1.1.</span> <span class="toc-text">5-12 gdb接口内部结构</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-75
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:20.781Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id="512gdb">5-12 gdb接口内部结构</h3><br><pre><code class="go language-go">type N int<br><br>func (N) A() { println(“<em>N.A”) }<br>func (</em>N) B() { println(“<em>N.B”) }<br>func (</em>N) C() { println(“<em>N.C”) } // </em>N = N + <em>N  = A+B+C   // N = A<br><br>type Ner interface {<br>    A()<br>    B()<br>}<br><br>func main() {<br>    var n N = 0x100<br>    var x Ner = &amp;n // main.(</em>N)<br><br>    x.A()<br>    x.B()<br>}<br></code></pre><br><p>定义类型N，N有三个方法，其中一个属于N的，两个属于N指针的，定义一个接口Ner，要求必须有两个方法A和B。因为Go语言并不需要明确的在类型上声明实现了某个接口，但是Java或者C#需要明确声明。</p><br><p>Go语言就是当方法集包含某个接口的全部声明就表示你实现了这个接口，我们通常把类型Ner叫做鸭子类型(Duck Type)，就是你长的像这只鸭子我们就可以把你当做鸭子。类型N有A和B，那么就认为它实现了Ner接口。</p><br><p>main方法中首先创建了N的对象实例，接下来把这个实例赋值给接口对象，这地方为什么不直接用N而是用N指针呢？因为类型N包含A，N指针包含A、B、C，所以只有N指针实现了Ner接口，N并没有实现Ner接口，N没有实现Ner接口的话var x Ner = n赋值是不成功的。接下来用接口调用A、B。</p><br><p>用GDB看下接口内部结构</p><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l” -o test test.go #编译<br>$ gdb test #调试<br>$ l<br>$ l<br>$ b 18<br>$ r<br>$ info locals<br></code></pre><br><p>x是接口，包含了两个字段，<code>tab</code>和<code>data</code>，<code>data</code>存储的就是n的指针，很显然接口调用通过<code>data</code>就可以找到实例在哪，就可以访问实例的数据。</p><br><p>第一个问题接口Ner怎么存储N？我们知道通过<code>data</code>字段存储的。</p><br><p>那么接下来怎么调用？因为我们知道接口是运行期的动态绑定，问题是怎么去找？剩下来怀疑的目标是<code>tab</code>。</p><br><pre><code class="bash language-bash">$ ptype x #输出结构定义<br>$ ptype x.tab #看到<code>tab</code>是<code>runtime.itab</code>结构<br></code></pre><br><p><code>runtime.itab</code>结构挺复杂，内部包含了很多东西，我们先找关注的目标，运行期找数据肯定找类型相关的东西。</p><br><p><code><em>inter</em></code>和<code>_type</code>是重点对象，<code><em>link</em></code>是一个链表结构，应该是内部管理的东西，<code>hash</code>、<code>inhash</code>是hash值性能相关，<code>bad</code>是内部管理标记位、<code>unused</code>是计数器，运行期runtime用的，<code>fun</code>通常是函数的缩写，<code>uintptr</code>是一个不完全结构体，通常定义成运行期的动态列表。</p><br><pre><code class="bash language-bash">$ ptype x.tab.inter #看<code>x.tab.inter</code>结构 <code>x.tab.inter</code>结构嵌套了很多东西。<br>$ p/x x.tab.inter #获取指针的数据<br></code></pre><br><p><code>size</code>长度、<code>ptrdata</code>指针数据，不是动态行为、<code>hash</code>很多东西用hash快速比较是否相等，避免字段字段判断、<code>tflag</code>标记、<code>align</code>对齐、<code>fieldalign</code>字段对齐、<code>kind</code>类型、<code>alg</code>和<code>gcdata</code>是、<code>str</code>是一个字符串，我们在进行内存分析的时候字符串往往是个线索，字符串里面可能包含了我们需要的关键性的目标指示，这个字符串是个指针。</p><br><pre><code class="bash language-bash">$ p/x <em>x.tab.inter.typ.str #获取数据，1.9以上版本cannot access memory at address<br></em></code></pre><br><p>输出”main.Ner”是符号名，就是接口Ner名字，也就意味着<code>x.tab.inter</code>里面存的是接口相关的数据，包含了接口类型对象各种各样运行期的元数据，记录接口里面的内存布局。</p><br><p><code>mhdr</code>通常是方法表，很常见的缩写，从数据结构上可以判断是个切片，底层数组的指针、长度、容量，长度是2。</p><br><pre><code class="bash language-bash">$ p/x x.tab.inter.mhdr #切片里面是什么<br>$ p/x x.tab.inter.mhdr.array #获取指针<br>$ p/x x.tab.inter.mhdr.array #获取指针的数据<br>$ p/x <em>x.tab.inter.mhdr.array.name #方法表第一项存的是A的相关信息###1.9版本Cannot access memory at address<br>$ p/x </em>x.tab.inter.mhdr.array[0].name #方法表第一项存的是A的相关信息###1.9版本Cannot access memory at address<br>$ p/x <em>x.tab.inter.mhdr.array[1].name #方法表第二项存的是B的相关信息###1.9版本Cannot access memory at address<br></em></code></pre><br><p>很显然<code>x.tab.inter.mhdr</code>方法表里面保存的是接口的方法声明，因为这样我们通过反射的时候，既能找到接口相关的元数据也能找到接口一共有几个方法。</p><br><p>所以<code>tab.inter</code>第一个字段存储的是接口的元数据Metadata，第二个字段存储的是接口的方法表MethodTable。因为这两个东西都存在，反射时候才能把整个接口的类型信息还原。</p><br><p>这是接口的数据，还没有找到接口和对象实例的映射。</p><br><pre><code class="bash language-bash">$ p/x x.tab._type #分析<code>x.tab._type</code>，看上去个<code>tab.inter</code>有点像，区别在于它没有方法表<br>$ p/x <em>x.tab._type.str ###1.9版本Cannot access memory at address<br></em></code></pre><br><p>输出”main.N”是符号名，就是实现接口的类型。所以<code>tab._type</code>里面存储的是实现接口的类型元数据TypeMetadata。</p><br><p>现在还缺接口的方法到实现接口类型方法的映射关系。</p><br><pre><code class="bash language-bash">$ p/x <em>x.tab<br>$ info symbol 0x450b80 #默认第一个数据是存储的是实现接口的方法`main.(</em>N).A<code>地址
+$ x/2xg x.tab.fun #第二组数据就是B的地址，长度是2，输出2组指针
+$ info symbol 0x0000000000450a10 #第二组数据
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;很显然&lt;code&gt;x.tab.fun&lt;/code&gt;存储的是实现接口类型的方法，即存的是真实目标类型实现那些接口对应的方法地址。&lt;/p&gt;
+&lt;p&gt;显然一个完整的接口里面&lt;code&gt;data&lt;/code&gt;存着接口实例的对象地址；&lt;code&gt;tab&lt;/code&gt;里面存储三样数据，第二个是接口本身的元数据，用来描述接口什么样子的怎么样的布局包含哪些具体的信息，第二个保存的是实现接口类型的元数据，比如什么名字，怎么对齐的，多大长度。第三个数据用了不完全结构体数组来保存真实目标的那些方法地址，因为只有这样它才能找到真正需要调用的目标。&lt;/p&gt;
+&lt;p&gt;通过这个分析我们搞明白一个接口对象里面到底存的什么东西，起码利用接口这些数据做反射没有问题，我们知道反射是很典型的运行期行为。然后利用接口进行调用，只要访问fan字段我们就可以知道真实目标的代码地址然后进行call调用。&lt;/p&gt;
+&lt;p&gt;接下来看接口怎么调用的&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot;&gt;$ gdb test
+$ l
+$ l
+$ b 18
+$ r
+$ set disassembly-flavor intel #设置intel样式
+$ disass #注意到</code>&lt;go.itab.<em>main.N,main.Ner&gt;`就是通过这些信息访问的。<br>$ ptype $rsp+0x28 #$rsp+0x28存的是指针<br>$ x/xg $rsp+0x28 #$rsp+0x28内容<br>$ x/xg 0x000000c4200140a8 #执行地址的内容是100，很显然接口对象放到rsp<br>$ b </em>0x0000000000450adb #<code>call rcx</code>下断点<br>$ c #执行到断点<br>$ disass #反汇编<br>$ x/xg $rcx+0x20 #看<code>rcx+0x20</code>里面是指向某个方法的地址，然后进行call调用，这个数据很显然就是从<code>tab.fun</code>拿到的<br></code></pre><br><p>很显然call调用是动态的，因为目标地址是从某个地方读出来的，因为我们知道如果是静态调用直接给的是具体地址，例如<code>call 0x40c480 &lt;runtime.newobject&gt;</code>很常见的静态绑定都是给出很明确的目标地址，<code>call rcx</code>的调用地址很显然是从某个地方读出来的，很显然是运行期的动态绑定。</p><br><p>那么通过接口调用是一种动态行为，调用目标的地址是在运行期读出来的。<code>rcx</code>是从栈桢上交换出来的，栈桢上数据肯定是在运行期才有的。从运行期的栈桢上读取数据放到<code>rcx</code>里面，然后<code>call rcx</code>，这显然是运行期的动态绑定。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#512gdb"><span class="toc-number">1.1.</span> <span class="toc-text">5-12 gdb接口内部结构</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&text=重学 Go 语言：基础篇-75"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&is_video=false&description=重学 Go 语言：基础篇-75"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-75&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&title=重学 Go 语言：基础篇-75"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/&name=重学 Go 语言：基础篇-75&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

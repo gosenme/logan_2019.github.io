@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="匿名嵌入方法集嵌入S，T += receiver S。嵌入S，T += receiver (S + S)。嵌入S或S， T += receiver (S + S)。匿名嵌入字段时基本规则大概这样。如果在一个类型里嵌入S，那么T的方法集包含S。如果嵌入S那么包含全部。不管S还是S，以T的方式获取方法集的时候包含全部。所以用指针方式获取方法集时等于全部，当用T方式获取时，分嵌入S还是S。不管一级还是两">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-73">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="匿名嵌入方法集嵌入S，T += receiver S。嵌入S，T += receiver (S + S)。嵌入S或S， T += receiver (S + S)。匿名嵌入字段时基本规则大概这样。如果在一个类型里嵌入S，那么T的方法集包含S。如果嵌入S那么包含全部。不管S还是S，以T的方式获取方法集的时候包含全部。所以用指针方式获取方法集时等于全部，当用T方式获取时，分嵌入S还是S。不管一级还是两">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:17.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-73">
+<meta name="twitter:description" content="匿名嵌入方法集嵌入S，T += receiver S。嵌入S，T += receiver (S + S)。嵌入S或S， T += receiver (S + S)。匿名嵌入字段时基本规则大概这样。如果在一个类型里嵌入S，那么T的方法集包含S。如果嵌入S那么包含全部。不管S还是S，以T的方式获取方法集的时候包含全部。所以用指针方式获取方法集时等于全部，当用T方式获取时，分嵌入S还是S。不管一级还是两">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-73</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-74接口/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&text=重学 Go 语言：基础篇-73"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&is_video=false&description=重学 Go 语言：基础篇-73"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-73&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&name=重学 Go 语言：基础篇-73&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">匿名嵌入方法集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">匿名嵌入字段方法集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">匿名嵌入对方法集的影响</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-73
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:17.921Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>匿名嵌入方法集</h3><br><ul><br><li>嵌入S，T += receiver S。</li><br><li>嵌入<em>S，T += receiver (S + </em>S)。</li><br><li>嵌入S或<em>S， </em>T += receiver (S + <em>S)。</em></li><br></ul><br><p>匿名嵌入字段时基本规则大概这样。如果在一个类型里嵌入<code>S</code>，那么<code>T</code>的方法集包含<code>S</code>。如果嵌入<code>S</code>那么包含全部。不管S还是<code><em>S</em></code>，以<code>T</code>的方式获取方法集的时候包含全部。所以用指针方式获取方法集时等于全部，当用<code>T</code>方式获取时，分嵌入<code>S</code>还是<code><em>S</em></code>。不管一级还是两级都严格区分<code>T</code>和<code>T</code>。</p><br><h3 id="-1">匿名嵌入字段方法集</h3><br><pre><code class="go language-go">type S int<br>type X struct {<br>    S<br>}<br><br>func (S) A()  {}<br>func (<em>S) B() {}<br>func main() {<br>    var o X<br>    t := reflect.TypeOf(o)<br>    // t := reflect.TypeOf(&amp;o)<br>    for i := 0; i &lt; t.NumMethod(); i++ {<br>        fmt.Println(t.Method(i).Name)<br>    }<br>}<br></em></code></pre><br><p>S有A和B两个方法，X里嵌入S或者S。测试不同嵌入情况下的方法集有什么不同。</p><br><p>在很多语言接口不是实际意义上的概念，可能在运行期并不存在，Python甚至没有接口这种概念，它称之为协议。在go里接口是独立数据结构，所以导致通过接口调用方法的时候和它的内存布局有关系。了解方法集概念以后，第一个概念是一个类型能调用的方法和它对应的方法集不一样。第二个概念就是上面公式。</p><br><h3 id="-2">匿名嵌入对方法集的影响</h3><br><p>当匿名嵌入一个对象的时候，编译器会帮我们自动生成间接代码调用，所以看上去拥有了对象的方法，实际上不是拥有而是编译器做了代码补全。这个语法糖实际上是代码补全而不是动态行为是静态行为。</p><br><pre><code class="go language-go">type N int<br><br>type X struct {<br>    N<br>}<br><br>type Y struct {<br>    <em>N<br>}<br><br>func (n </em>N) Inc() {<br>    <em>n++<br>}<br><br>func (n N) String() string {<br>    return strconv.Itoa(int(n))<br>}<br><br>func listMethods(a interface{}) {<br>    t := reflect.TypeOf(a)<br>    fmt.Printf(“\n— %v ———\n”, t)<br><br>    for i := 0; i &lt; t.NumMethod(); i++ {<br>        m := t.Method(i)<br>        fmt.Printf(“%s: %v\n”, m.Name, m.Type)<br>    }<br>}<br><br>func main() {<br>    var x X<br>    listMethods(x)<br>    listMethods(&amp;x)<br><br>    var y Y<br>    listMethods(y)<br>    listMethods(&amp;y)<br>}<br></em></code></pre><br><p>X嵌入了N，Y嵌入了N。</p><br><pre><code>— main.X ———<br>String: func(main.X) string<br><br>— <em>main.X ———<br>Inc: func(</em>main.X)<br>String: func(<em>main.X) string<br><br>— main.Y ———<br>Inc: func(main.Y)<br>String: func(main.Y) string<br><br>— </em>main.Y ———<br>Inc: func(<em>main.Y)<br>String: func(</em>main.Y) string<br></code></pre><br><p>我们注意到<code>X</code>只拥有<code>X</code>自身的方法，<code>X</code>指针拥有<code>X</code>和<code>X</code>指针的方法。<code>Y</code>因为嵌入了<code>X</code>，只能获得对应值类型的方法，<code>Y</code>指针拥有对应的指针类型。</p><br><p>接下来看看匿名嵌入的时候用哪些东西是自动生成的，我们注意到这里面有很多自动生成的方法来实现方法集。</p><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l” -o test embed.go<br>$ nm test | grep “[^.]main.“<br>$ go tool objdump -s “main.“ test | grep “TEXT.<em>autogenerated”<br>$ nm test | grep “[^.]main.“<br></em></code></pre><br><pre><code>T main.init<br>B main.initdone.<br>T main.listMethods<br>T main.main<br>T main.(N).Inc<br>T main.(<em>N).String<br>T main.N.String<br>T main.(</em>X).Inc<br>T main.(<em>X).String<br>T main.X.String<br>T main.(</em>Y).Inc<br>T main.Y.Inc<br>T main.(<em>Y).String<br>T main.Y.String<br></em></code></pre><br><pre><code class="bash language-bash">go tool objdump -s “main.“ test | grep “TEXT.autogenerated”<br></code></pre><br><pre><code>TEXT main.init(SB) &lt;autogenerated&gt;<br>TEXT main.(<em>N).String(SB) &lt;autogenerated&gt;<br>TEXT main.(</em>X).Inc(SB) &lt;autogenerated&gt;<br>TEXT main.(<em>X).String(SB) &lt;autogenerated&gt;<br>TEXT main.X.String(SB) &lt;autogenerated&gt;<br>TEXT main.(</em>Y).Inc(SB) &lt;autogenerated&gt;<br>TEXT main.(*Y).String(SB) &lt;autogenerated&gt;<br>TEXT main.Y.Inc(SB) &lt;autogenerated&gt;<br>TEXT main.Y.String(SB) &lt;autogenerated&gt;<br></code></pre></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">匿名嵌入方法集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">匿名嵌入字段方法集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">匿名嵌入对方法集的影响</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&text=重学 Go 语言：基础篇-73"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&is_video=false&description=重学 Go 语言：基础篇-73"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-73&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&title=重学 Go 语言：基础篇-73"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/&name=重学 Go 语言：基础篇-73&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

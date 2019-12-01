@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="字典的数据竞争问题很多人会问数据结构是不是线程安全的？大部分语言都实现成非线程安全的，为什么不直接做成线程安全？线程安全需要加锁的。如果字典线程安全的，比如遍历处理，是不是每次访问都要进行锁的处理。我们可能希望在遍历之前加锁遍历完成之后解锁。这时候锁的粒度是由调用方控制的。因为我们才知道锁的粒度多大才合理。字典只是逻辑处理的代码块，逻辑可能有多个代码块组成的，那么我可能对几个代码块区域加锁，在内部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-58">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="字典的数据竞争问题很多人会问数据结构是不是线程安全的？大部分语言都实现成非线程安全的，为什么不直接做成线程安全？线程安全需要加锁的。如果字典线程安全的，比如遍历处理，是不是每次访问都要进行锁的处理。我们可能希望在遍历之前加锁遍历完成之后解锁。这时候锁的粒度是由调用方控制的。因为我们才知道锁的粒度多大才合理。字典只是逻辑处理的代码块，逻辑可能有多个代码块组成的，那么我可能对几个代码块区域加锁，在内部">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:57.176Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-58">
+<meta name="twitter:description" content="字典的数据竞争问题很多人会问数据结构是不是线程安全的？大部分语言都实现成非线程安全的，为什么不直接做成线程安全？线程安全需要加锁的。如果字典线程安全的，比如遍历处理，是不是每次访问都要进行锁的处理。我们可能希望在遍历之前加锁遍历完成之后解锁。这时候锁的粒度是由调用方控制的。因为我们才知道锁的粒度多大才合理。字典只是逻辑处理的代码块，逻辑可能有多个代码块组成的，那么我可能对几个代码块区域加锁，在内部">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-58</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-59/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-57使用int key/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&text=重学 Go 语言：基础篇-58"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&is_video=false&description=重学 Go 语言：基础篇-58"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-58&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&name=重学 Go 语言：基础篇-58&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">字典的数据竞争问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defaultdictmapentry"><span class="toc-number">1.2.</span> <span class="toc-text">defaultdict如何实现，是否要在map中创建entry？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.3.</span> <span class="toc-text">字典无序遍历设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#orderdict"><span class="toc-number">1.4.</span> <span class="toc-text">如何实现orderdict？添加顺序；键值排序；如何删除？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapcachelfulruttl"><span class="toc-number">1.5.</span> <span class="toc-text">用map实现cache容器是否合理？LFU，LRU，TTL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set"><span class="toc-number">1.6.</span> <span class="toc-text">设计相关数据结构SET</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bloomfiltersmap"><span class="toc-number">1.7.</span> <span class="toc-text">使用Bloom Filters代替map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syncmap"><span class="toc-number">1.8.</span> <span class="toc-text">sync.Map</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-58
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:57.176Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>字典的数据竞争问题</h3><br><p>很多人会问数据结构是不是线程安全的？大部分语言都实现成非线程安全的，为什么不直接做成线程安全？线程安全需要加锁的。</p><br><p>如果字典线程安全的，比如遍历处理，是不是每次访问都要进行锁的处理。我们可能希望在遍历之前加锁遍历完成之后解锁。这时候锁的粒度是由调用方控制的。因为我们才知道锁的粒度多大才合理。字典只是逻辑处理的代码块，逻辑可能有多个代码块组成的，那么我可能对几个代码块区域加锁，在内部再实现第二把锁没有必要。</p><br><p>选择一个数据结构是不是线程安全的，前提你得知道你的算法在数据安全范围到底有多大，什么时候开始加锁什么时候开始解锁只有算法知道，数据结构不知道，它没有办法控制这些东西。之所以想找数据安全的是因为你觉得把它从数据算法里分离出去作为独立的存储结构。如果你的逻辑结构用异步的方式把数据存储到存储结构里面去，因为数据提交完了并不负责存储这块，那么存储结构的锁就变成独立的了。因为这两个东西并不属于一个执行序上面的。这时候锁是分离的，选择线程安全的数据容器就很正常。因为我们把一个东西异步提交，最终由哪个线程执行是不确定的，它已经从当前线程脱离出去了。当前线程的锁并不会影响另外一个线程，另外一个线程有自己的锁，这时候选择数据用线程安全的容器就变成合理的了。什么时候选择什么样的线程容器，这个容器是否线程安全和算法有关系，不能莫名奇妙的就去选择一种线程安全的容器。</p><br><p>Go语言的特点是所有东西都是并发的，从程序一启动都是并发的，字典是很容易造成并发冲突的，所以go编译器把它当作特等公民对待，只要发现有并发冲突就立马对它进行中断。</p><br><pre><code class="go language-go">func main() {<br>    m := make(map[string]int)<br><br>    w := func() {<br>        for {<br>            m[“a”]++<br>        }<br>    }<br><br>    r := func() {<br>        for {<br>            _ = m[“b”]<br>        }<br>    }<br><br>    _, _ = r, w<br><br>    go w()<br>    go w()<br><br>    time.Sleep(time.Second * 2)<br>}<br></code></pre><br><p>启动2个线程进行读写操作，写和读是不能并存的，因为都会带来数据竞争。</p><br><p>如果有个数组，线程1只访问index0，线程2只访问index2，那么线程1和线程2有并发冲突么？如果这个有冲突那么意味着你访问任何内存都有冲突，整个地址空间其实就是个大数组。其实在数组这块，你访问的数据不属于同一个区域，哪怕它们隶属于同一个对象也不存在冲突。</p><br><p>字典有非安全问题，比如线程1去写数据可能会引发扩容操作，那么这时候另外线程正在遍历，指针发生变化了处理不了了。</p><br><h3 id="defaultdictmapentry">defaultdict如何实现，是否要在map中创建entry？</h3><br><p>字典有setdefault方法，就是从字典里面读key，如果存在直接返回value，如果不存在先把key设为100，然后返回100。这种设计非常常见。</p><br><pre><code class="go language-go">func main() {<br>    m := make(map[string]int)<br>    v, ok := m[“a”]<br>    if !ok {<br>        m[“a”] = 0<br>    }<br>}<br></code></pre><br><p>如果返回时候没有找到a，就在里面创建a，虽然它的值是默认值。不创建的话for循环永远不会有a出现，但是创建了a会出现。</p><br><p>访问的数据虽然现在没有值但是很多时候认为接下来可能会被设置，基于很典型的乐观缓存。就像CPU一样当访问一个页接下来最有可能连续访问后面一页，会提前缓存起来。当我们访问数据的时候很可能继续会写，同样的写进去以后接下来检查的时候我们可能会知道接下来操作什么东西。这是两种不同的设计理念。很多时候访问数据是加锁，处理数据解锁，持有锁的期间把数据加进去，和以后再去拿锁往里加不是一个概念了。任何时候并发编程涉及到锁时候都得小心。</p><br><h3 id="-1">字典无序遍历设计</h3><br><p>对于字典来说比较诡异的东西，字典每次输出的顺序不一样。我们不能依赖于遍历字典key的顺序，同样的遍历进行增加和删除都会有问题。</p><br><p>迭代字典的顺序不属于语言规范，不能保证使用相同的迭代顺序。另外在迭代期间进行删除或者增加操作，不能保证会删除或者增加被合法读到。这其实和hash结构设计有关，其实是有意设计乱序的，早期还是有些规律的，每8个keyvalue形成一个桶，这8个原来能保证是一致的，后来有意变成乱序了。其实归根结底通过这种方式解决几个问题，第一警告不要依赖顺序，这和哈希表设计数据结构实现原理有关系。不管是开放地址法还是链表法，并不能保证新增数据的位置，这跟他的具体hash算法有关系，对于Go来说这种哈希算法是隐藏的并没有对外公开不需要知道这些，因为如果依赖于内部实现，任何人都不希望你依赖对方内部实现。这样可以用来数据洗牌shuffle，打乱它的次序。</p><br><pre><code class="go language-go">func main() {<br>    m := make(map[int]int)<br><br>    for i := 0; i &lt; 10; i++ {<br>        m[i] = i<br>    }<br>    for k := range m {<br>        println(k)<br>    }<br>    for k := range m {<br>        println(k)<br>    }<br>}<br></code></pre><br><h3 id="orderdict">如何实现orderdict？添加顺序；键值排序；如何删除？</h3><br><p>添加顺序。有些时候希望添加和遍历保持顺序这样的需求怎么设计，字典说白了就是一个定位器，字典没有顺序的，就另外用一个有顺序的数据结构来保存。用数组保存value，用字典保存key和数组的索引。添加从数组尾部添加返回索引号，把key和索引号保存到字典中。如果顺序遍历，数组可以存key和value。删除把数组数据变成0。</p><br><p>用数组实现顺序化存储，用字典实现定位器。字典从数据容器转变成定位器。</p><br><p>键值排序可能使用大小堆来实现，<code>heap</code>就是大小堆，比较操作的时候是大于还是小于。也可以用切片实现排序，<code>sort</code>库有现成的函数。</p><br><h3 id="mapcachelfulruttl">用map实现cache容器是否合理？LFU，LRU，TTL</h3><br><p>我们实现缓存容器时候，字典不太够用，因为缓存有很多相关数据，例如TTL有生存周期30s，LFU、LRU最后保存100M空间，超出的话就会放弃其中的一部分。缓存是可丢失的，用map未必合理。Go类似的库挺多的。</p><br><p><a href="https://github.com/allegro/bigcache" target="_blank" rel="noopener">https://github.com/allegro/bigcache</a> 是用map实现的，是保证紧凑性比较好的缓存容器，有分片、最大尺寸等配置。hash的fnv算法的好处是针对短字符串性能比较好。</p><br><p><a href="https://github.com/golang/groupcache" target="_blank" rel="noopener">https://github.com/golang/groupcache</a> 著名项目，作者最早实现很专业的memcache，后来开发groupcache用来替代memcache。自从redis出来之后memcache用的比较少，memcache和redis不是一回事，memcache缓存的是keyvalue数据，redis大多数当db用。设计真正意义上的缓存不是像redis设计复杂的数据结构，而是快速检索、高效存储、持久化类似这样的东西。设计缓存需要考虑的是性能、内存使用率要非常合理、什么策略抛弃旧数据、数据是否压缩存储、是否持久化，避免mongodb内存问题。</p><br><p><a href="https://github.com/alecthomas/mph" target="_blank" rel="noopener">https://github.com/alecthomas/mph</a> mph算是很有名的hash算法，它利用mph实现只读的快速检索哈希表，对于海量数据像300K键、2GB的数据进行快速检索。很多时候很多数据需要检索，比如IP数据库、敏感词过滤库。而且可以保存文件下次读出来。它对于只读的海量数据处理效率会很高。</p><br><h3 id="set">设计相关数据结构SET</h3><br><p>有种数据结构叫集合，Go里面没有，最简单的做法使用字典，只有key，value是空结构体<code>set := make(map[string]struct{})</code>。</p><br><h3 id="bloomfiltersmap">使用Bloom Filters代替map</h3><br><p>很多时候用字典当作集合使用，字典做去重效率不是特别好。推荐做法用布隆过滤器。布隆过滤器创建足够大的位图，位图就是个字节数组，每个字节8个标记位，每个索引对应1个二进制标记位，如果判断某个url是否已经写过，用3种哈希算法，每种哈希算法都可以得到一个值，比如1、7、9，把1、7、9标记为1。换句话说下次判断这个url是否存在要判断3个索引位上面数字全部标记为1，只要1个不对肯定不存在。除非另外一个url和当前url的3种哈希得出来一模一样才会出现碰撞。布隆过滤器存储效率非常高，1个字节8个标记位，能处理很大数据量。运算效率非常高，二进制运算非常快的。哈希算法可以选择多种，哈希算法越多碰撞几率越小。这样比直接用字典处理效率高很多。它的缺陷有碰撞误操作。但是可以这样避免，用一个布隆过滤器预处理，如果能得到准确结果立即返回，不能的话后面可能向后端发起查询，这样布隆过滤器可以拦截99%的去重，它的效率非常的高。</p><br><p>有些时候使用一些手段实现预处理。这种预处理使用合适的数据结构，比如使用Bloom Filters代替map。因为字典的存储效率很低的，比如创建100个空间只能存储60个，这是哈希表的数据结构决定的。第二没法在二进制位上做标记。第三布隆过滤器访问效率非常高。对于不同的应用选择不同的做法，我们会组合不同的数据结构。</p><br><h3 id="syncmap">sync.Map</h3><br><p>同步版本，并非取代map+mutex/rwmuex</p><br><ul><br><li>一次写，多次读。</li><br><li>不同并发单元(goroutine)读取不相交键值项。</li><br></ul><br><p><code>sync.Map</code>不是用来替代map加锁。<code>sync.Map</code>的问题是存储的键值对用接口实现，接口需要额外的开销对垃圾回收压力很大，本身的内存模型效率不高，因为没有泛型用接口实现。</p><br><p>正常情况下，我们使用map加锁方式。它解决两种需求，在一次写多次读和不同并发单元操作的键值对不一样。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">字典的数据竞争问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defaultdictmapentry"><span class="toc-number">1.2.</span> <span class="toc-text">defaultdict如何实现，是否要在map中创建entry？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.3.</span> <span class="toc-text">字典无序遍历设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#orderdict"><span class="toc-number">1.4.</span> <span class="toc-text">如何实现orderdict？添加顺序；键值排序；如何删除？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapcachelfulruttl"><span class="toc-number">1.5.</span> <span class="toc-text">用map实现cache容器是否合理？LFU，LRU，TTL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set"><span class="toc-number">1.6.</span> <span class="toc-text">设计相关数据结构SET</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bloomfiltersmap"><span class="toc-number">1.7.</span> <span class="toc-text">使用Bloom Filters代替map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syncmap"><span class="toc-number">1.8.</span> <span class="toc-text">sync.Map</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&text=重学 Go 语言：基础篇-58"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&is_video=false&description=重学 Go 语言：基础篇-58"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-58&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&title=重学 Go 语言：基础篇-58"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-58字典的数据竞争问题/2019/11/&name=重学 Go 语言：基础篇-58&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

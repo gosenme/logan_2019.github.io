@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="接收请求       3.1　Go 的 net/http 标准库 3.2　使用 Go 构建服务器 3.2.1　Go Web 服务器 3.2.2　通过 HTTPS 提供服务   3.3　处理器和处理器函数 3.3.1　处理请求 3.3.2　使用多个处理器 3.3.3　处理器函数 3.3.4　串联多个处理器和处理器函数 3.3.5　ServeMux 和 DefaultServ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接收请求">
+<meta property="og:url" content="http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="接收请求       3.1　Go 的 net/http 标准库 3.2　使用 Go 构建服务器 3.2.1　Go Web 服务器 3.2.2　通过 HTTPS 提供服务   3.3　处理器和处理器函数 3.3.1　处理请求 3.3.2　使用多个处理器 3.3.3　处理器函数 3.3.4　串联多个处理器和处理器函数 3.3.5　ServeMux 和 DefaultServ">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/b981e1f0-a486-11e8-8a5b-85d5618fe6ba">
+<meta property="og:image" content="https://images.gitbook.cn/bf79bec0-a486-11e8-8b4a-cf3651600922">
+<meta property="og:image" content="https://images.gitbook.cn/d5805350-a486-11e8-8a5b-85d5618fe6ba">
+<meta property="og:image" content="https://images.gitbook.cn/dcf07840-a486-11e8-80dc-8d254ca863fe">
+<meta property="og:image" content="https://images.gitbook.cn/e4762100-a486-11e8-8b4a-cf3651600922">
+<meta property="og:image" content="https://images.gitbook.cn/e93556c0-a486-11e8-a2aa-0bd41466d20f">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.087Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="接收请求">
+<meta name="twitter:description" content="接收请求       3.1　Go 的 net/http 标准库 3.2　使用 Go 构建服务器 3.2.1　Go Web 服务器 3.2.2　通过 HTTPS 提供服务   3.3　处理器和处理器函数 3.3.1　处理请求 3.3.2　使用多个处理器 3.3.3　处理器函数 3.3.4　串联多个处理器和处理器函数 3.3.5　ServeMux 和 DefaultServ">
+<meta name="twitter:image" content="https://images.gitbook.cn/b981e1f0-a486-11e8-8a5b-85d5618fe6ba">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>接收请求</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/go_web编程/Go与Web应用/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/go_web编程/2-2处理请求(上)/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&text=接收请求"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&is_video=false&description=接收请求"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=接收请求&body=Check out this article: http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&name=接收请求&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#31gonethttp"><span class="toc-number">1.</span> <span class="toc-text">3.1　Go 的 net/http 标准库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32go"><span class="toc-number">2.</span> <span class="toc-text">3.2　使用 Go 构建服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#321goweb"><span class="toc-number">2.1.</span> <span class="toc-text">3.2.1　Go Web 服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#322https"><span class="toc-number">2.2.</span> <span class="toc-text">3.2.2　通过 HTTPS 提供服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33"><span class="toc-number">3.</span> <span class="toc-text">3.3　处理器和处理器函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#331"><span class="toc-number">3.1.</span> <span class="toc-text">3.3.1　处理请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#332"><span class="toc-number">3.2.</span> <span class="toc-text">3.3.2　使用多个处理器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#333"><span class="toc-number">3.3.</span> <span class="toc-text">3.3.3　处理器函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#334"><span class="toc-number">3.4.</span> <span class="toc-text">3.3.4　串联多个处理器和处理器函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#335servemuxdefaultservemux"><span class="toc-number">3.5.</span> <span class="toc-text">3.3.5　ServeMux 和 DefaultServeMux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#336"><span class="toc-number">3.6.</span> <span class="toc-text">3.3.6　使用其他多路复用器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34http2"><span class="toc-number">4.</span> <span class="toc-text">3.4　使用 HTTP/2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#35"><span class="toc-number">5.</span> <span class="toc-text">3.5　小结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        接收请求
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.087Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>接收请求</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#31gonethttp">3.1　Go 的 net/http 标准库</a></li>
+<li><a href="#32go">3.2　使用 Go 构建服务器</a><ul>
+<li><a href="#321goweb">3.2.1　Go Web 服务器</a></li>
+<li><a href="#322https">3.2.2　通过 HTTPS 提供服务</a></li>
+</ul>
+</li>
+<li><a href="#33">3.3　处理器和处理器函数</a><ul>
+<li><a href="#331">3.3.1　处理请求</a></li>
+<li><a href="#332">3.3.2　使用多个处理器</a></li>
+<li><a href="#333">3.3.3　处理器函数</a></li>
+<li><a href="#334">3.3.4　串联多个处理器和处理器函数</a></li>
+<li><a href="#335servemuxdefaultservemux">3.3.5　ServeMux 和 DefaultServeMux</a></li>
+<li><a href="#336">3.3.6　使用其他多路复用器</a></li>
+</ul>
+</li>
+<li><a href="#34http2">3.4　使用 HTTP/2</a></li>
+<li><a href="#35">3.5　小结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<p><strong>本章主要内容</strong></p>
+<ul>
+<li>Go 语言的<code>net/http</code>标准库的使用方法</li>
+<li>通过<code>net/http</code>库提供 HTTP 服务的方法</li>
+<li>关于处理器以及处理器函数的更详细信息</li>
+<li>在服务器上使用多路复用器的方法</li>
+</ul>
+<p>在第2章中，我们看到了一个简单的网上论坛 Web 应用是由什么组件构成的，也了解到了这些组件是如何组织成一个 Go Web 应用的。虽然我们已经对构成 Go Web 应用的各个组件有了基本的了解，但关于这些组件还有很多值得深入的事情。在接下来的几章里，我们将更为深入地了解这些组件的细节，并详细地探讨这些组件是如何组合起来的。</p>
+<p>本章和下一章将对 Web 应用的“大脑”（也就是负责接收和处理客户端请求的处理器）进行讨论。在本章中，我们将要学习的是如何使用 Go 语言去创建一个 Web 服务器，以及如何处理客户端发送的请求。</p>
+<h3 id="31gonethttp">3.1　Go 的 net/http 标准库</h3>
+<p>在进行 Web 应用开发的时候，使用成熟并且复杂的 Web 应用框架通常会使开发变得更加迅速和简便，但这也意味着开发者必须接受框架自身的一套约定和模式。虽然很多框架都认为自己提供的约定和模式是最佳实践（best practice），但是如果开发者没有正确地理解这些最佳实践，那么对最佳实践的应用就可能会发展为货物崇拜编程（cargo cult programming）：开发者如果不了解这些约定和模式的用法，就可能会在不必要甚至有害的情况下盲目地使用它们。</p>
+<blockquote>
+  <p>货物崇拜编程　</p>
+  <p>第二次世界大战期间，盟军为了对战事提供支援，在太平洋的多个岛屿上设立了空军基地，以空投的方式向部队以及支援部队的岛民投送了大量生活用品以及军事设备，从而极大地改善了部队以及岛民的生活，岛民也因此第一次看到了人工生产的衣物、罐头食品以及其他物品。在战争结束之后，这些空军基地便被废弃了，货物空投自然也停止了。此时，岛民做了一件非常符合其本性的事情——他们把自己打扮成空管员、士兵以及水手，使用机场上的指挥棒挥舞着着陆信号，进行地面阅兵演习，试图让飞机继续空投货物，货物崇拜一词也因此而诞生。</p>
+  <p>尽管货物崇拜程序员并没有像岛民一样挥舞指挥棒，但他们却大量地复制和粘贴从 StackOverflow 这类网站上找来的代码，这些代码虽然能够运行，但是他们却对这些代码的工作原理一点也不了解。这样做的结果是，他们通常无法扩展和修改这些代码。与此类似，货物崇拜程序员通常会在既不了解框架为什么使用特定的模式或约定，也不知道框架做了何种取舍的情况下，盲目地使用 Web 框架。</p>
+</blockquote>
+<p>举个例子来说，因为 HTTP 是一种无连接协议（connection-less protocol），通过这种协议发送给服务器的请求对服务器之前处理过的请求一无所知，所以应用程序才会以 cookie 的方式在客户端实现数据持久化，并以会话的方式在服务器上实现数据持久化，而不了解这一点的人是很难理解为什么要在不同连接之间使用 cookie 和会话实现信息持久化的。为了降低使用 cookie 和会话带来的复杂性，Web 应用框架通常都会提供一个统一的接口（uniform interface），用于在连接之间实现持久化。这样做的结果是，很多新手程序员都会想当然地假设在连接之间进行持久化唯一要做的就是使用框架提供的接口。但是由于这类接口通常都是根据框架自身的习惯制定的，因此不同框架提供的接口可能会有所不同。更糟糕的是，不同的框架可能会提供一些名字相同的接口，但是这些同名接口之间的实现却又千差万别、各不相同，因此给开发者带来不必要的困惑。通过这个例子可以看出，使用框架进行 Web 应用开发意味着将框架与应用进行绑定，之后无论是将应用迁移至另一个框架，还是对应用进行扩展，又或者为应用添加新的特性，都需要对框架本身有深入的了解，在某些情况下可能还需要对框架进行定制。</p>
+<p>本书的目的并不是让大家抛弃框架、约定和模式——一个好的框架通常是快速构建可扩展且健壮的 Web 应用的最好方法，但理解那些隐藏在框架之下的底层概念和基础设施也是非常重要的。只要对框架的实现原理有了正确的认识，我们就可以更加清晰地了解到这些约定和模式是如何形成的，从而避免陷阱、理清思路，不再盲目地使用模式。</p>
+<p>对 Go 语言来说，隐藏在框架之下的通常是<code>net/http</code>和<code>html/template</code>这两个标准库，本章和接下来的第4章将介绍<code>net/http</code>库，而之后的第5章将介绍<code>html/template</code>库。</p>
+<p>如图3-1所示，<code>net/http</code>标准库可以分为客户端和服务器两个部分，库中的结构和函数有些只支持客户端和服务器这两者中的一个，而有些则同时支持客户端和服务器：</p>
+<ul>
+<li><code>Client</code>、<code>Response</code>、<code>Header</code>、<code>Request</code>和<code>Cookie</code>对客户端进行支持；</li>
+<li><code>Server</code>、<code>ServeMux</code>、<code>Handler/HandleFunc</code>、<code>ResponseWriter</code>、<code>Header</code>、<code>Request</code>和<code>Cookie</code>则对服务器进行支持。</li>
+</ul>
+<p>本章接下来将会展示如何把<code>net/http</code>标准库用作服务器以及如何使用 Go 语言接收客户端发送的 HTTP 请求。在之后的第4章，我们还会继续使用<code>net/http</code>标准库，但焦点会放在如何处理请求上面。</p>
+<p>在本书中，我们主要关注的是如何使用<code>net/http</code>标准库的服务器功能而非客户端功能。</p>
+<p><img src="https://images.gitbook.cn/b981e1f0-a486-11e8-8a5b-85d5618fe6ba" alt="enter image description here"></p>
+<p>图3-1　<code>net/http</code>标准库的各个组成部分</p>
+<h3 id="32go">3.2　使用 Go 构建服务器</h3>
+<p>如图3-2所示，通过<code>net/http</code>标准库，我们可以启动一个 HTTP 服务器，然后让这个服务器接收请求并向请求返回响应。除此之外，<code>net/http</code>标准库还提供了一个连接多路复用器（multiplexer）的接口以及一个默认的多路复用器。</p>
+<p><img src="https://images.gitbook.cn/bf79bec0-a486-11e8-8b4a-cf3651600922" alt="enter image description here"></p>
+<p>图3-2　通过 Go 服务器处理请求</p>
+<h4 id="321goweb">3.2.1　Go Web 服务器</h4>
+<p>跟其他编程语言里面的绝大多数标准库不一样，Go 提供了一系列用于创建 Web 服务器的标准库。正如代码清单3-1所示，创建一个服务器的步骤非常简单，只要调用<code>ListenAndServe</code>并传入网络地址以及负责处理请求的处理器（handler）作为参数就可以了。如果网络地址参数为空字符串，那么服务器默认使用80端口进行网络连接；如果处理器参数为<code>nil</code>，那么服务器将使用默认的多路复用器<code>DefaultServeMux</code>。</p>
+<p>代码清单3-1　最简单的 Web 服务器</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　 <span class="hljs-string">"net/http"</span>
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　 http.ListenAndServe(<span class="hljs-string">""</span>, nil)
+}
+</code></pre>
+<p>用户除了可以通过<code>ListenAndServe</code>的参数对服务器的网络地址和处理器进行配置之外，还可以通过<code>Server</code>结构对服务器进行更详细的配置，其中包括为请求读取操作设置超时时间、为响应写入操作设置超时时间以及为<code>Server</code>结构设置错误日志记录器等。</p>
+<p>代码清单3-2和代码清单3-1的作用基本上是相同的，它们之间的唯一区别在于代码清单3-2可以通过<code>Server</code>结构对服务器进行更多的配置。</p>
+<p>代码清单3-2　带有附加配置的 Web 服务器</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　server := http.Server{
+　　　　Addr:　　<span class="hljs-string">"127.0.0.1:8080"</span>,
+　　　　Handler: nil,
+　　}
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>代码清单3-3展示了<code>Server</code>结构所有可选的配置选项。</p>
+<p>代码清单3-3　<code>Server</code>结构的配置选项</p>
+<pre><code class="hljs cs">type Server <span class="hljs-keyword">struct</span> {
+　　Addr　　　　　 <span class="hljs-keyword">string</span>
+　　Handler　　　　Handler
+　　ReadTimeout　　time.Duration
+　　WriteTimeout　 time.Duration
+　　MaxHeaderBytes <span class="hljs-keyword">int</span>
+　　TLSConfig　　　*tls.Config
+　　TLSNextProto　 map[<span class="hljs-keyword">string</span>]func(*Server, *tls.Conn, Handler)
+　　<span class="hljs-function">ConnState　　　<span class="hljs-title">func</span>(<span class="hljs-params">net.Conn, ConnState</span>)
+　　ErrorLog　　　 *log.Logger
+}
+</span></code></pre>
+<h4 id="322https">3.2.2　通过 HTTPS 提供服务</h4>
+<p>当客户端和服务器需要共享密码或者信用卡信息这样的私密信息时，大多数网站都会使用 HTTPS 对客户端和服务器之间的通信进行加密和保护。在一些情况下，这种保护甚至是强制性的。比如说，如果一个网站提供了信用卡支付功能，那么按照支付卡行业数据安全标准（Payment Card Industry Data Security Standard），这个网站就必须对客户端和服务器之间的通信进行加密。像 Gmail 和 Facebook 这样带有隐私性质的网站甚至在整个网站上都启用了 HTTPS。如果你打算开发一个网站，而这个网站又需要提供用户登录功能，那么你也需要在这个网站上启用 HTTPS。</p>
+<p>HTTPS 实际上就是将 HTTP 通信放到 SSL 之上进行。通过使用<code>ListenAndServeTLS</code>函数，我们可以让之前展示过的简单 Web 应用也提供 HTTPS 服务，代码清单3-4展示了具体的实现代码。</p>
+<p>代码清单3-4　通过 HTTPS 提供服务</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　　　Handler: nil,
+　　}
+　　server.ListenAndServeTLS(<span class="hljs-string">"cert.pem"</span>, <span class="hljs-string">"key.pem"</span>)
+}
+</code></pre>
+<p>这段代码中的<code>cert.pem</code>文件是 SSL 证书，而<code>key.pem</code>则是服务器的私钥（private key）。在生产环境中使用的 SSL 证书需要通过 VeriSign、Thawte 或者 Comodo SSL 这样的 CA 取得，但如果是出于测试目的才使用证书和私钥，那么使用自行生成的证书就可以了。生成证书的办法有很多种，其中一种就是使用 Go 标准库中的<code>crypto</code>包群（library group）。</p>
+<blockquote>
+  <p>SSL、TLS 和 HTTPS</p>
+  <p>SSL（Secure Socket Layer，安全套接字层）是一种通过公钥基础设施（Public Key Infrastructure，PKI）为通信双方提供数据加密和身份验证的协议，其中通信的双方通常是客户端和服务器。SSL 最初由 Netscape 公司开发，之后由 IETF（Internet Engineering Task Force，互联网工程任务组）接手并将其改名为 TLS（Transport Layer Security，传输层安全协议）。HTTPS，即 SSL 之上的 HTTP，实际上就是在 SSL/TLS 连接的上层进行 HTTP 通信。</p>
+  <p>HTTPS 需要使用 SSL/TLS 证书来实现数据加密以及身份验证（本书使用 SSL 证书这一名称，因为它更常用）。SSL 证书存储在服务器之上，它是一种使用 X.509 格式进行格式化的数据，这些数据包含了公钥以及其他一些相关信息。为了保证证书的可靠性，证书一般由证书分发机构（Certificate Authority，CA）签发。服务器在接收到客户端发送的请求之后，会将证书和响应一并返回给客户端，而客户端在确认证书的真实性之后，就会生成一个随机密钥（random key），并使用证书中的公钥对随机密钥进行加密，此次加密产生的对称密钥（symmetric key）就是客户端和服务器在进行通信时，负责对通信实施加密的实际密钥（actual key）。</p>
+</blockquote>
+<p>虽然我们不会在生产环境中使用自行生成的证书和私钥，但了解 SSL 证书和私钥的生成方法，并学会如何在开发和测试的过程中使用证书和私钥，也是一件非常有意义的事情。代码清单3-5展示了生成 SSL 证书以及服务器私钥的具体代码。</p>
+<p>代码清单3-5　生成个人使用的 SSL 证书以及服务器私钥</p>
+<pre><code class="hljs cpp"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"crypto/rand"</span>
+　　<span class="hljs-string">"crypto/rsa"</span>
+　　<span class="hljs-string">"crypto/x509"</span>
+　　<span class="hljs-string">"crypto/x509/pkix"</span>
+　　<span class="hljs-string">"encoding/pem"</span>
+　　<span class="hljs-string">"math/big"</span>
+　　<span class="hljs-string">"net"</span>
+　　<span class="hljs-string">"os"</span>
+　　<span class="hljs-string">"time"</span>
+)</span>
+
+func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　max := <span class="hljs-keyword">new</span>(big.Int).Lsh(big.NewInt(<span class="hljs-number">1</span>), <span class="hljs-number">128</span>)
+　　serialNumber, _ := rand.Int(rand.Reader, max)
+　　subject := pkix.Name{
+　　　　Organization:　　　 []<span class="hljs-built_in">string</span>{<span class="hljs-string">"Manning Publications Co."</span>},
+　　　　OrganizationalUnit: []<span class="hljs-built_in">string</span>{<span class="hljs-string">"Books"</span>},
+　　　　CommonName:　　　　 <span class="hljs-string">"Go Web Programming"</span>,
+　　}
+
+　　<span class="hljs-keyword">template</span> := x509.Certificate{
+　　　　SerialNumber: serialNumber,
+　　　　Subject:　　　subject,
+　　　　NotBefore:　　time.Now(),
+　　　　NotAfter:　　 time.Now().Add(<span class="hljs-number">365</span> * <span class="hljs-number">24</span> * time.Hour),
+　　　　KeyUsage:　　 x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+　　　　ExtKeyUsage:　[]x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+　　　　IPAddresses:　[]net.IP{net.ParseIP(<span class="hljs-string">"127.0.0.1"</span>)},
+　　}
+
+　　pk, _ := rsa.GenerateKey(rand.Reader, <span class="hljs-number">2048</span>)
+
+　　derBytes, _ := x509.CreateCertificate(rand.Reader, &amp;<span class="hljs-keyword">template</span>,
+　　➥&amp;<span class="hljs-keyword">template</span>, &amp;pk.PublicKey, pk)
+　　certOut, _ := os.Create(<span class="hljs-string">"cert.pem"</span>)
+　　pem.Encode(certOut, &amp;pem.Block{Type: <span class="hljs-string">"CERTIFICATE"</span>, Bytes: derBytes})
+　　certOut.Close()
+
+　　keyOut, _ := os.Create(<span class="hljs-string">"key.pem"</span>)
+　　pem.Encode(keyOut, &amp;pem.Block{Type: <span class="hljs-string">"RSA PRIVATE KEY"</span>, Bytes:
+　　➥x509.MarshalPKCS1PrivateKey(pk)})
+　　keyOut.Close()
+}
+</code></pre>
+<p>生成 SSL 证书和密钥的步骤并不是特别复杂。因为 SSL 证书实际上就是一个将扩展密钥用法（extended key usage）设置成了服务器身份验证操作的 X.509 证书，所以程序在生成证书时使用了<code>crypto/x509</code>标准库。此外，因为创建证书需要用到私钥，所以程序在使用私钥成功创建证书之后，会将私钥单独保存在一个存放服务器私钥的文件里面。</p>
+<p>让我们来仔细分析一下代码清单3-5中的主要代码吧。首先，程序使用一个<code>Certificate</code>结构来对证书进行配置：</p>
+<pre><code class="hljs cpp"><span class="hljs-keyword">template</span> := x509.Certificate{
+　SerialNumber: serialNumber,
+　Subject: subject,
+　NotBefore: time.Now(),
+　NotAfter: time.Now().Add(<span class="hljs-number">365</span>*<span class="hljs-number">24</span>*time.Hour),
+　KeyUsage: x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+　ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+　IPAddresses: []net.IP{net.ParseIP(<span class="hljs-string">"127.0.0.1"</span>)},
+}
+</code></pre>
+<p>结构中的证书序列号（<code>SerialNumber</code>）用于记录由 CA 分发的唯一号码，为了能让我们的 Web 应用运行起来，程序在这里生成了一个非常长的随机整数来作为证书序列号。之后，程序创建了一个专有名称（distinguished name），并将它设置成了证书的标题（subject）。此外，程序还将证书的有效期设置成了一年，而结构中<code>KeyUsage</code>字段和<code>ExtKeyUsage</code>字段的值则表明了这个 X.509 证书是用于进行服务器身份验证操作的。最后，程序将证书设置成了只能在 IP 地址127.0.0.1之上运行。</p>
+<blockquote>
+  <p>SSL 证书</p>
+  <p>X.509 是国际电信联盟电信标准化部门（ITU-T）为公钥基础设施制定的一个标准，这个标准包含了公钥证书的标准格式。</p>
+  <p>一个 X.509 证书（简称 SSL 证书）实际上就是一个经过编码的 ASN.1（Abstract Syntax Notation One，抽象语法表示法/1）格式的电子文档。ASN.1 既是一个标准，也是一种表示法，它描述了表示电信以及计算机网络数据的规则和结构。</p>
+  <p>X.509 证书可以使用多种格式编码，其中一种编码格式是 BER（Basic Encoding Rules，基本编码规则）。BER 格式指定了一种自解释并且自定义的格式用于对 ASN.1 数据结构进行编码，而 DER 格式则是 BER 的一个子集。DER 只提供了一种编码 ASN.1 值的方法，这种方法被广泛地应用于密码学当中，尤其是对 X.509 证书进行加密。</p>
+  <p>SSL 证书可以以多种不同的格式保存，其中一种是 PEM（Privacy Enhanced Email，隐私增强邮件）格式，这种格式会对 DER 格式的 X.509 证书实施 Base64 编码，并且这种格式的文件都以<code>-----BEGIN CERTIFICATE-----</code>开头，以<code>-----END CERTIFICATE-----</code>结尾（除了用作文件格式之外，PEM 和此处讨论的 SSL 证书关系并不大）。</p>
+</blockquote>
+<p>在此之后，程序通过调用<code>crypto/rsa</code>标准库中的<code>GenerateKey</code>函数生成了一个 RSA 私钥：</p>
+<pre><code class="hljs">pk, _ := rsa.GenerateKey(rand.Reader, 2048)
+</code></pre>
+<p>程序创建的 RSA 私钥的结构里面包含了一个能够公开访问的公钥（public key），这个公钥在使用<code>x509.CreateCertificate</code>函数创建 SSL 证书的时候就会用到：</p>
+<pre><code class="hljs cpp">derBytes, _ := x509.CreateCertificate(rand.Reader, &amp;<span class="hljs-keyword">template</span>, &amp;<span class="hljs-keyword">template</span>,
+➥&amp;pk.PublicKey, pk)
+</code></pre>
+<p><code>CreateCertificate</code>函数接受<code>Certificate</code>结构、公钥和私钥等多个参数，创建出一个经过 DER 编码格式化的字节切片。后续代码的意图也非常简单明了，它们首先使用<code>encoding/pem</code>标准库将证书编码到<code>cert.pem</code>文件里面：</p>
+<pre><code class="hljs apache"><span class="hljs-attribute">certOut</span>, _ := os.Create(<span class="hljs-string">"cert.pem"</span>)
+<span class="hljs-attribute">pem</span>.Encode(certOut, &amp;pem.Block{Type: <span class="hljs-string">"CERTIFICATE"</span>, Bytes: derBytes})
+<span class="hljs-attribute">certOut</span>.Close()
+</code></pre>
+<p>然后继续以 PEM 编码的方式把之前生成的密钥编码并保存到<code>key.pem文件</code>里面：</p>
+<pre><code class="hljs bash">keyOut, _ := os.Create(<span class="hljs-string">"key.pem"</span>)
+pem.Encode(keyOut, &amp;pem.Block{Type: <span class="hljs-string">"RSA PRIVATE KEY"</span>, Bytes:
+➥x509.MarshalPKCS1PrivateKey(pk)})
+keyOut.Close()
+</code></pre>
+<p>最后需要提醒的是，如果证书是由 CA 签发的，那么证书文件中将同时包含服务器签名以及 CA 签名，其中服务器签名在前，CA 签名在后。</p>
+<h3 id="33">3.3　处理器和处理器函数</h3>
+<p>在前面的内容中，我们启动了一个 Web 服务器，但是因为这个服务器尚未实现任何功能，所以现在访问这个服务器只会获得一个404 HTTP 响应代码。出现这一问题的原因在于我们尚未为服务器编写任何处理器，所以服务器的多路复用器在接收到请求之后找不到任何处理器来处理请求，因此它只能返回一个404响应。为了让服务器能够产生实际的行为，我们需要为之编写处理器。</p>
+<h4 id="331">3.3.1　处理请求</h4>
+<p>前面的第1章和第2章曾经简单地介绍过处理器以及处理器函数，现在是时候详细地谈谈它们的定义了。在 Go 语言中，一个处理器就是一个拥有<code>ServeHTTP</code>方法的接口，这个<code>ServeHTTP</code>方法需要接受两个参数：第一个参数是一个<code>ResponseWriter</code>接口，而第二个参数则是一个指向<code>Request</code>结构的指针。换句话说，任何接口只要拥有一个<code>ServeHTTP</code>方法，并且该方法带有以下签名（signature），那么它就是一个处理器：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">ServeHTTP</span>(<span class="hljs-selector-tag">http</span><span class="hljs-selector-class">.ResponseWriter</span>, *<span class="hljs-selector-tag">http</span><span class="hljs-selector-class">.Request</span>)
+</code></pre>
+<p>现在，让我们暂时离题一下，回答一个在阅读本章时可能会出现在你脑海里面的问题：既然<code>ListenAndServe</code>接受的第二个参数是一个处理器，那么为何它的默认值却是多路复用器<code>DefaultServeMux</code>呢？</p>
+<p>这是因为<code>DefaultServeMux</code>多路复用器是<code>ServeMux</code>结构的一个实例，而后者也拥有上面提到的<code>ServeHTTP</code>方法，并且这个方法的签名与成为处理器所需的签名完全一致。换句话说，<code>DefaultServeMux</code>既是<code>ServeMux</code>结构的实例，也是<code>Handler</code>结构的实例，因此<code>DefaultServeMux</code>不仅是一个多路复用器，它还是一个处理器。不过<code>DefaultServeMux</code>处理器和其他一般的处理器不同，<code>DefaultServeMux</code>是一个特殊的处理器，它唯一要做的就是根据请求的 URL 将请求重定向到不同的处理器。在了解了这些知识之后，我们现在只需要自行编写一个处理器并使用它去代替默认的多路复用器，就可以让服务器正常地对客户端进行响应了，具体如代码清单3-6所示。</p>
+<p>代码清单3-6　处理请求</p>
+<pre><code class="hljs cpp"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+type MyHandler <span class="hljs-keyword">struct</span></span>{}
+
+func (h *MyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+　　fmt.Fprintf(w, <span class="hljs-string">"Hello World!"</span>)
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　handler := MyHandler{}
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　　　Handler: &amp;handler,
+　　}
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>现在，只要按照2.7节介绍过的方法启动服务器，并使用浏览器访问地址 http://localhost:8080/，我们就可以在浏览器里面看到 Hello World 响应了。</p>
+<p>有趣的是，如果我们使用浏览器访问 http://localhost:8080/anything/at/all，同样会看到相同的 Hello World 响应。造成这个问题的原因非常明显：在代码清单3-6中，程序创建了一个处理器并将它与服务器进行了绑定，以此来代替原本正在使用的默认多路复用器。这意味着服务器不会再通过 URL 匹配来将请求路由至不同的处理器，而是直接使用同一个处理器来处理所有请求，因此无论浏览器访问什么地址，服务器返回的都是同样的 Hello World 响应。</p>
+<p>这也是我们在 Web 应用中使用多路复用器的原因：对某些特殊用途的服务器来说，只使用一个处理器也许就可以很好地完成工作了，但是在大部分情况下，我们还是希望服务器可以根据不同的 URL 请求返回不同的响应，而不是一成不变地只返回一种响应。</p>
+<h4 id="332">3.3.2　使用多个处理器</h4>
+<p>在大部分情况下，我们并不希望像代码清单3-6那样，使用一个处理器去处理所有请求，而是希望使用多个处理器去处理不同的 URL。为了做到这一点，我们不再在<code>Server</code>结构的<code>Handler</code>字段中指定处理器，而是让服务器使用默认的<code>DefaultServeMux</code>作为处理器，然后通过<code>http.Handle</code>函数将处理器绑定至<code>DefaultServeMux</code>。需要注意的是，虽然<code>Handle</code>函数来源于<code>http</code>包，但它实际上是<code>ServeMux</code>结构的方法：这些函数是为了操作便利而创建的函数，调用它们等同于调用<code>DefaultServeMux</code>的某个方法。比如说，调用<code>http.Handle</code>实际上就是在调用<code>DefaultServeMux</code>的<code>Handle</code>方法。</p>
+<p>在代码清单3-7中，程序创建了两个处理器，并将它们与各自的 URL 进行了绑定。现在，访问地址 http://localhost:8080/hello 将会看到“Hello!”，而访问地 http://localhost:8080/world 则会看到“World!”。</p>
+<p>代码清单3-7　使用多个处理器对请求进行处理</p>
+<pre><code class="hljs bash">package main
+
+import (
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+)
+
+<span class="hljs-built_in">type</span> HelloHandler struct{}
+
+func (h *HelloHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
+　　fmt.F<span class="hljs-built_in">printf</span>(w, <span class="hljs-string">"Hello!"</span>)
+}
+
+<span class="hljs-built_in">type</span> WorldHandler struct{}
+
+func (h *WorldHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
+　　fmt.F<span class="hljs-built_in">printf</span>(w, <span class="hljs-string">"World!"</span>)
+}
+
+func <span class="hljs-function"><span class="hljs-title">main</span></span>() {
+　　hello := HelloHandler{}
+　　world := WorldHandler{}
+
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+
+　　http.Handle(<span class="hljs-string">"/hello"</span>, &amp;hello)
+　　http.Handle(<span class="hljs-string">"/world"</span>, &amp;world)
+
+　　server.ListenAndServe()
+}
+</code></pre>
+<h4 id="333">3.3.3　处理器函数</h4>
+<p>上一小节对处理器进行了介绍，那么什么是处理器函数呢？处理器函数实际上就是与处理器拥有相同行为的函数：这些函数与<code>ServeHTTP</code>方法拥有相同的签名，也就是说，它们接受<code>ResponseWriter</code>和指向<code>Request</code>结构的指针作为参数。代码清单3-8展示了如何在服务器中使用处理器函数。</p>
+<p>代码清单3-8　使用处理器函数处理请求</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+func <span class="hljs-title">hello</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request)</span> </span>{
+　　fmt.Fprintf(w, <span class="hljs-string">"Hello!"</span>)
+}
+
+<span class="hljs-function">func <span class="hljs-title">world</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request)</span> </span>{
+　　fmt.Fprintf(w, <span class="hljs-string">"World!"</span>)
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+　　http.HandleFunc(<span class="hljs-string">"/hello"</span>, hello)
+　　http.HandleFunc(<span class="hljs-string">"/world"</span>, world)
+
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>处理器函数的实现原理是这样的：Go 语言拥有一种<code>HandlerFunc</code>函数类型，它可以把一个带有正确签名的函数<code>f</code>转换成一个带有方法<code>f</code>的<code>Handler</code>。比如说，对下面这个<code>hello</code>函数来说：</p>
+<pre><code class="hljs bash">func hello(w http.ResponseWriter, r *http.Request) {
+　　　fmt.F<span class="hljs-built_in">printf</span>(w, <span class="hljs-string">"Hello!"</span>)
+}
+</code></pre>
+<p>程序只需要执行以下代码：</p>
+<pre><code class="hljs makefile">helloHandler := HandlerFunc(hello)
+</code></pre>
+<p>就可以把<code>helloHandler</code>设置成一个<code>Handler</code>。如果你对此感到疑惑，那么不妨回顾一下之前展示过的接受处理器的服务器代码：</p>
+<pre><code class="hljs bash">package main
+
+import (
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+}
+
+<span class="hljs-built_in">type</span> HelloHandler struct{}
+
+func (h*HelloHandler) ServeHTTP(w thhp.ResponseWriter, r *http.Request){
+　　fmt.F<span class="hljs-built_in">printf</span>(w, <span class="hljs-string">"Hello! "</span>)
+}
+<span class="hljs-built_in">type</span> WorldHandler struct{}
+
+func (h *WorldHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
+　　fmt.F<span class="hljs-built_in">printf</span>(w,<span class="hljs-string">"World!"</span>)
+}
+
+func <span class="hljs-function"><span class="hljs-title">main</span></span> () {
+　　hello := HelloHandler{}
+　　world := WorldHandler{}
+
+　　server := thhp.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+
+　　http.Handle(<span class="hljs-string">"/hello"</span>,&amp;hello)
+　　http.Handle(<span class="hljs-string">"/world"</span>,&amp;world)
+
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>这个程序使用了以下这行代码来绑定 URL 地址<code>/hello</code>和<code>hello</code>函数：</p>
+<pre><code class="hljs apache"><span class="hljs-attribute">http</span>.Handle(<span class="hljs-string">"/hello"</span>, &amp;hello)
+</code></pre>
+<p>这行代码向我们展示了<code>Handle</code>函数将一个处理器绑定至 URL 的具体方法。此外，在接受处理器函数的代码清单3-8中，<code>HandleFunc</code>函数会将<code>hello</code>函数转换成一个<code>Handler</code>，并将它与<code>DefaultServeMux</code>进行绑定，以此来简化创建并绑定<code>Handler</code>的工作。换句话说，处理器函数只不过是创建处理器的一种便利的方法而已。代码清单3-9展示了<code>http.HandleFunc</code>函数的具体定义。</p>
+<p>代码清单3-9　<code>http.HandleFunc</code>函数的源代码</p>
+<pre><code class="hljs cs"><span class="hljs-function">func <span class="hljs-title">HandleFunc</span>(<span class="hljs-params">pattern <span class="hljs-keyword">string</span>, handler func(ResponseWriter, *Request</span>)) </span>{
+　　 DefaultServeMux.HandleFunc(pattern, handler)
+}
+</code></pre>
+<p>而下面是<code>ServeMux.HandleFunc</code>方法的定义：</p>
+<pre><code class="hljs cs">func (mux *ServeMux) HandleFunc(pattern <span class="hljs-keyword">string</span>, <span class="hljs-function">handler <span class="hljs-title">func</span>(<span class="hljs-params">ResponseWriter,
+　　 *Request</span>)) </span>{
+　　mux.Handle(pattern, HandlerFunc(handler))
+}
+</code></pre>
+<p>注意这个方法是如何使用<code>HandlerFunc</code>函数将传入的<code>handler</code>函数转换成真正的处理器的。</p>
+<p>虽然处理器函数能够完成跟处理器一样的工作，并且使用处理器函数的代码比使用处理器的代码更为整洁，但是处理器函数并不能完全代替处理器。这是因为在某些情况下，代码可能已经包含了某个接口或者某种类型，这时我们只需要为它们添加<code>ServeHTTP</code>方法就可以将它们转变为处理器了，并且这种转变也有助于构建出更为模块化的 Web 应用。</p>
+<h4 id="334">3.3.4　串联多个处理器和处理器函数</h4>
+<p>尽管 Go 语言并不是一门函数式编程语言，但它也拥有一些函数式编程语言的特性，如函数类型、匿名函数和闭包。正如前面的代码所示，在 Go 语言里面，程序可以将一个函数传递给另一个函数，又或者通过标识符去引用一个具名函数。这意味着，程序可以像图3-3展示的那样，将函数<code>f1</code>传递给另一个函数<code>f2</code>，然后在函数<code>f2</code>执行完某些操作之后调用<code>f1</code>。</p>
+<p><img src="https://images.gitbook.cn/d5805350-a486-11e8-8a5b-85d5618fe6ba" alt="enter image description here"></p>
+<p>图3-3　串联起多个处理器</p>
+<p>来看一个完整的例子：假设我们想要在每个处理器被调用时，在某个地方记录下相应的调用信息。为此，我们可以在处理器里面添加一些额外的代码，又或者像第2章那样，将这些记录代码重构成一个工具函数，然后让每个处理器都去调用这个工具函数。虽然实现上面提到的两种方法并不困难，但引入额外代码的做法会给程序的编写带来麻烦，并导致处理器需要包含与处理请求无关的代码。</p>
+<p>诸如日志记录、安全检查和错误处理这样的操作通常被称为横切关注点（cross-cutting concern），虽然这些操作非常常见，但是为了防止代码重复和代码依赖问题，我们又不希望这些操作和正常的代码搅和在一起。为此，我们可以使用串联（chaining）技术分隔代码中的横切关注点。代码清单3-10展示了一个串联多个处理器的例子。</p>
+<p>代码清单3-10　串联两个处理器函数</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+　　<span class="hljs-string">"reflect"</span>
+　　<span class="hljs-string">"runtime"</span>
+)</span>
+
+func <span class="hljs-title">hello</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request)</span> </span>{
+　　fmt.Fprintf(w, <span class="hljs-string">"Hello!"</span>)
+}
+
+<span class="hljs-function">func <span class="hljs-title">log</span><span class="hljs-params">(h http.HandlerFunc)</span> http.HandlerFunc </span>{
+　　<span class="hljs-keyword">return</span> func(w http.ResponseWriter, r *http.Request) {
+　　　　name := runtime.FuncForPC(reflect.ValueOf(h).Pointer()).Name()
+　　　　fmt.Println(<span class="hljs-string">"Handler function called - "</span> + name)
+　　　　h(w, r)
+　　}
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+　　http.HandleFunc(<span class="hljs-string">"/hello"</span>, log(hello))
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>除处理器函数<code>hello</code>之外，这个代码清单还包含了一个<code>log</code>函数。<code>log</code>函数接受一个<code>HandlerFunc</code>类型的函数作为参数，然后返回另一个<code>HandlerFunc</code>类型的函数作为值。因为<code>hello</code>函数就是一个<code>HandlerFunc</code>类型的函数，所以代码<code>log(hello)</code>实际上就是将<code>hello</code>函数发送至<code>log</code>函数之内，换句话说，这段代码串联起了<code>log</code>函数和<code>hello</code>函数。</p>
+<p><code>log</code>函数的返回值是一个匿名函数，因为这个匿名函数接受一个<code>ResponseWriter</code>和一个<code>Request</code>指针作为参数，所以它实际上也是一个<code>HandlerFunc</code>。在匿名函数内部，程序首先会获取被传入的<code>HandlerFunc</code>的名字，然后再调用这个<code>HandlerFunc</code>。作为结果，如果我们使用浏览器访问地址 http://localhost:8080/hello，那么浏览器页面将显示以下信息：</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">Handler</span> <span class="hljs-keyword">function</span> called – main.hello
+</code></pre>
+<p>就像搭积木一样，既然我们可以串联起两个函数，那么自然也可以串联起更多函数。串联多个函数可以让程序执行更多动作，这种做法有时候也称为管道处理（pipeline processing），如图3-4所示。</p>
+<p><img src="https://images.gitbook.cn/dcf07840-a486-11e8-80dc-8d254ca863fe" alt="enter image description here"></p>
+<p>图3-4　串联更多处理器</p>
+<p>举个例子，如果我们还有一个<code>protect</code>函数，它会在调用传入的处理器之前验证用户的身份：</p>
+<pre><code class="hljs cs"><span class="hljs-function">func <span class="hljs-title">protect</span>(<span class="hljs-params">h http.HandlerFunc</span>) http.HandlerFunc </span>{
+　　<span class="hljs-keyword">return</span> func(w http.ResponseWriter, r *http.Request) {
+　　　 . . .　❶
+　　　 h(w, r)
+　　}
+}
+</code></pre>
+<p>❶ 为了节省篇幅，这里省略了一段用于检测用户登录情况的代码</p>
+<p>那么我们只需要把<code>protect</code>函数跟之前的函数串联在一起，就可以正常使用这个函数了：</p>
+<pre><code class="hljs bash">http.HandleFunc(<span class="hljs-string">"/hello"</span>, protect(<span class="hljs-built_in">log</span>(hello)))
+</code></pre>
+<p>你可能已经注意到了，虽然我们一直讨论的都是如何串联处理器，但代码清单3-10实际上却是在串联处理器函数。不过正如代码清单3-11所示，串联处理器的方法实际上和串联处理器函数的方法是非常相似的。</p>
+<p>代码清单3-11　串联多个处理器</p>
+<pre><code class="hljs cs"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> (<span class="hljs-params">
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+</span>)
+
+type HelloHandler <span class="hljs-keyword">struct</span></span>{}
+
+func (h HelloHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
+　　fmt.Fprintf(w, <span class="hljs-string">"Hello!"</span>)
+}
+
+<span class="hljs-function">func <span class="hljs-title">log</span>(<span class="hljs-params">h http.Handler</span>) http.Handler </span>{
+　　<span class="hljs-keyword">return</span> http.HandlerFunc (func(w http.ResponseWriter, r *http.Request) {
+　　　　fmt.Printf(<span class="hljs-string">"Handler called - %T\n"</span>, h)
+　　　　h.ServeHTTP (w, r)
+　　})
+}
+
+<span class="hljs-function">func <span class="hljs-title">protect</span>(<span class="hljs-params">h http.Handler</span>) http.Handler </span>{
+　　<span class="hljs-keyword">return</span> http.HandlerFunc (func(w http.ResponseWriter, r *http.Request) {
+　　　   . . .　❶
+　　　　h.ServeHTTP (w, r)
+　　})
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+　　hello := HelloHandler{}
+　　http.Handle(<span class="hljs-string">"/hello"</span>, protect(log(hello)))
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>❶ 为了节省篇幅，这里省略了一段用于检测用户登录情况的代码</p>
+<p>让我们来观察一下代码清单3-11和代码清单3-10有什么区别。代码清单3-11中的<code>Hello Handler</code>在前面的代码清单中已经展示过，它跟代码清单3-10中的<code>hello</code>函数一样，都位于串联链的末尾。至于<code>log</code>函数则不再接受和返回<code>HandlerFunc</code>类型的函数，而是接受并返回<code>Handler</code>类型的处理器：</p>
+<pre><code class="hljs perl">func <span class="hljs-keyword">log</span>(h http.Handler) http.Handler {
+　　<span class="hljs-keyword">return</span> http.HandlerFunc (func(w http.ResponseWriter, r *http.Request) {
+　　　　fmt.Printf(<span class="hljs-string">"Handler called - %T\n"</span>, h)
+　　　　h.ServeHTTP (w, r)
+　　})
+}
+</code></pre>
+<p><code>log</code>函数和<code>protect</code>函数现在不再返回匿名函数，而是使用<code>HandlerFunc</code>直接将匿名函数转换成一个<code>Handler</code>，然后返回这个<code>Handler</code>。程序现在也不再直接执行处理器函数了，而是调用处理器的<code>ServeHTTP</code>函数。最后的一点变化是，程序现在绑定的是处理器而不是处理器函数：</p>
+<pre><code class="hljs bash">hello := HelloHandler{}
+http.Handle(<span class="hljs-string">"/hello"</span>, protect(<span class="hljs-built_in">log</span>(hello)))
+</code></pre>
+<p>除了以上提到的区别之外，两个程序的其余代码基本上都是相同的。</p>
+<p>串联处理器和处理器函数是一种非常常见的惯用法，很多 Web 应用框架都使用了这一技术。</p>
+<h4 id="335servemuxdefaultservemux">3.3.5　ServeMux 和 DefaultServeMux</h4>
+<p>本章和前一章都对<code>ServeMux</code>和<code>DefaultServeMux</code>进行了介绍。<code>ServeMux</code>是一个 HTTP 请求多路复用器，它负责接收 HTTP 请求并根据请求中的 URL 将请求重定向到正确的处理器，如图3-5所示。</p>
+<p><img src="https://images.gitbook.cn/e4762100-a486-11e8-8b4a-cf3651600922" alt="enter image description here"></p>
+<p>图3-5　通过多路复用器将请求转发给各个处理器</p>
+<p><code>ServeMux</code>结构包含了一个映射，这个映射会将 URL 映射至相应的处理器。正如之前所说，因为<code>ServeMux</code>结构也实现了<code>ServeHTTP</code>方法，所以它也是一个处理器。当<code>ServeMux</code>的<code>ServeHTTP</code>方法接收到一个请求的时候，它会在结构的映射里面找出与被请求 URL 最为匹配的 URL，然后调用与之相对应的处理器的<code>ServeHTTP</code>方法，如图3-6所示。</p>
+<p><img src="https://images.gitbook.cn/e93556c0-a486-11e8-a2aa-0bd41466d20f" alt="enter image description here"></p>
+<p>图3-6　多路复用器的工作原理</p>
+<p>在介绍完<code>ServeMux</code>之后，让我们来了解一下<code>DefaultServeMux</code>。因为<code>ServeMux</code>是一个结构而不是一个接口，所以<code>DefaultServeMux</code>并不是<code>ServeMux</code>的实现。<code>Default-ServeMux</code>实际上是<code>ServeMux</code>的一个实例，并且所有引入了<code>net/http</code>标准库的程序都可以使用这个实例。当用户没有为<code>Server</code>结构指定处理器时，服务器就会使用<code>DefaultServeMux</code>作为<code>ServeMux</code>的默认实例。</p>
+<p>此外，因为<code>ServeMux</code>也是一个<code>处理器</code>，所以用户也可以在有需要的情况下对其实例实施处理器串联。</p>
+<p>在上面的几个例子中，被请求的 URL <code>/hello</code>完美地匹配了与多路复用器绑定的 URL，但如果浏览器访问的是<code>/random</code>或者<code>/hello/there</code>，那么服务器又会返回什么响应呢？</p>
+<p>这个问题的答案跟我们绑定 URL 的方法有关：如果我们像图3-6那样绑定根 URL（<code>/</code>），那么匹配不成功的 URL 将会根据 URL 的层级进行下降，并最终降落在根 URL 之上。当浏览器访问<code>/random</code>的时候，因为服务器无法找到负责处理这个 URL 的处理器，所以它会把这个 URL 交给根 URL 的处理器处理（对于图中所示的例子来说，就是使用<code>indexHandler</code>来处理这个 URL）。</p>
+<p>那么服务器又是如何处理<code>/hello/there</code>的呢？根据最小惊讶原则（The Principle of Least Surprise），因为程序已经为<code>/hello</code>绑定了处理器，所以在默认情况下，程序似乎应该使用<code>helloHandler</code>处理<code>/hello/there</code>。但是对图3-6所示的例子来说，服务器实际上会使用<code>indexHandler</code>去处理对<code>/hello/there</code>的请求。</p>
+<blockquote>
+  <p>最小惊讶原则</p>
+  <p>最小惊讶原则，也称最小意外原则，是设计包括软件在内的一切事物的一条通用规则，它指的是我们在进行设计的时候，应该做那些合乎常理的事情，使事物的行为总是显而易见、始终如一并且合乎情理。</p>
+  <p>举个例子，如果我们在一扇门的旁边放置一个按钮，那么人们就会认为这个按钮与这扇门有关，比如，按下按钮门铃会响或者门会自动打开，等等。但是，如果这个按钮被按下时会关掉走廊的灯光，它就违反了最小惊讶原则，因为这一行为不符合人们对这个按钮的预期。</p>
+</blockquote>
+<p>产生这种行为的原因在于程序在绑定<code>helloHandler</code>时使用的 URL 是<code>/hello</code>而不是<code>/hello/</code>。如果被绑定的 URL 不是以<code>/</code>结尾，那么它只会与完全相同的 URL 匹配；但如果被绑定的 URL 以<code>/</code>结尾，那么即使请求的 URL 只有前缀部分与被绑定 URL 相同，<code>ServeMux</code>也会认定这两个 URL 是匹配的。</p>
+<p>这也就是说，如果与<code>helloHandler</code>处理器绑定的 URL 是<code>/hello/</code>而不是<code>/hello</code>，那么当浏览器请求<code>/hello/there</code>的时候，服务器在找不到与之完全匹配的处理器时，就会退而求其次，开始寻找能够与<code>/hello/</code>匹配的处理器，并最终找到<code>helloHandler</code>处理器。</p>
+<h4 id="336">3.3.6　使用其他多路复用器</h4>
+<p>因为创建一个处理器和多路复用器唯一需要做的就是实现<code>ServeHTTP</code>方法，所以通过自行创建多路复用器来代替<code>net/http</code>包中的<code>ServeMux</code>是完全可行的，并且目前市面上已经出现了很多第三方的多路复用器可供使用，比如，Gorilla Toolkit 就是一个非常优秀的第三方多路复用器包，它提供了<code>mux</code>和<code>pat</code>这两个工作方式非常不同的多路复用器，而本节将要介绍的则是另一个高效的轻量级第三方多路复用器——HttpRouter。</p>
+<p><code>ServeMux</code>的一个缺陷是无法使用变量实现 URL 模式匹配。虽然在浏览器请求<code>/threads</code>的时候，使用<code>ServeMux</code>可以很好地获取并显示论坛中的所有帖子，但如果浏览器请求的是<code>/thread/123</code>，那么要获取并显示论坛里面 ID 为123的帖子就会变得非常困难。程序必须对 URL 进行语法分析才能提取出 URL 当中的帖子 ID。此外，因为受<code>ServeMux</code>实现 URL 模式匹配的方式所限，如果我们想要通过<code>/thread/123/post/456</code>这样的 URL 从 ID 为123的帖子中获取 ID 为456的回复，就必须在程序里面进行大量复杂的语法分析，并因此给程序带来额外的复杂度。</p>
+<p>与<code>ServeMux</code>不同，<code>HttpRouter</code>包并没有上面提到的这些限制。本节将对<code>HttpRouter</code>包最重要的一部分特性进行介绍，关于这个包的更详细的说明可以在它的文档页面里面看到：https://github.com/julienschmidt/httprouter。代码清单3-12展示了一个使用 HttpRouter 实现的服务器。</p>
+<p>代码清单3-12　使用 HttpRouter 实现的服务器</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"github.com/julienschmidt/httprouter"</span>
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+func <span class="hljs-title">hello</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request, p httprouter.Params)</span> </span>{
+　　fmt.Fprintf(w, <span class="hljs-string">"hello, %s!\n"</span>, p.ByName(<span class="hljs-string">"name"</span>))
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　mux := httprouter.New()
+　　mux.GET(<span class="hljs-string">"/hello/:name"</span>, hello)
+
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　　　Handler: mux,
+　　}
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>这个程序中的大部分代码都和之前展示过的代码一样，只是涉及多路复用器的部分代码跟之前有所不同。在这段代码里，程序通过调用<code>New</code>函数来创建一个多路复用器：</p>
+<pre><code class="hljs makefile">mux := httprouter.New()
+</code></pre>
+<p>这个程序不再使用<code>HandleFunc</code>绑定处理器函数，而是直接把处理器函数与给定的 HTTP 方法进行绑定：</p>
+<pre><code class="hljs apache"><span class="hljs-attribute">mux</span>.GET(<span class="hljs-string">"/hello/:name"</span>, hello)
+</code></pre>
+<p>这段代码会把给定 URL 的<code>GET</code>方法与<code>hello</code>处理器函数进行绑定，当浏览器向这个 URL 发送<code>GET</code>请求时，<code>hello</code>函数就会被调用，但如果浏览器向这个 URL 发送除<code>GET</code>请求之外的其他请求，<code>hello</code>函数则不会被调用。需要注意的是，被绑定的 URL 包含了具名参数（named parameter），这些具名参数会被 URL 中的具体值所代替，并且程序可以在处理器里面获取这些值。</p>
+<p>跟之前的处理器函数相比，现在的<code>hello</code>处理器函数也发生了变化，它不再接受两个参数，而是接受3个参数。其中第三个参数<code>Params</code>就包含了之前提到的具名参数，具名参数的值可以在处理器内部通过<code>ByName</code>方法获取：</p>
+<pre><code class="hljs bash">func hello(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+　　 fmt.F<span class="hljs-built_in">printf</span>(w, <span class="hljs-string">"hello, %s!\n"</span>, p.ByName(<span class="hljs-string">"name"</span>))
+}
+</code></pre>
+<p>程序的最后一个变化是它不再使用默认的<code>DefaultServeMux</code>，而是通过将 HttpRouter 传递给<code>Server</code>结构来使用这个多路复用器：</p>
+<pre><code class="hljs bash">server := http.Server{
+　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　Handler: mux,
+}
+server.ListenAndServe()
+</code></pre>
+<p>现在，如果我们在终端上执行<code>go build</code>命令，那么编译器将返回一个错误：</p>
+<pre><code class="hljs javascript">$ go build
+server.go:<span class="hljs-number">5</span>:<span class="hljs-number">5</span>: cannot find package <span class="hljs-string">"github.com/julienschmidt/httprouter"</span> <span class="hljs-keyword">in</span>
+　any <span class="hljs-keyword">of</span>:
+　　<span class="hljs-regexp">/usr/</span>local/go/src/github.com/julienschmidt/httprouter (<span class="hljs-keyword">from</span> $GOROOT)
+　　/Users/sausheong/gws/src/github.com/julienschmidt/httprouter (<span class="hljs-keyword">from</span> $GOPATH)
+</code></pre>
+<p>出现这个错误的原因在于，我们虽然指定了 HttpRouter 库，但这个第三方库在我们的电脑上并不存在，得益于 Go 语言强大且易用的包管理系统，我们只需要执行以下命令就可以解决这个问题了：</p>
+<pre><code class="hljs cs">$ go <span class="hljs-keyword">get</span> github.com/julienschmidt/httprouter
+</code></pre>
+<p>在计算机连接了网络的情况下，这个命令会从 HttpRouter 的 GitHub 主页上下载 HttpRouter 包的源代码，并将其存储到<code>$GOPATH/src</code>目录中。在此之后，当我们再次执行<code>go build</code>命令尝试编译代码清单3-12所示的服务器时，编译器就会导入 HttpRouter 的代码，并对整个服务器进行编译。</p>
+<h3 id="34http2">3.4　使用 HTTP/2</h3>
+<p>在本章的最后，让我们来了解一下如何使用 HTTP/2 构建本章介绍的 Web 服务器。</p>
+<p>本书在第1章已经对 HTTP/2 做过简单的介绍，并且提到过在1.6或以上版本的 Go 语言中，如果使用 HTTPS 模式启动服务器，那么服务器将默认使用 HTTP/2。但是，在默认情况下，版本低于1.6版本的 Go 语言将不会安装<code>http2</code>包，因此用户需要通过手动执行以下命令来获取这个包：</p>
+<pre><code class="hljs cs">go <span class="hljs-keyword">get</span> <span class="hljs-string">"golang.org/x/net/http2"</span>
+</code></pre>
+<p>为了让代码清单3-6中构建的 Web 服务器用上 HTTP/2，我们需要给这个服务器导入<code>http2</code>包，并通过添加一些代码行来让服务器打开对 HTTP/2 的支持。为了做到这一点，我们需要调用<code>http2</code>包中的<code>ConfigureServer</code>方法，并将服务器配置传递给它，修改后的服务器代码如代码清单3-13所示。</p>
+<p>代码清单3-13　启用 HTTP/2</p>
+<pre><code class="hljs cpp"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"golang.org/x/net/http2"</span>
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+type MyHandler <span class="hljs-keyword">struct</span></span>{}
+
+func (h *MyHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
+　　fmt.Fprintf(w, <span class="hljs-string">"Hello World!"</span>)
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　handler := MyHandler{}
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　　　Handler: &amp;handler,
+　　}
+　　http2.ConfigureServer(&amp;server, &amp;http2.Server{})
+　　server.ListenAndServeTLS(<span class="hljs-string">"cert.pem"</span>, <span class="hljs-string">"key.pem"</span>)
+}
+</code></pre>
+<p>现在，我们只要执行以下代码就可以启动这个打开了 HTTP/2 功能的 Web 服务器了：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">go</span> <span class="hljs-selector-tag">run</span> <span class="hljs-selector-tag">server</span><span class="hljs-selector-class">.go</span>
+</code></pre>
+<p>为了检查服务器是否运行在 HTTP/2 模式之下，我们可以使用 cURL 对服务器进行检查。因为 cURL 在很多平台上都是可用的，所以本书会经常使用它作为检测工具，因此现在是时候来学习一下如何使用 cURL 了。</p>
+<blockquote>
+  <p>cURL</p>
+  <p>cURL 是一个命令行工具，它可以获取指定 URL 上的文件，又或者向指定的 URL 发送文件。cURL 支持数量庞大的常用互联网协议，其中就包括 HTTP 和 HTTPS。cURL 默认安装在包括 OS X 在内的很多 Unix 变种之上，并且它同样可以在 Windows 系统上使用。手动下载和安装 cURL 的方法可以通过页面 http://curl.haxx.se/download.html 看到。</p>
+</blockquote>
+<p>cURL 从7.43.0版本开始支持 HTTP/2，用户在发送请求的时候，只需要打开<code>--http2</code>标志（flag）就可以发送 HTTP/2 请求了。此外，为了让 cURL 能够支持 HTTP/2，用户还必须将 cURL 与<code>nghttp2</code>这个提供 HTTP/2 支持的 C 语言库进行链接（link）。在撰写本节的时候，包括 OS X 平台在内的很多默认的 cURL 实现都还没有提供对 HTTP/2 的支持，因此我们可能需要重新编译 cURL，将它与<code>nghttp2</code>库进行链接，然后用编译后的新版 cURL 代替原有的 cURL。</p>
+<p>在完成重新编译 cURL 的工作之后，我们可以使用以下命令去检查代码清单3-13展示的 Web 应用是否启用了 HTTP/2：</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">curl</span> -I --http2 --insecure https://localhost:8080/
+</code></pre>
+<p>在默认情况下，cURL 在以 HTTP/2 形式访问一个 Web 应用的时候，会对应用的证书进行验证，并在验证无法通过时拒绝访问。因为我们的 Web 应用使用的是自行创建的证书和密钥，它们默认是无法通过这一验证的，所以上面的命令在调用 cURL 的时候使用了<code>insecure</code>标志，这个标志会让 cURL 强制接受我们创建的证书，从而使访问可以顺利进行。</p>
+<p>如果一切顺利，cURL 将返回以下输出：</p>
+<pre><code class="hljs perl">HTTP/<span class="hljs-number">2.0</span> <span class="hljs-number">200</span>
+content-type:text/plain; charset=utf-<span class="hljs-number">8</span>
+content-<span class="hljs-keyword">length</span>:<span class="hljs-number">12</span>
+date:Mon, <span class="hljs-number">15</span> Feb <span class="hljs-number">2016</span> <span class="hljs-number">05</span>:<span class="hljs-number">33</span>:<span class="hljs-number">01</span> GMT
+</code></pre>
+<p>本章虽然详细介绍了如何接收 HTTP 请求，但是并没有具体地说明如何处理接收到的请求，以及如何向客户端返回响应。虽然处理器和处理器函数是使用 Go 编写 Web 应用的关键，但如何处理请求以及如何发送响应才是 Web 应用真正安身立命之所在。在接下来的一章中，我们将深入学习请求和响应的细节，了解如何从请求中提取信息，以及如何通过响应传递信息。</p>
+<h3 id="35">3.5　小结</h3>
+<ul>
+<li>Go 语言拥有一系列成熟的标准库，如<code>net/http</code>和<code>html/template</code>，这些标准库可以用于构建 Web 应用。</li>
+<li>尽管使用 Web 框架可以更容易并且更快捷地构建 Web 应用，但是在使用这些框架之前，先了解 Web 编程所需的基础知识也是非常重要的。</li>
+<li>Go 语言的<code>net/http</code>标准库可以将 HTTP 通信放到 SSL 之上进行，也就是通过 HTTPS 方式创建出更为安全的通信连接。</li>
+<li>Go 语言的处理器可以是任何带有<code>ServeHTTP</code>方法的结构，其中<code>ServeHTTP</code>方法需要接收两个参数：第一个参数是一个<code>ResponseWriter</code>接口，而第二个参数则是一个指向<code>Request</code>结构的指针。</li>
+<li>处理器函数是与处理器拥有相似行为的函数。处理器函数用于处理请求，它们跟<code>ServeHTTP</code>方法拥有相同的签名。</li>
+<li>通过串联处理器或者处理器函数，可以对程序中的横切关注点进行分隔，并以模块化的方式处理请求。</li>
+<li>多路复用器也是处理器。比如，<code>ServeMux</code>就是一个 HTTP 请求多路复用器，它接受 HTTP 请求并根据请求中的 URL 将请求重定向到正确的处理器。<code>DefaultServeMux</code>是<code>ServeMux</code>的一个公开的实例，这个实例会被用作默认的多路复用器。</li>
+<li>在 Go 1.6或以上的版本中，<code>net/http</code>标准库默认支持 HTTP/2。版本低于1.6的 Go 语言如果想要获得 HTTP/2 支持，就需要手动添加<code>http2</code>包。</li>
+</ul></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#31gonethttp"><span class="toc-number">1.</span> <span class="toc-text">3.1　Go 的 net/http 标准库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32go"><span class="toc-number">2.</span> <span class="toc-text">3.2　使用 Go 构建服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#321goweb"><span class="toc-number">2.1.</span> <span class="toc-text">3.2.1　Go Web 服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#322https"><span class="toc-number">2.2.</span> <span class="toc-text">3.2.2　通过 HTTPS 提供服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33"><span class="toc-number">3.</span> <span class="toc-text">3.3　处理器和处理器函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#331"><span class="toc-number">3.1.</span> <span class="toc-text">3.3.1　处理请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#332"><span class="toc-number">3.2.</span> <span class="toc-text">3.3.2　使用多个处理器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#333"><span class="toc-number">3.3.</span> <span class="toc-text">3.3.3　处理器函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#334"><span class="toc-number">3.4.</span> <span class="toc-text">3.3.4　串联多个处理器和处理器函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#335servemuxdefaultservemux"><span class="toc-number">3.5.</span> <span class="toc-text">3.3.5　ServeMux 和 DefaultServeMux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#336"><span class="toc-number">3.6.</span> <span class="toc-text">3.3.6　使用其他多路复用器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34http2"><span class="toc-number">4.</span> <span class="toc-text">3.4　使用 HTTP/2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#35"><span class="toc-number">5.</span> <span class="toc-text">3.5　小结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&text=接收请求"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&is_video=false&description=接收请求"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=接收请求&body=Check out this article: http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&title=接收请求"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/go_web编程/2-1接收请求/2019/09/&name=接收请求&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="自定义类型type X intfunc main() {    var a X = 1    var b int = a // cannot use a (type X) as type int in assignment    _ = b}以基础类型（underlying type）内存布局为模板，创建新类型。与基础类型属完全不同的两个类型。允许显式转换。除了内置类型就是自定义类型。创建自定类型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-12">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="自定义类型type X intfunc main() {    var a X = 1    var b int = a // cannot use a (type X) as type int in assignment    _ = b}以基础类型（underlying type）内存布局为模板，创建新类型。与基础类型属完全不同的两个类型。允许显式转换。除了内置类型就是自定义类型。创建自定类型">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:52:52.190Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-12">
+<meta name="twitter:description" content="自定义类型type X intfunc main() {    var a X = 1    var b int = a // cannot use a (type X) as type int in assignment    _ = b}以基础类型（underlying type）内存布局为模板，创建新类型。与基础类型属完全不同的两个类型。允许显式转换。除了内置类型就是自定义类型。创建自定类型">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-12</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-11语法歧义/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&text=重学 Go 语言：基础篇-12"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&is_video=false&description=重学 Go 语言：基础篇-12"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-12&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&name=重学 Go 语言：基础篇-12&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">自定义类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">别名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">编译器眼中的别名</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-12
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:52:52.190Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>自定义类型</h3><br><pre><code class="go language-go">type X int<br><br>func main() {<br>    var a X = 1<br>    var b int = a // cannot use a (type X) as type int in assignment<br>    _ = b<br>}<br></code></pre><br><ul><br><li>以基础类型（underlying type）内存布局为模板，创建新类型。</li><br><li>与基础类型属完全不同的两个类型。</li><br><li>允许显式转换。</li><br></ul><br><p>除了内置类型就是自定义类型。创建自定类型首先需要考虑基础布局，基础布局就是要么从现有的一个类型的基础布局上复制，要么创建结构体从零规划，例如 User、订单。</p><br><p>定义一个类型 X，X 本质上是基于整型这种内存布局来创建。X 是类型名字（type name），int 是所参照的内存布局（memory layout）。因为任何一个类型必须知道它的内存布局，否则编译器也不知道怎么创建内存空间。X 和 int 没有关系，只不过它们之间内存布局是一样的，所以它们之间可以转换。</p><br><p>X 复制 int 类型的内存布局，用一个现成的类型当模板，只是复制内存布局，所以 X 不能直接赋值给 int 类型。因为它们是完全不同的类型，必须显式转换。所以基于基础类型来自定义类型，仅仅只是复制内存布局，除此之外没关系。</p><br><p>我们知道定义一个任何类型，必须给出明确的内存布局，否则编译器不知道分配多大内存空间。</p><br><pre><code class="go language-go">func main() {<br>    var x X = 100<br>    //var y int = x<br>    var y int = int(x)<br>    var z X = X(y)<br>    println(x, y, z)<br>}<br></code></pre><br><p>创建一个变量，x 和 int 不是同一种类型，必须显式转换，Go 语言不支持隐式转换，即使内存布局一样也不能隐式转换，内存布局一样指的是宽度是一样的，但是字节序、大小端不一定一样，所以必须明确转换类型。int(x) 表示，明确地告诉编译器，x 按照 int 内存布局处理就可以了。</p><br><pre><code class="go language-go">type X int<br>type Y X<br><br>func test(x X) {}<br>func main() {<br>    var a Y = 1<br>    test(a) // cannot use a (type Y) as type X in argument to test<br>}<br></code></pre><br><p>与基础类型属完全不同的两个类型。</p><br><p>除了赋值以外，传参也不行。Y 基于 X 创建了一个新的类型，Y 和 X 没什么关系，test 函数的参数是 X 类型，不能直接传 Y 类型，因为它们是两种类型。</p><br><pre><code class="go language-go">type data struct {<br>}<br><br>type X int<br><br>type Pointer **int<br><br>type addFunc func(int, int) int<br><br>func (f addFunc) String() {<br>}<br></code></pre><br><p>最常见的自定义类型是结构体，很多时候也会基于某种现有类型创建新的类型，只不过它们的内存布局相同。甚至是很复杂的指针类型。</p><br><p>定义类型之后就可以给它创建方法，我们没有办法为现有类型创建方法，有些语言比如 Python 支持对现有类型创建新的方法，Go 只能为当前包里面的类型定义方法，第三方包和标准库不属于当前包，创建不了。</p><br><pre><code class="go language-go">type X int<br><br>func (x X) A() {}<br>func (x X) B() {}<br><br>type Y X<br><br>func main() {<br>    println(reflect.TypeOf(X(1)).NumMethod()) // 2<br>    println(reflect.TypeOf(Y(1)).NumMethod()) // 0<br>}<br></code></pre><br><p>不继承基础类型的方法。</p><br><p>自定义类型只复制了内存布局，至于这个类型有多少方法肯定不会复制。对比一下它们各自拥有的方法的数量，X 有两个方法。因为 Go 语言没有继承这种概念。匿名嵌入和继承也不是一回事。</p><br><h3 id="-1">别名</h3><br><pre><code class="go language-go">type X int   //自定义类型<br>type Y = int //定义别名<br></code></pre><br><ul><br><li>自 Go 1.9 起，允许为类型定义别名。</li><br></ul><br><pre><code>byte:uint8;rune:int32<br></code></pre><br><ul><br><li>通过别名，让通用类型具备更实际的上下文含义。</li><br><li>通过别名，在不修改源代码的情况下，提升访问权限。</li><br><li>通过别名，扩展类型方法。</li><br></ul><br><pre><code class="go language-go">func main() {<br>    var x byte = 10<br>    var y uint8 = x<br>    println(x, y)<br>}<br></code></pre><br><p>Go 语言有两个别名 <code>byte-&gt;uint8;rune-&gt;int32</code>，是系统定义好的，自 1.9 起允许为类型定义别名。别名指的就是同一个东西，只不过起不同的名字。</p><br><p>别名和自定义类型语法看上去非常的类似。<code>type X int</code> 定义是基于 int 类型这个模板来定义 X 新类型。</p><br><p><code>type Y = int</code> 给 int 类型取一个别名叫 Y。编译器编译生成的机器代码里不存在别名，别名在抽象层面上就是一种语法糖。从实现层面上别名是不存在的，编译器会最终把别名都翻译成具体的指代。</p><br><p>在不同的地方通过取一个别名，让它在上下文里更具有一个特殊的含义。取别名是因为在这个上下文里，这个别名可能比它的本名更容易表达一种特定的意义。有时候在设计层面上使用这样的方式来进行抽象。</p><br><h3 id="-2">编译器眼中的别名</h3><br><pre><code class="go language-go">type X int<br>type Y = int<br><br>func test(a int) {}<br>func main() {<br>    var a X = 1<br>    var b Y = 2<br>    // test(a) // cannot use a (type X) as type int in argument to test<br>    test(b)<br>    fmt.Printf(“%T, %T\n”, a, b) // main.X, int<br>}<br></code></pre><br><p>这个例子通过对比自定义类型和别名到底有什么区别，<code>type X int</code> 基于 int 定义了新的类型，<code>type Y = int</code> 取个别名，test 函数接收 int 类型，<code>var a X = 1</code> 和 <code>var b Y = 2</code> 定义两个变量。X 和 int 实际上是两种类型。我们直接把 X 传给 test 函数肯定会出错，提示 X 和 int 不是同一种类型，必须类型转换写成 <code>test(int(a))</code>。b 是 Y 的别名传递没有问题，因为别名不会生成一个新的类型，只是给原来的类型取了一个外号。</p><br><p>在编译器眼里，Y 和 int 到底有什么区别？输出 a 和 b 的类型，a 是 X 类型，Y 是 int 类型，在编译器眼里，别名就是原始类型。</p><br><pre><code class="go language-go">type data struct{}<br>type Tester interface {<br>    test()<br>}<br>type Y = data<br><br>func (y Y) test() {}<br>func main() {<br>    var d Y<br>    var e Tester = d // go.itab.””.data,””.Tester<br>    _ = e<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l -S” 2&gt;a.txt<br></code></pre><br><p>我们通过接口的方式来验证。定义一个类型 data，定义接口类型 Tester，有个 test() 方法，给 data 取外号叫 Y，通过 Y 定义一个方法 test()，所以 <code>func (y Y) test() {}</code> 相当于 <code>func (y data) test() {}</code>。编译器实际上会把外号还原成原始类型。</p><br><p>那么接口会不会出现类似 Y 的相关信息？输出汇编信息，我们把 Y 赋值给接口，编译器最终把它还原成 data。</p><br><p>之所以出现别名，还是在抽象层面上，在语言层面上写给程序员看的。所有语言里面的东西都会区分为抽象和实现两种观察视角，既可以从抽象层面上去理解，也可以从实现层面上去理解。</p><br><p>编程语言本身就是一种抽象，这种抽象有些时候会掩盖一些真实的面目，导致对抽象的理解不透彻。必须通过实现的手段来观测抽象背后，到底掩盖了什么。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">自定义类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">别名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">编译器眼中的别名</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&text=重学 Go 语言：基础篇-12"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&is_video=false&description=重学 Go 语言：基础篇-12"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-12&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&title=重学 Go 语言：基础篇-12"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/&name=重学 Go 语言：基础篇-12&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="结构体字段标签type User struct {    Name string user.name    Age  int    user.age}func main() {    u := User{“user1”, 10}    t := reflect.TypeOf(u)    f, _ := t.FieldByName(“Name”)    println(f.Tag)}  存储元数据，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-61">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="结构体字段标签type User struct {    Name string user.name    Age  int    user.age}func main() {    u := User{“user1”, 10}    t := reflect.TypeOf(u)    f, _ := t.FieldByName(“Name”)    println(f.Tag)}  存储元数据，">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://logan_2019.github.io/重学Go/重学%20Go%20语言：基础篇-61结构体字段标签/2019/11/images/struct.png">
+<meta property="og:updated_time" content="2019-11-30T10:54:01.141Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-61">
+<meta name="twitter:description" content="结构体字段标签type User struct {    Name string user.name    Age  int    user.age}func main() {    u := User{“user1”, 10}    t := reflect.TypeOf(u)    f, _ := t.FieldByName(“Name”)    println(f.Tag)}  存储元数据，">
+<meta name="twitter:image" content="http://logan_2019.github.io/重学Go/重学%20Go%20语言：基础篇-61结构体字段标签/2019/11/images/struct.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-61</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-62空结构的用途/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-60匿名结构体/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&text=重学 Go 语言：基础篇-61"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&is_video=false&description=重学 Go 语言：基础篇-61"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-61&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&name=重学 Go 语言：基础篇-61&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">结构体字段标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">字段结构相同标签不同的结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">结构体内存布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">字段顺序不同的结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24"><span class="toc-number">1.5.</span> <span class="toc-text">24 名称遮蔽(成员访问优先级)</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-61
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:01.141Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>结构体字段标签</h3><br><pre><code class="go language-go">type User struct {<br>    Name string <code>user.name</code><br>    Age  int    <code>user.age</code><br>}<br><br>func main() {<br>    u := User{“user1”, 10}<br>    t := reflect.TypeOf(u)<br>    f, _ := t.FieldByName(“Name”)<br>    println(f.Tag)<br>}<br></code></pre><br><blockquote><br>  <p>存储元数据，用于ORM、Validator等场合。</p><br></blockquote><br><p>结构体字段标签和代码无关，它只是字符串元数据用来描述其他数据的，通过反射读出来利用它对数据进行验证。一般用来ORM映射标记当前字段和数据库列对应，做验证器，比如最大值，最小值。</p><br><h3 id="-1">字段结构相同标签不同的结构体</h3><br><pre><code class="go language-go">type User struct {<br>    name string<br>    age  int<br>}<br><br>type User2 struct {<br>    name string <code>tag:&quot;name&quot;</code><br>    age  int    <code>tag:&quot;age&quot;</code><br>}<br><br>func main() {<br>    var u1 User = User{“tom”, 32}<br>    var u2 User2 = User2(u1)<br>    var u3 User2 = <em>((</em>User2)(unsafe.Pointer(&amp;u1)))<br>    fmt.Println(u1, u2, u3)<br>}<br></code></pre><br><p>字段结构相同标签不同属于同一类型，内存布局一样，可以相互转换。标签在1.8版本更新不属于类型的一部分。</p><br><p>Go在运行期没有对象一说。</p><br><h3 id="-2">结构体内存布局</h3><br><p>结构体的内存布局和其它语言常见的实例的方式的内存布局非常类似。</p><br><pre><code class="go language-go">type User struct {<br>    name string<br>    age  int<br>}<br><br>func main() {<br>    u := User{<br>        name: “xx”,<br>        age:  30,<br>    }<br><br>    println(u.name, u.age)<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build -gcflags “-N” -o test testuser.go<br></code></pre><br><pre><code class="bash language-bash">$ gdb test<br>$ l<br>$ l<br>$ b 14<br>$ r<br>$ info locals<br>$ p/x &amp;u #输出地址<br>$ x/4xg &amp;u #输出4组内存数据<br>$ x/s 0x0000000476ba0 #查看第一组的数据<br>$ ptype u<br></code></pre><br><p><img src="images/struct.png" alt></p><br><p>当一个结构体包含其它类型的时候，它会把原来的类型展开，所以它的内存布局包含了所有展开的结果，展开的是类型基本的结构。</p><br><p>为什么需要知道内存布局呢？是因为在指针操作的时候要知道操作的是什么东西。</p><br><h3 id="-3">字段顺序不同的结构体</h3><br><pre><code class="go language-go">type User struct { // |ptr|len|int|<br>    name string<br>    age  int<br>}<br><br>type User2 struct { // |ptr|len|int|<br>    name string<br>    age  int<br>}<br><br>type User3 struct { // |int|ptr|len|<br>    age  int<br>    name string<br>}<br><br>func main() {<br>    u := User{}<br>    var u2 User2 = User2(User{})<br>    // cannot convert u (type User) to type User3<br>    // u3 := User3(u)<br><br>    fmt.Printf(“%v, %v”, u, u2)<br>}<br></code></pre><br><blockquote><br>  <p>字段顺序不同的结构体属于不同类型，不能转换<br>  转换的基本规则是有相同的内存布局。</p><br></blockquote><br><p>两个结构<code>User</code>和<code>User3</code>的字段相同，不能转换。Go遵循的转换规则其中有一条需要保证基础类型相同，什么叫基础类型相同？<code>User</code>和<code>User3</code>内存布局不一样，从安全模型上来说这样会直接会影响当前内存模型奔溃。</p><br><p>Java、C#语言不能指针访问，不能取地址或者偏移量，编译器会重排布局，只能通过元素名访问。在很多语言里两种类型能否相互转换不仅仅考虑类型是否相同，可能考虑成员是否相同，这种特征称之为语法糖或者语言高级属性。大部分系统编程语言不会重排，因为对系统编程语言来说任何内存都属于可访问数据区域。</p><br><h3 id="24">24 名称遮蔽(成员访问优先级)</h3><br><p>名称遮蔽是很典型的语法糖。</p><br><pre><code class="go language-go">type (<br>    file struct {<br>        name string<br>    }<br><br>    log struct {<br>        name string<br>    }<br><br>    data struct {<br>        file<br>        log<br>    }<br>)<br><br>func main() {<br>    d := data{}<br><br>    //d.name = “name”<br><br>    d.file.name = “file”<br>    d.log.name = “log”<br><br>    fmt.Printf(“%+v\n”, d)<br>}<br></code></pre><br><p>go支持这种结构：定义了三个结构体，<code>data</code>里面嵌入了file和log结构，但是只给了类型没有给字段的名字，这其实就是一个语法糖，真实写法就是用类型做名字：</p><br><pre><code class="go language-go">type (<br>    data struct {<br>        file file<br>        log log<br>    }<br>)<br></code></pre><br><p>只不过，字段名字和类型相同，所以就忽略掉了，忽略掉的好处就是我们可以直接用短名去访问被嵌入的名字，看上去有点像短名访问效应。</p><br><p>有个所谓的名称遮蔽问题，如果名字一样，高优先级的会遮蔽掉低优先级的。一般是自己的优先，没有的话找嵌入字段，嵌入字段从数据结构上来说类似于继承的东西，如果两个都有，它没有办法确定哪个，因为Go语言没有真正意义上的继承概念，Python有多继承的概念，它的规则是从左到右，从下到上。那么你就必须明确指定操作谁。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">结构体字段标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">字段结构相同标签不同的结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">结构体内存布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">字段顺序不同的结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24"><span class="toc-number">1.5.</span> <span class="toc-text">24 名称遮蔽(成员访问优先级)</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&text=重学 Go 语言：基础篇-61"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&is_video=false&description=重学 Go 语言：基础篇-61"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-61&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&title=重学 Go 语言：基础篇-61"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-61结构体字段标签/2019/11/&name=重学 Go 语言：基础篇-61&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

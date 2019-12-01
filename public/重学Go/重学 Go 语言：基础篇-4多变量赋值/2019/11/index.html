@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="多变量赋值//go:noinline//go:nosplitfunc test() (int, int) {    a, b := 1, 2    a, b = b+1, a+2    return a, b}func main() {    a, b := test()    println(a, b)}多变量赋值涉及计算规则问题，很多语言对于多变量赋值其实是个坑。Go 语言的做法先计算右边的值">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-4">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="多变量赋值//go:noinline//go:nosplitfunc test() (int, int) {    a, b := 1, 2    a, b = b+1, a+2    return a, b}func main() {    a, b := test()    println(a, b)}多变量赋值涉及计算规则问题，很多语言对于多变量赋值其实是个坑。Go 语言的做法先计算右边的值">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:52:41.139Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-4">
+<meta name="twitter:description" content="多变量赋值//go:noinline//go:nosplitfunc test() (int, int) {    a, b := 1, 2    a, b = b+1, a+2    return a, b}func main() {    a, b := test()    println(a, b)}多变量赋值涉及计算规则问题，很多语言对于多变量赋值其实是个坑。Go 语言的做法先计算右边的值">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-4</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-5常量定义/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&text=重学 Go 语言：基础篇-4"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&is_video=false&description=重学 Go 语言：基础篇-4"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-4&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&name=重学 Go 语言：基础篇-4&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">多变量赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">反汇编多变量赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">未使用变量引发的错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">动态修改字符串变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-4"><span class="toc-number">1.5.</span> <span class="toc-text">命名建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-5"><span class="toc-number">1.6.</span> <span class="toc-text">原理：变量的本质</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-4
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:52:41.139Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>多变量赋值</h3><br><pre><code class="go language-go">//go:noinline<br>//go:nosplit<br>func test() (int, int) {<br>    a, b := 1, 2<br>    a, b = b+1, a+2<br>    return a, b<br>}<br>func main() {<br>    a, b := test()<br>    println(a, b)<br>}<br></code></pre><br><p>多变量赋值涉及计算规则问题，很多语言对于多变量赋值其实是个坑。Go 语言的做法先计算右边的值，然后批量对左边进行赋值。</p><br><p><code>a, b := 1, 2</code> 没有歧义，<code>a, b = b+1, a+2</code> 怎么计算呢？第一种解释先计算 b+1，把这个结果赋值给 a，那么 a = 3；然后计算 a+2，那么 a = 5 那 b = 5。第二种解释是什么？先把 b+1 和 a+2 计算出来再进行 a 和 b 的赋值 a 和 b 都等于 3。处理顺序到底是什么？我们需要用反汇编的方式来确认。</p><br><h3 id="-1">反汇编多变量赋值</h3><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l”<br>$ go tool objdump -s “main.test” test<br> main.go:5 MOVQ $0x0, 0x30(SP) # ret1 = 0 30(SP)<br> main.go:5 MOVQ $0x0, 0x38(SP) # ret2 = 0 38(SP)<br> main.go:6 MOVQ $0x1, 0x8(SP)  # a = 1 8(SP)<br> main.go:6 MOVQ $0x2, 0(SP)    # b = 2 0(SP)<br> main.go:7 MOVQ $0x3, 0x18(SP) # tmp1 = 3 18(SP)<br> main.go:7 MOVQ 0x8(SP), AX    # tmp2 = a + 2 10(SP)<br> main.go:7 ADDQ $0x2, AX<br> main.go:7 MOVQ AX, 0x10(SP)<br> main.go:7 MOVQ 0x18(SP), AX   # a = tmp1<br> main.go:7 MOVQ AX, 0x8(SP)<br> main.go:7 MOVQ 0x10(SP), AX   # b = tmp2<br> main.go:7 MOVQ AX, 0(SP)<br> main.go:8 MOVQ 0x8(SP), AX    # ret1 = a<br> main.go:8 MOVQ AX, 0x30(SP)<br> main.go:8 MOVQ 0(SP), AX      # ret2 = b<br> main.go:8 MOVQ AX, 0x38(SP)<br></code></pre><br><p><code>go build -gcflags “-N -l”</code> 中，-gcflags 给编译器传参数的，第一个参数不要对代码进行优化，因为我们需要知道它完整的处理过程；第二个参数不要内联，其实 <code>//go:noinline</code> 已经处理过不要内联了。</p><br><pre><code>go tool objdump -s “main.test” test<br></code></pre><br><p>反汇编看结果。这个函数的栈帧空间 28，按照 Go 语言函数调用规则还会使用 BP\IP。很显然 30 是第一个返回值，38 是第二个返回值，首先把两个返回值内存清零，确保是零值，如果函数调用失败，返回的是垃圾数据，所以把它重置为零值。接下来就比较简单，我们知道用反汇编 SP 加上偏移量来确定位置。</p><br><p>在当前栈帧指向 8，0 相当于处理 <code>a, b := 1, 2</code>，接下来指向 18 位置，临时用中间对象或者中间变量等于3，接下来把 08 即变量 a 放到 AX 里面，然后 AX+2 又写回到 10。现在产生了两个临时变量 18 和 10，实际上完成 <code>b+1, a+2</code> 计算，编辑器生成的指令很奇怪，a+2 用指令生成了一次，b+1 直接计算出来结果。正常来说临时变量二也可以像临时变量一一样直接计算出来，编译器优化还是有缺陷。接下来计算完以后，把临时变量一 18 通过 AX 间接地写到 08 赋值给 a，临时变量二 10 通过 AX 间接地写到 0 赋值给 b，最后拷贝到返回值里面。</p><br><p>我们可以根据反汇编实际上明确了先计算右边，然后依次对左边进行赋值。</p><br><h3 id="-2">未使用变量引发的错误</h3><br><pre><code class="go language-go">var x int<br><br>func main() {<br>    y := 1<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build<br>./main.go:6:2: y declared and not used<br></code></pre><br><p>该规则仅针对局部变量。</p><br><p>定义一个变量，不使用它编译器会提示出错。但是这里有个坑需要注意，比如定义全局变量 x 和局部变量 y，编译器提示出错局部变量 y 没有使用，而全局变量 x 不提示。从设计上来讲，编译器可以把未使用的变量优化掉，很多编译器可以优化掉死代码的。所以 Go 语言很多设计有点莫名其妙，起码对于比较严谨的语言来说，编译器起码输出警告信息，因为输出信息分成两类，一种是错误，一种是警告。</p><br><h3 id="-3">动态修改字符串变量</h3><br><pre><code class="go language-go">var BuildTime string<br><br>func main() {<br>    println(BuildTime)<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build -ldflags “-X main.BuildTime=$(date +’%Y.%m.%d’)”<br></code></pre><br><ul><br><li>仅支持字符串</li><br><li>可设置非导出成员</li><br></ul><br><p>介绍一个小技巧，对于变量初始化都是在代码里实现的，初始化变量还可以在编译命令行上面。</p><br><p>比如说提供字符串类型变量，但是没有赋值默认的值是空字符串，可以通过命令行的方式用链接器传一个值。<code>$(date +’%Y.%m.%d’)</code> 是 Shell 命令返回特定格式的当前时间，然后给链接器传参数 <code>-X</code> 用来修改特定字符串初始化值，字符串的全名是包和它的名字。</p><br><p>这个小技巧可以用来初始化版本号、编译时间、加密密码不能写在代码里的场景。但是有个限制只能针对字符串的格式，字符串是导出成员和非导出成员都可以，如果是其他类型可能通过字符串赋值以后做一些类型转换。</p><br><h3 id="-4">命名建议</h3><br><p>合理而严谨的命名规则，有助于提升代码可阅读性和可维护性。</p><br><ul><br><li>全局变量建议使用完整且有明确含义的单词；</li><br><li>局部变量建议使用短名和缩写，以便区分全局变量；</li><br><li>不要使用保留关键字、内置函数，以及常用标准库成员名称；</li><br><li>专有名词建议大写（escapeHTML）。</li><br></ul><br><p>变量最关键的是变量的命名。变量的命名对于代码可阅读性是很重要的，我们最好就近访问变量，不要让变量的跨度特别长，如果跨度长最好给它稍微长的名字。命名习惯可能会导致可阅读性和可维护性的问题。</p><br><ul><br><li><strong>可阅读性</strong>就是不会产生明显的歧义。歧义就是变量名不能确切地知道它的位置，就可能有问题。读代码的人不见得像你一样是功力深厚的人，可能产生歧义就不是一个好的方式。</li><br><li><strong>可维护性</strong>就是避免名称遮蔽，当进行重构的时候不应该有明显的依赖关系，这种依赖关系不应该因为代码挪的位置而造成破坏。</li><br></ul><br><p>对于变量来说有几个简单的建议。</p><br><ul><br><li>第一，全局变量建议使用完整且有明确含义的单词。可能是两个单词组成的，一个单词比较通用可能会引起一些误解，需要用两个单词明确的表达，但是不要太长。</li><br><li>第二，局部变量建议尽量使用短名和缩写，一个函数最好不要超过一个屏幕，用短名和缩写区分全局变量和局部变量避免歧义。</li><br></ul><br><p>一般相对来说，全局变量是完整的单词甚至是多个单词组成的。对于局部变量但是跨度非常长的，最好给单个单词或者某个单词的缩写来表示。对于小的内部作用块，我们给一个字母，这会给大脑暗示作用域到底有多长，也便于我们更好的维护。变量命名符号的长度其实给自己一个暗示，还有避免对重构依赖性，对于变量命名是否定义新变量等，通过名字就知道干什么的。</p><br><p>我们在全局变量定义和局部变量定义语法大体差别是什么呢？全局变量，我们更希望给一个有意义的名称，比如计数器 counter。局部变量，给个简短名称便于阅读和维护，因为在代码中有大量长名称的话非常不方便阅读。</p><br><p>不要使用保留关键字、内置函数、常用的标准库成员名字。用成员名字会给别人造成误解，有些 IDE 环境也可能不能正确地定位到位置。</p><br><p>另外有些专有名词最好大写，写成小写会非常别扭，命名方式要遵循大家的阅读习惯。</p><br><pre><code class="go language-go">// comment …<br>var (<br>    counter int = 0x100<br>    data    string<br>)<br></code></pre><br><p>从编写习惯上来说，我们更希望把变量分组，比如有两个变量做同一个目的，它们需要配合使用把它们分成一组，给这一组提供注释说明。因为它们之间实际上存在一些逻辑关联，我们希望把一些相关的完成同一件事的变量进行分组。还有基于语法习惯，我们希望用分组方式来写，因为这样形成一个语法意义上的块，表示批量定义一批变量，阅读起来更方便。全局变量利用分组的概念形成不同的注释说明。</p><br><p>程序等于算法加数据，算法是通过修改数据的内容和样式来体现不同逻辑的结果，所以说对于变量的维护涉及到算法内部流程是否清晰、是否易阅读、是否好维护。</p><br><p>关于注释的问题，假如只是一行加注释通常会建议写在后边，对一整块做加注释建议写在前面。</p><br><h3 id="-5">原理：变量的本质</h3><br><p>所有的变量都会被翻译成内存地址，因为符号名最终是没有任何意义的。所有的变量都是可寻址的，不管是全局变量还是局部变量最终是要求可寻址的，但是变量可以寻址并不代表一个计算中间结果可以寻址。</p><br><p>变量代表着一段或者多段存储内存。变量实际上就是一种内存，因为在很多高级语言里大家忽略对内存的这种概念。定义一个变量，这个变量存储数据，但数据究竟存在哪，我们知道存储器有很多种，存储器体系来说寄存器、L1、L2、L3 三级缓存、主存。虚拟内存里有部分数据可能会交换到磁盘上，还有硬盘上存储、网络上存储。</p><br><p>当声明一个变量的时候，变量存在哪里差别比较大。其实 CPU 默认情况下生成所有的指令只跟虚拟空间打交道，虚拟空间大部分情况下指的是主存。</p><br><p>每个程序中有 VA 地址空间，VA地址空间都是单独的地址，它通过 MMU 映射到物理内存上，比如一个变量 x 映射到某个位置。但是考虑这个位置的内存可能是复用的，例如恰巧这个内存可能是 ZeroValue 状态，或者因为缺页，正在使用的内存页交换到磁盘上去把这块内存空出来，然后交给 x 映射。操作系统并不保证物理内存被重新初始化过，也就意味着有种可能是，变量所指向的物理内存没有初始化过。所以内存必须是被初始化过才能使用，否则不能保证变量指向的目标是什么。</p><br><p>不同的语言对语法可能有些不同，我们遵循这种语法规则定义变量。对于编译器来说是不会在乎的，编译器翻译成某种中间语言，比如汇编。汇编最后怎么样去处理，这是汇编器的问题。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">多变量赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">反汇编多变量赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">未使用变量引发的错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">动态修改字符串变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-4"><span class="toc-number">1.5.</span> <span class="toc-text">命名建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-5"><span class="toc-number">1.6.</span> <span class="toc-text">原理：变量的本质</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&text=重学 Go 语言：基础篇-4"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&is_video=false&description=重学 Go 语言：基础篇-4"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-4&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&title=重学 Go 语言：基础篇-4"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/&name=重学 Go 语言：基础篇-4&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

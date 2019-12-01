@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="4-7 reslice append07 重新切片07 append07 append(nil)行为4-7 reslice append07 重新切片111重新切片(reslice)构建新的切片对象，依旧引用相同底层数组。以[cap]slice为数据源，不能超出cap，但不受len限制。重新切片索引以源对象为准（非底层数组）。重新进行切片怎么做呢。比如在底层数组基础之上，创建一个切片，s1从1到6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-44">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="4-7 reslice append07 重新切片07 append07 append(nil)行为4-7 reslice append07 重新切片111重新切片(reslice)构建新的切片对象，依旧引用相同底层数组。以[cap]slice为数据源，不能超出cap，但不受len限制。重新切片索引以源对象为准（非底层数组）。重新进行切片怎么做呢。比如在底层数组基础之上，创建一个切片，s1从1到6">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:36.753Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-44">
+<meta name="twitter:description" content="4-7 reslice append07 重新切片07 append07 append(nil)行为4-7 reslice append07 重新切片111重新切片(reslice)构建新的切片对象，依旧引用相同底层数组。以[cap]slice为数据源，不能超出cap，但不受len限制。重新切片索引以源对象为准（非底层数组）。重新进行切片怎么做呢。比如在底层数组基础之上，创建一个切片，s1从1到6">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-44</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-45/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-43/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&text=重学 Go 语言：基础篇-44"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&is_video=false&description=重学 Go 语言：基础篇-44"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-44&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&name=重学 Go 语言：基础篇-44&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47resliceappend"><span class="toc-number">2.</span> <span class="toc-text">4-7 reslice append</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#07"><span class="toc-number">2.1.</span> <span class="toc-text">07 重新切片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#07append"><span class="toc-number">2.2.</span> <span class="toc-text">07 append</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#07appendnil"><span class="toc-number">2.3.</span> <span class="toc-text">07 append(nil)行为</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-44
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:36.753Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><p><div class="toc"><br><ul><br><li><ul><br><li><a href="#47resliceappend">4-7 reslice append</a><ul><br><li><a href="#07">07 重新切片</a></li><br><li><a href="#07append">07 append</a></li><br><li><a href="#07appendnil">07 append(nil)行为</a></li><br></ul><br></li><br></ul><br></li><br></ul><br></div><br></p><br><h2 id="47resliceappend">4-7 reslice append</h2><br><h3 id="07">07 重新切片</h3><br><p>111</p><br><ul><br><li>重新切片(reslice)构建新的切片对象，依旧引用相同底层数组。</li><br><li>以[cap]slice为数据源，不能超出cap，但不受len限制。</li><br><li>重新切片索引以源对象为准（非底层数组）。</li><br></ul><br><p>重新进行切片怎么做呢。比如在底层数组基础之上，创建一个切片，<code>s1</code>从1到6，半开半闭。这时候就会形成两个概念，第一个指定的是长度，长度从1开始6结束，容量依然还是数组边界。</p><br><pre><code class="go language-go">func main() {<br>    a := […]int{0, 1, 2, 3, 4, 5, 6}<br>    s1 := a[:]    // {0,1,2,3,4,5,6} len:7 cap:7<br>    fmt.Println(s1, len(s1), cap(s1))<br>    s2 := s1[2:4] // [2:4)起始地址2，访问元素边界4，{2,3} len:2 cap:5<br>    fmt.Println(s2, len(s2), cap(s2))<br>    s3 := s2[:5]  // {2,3,4,5,6} len:5 cap:5<br>    fmt.Println(s3, len(s3), cap(s3))<br>}<br></code></pre><br><p><code>s1</code>的内容是从从第一个元素开始到最后一个元素，长度和容量和<code>a</code>一样。</p><br><p><code>s2</code>在<code>s1</code>的基础上把起始地址和可访问元素的边界地址做了限制，基于<code>s1</code>做重新切片，起始地址从2开始，边界到4结束，数学表达方式<code>[2:4)</code>。它使用的索引基于<code>s1</code>，<code>s1</code>从2开始复制<code>2,3,4,5,6</code>。容量没有限制，那么从2开始容量是一直到结尾，最后就是基于原来的容量去掉前面跳过的部分就是5，也就是可以访问的空间。用4限定可以访问的元素数量，但是容量并没有改变。</p><br><p><code>s3</code>设置容量是5，重新切片。我们会突破可访问元素的数量。<code>s2</code>可以访问数据2、3，但是<code>s3</code>在<code>s2</code>的基础上重新切片，居然可以访问5个数据，因为<code>s2</code>访问的数据是2、3，但是底层数组持有的数据是23456，只是限制只能访问2、3。<code>s3</code>只不过调整可访问数据的边界。第二个位置只是限制可以访问的这些元素的数量，实际上持有的数据可能远远多于可访问的数量，重新切片只要不突破容量限制就可以。</p><br><p>有个很长的数组，有个切片可以访问的元素数量len，实际上容量是数组的长度，重新切片的时候，可以调整起始位置，只要不突破cap的限制。cap才是限制的右边界。len是当前切片可以访问元素数量。重新切片是重新调整引用的区间，因为指向的都是底层数组。</p><br><p><code>s2</code>是以<code>s1</code>作为参考样本来调整，底层数组长度是真正的右边界，len是中间边界用来只是针对当前切片，开放的可以访问的区间，但是真的持有的区间是由cap来控制。<code>s2</code>在<code>s1</code>基础之上重新调整，真正受限制是cap。重新调整右边界不能突破。开放多少是len。重新切片的时候，使用的索引是基于样本。关键搞清楚两个字段，一个是用来可以开放的访问元素。第二底层数组持有的数量。</p><br><h3 id="07append">07 append</h3><br><pre><code class="go language-go">func main() {<br>    var a [100]int<br>    b := a[:1:2]<br>    b = append(b, 1)<br>    fmt.Println(&amp;a[0], &amp;b[0], cap(b)) // 0xc000078000 0xc000078000 2<br>    b = append(b, 2)<br>    fmt.Println(&amp;a[0], &amp;b[0], cap(b)) // 0xc000078000 0xc000016140 4<br>}<br></code></pre><br><ul><br><li>如果超出cap限制，则重新分配（复制）底层数组。</li><br><li>新分配数组长度基于cap计算，而非原数组。</li><br></ul><br><p>向切片追加数据的时候，实际上参考的不是底层数组而是切片。追加的时候，以len标定追加的位置，len决定接下来的数据追加到什么地方。但是写数据到达阈值的时候就超出容量限制，不会检查底层数组多大。如果到了右边界会重新分配新的数组。把数据复制过来，接下来在新的位置追加。追加数据的时候，真正的起作用的是两个。len代表追加的位置，cap代表可以追加数据的阈值。</p><br><p><code>a</code>是底层数组是100，切片<code>b</code>的容量限制是2。追加数据后判断第一个元素的地址是不是重新分配数组。我们可以看到第一次追加的时候没有突破两个元素的限制，两个地址是一样的，表示底层数组是一样的。第二次追加突破了限制，内存地址发生变化，容量大小是两倍。所以向切片追加数据的时候不能突破当前切片的限制，切片的限制是由长度和容量来决定。长度是往哪追加，追加数据的总容量是多大。</p><br><blockquote><br>  <p>go/src/runtime/slice.go:growslice 空间分配算法</p><br></blockquote><br><pre><code class="go language-go">func main() {<br>    var a []int<br>    println(a == nil) // true<br>    b := append(a, 1)<br>    println(b[0], a == nil, b == nil) // 1 true false<br>}<br></code></pre><br><blockquote><br>  <p>向nil slice追加数据时，自动分配底层数组，返回新切片对象。</p><br></blockquote><br><p>追加数据的时候，<code>a</code>本身就是空的切片，没有底层数组，它会自动分配新的底层数组。还有切片本身是只读的，因为三个字段都是非导出成员，我们没有办法修改切片本身，实际上每次创建都创建新的切片对象。<code>a := append(a, 1)</code>新生成的切片覆盖原来对象的内存。</p><br><h3 id="07appendnil">07 append(nil)行为</h3><br><p>我们可以向<code>nil</code>追加数据，严格意义来说<code>s</code>的结构是<code>{ptr(0), 0, 0}</code>,<code>append</code>方法向<code>s</code>追加3个数据，首先判断内存不够，需要扩容。第一步新建底层数据，第二步把数据存到数组里面去，第三步修改头部信息，指针和长度容量需要更新。如果<code>s</code>真的是<code>nil</code>的话肯定不能写。当然Go语言的<code>append</code>并不修改原来的<code>s</code>，它实际上创建新的头信息，这里的考虑是<code>s</code>可能是引用类型，同别人共享的，如果修改了<code>s</code>的属性，可能会导致别的地方产生连锁反应，除非明确的表达需要覆盖，否则总是产生新的。</p><br><p>函数的基本规则是尽可能的不要修改参数而通过返回值。</p><br><pre><code class="go language-go">func main() {<br>    var s []int = nil //{ptr(0), 0, 0}<br><br>    //1. new array<br>    //2. save<br>    //3. new header {ptr, 3, 3}<br>    s = append(s, 1, 2, 3)<br>    fmt.Println(s)<br>}<br></code></pre><br><pre><code class="go language-go">func main() {<br>    var b []byte<br>    fmt.Printf(“%+v\n”, <em>(</em>reflect.SliceHeader)(unsafe.Pointer(&amp;b)))<br><br>    b = append(b, “abc”…)<br>    fmt.Println(b)<br>    fmt.Printf(“%+v\n”, <em>(</em>reflect.SliceHeader)(unsafe.Pointer(&amp;b)))<br>}<br></code></pre></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47resliceappend"><span class="toc-number">2.</span> <span class="toc-text">4-7 reslice append</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#07"><span class="toc-number">2.1.</span> <span class="toc-text">07 重新切片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#07append"><span class="toc-number">2.2.</span> <span class="toc-text">07 append</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#07appendnil"><span class="toc-number">2.3.</span> <span class="toc-text">07 append(nil)行为</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&text=重学 Go 语言：基础篇-44"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&is_video=false&description=重学 Go 语言：基础篇-44"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-44&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&title=重学 Go 语言：基础篇-44"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-44/2019/11/&name=重学 Go 语言：基础篇-44&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="协程和上下文切换   本节内容：  协程基本原理，优点和缺点 上下文切换（Context Switch），以及对性能的影响  协程基本原理，优点和缺点 所有的代码就是用线程来执行的，比如有一段线程执行的时间片，有起点 A 和终点 B，执行一段 Logic 用户代码，执行到某点时需要做系统调用，做系统调用的时候就会在这一点阻塞，然后执行序就进入系统内核状态，用户线程就会在这地">
+<meta property="og:type" content="article">
+<meta property="og:title" content="协程和上下文切换">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="协程和上下文切换   本节内容：  协程基本原理，优点和缺点 上下文切换（Context Switch），以及对性能的影响  协程基本原理，优点和缺点 所有的代码就是用线程来执行的，比如有一段线程执行的时间片，有起点 A 和终点 B，执行一段 Logic 用户代码，执行到某点时需要做系统调用，做系统调用的时候就会在这一点阻塞，然后执行序就进入系统内核状态，用户线程就会在这地">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://images.gitbook.cn/9e4d4370-17a0-11e8-ac0a-03d2406b28d7">
+<meta property="og:image" content="http://images.gitbook.cn/d3f846f0-17a0-11e8-ac0a-03d2406b28d7">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.087Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="协程和上下文切换">
+<meta name="twitter:description" content="协程和上下文切换   本节内容：  协程基本原理，优点和缺点 上下文切换（Context Switch），以及对性能的影响  协程基本原理，优点和缺点 所有的代码就是用线程来执行的，比如有一段线程执行的时间片，有起点 A 和终点 B，执行一段 Logic 用户代码，执行到某点时需要做系统调用，做系统调用的时候就会在这一点阻塞，然后执行序就进入系统内核状态，用户线程就会在这地">
+<meta name="twitter:image" content="http://images.gitbook.cn/9e4d4370-17a0-11e8-ac0a-03d2406b28d7">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>协程和上下文切换</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/go_web编程/2-2处理请求(上)/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/gitchat/系统和并发/4_go语言垃圾回收实现/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&text=协程和上下文切换"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&is_video=false&description=协程和上下文切换"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=协程和上下文切换&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&name=协程和上下文切换&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">协程基本原理，优点和缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contextswitch"><span class="toc-number">2.</span> <span class="toc-text">上下文切换（Context Switch），以及对性能的影响</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        协程和上下文切换
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.087Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>协程和上下文切换</title>
+</head>
+<body>
+<article id="articleDiv" style="overflow: hidden;padding-bottom:20px;text-align: justify;"><div class="mazi-article-content dont-break-out"><p>本节内容：</p>
+<ul>
+<li>协程基本原理，优点和缺点</li>
+<li>上下文切换（Context Switch），以及对性能的影响</li>
+</ul>
+<h3 id>协程基本原理，优点和缺点</h3>
+<p>所有的代码就是用线程来执行的，比如有一段线程执行的时间片，有起点 A 和终点 B，执行一段 Logic 用户代码，执行到某点时需要做系统调用，做系统调用的时候就会在这一点阻塞，然后执行序就进入系统内核状态，用户线程就会在这地方 Block，剩下来的时间片就交给系统内核去执行了。</p>
+<p>假如用户线程被阻塞住的时候，系统调用不使用剩下来的时间片，而把系统调用变成操作系统内核的异步调用，那么它所使用的时间片实际上是操作系统内部的一些时间片，后面一段用户线程的时间片就被空出来了，空出来的话阻塞那这个时间片白白浪费掉了，为什么白白浪费掉了？第一种可能就是看使用什么样的阻塞方式，一种方式阻塞在那一直等一直等什么都不干，另外一种操作系统觉得剩下来时间片拿走交给别的程序或者线程去执行，对于我们进程执行来说这很显然就是性能损失。</p>
+<p>所以能不能有这样的一种模式，当程序执行线程 A 执行到一点的时候被阻塞了，然后发生一次系统调用，让这个系统调用异步执行，剩下来的时间片不打算交回去，完成一次调度把这段时间片交给线程 B 执行，当系统调用完成的时候有很多机制实现唤醒，比如说 select、epoll 这样的一些机制，唤醒把结果返还给 A。这样的话可以在同一个线程执行并发多个任务，这些并发任务实际上是在用户态完成的和操作系统无关。</p>
+<p><img src="http://images.gitbook.cn/9e4d4370-17a0-11e8-ac0a-03d2406b28d7" alt="enter image description here"></p>
+<p>例如系统调用是 Open 操作，可以去实现一个异步版本 OpenAsync，这个异步版本是本来阻塞的地方变成一次异步调用，就是向操作系统去注册 epoll 事件，然后立即告诉调度器我暂时被阻塞，我已经注册好了相应的事件，调度器可以把剩下来的时间片去执行别的任务。这个操作对操作系统来说线程 A 和线程 B 是属于一套完整的逻辑，操作系统不关心这事，这样的话操作系统分配完整的时间片就完整的利用上了，没有做任何的浪费。</p>
+<p>因为任何时候线程拿到时间片都是非常宝贵的，线程不能把这时间片浪费掉，也不能把没有用完的时间片返还给操作系统，因为长时间有这种返还的话，操作系统可能会降低优先级，它会认为每次给这个线程的时间片都用不完，以后给这个线程的时间片可能会更短。所以为了维持这些时间片我们可能想办法充分利用起来，一种方式是利用异步机制利用自己在用户态实现这种调度机制把阻塞的那段时间抢回来用来执行其他的任务，当 B 任务执行结束的时候下次再执行的时候去会检查 epoll 返回的事件，然后把 A 的结果返还给 A，这样一来我们<strong>在用户空间实现多任务的调度而多任务调度是发生在一个线程上的，我们把这种机制称之为协程</strong>。</p>
+<p>因为操作系统调度以系统线程为单位的，但是我们在操作系统以外用户空间再实现一次调度，它每次浪费的时间片都捡回来尽可能去执行我们的代码，我们可以把这种机制称之为协程，就是它比线程粒度更小，因为它实际在线程上把线程的时间片划分成多个块在线程上再去执行多个任务，但是协程很显然是串行的它不是真正意义上的并行，实际上是执行 A 任务当 A 任务阻塞的时候然后唤醒 B 任务，B 任务完了以后可能做一次检查看 A 的结果回没回来，很显然它这种切换来实现多任务并发，<strong>协程本质是串行的</strong>。</p>
+<p>协程有什么好处？假如 A 和 B 都共享一个变量 x 的时候，A 和 B 需要不需要加锁，因为它们不可能同时执行，所以协程很多时候不需要做锁的处理的，第二个因为这种调度机制是我们自主去实现的，我们可以有很多种不同的方式，比如说 A 执行到一个节点的时候去唤醒 B，或者 B 执行完一个节点时候去唤醒 A，A 和 B 可以自己决定什么时候把控制权交出去，就是可以把一个逻辑执行到一个相对安全的点然后给交出去，所以这种操作系统这种抢占机制，协程更多的实现<code>协商机制</code>，自己决定什么时候交出去，因为操作系统没办法去抢。</p>
+<p>不同的协程在调度器里面有不同做法，一种是这种完全由 A 和 B 用户逻辑来什么时候切换，很多语言里面都有这样这种机制，用 yield 机制可以实现把当前任务暂停然后把控制权交出去，可以用它来实现协程。还有种方式比如像 Python，解释性执行，它可以去数你实现10条指令它就切换一次这种控制权，这种实现机制是一种<code>伪调度机制</code>，因为看的有点像抢占，为什么是伪调度机制呢，因为这种调度机制是控制不了时间片的，它只是时间很简单计数器，不知道哪条指令花费多少时间。</p>
+<p>所以协程要看怎么去实现，哪种方式是合理的，每种语言都有自己的选择，比如说 Go 语言有 Go 语言的选择，其他语言有其他语言的选择，这种调度毕竟不是操作系统实现的，所以并不能真正意义上做到抢占调度，比如说 Erlang 语言实现的是一种抢占但是这种抢占跟操作系统抢占是有区别的。因为用户态我们是没有办法实现可以向操作系统说你给我 5 秒钟吧，操作系统肯定不理你，操作系统肯定是说你每执行 10 毫秒给你切一次，所以用户态实现和系统态实现其实是有差别的。</p>
+<p>我们现在最起码搞清楚了几个概念，进程、线程、协程到底是怎么回事。</p>
+<h3 id="contextswitch">上下文切换（Context Switch），以及对性能的影响</h3>
+<p>现在还有个概念就是所谓上下文切换，上下文切换实际上有几种。</p>
+<p>一种是操作系统上下文切换，这种切换成本非常高，它需要所有东西全部刷出去比如说 CPU 的 L1-L3 缓存，然后把操作系统里面 mmu 映射关系保存起来，需要把这些写回主存里面去，然后相应的 IO 操作，还有注册的那些信号和处理那些事件都需要保存起来。</p>
+<p>程序所有机器里面 CPU 核的数量都是很少的，可能 5、8、10 个，但是程序执行的任务有很多个，所以这会涉及到时间片执行完了需要保存起来，下次执行时候恢复，我们把这称之为上下文切换。一种切换基于进程级别的切换，整个进程都得保存现场或者恢复现场。还有一种基于线程的上下文切换，线程上下文切换有一点比较好的，mmu 映射不用保存，L1-L3 Cache 也不需要保存，因为共享同一段 VA 地址空间，当用户线程进入系统线程的时候只需要把用户线程的地址映射到系统线程中去，所以这种上下文切换其实是像 VA 那种换入换出有些类似，是有保存场景和恢复场景，都需要有代价的，上下文切换我们说一种是进程级别的，一种是线程级别的。</p>
+<p>还有一种是中断引起的，中断是操作系统一种概念，比如说硬件中断，程序正在执行按了 Ctrl+C，如果程序可能需要执行很长时间假死在那按 Ctrl+C 想中断它，这个时候操作系统立马捕获到硬件中断信号，有个程序去处理中断信号，这种中断首先把执行任务挂起来，然后看什么时候断开。还有一种是各种各样的底层驱动程序引发的，这些都是很被动的，另外有些是种主动的，执行系统调用其实就是发生一种中断，调用一段系统调用的时候，这个执行是从用户空间进入系统空间，很显然在这发生一次中断，用户空间的数据需要保存起来，因为接下来这个线程的时间片和这个线程都用来执行系统级的代码了，.text代码是操作系统本身的代码，它执行这些代码的时候可能会覆盖掉寄存器里面的数据，所以进入系统调用的时候首先需要把用户态的状态全部保存起来，所以这会涉及上下文切换。</p>
+<p>不管怎么做上下文切换都会带来很大的性能损失，不管进程级别的还是线程级别的还是主动系统调用而引发的都会造成一定的性能损失，一些书的时候大家都会这样提醒，尽可能的减少系统调用实际上就是要减少上下文切换带来的性能损失，因为很多离 CPU 很近的一些资源比如说 L 级的 Cache，寄存器的数据都要写回到主存里面去，而系统代码执行完了都要把这些东西读回来，相对 CPU 这种执行速度来说从主存操作数据是很慢的，所以这都是要付出代价的。</p>
+<p>那么我们平时工作的时候，使用<code>dstat</code>监控 int 中断次数、csw 上下文切换次数，当这个数字非常大的时候会引发相应的一些问题，<code>dstat</code>监控的是系统级别，进程级别的监控使用<code>sysstat</code>包，<code>pidstat -w l</code>用来监控进程级别的，有很多参数 -w 是看上下文切换的，我们看到上下文切换每秒百分比，主动 cswch/s，被动 nvcswch/s。当数字比较大的时候可能就是调用了大量的系统调用造成了上下文切换非常的频繁影响程序性能，那么考虑把系统调用数量减少，可以用类似<code>strace</code>去检查到底有哪些系统调用，像<code>htop</code>也有这样的工具，s 参数用来跟踪系统调用具体的东西到底是哪些系统调用造成的。</p>
+<p><img src="http://images.gitbook.cn/d3f846f0-17a0-11e8-ac0a-03d2406b28d7" alt="enter image description here"></p>
+<p>比如是一个 IO 操作造成的，那是不是在用户空间建一个很大的 buffer，把数据先写在 buffer 里面去，然后每填满一 MB 以后再向操作系统提交一次。这样原来每秒操作 100 次现在变成每秒只操作一次，程序究竟什么问题造成性能不好，那么这种上下文切换其实很多时候也是很重要的因数。</p>
+<p>那么上下文切换到底什么原因引起的，比如说硬件引发的，甚至是操作系统安装时候某些驱动没有安装好，还有可能原因是大量调用系统调用引起的，别人为什么要建议我们减少上下文调用，都说系统调用会引发大量的性能问题到底是为什么，这句话什么意思，为什么会引发性能问题，应该怎么样减少这样的问题或者说怎么样了解这样的问题，所以得花点时间去搞清楚现在用的这些操作系统是怎么管理进程的，怎么管理线程的，怎么样给线程分配时间片的，然后线程优先级怎么确定的，这个上下文切换到底需要付出多大的代价，有哪些原因会引发上下文切换，可能不需要对操作系统了解非常多，但这些东西必须要了解，因为程序执行的时候会跟这些东西息息相关，这甚至决定了程序是否使用多进程模型。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">协程基本原理，优点和缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contextswitch"><span class="toc-number">2.</span> <span class="toc-text">上下文切换（Context Switch），以及对性能的影响</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&text=协程和上下文切换"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&is_video=false&description=协程和上下文切换"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=协程和上下文切换&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&title=协程和上下文切换"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/9_协程和上下文切换/2019/09/&name=协程和上下文切换&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

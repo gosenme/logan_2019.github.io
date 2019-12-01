@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="方法集思想理解接口首先需要理解方法集的概念，接口在不同语言里有不同的做法，静态语言往往会有显式的接口，就是声明一个接口类型，至于哪些类型是否实现了这个接口类型，不同语言有不同处理方法，C#或者Java必须指定类型实现了接口，Go语言只要符合条件就可以了，不需要显式的说实现。动态语言很多时候没有接口这样的概念，只要有对应的名字就可以了，它们把接口称之为协议，概念都是类似的，在了解接口之前，理解方法集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-71">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="方法集思想理解接口首先需要理解方法集的概念，接口在不同语言里有不同的做法，静态语言往往会有显式的接口，就是声明一个接口类型，至于哪些类型是否实现了这个接口类型，不同语言有不同处理方法，C#或者Java必须指定类型实现了接口，Go语言只要符合条件就可以了，不需要显式的说实现。动态语言很多时候没有接口这样的概念，只要有对应的名字就可以了，它们把接口称之为协议，概念都是类似的，在了解接口之前，理解方法集">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:15.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-71">
+<meta name="twitter:description" content="方法集思想理解接口首先需要理解方法集的概念，接口在不同语言里有不同的做法，静态语言往往会有显式的接口，就是声明一个接口类型，至于哪些类型是否实现了这个接口类型，不同语言有不同处理方法，C#或者Java必须指定类型实现了接口，Go语言只要符合条件就可以了，不需要显式的说实现。动态语言很多时候没有接口这样的概念，只要有对应的名字就可以了，它们把接口称之为协议，概念都是类似的，在了解接口之前，理解方法集">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-71</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-72方法集调用/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-70/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&text=重学 Go 语言：基础篇-71"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&is_video=false&description=重学 Go 语言：基础篇-71"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-71&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&name=重学 Go 语言：基础篇-71&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">方法集思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">方法集定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">方法集方法生成</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-71
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:15.106Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>方法集思想</h3><br><p>理解接口首先需要理解方法集的概念，接口在不同语言里有不同的做法，静态语言往往会有显式的接口，就是声明一个接口类型，至于哪些类型是否实现了这个接口类型，不同语言有不同处理方法，C#或者Java必须指定类型实现了接口，Go语言只要符合条件就可以了，不需要显式的说实现。动态语言很多时候没有接口这样的概念，只要有对应的名字就可以了，它们把接口称之为协议，概念都是类似的，在了解接口之前，理解方法集的概念。</p><br><p>Go语言里的方法集，个人认为实现起来不是特别优雅，但是并不影响我们理解概念。什么是方法集？假如说类型A实现了a1方法，B继承自A，B实现了b1方法，C继承B，C实现了c1方法。那么A的方法集就是A能调用的方法集合。A的方法集是a1，B的方法集是a1，b1，就是还包含父类的方法，C的方法集是a1，b1，c1。Go语言很大的问题是没有继承的概念，它用的是组合的概念。</p><br><p>假如说C里面包含了B和A，C的方法集包含哪些呢？Go语言编译器就做了比较投机取巧的事情，它认为包含了某个东西，就除了访问它的字段以外还可以访问它的方法，就是C.c1，C.B.b1，C.A.a1，按照正常访问是访问3个方法，在语法糖上把C.B.b1做了一次缩写C.b1，C.A.a1缩写成C.a1，编译器负责查找，最后的方法集变成了c1，b1，a1。很显然这个是编译器替我们完成。</p><br><p>正常情况下我们自己写伪码：</p><br><pre><code>struct A{<br>    a1()<br>}<br><br>struct B{<br>    b1()<br>}<br><br>struct C{<br>    A<br>    B<br>    c1()<br>}<br><br>C::a1{<br>    C.A.a1()<br>}<br><br>C::b1{<br>    C.B.b1()<br>}<br></code></pre><br><p>如果编译器不帮我们做，我们实际上需要自己去写C.a1调用C.A.a1，这样一来，c的方法集就包含a1，b1，c1，因为理论上组合是没有办法继承它内部字段成员的，必须是显式实现，区别在于是我们自己写还是编译器替我们写。</p><br><h3 id="-1">方法集定义</h3><br><p>方法集合(method set)，主要用于“实现”接口。</p><br><ul><br><li>注意区别可调用方法与方法集。</li><br><li>方法调用，编译器完成T和<em>T转换。</em></li><br><li>但T和T拥有不同的方法集。</li><br><li>T=receiver T。</li><br><li><em>T=receiver(T+ </em>T)。</li><br></ul><br><p>一个类型对应的方法和它对应的方法集不是一回事。方法集不是一个类型所有方法的集合。类型<code>T</code>定义<code>T.A</code>或者<code><em>T.B</em></code>，从抽象层面上来说<code>A</code>和<code>B</code>都属于<code>T</code>的方法。类型<code>X</code>把<code>T</code>匿名嵌入，<code>X</code>拥有方法<code>A</code>和<code>B</code>。所以一个类型拥有的方法是个抽象的概念，至于底层怎么实现是另外一回事。写代码是一个抽象的概念，围绕着<code>T</code>做一些事情，把<code>T</code>嵌入<code>X</code>里是一种逻辑组合，在抽象逻辑上它拥有了<code>A</code>和<code>B</code>两个方法。</p><br><p>方法集不是抽象层面上的概念而是实现层面的概念，它是为了接口做的一种变通。也就是<code>T</code>和<code>T</code>拥有的方法集可能不一样。一个类型所拥有的方法是抽象概念，而一个类型所拥有的方法集是实现上的概念，大致认为一个类型所拥有的方法大于或等于它的方法集。</p><br><p>方法集就是把一个类型所调用的方法按照某种规则选出其中一部分构成一个集合用来实现接口。方法调用的时候编译器会完成<code>T</code>和<code><em>T</em></code>的转换，但是方法集不会。简单点来说，以<code>T</code>表达方法集，他的方法集只包含<code>T</code>，当以<code>T</code>表达方法集，他的方法集包含<code>T</code>和<code><em>T</em></code>。</p><br><p>方法集严格意义上是为了实现接口使用的，正常情况下实现接口的方式是比如接口<code>X</code>，基类<code>A</code>实现一部分，继承类<code>B</code>实现一部分，<code>C</code>实现一部分，最后<code>C</code>实现了这个接口。这是我们传统的基于继承体系的做法。</p><br><p>Go语言是基于组合的，怎么办呢？<code>A</code>包含了<code>B</code>、<code>C</code>的话，<code>A</code>编译器就自动生成<code>B</code>和<code>C</code>的方法包装，这样一来，<code>A</code>就同时拥有了<code>A</code>、<code>B</code>、<code>C</code>的方法，最后<code>A</code>就实现了<code>X</code>接口。很显然，方法集就是为了实现接口准备。因为很多时候我们为了实现一个方法是通过多个组件拼装出来的，未必都是自己实现的。</p><br><p>比如我要实现下订单的接口，那可能是由三个对象实现的，比如一个对象维持对象的列表，一个对象实现计算相应的价格，因为涉及到很多折扣的东西，另外对象对订单临时暂存类似于这样的功能。我们可能对这多个对象要么继承要么组合。</p><br><pre><code class="go language-go">type X int<br><br>func (X) A()  {}<br>func (X) B() {}<br>func main() {<br>    var o X<br>    t := reflect.TypeOf(o) //查询T的方法集<br>    // t := reflect.TypeOf(&amp;o) //查询<em>T的方法集<br>    for i := 0; i &lt; t.NumMethod(); i++ {<br>        fmt.Println(t.Method(i).Name)<br>    }<br>}<br></em></code></pre><br><p>类型<code>X</code>有两个方法，我们从方法角度来说<code>X</code>同时拥有<code>A</code>和<code>B</code>两个方法。从方法集的概念上来说，通过反射的途径来看它拥有哪些方法。</p><br><p><code>T</code>的方法集只拥有<code>A</code>不包含<code>B</code>。用指针方式相当于<code>T</code>的方法集返回的是<code>A</code>和<code>B</code>。从方法角度来说，编译器自动完成转换，不管<code>T</code>还是<code>*T</code>，<code>A</code>和<code>B</code>都可以调用。</p><br><p>方法集用来实现接口，也就是在正常情况下不通过接口而直接通过这个类型实例调用的时候没有方法集这种概念。当用接口的方式处理的时候，那么就会涉及到一个方法的方法及这个概念。所以方法及和方集不是一回事。</p><br><h3 id="-2">方法集方法生成</h3><br><pre><code>$ go build &amp;&amp; go tool objdump -s “main.“ test | grep “TEXT main.“<br></code></pre><br><ul><br><li>与方法调用时由编译器自动转换不同。</li><br><li>编译器按方法集自动生成包装方法。</li><br><li>接口内部实现需要明确的目标方法地址。</li><br></ul><br><p>对方法而言，X嵌入S的时候，它有A和B，但是不会为X生成A和B方法。通过接口调用的时候，X生成了两个方法。因为方法集严格意义上来说它属于X不属于S，所以必须存在这两个方法。因为方法调用时编译器自动转换，接口调用时是通过运行期从X中找到A和B两个方法，编译器就自动生成这些方法就有合法的内存地址，把内存地址交给接口间接的调用<code>S.A</code>。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">方法集思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">方法集定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">方法集方法生成</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&text=重学 Go 语言：基础篇-71"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&is_video=false&description=重学 Go 语言：基础篇-71"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-71&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&title=重学 Go 语言：基础篇-71"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/&name=重学 Go 语言：基础篇-71&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

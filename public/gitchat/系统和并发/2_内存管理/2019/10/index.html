@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="内存管理   本节内容：  自主实现内存管理 内存管理面临的问题 Go 基于 tcmalloc 实现的内存分配器工作原理 如何释放物理内存  自主实现内存管理 在 C 语言中直接调用malloc、free、new、delete系统调用由操作系统分配内存很简单，但是几乎所有的新语言都自主管理内存，为什么要自主管理内存？由操作系统管理内存有哪些问题？ C 语言中向操作系统申请">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存管理">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="内存管理   本节内容：  自主实现内存管理 内存管理面临的问题 Go 基于 tcmalloc 实现的内存分配器工作原理 如何释放物理内存  自主实现内存管理 在 C 语言中直接调用malloc、free、new、delete系统调用由操作系统分配内存很简单，但是几乎所有的新语言都自主管理内存，为什么要自主管理内存？由操作系统管理内存有哪些问题？ C 语言中向操作系统申请">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://images.gitbook.cn/d90555f0-179d-11e8-a7d2-1b331958097a">
+<meta property="og:image" content="http://images.gitbook.cn/982e8510-179d-11e8-ac0a-03d2406b28d7">
+<meta property="og:image" content="http://images.gitbook.cn/2f0309c0-179e-11e8-ab6f-c92a5ff63d5e">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.222Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内存管理">
+<meta name="twitter:description" content="内存管理   本节内容：  自主实现内存管理 内存管理面临的问题 Go 基于 tcmalloc 实现的内存分配器工作原理 如何释放物理内存  自主实现内存管理 在 C 语言中直接调用malloc、free、new、delete系统调用由操作系统分配内存很简单，但是几乎所有的新语言都自主管理内存，为什么要自主管理内存？由操作系统管理内存有哪些问题？ C 语言中向操作系统申请">
+<meta name="twitter:image" content="http://images.gitbook.cn/d90555f0-179d-11e8-a7d2-1b331958097a">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>内存管理</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/gitchat/系统和并发/3_垃圾回收常用方式/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/gitchat/系统和并发/11_Goroutine架构设计/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&text=内存管理"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&is_video=false&description=内存管理"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=内存管理&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&name=内存管理&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">自主实现内存管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">内存管理面临的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gotcmalloc"><span class="toc-number">3.</span> <span class="toc-text">Go 基于 Tcmalloc 实现的内存分配器工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#heap"><span class="toc-number">3.1.</span> <span class="toc-text">Heap 机构的职责</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#central"><span class="toc-number">3.2.</span> <span class="toc-text">Central 机构的职责</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cache"><span class="toc-number">3.3.</span> <span class="toc-text">Cache 机构的职责</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">4.</span> <span class="toc-text">如何释放物理内存</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        内存管理
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.222Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>内存管理</title>
+</head>
+<body>
+<article id="articleDiv" style="overflow: hidden;padding-bottom:20px;text-align: justify;"><div class="mazi-article-content dont-break-out"><p>本节内容：</p>
+<ul>
+<li>自主实现内存管理</li>
+<li>内存管理面临的问题</li>
+<li>Go 基于 tcmalloc 实现的内存分配器工作原理</li>
+<li>如何释放物理内存</li>
+</ul>
+<h3 id>自主实现内存管理</h3>
+<p>在 C 语言中直接调用<code>malloc</code>、<code>free</code>、<code>new</code>、<code>delete</code>系统调用由操作系统分配内存很简单，但是几乎所有的新语言都自主管理内存，为什么要自主管理内存？由操作系统管理内存有哪些问题？</p>
+<p>C 语言中向操作系统申请或者释放内存需要做系统调用的，否则操作系统没有办法收到申请和释放的信号，向操作系统申请，操作系统需要在 mmu 建立映射，建立映射后给内存读写数据，自主管理内存肯定需要减少系统调用带来的系统消耗。</p>
+<p>如果由操作系统管理的话可以避免每种语言都自己实现内存管理，操作系统为什么不管理呢？最主要原因是操作系统根本不知道怎么内存复用，对于操作系统来说，内存复用也就意味着内存不释放。操作系统上运行着各种各样的应用程序，不同语言对于内存使用方式也不一样，选择不同的操作系统，选择不同的编程语言，这里的变化都不好控制。当然有些专业的定制的操作系统，专门为某种事开发的操作系统最好的方案是所有事都管，比如像军事上的，把权限交给用户也就意味着风险失控。对于普通的操作系统来说，进程崩溃操作系统是不关心的，操作系统甚至主动把长期不用的线程或者进程干掉，就像我们做架构设计时候一样的，把职责分清楚。</p>
+<p>所以在语言层面上去实现内存分配带来很多好处，第一减少系统调用带来的系统开销，第二自己实现内存复用体系，第三可以和垃圾回收器配合设计得非常精巧，垃圾回收器是回收内存，需要和内存分配器打交道，垃圾回收器不停的进化，内存分配器也要配合它不停的进化。换句话说，既然不使用操作系统的内存管理，操作系统提供的太原始了，那么我们应该怎么做呢？</p>
+<h3 id="-1">内存管理面临的问题</h3>
+<p>简单的想象内存如何管理的，每个程序有一段用户地址空间 VA，它实际上会被映射到不同的部分，比如 .text 段、.data 段。我们使用<code>mmap</code>系统调用在用户地址空间上主动申请 1MB 大小内存空间，然后把 1MB 空间以8字节为单位分配相同大小的格子，每个格子都是8字节，使用链表把这些格子管理起来。需要使用内存的时候，最小单位是在 1-8 字节之间不需要分配，直接在链表上取一个出来直接使用，比如需要1字节空间，取8字节的空间格子，其他7字节就当作浪费掉，用完之后把内存重新放回到链表中去，接下来这段内存又可以被 1-8 字节使用，为什么说要把它切成8字节呢，很显然是一种策略是适用 1-8 字节的内存分配的复用。</p>
+<p><img src="http://images.gitbook.cn/d90555f0-179d-11e8-a7d2-1b331958097a" alt="enter image description here"></p>
+<p>如果不切成大小相等的格子会出现什么状态呢？比如一次切走了1字节，接下来切走3字节，接下来1字节放回来以后，后面空间还在用，除非下次正好用1字节，否则一直用不上，慢慢的切来切去，结果越切越小，最后会形成碎片化，没法管理。Java 语言和 C# 语言内存回收的时候可以把使用的内存全部压缩搬到左边，把右边一大块空出来。C 语言和 Go 语言支持指针，搬的话地址就发生变化，本来大的地址搬到左边去了变成小地址了，所以 <strong>C 语言和 Go 语言不能对内存做压缩处理</strong>，不能把一个对象随便挪一个位置，除非用户逻辑自己去改变指针。</p>
+<p>内存分配最优化的方法是按照固定大小的方式分配，例如以 8 字节策略，就有 60 多种方式可以管理好几万种不同大小分配了，比如 8 字节、16 字节、32 字节，这样简化了内存管理和复用，规格1以 8 字节为单位切的格子，规格2以 16 字节为单位切的格子，以此类推，当分配的时候只需要计算出这个对象的 size，比如 11 字节，然后计算出需要对应的规格，比如规格2，直接在规格 2 上分配内存块就可以了，用完以后再放回规格 2，这样好处是内存复用会很方便，取内存和放回内存也很方便，还有这种规格大小的很难形成碎片化，因为很容易复用，所有内存都是有固定大小的。</p>
+<p>实际如何来分配呢？我们逆向推导这个过程，比如需要做分配操作<code>new(15)</code>，先找到对应的规格，假如是 2 对应 16 字节大小，那么去规格 2 空间找有没有剩余可用的块，有的话直接拿出来，如果没有的话，看有没有大块的内存自由块，如果有的话把它切成 16 字节大小的块，切完之后拿一块来用，没有大内存块就去向操作系统申请，一次申请 1M 自由块去切，尽管需要只是 16 字节但也申请 1M，申请后分配很多个 16 字节大小的格子，接下来所有分配内存都会从 16 字节格子上去取，这样就减少向操作系统申请的次数，这也是内存复用优化。还有种复用，假设在 16 字节格子切出 100 个，切出的内存都没有再用，就可以把 100 个格子整个内存块还原成自由块，这个自由块需要的时候可以切成 32 字节、64 字节、8 字节其他规格。</p>
+<p><img src="http://images.gitbook.cn/982e8510-179d-11e8-ac0a-03d2406b28d7" alt="enter image description here"></p>
+<p><strong>内存复用有两种体系，第一种是规格相同的复用，第二种是把切好的一整块大的内存块还原成自由块，自由块可以用来切成其他的单位。</strong> 很显然申请的 1M 内存可以有不同的复用方式。我们现在通过一种简单的策略知道内存管理简单的方式。无非是向操作系统申请一大块内存，用于减少向操作系统申请次数。申请一大块内存无非需要浪费很大内存空间，这里申请的是 VA 不是 PA，申请 1M 虚拟内存空间，操作系统肯定会及时返回，只有在写数据的时候才会去做 MMU 映射分配物理地址。</p>
+<h3 id="gotcmalloc">Go 基于 Tcmalloc 实现的内存分配器工作原理</h3>
+<h4 id="heap">Heap 机构的职责</h4>
+<p>上面介绍的是内存管理流程，Go 语言 Runtime 具体怎么管理的呢？首先操作系统有很大的内存空间，这个空间称之为<strong>堆 Heap</strong>，我们向操作系统申请大量的内存空间，有大有小，称之为自由块，最小的自由块是 1M，Heap 中很多自由块，自由块怎么管理起来呢？自由块的管理方式很简单，对于内存来说它的分类方式两种方式，一个按照字节来分，这种分类方式太琐碎了，比如 1 字节、3 字节，数量太多不方便管理，最好的方式按照<strong>页</strong>为单位，内存块有多少页，申请自由块时候说这块内存有多少页，操作系统管理内存的单位是页，一页可能有 8K、4K、2K，假设以 8K 为单位称之为 1 页，我们把所有为 1 页的自由块放在一个链表里，把 2 页的自由块放在 2 页的链表中，以此类推，这样把规格 1、规格 2 这样的链表建立数组。例如向堆上申请自由块，要 2 页的，很简单，从数组以 2 为下标，找到链表，从链表里取一个就可以了，换句话说，向堆释放一个自由块，它有多少页就放到哪个链表中去。</p>
+<p>很显然，对于规格的数组有个预值，超过一个限度的自由块，比如 100M 以上的自由块，可能说 100M 以上的自由块本来就很少，那么是 100M、101M、1000M 也好全部放在一起，我们管这些自由块称之为<strong>大对象</strong>，上面规格的自由块称之为<strong>小对象</strong>。实际在程序中小对象的数量是最多的，因为大多数分配内存都是在 1K 以下，起码都是在几页之内的，大对象数量非常的少，没有必要把大对象管理的非常复杂，比如说超过一定大小的来区分大对象还是小对象，每种语言对于这个大小都有预值。所有小对象以数组下标为单位，挂在链表数组里面去，所有大对象挂在单独的链表上去。</p>
+<p>对于堆来说，无非就做两种事情，第一种事情是<strong>申请自由块</strong>，首先从链表中去找，找到大小合适的，找不着的话，从大对象链表去找，可能涉及到比如申请 10 页大小的自由块，但是 1-9 都没有了，那么只能找一个比 10 大的或者等于 10 的，就是说 1-10 没找到只能从 11 找，11 没有从 12 找，如果从 12 找到到自由块，申请的是 10 页，但是当前自由块是 12 页，剩下 2 页浪费太严重，怎么办？把 2 页切下来，10 页的拿走，2 页的放到 2 的数组里。所以当从堆里拿内存的时候，可能会对内存做<strong>切割处理</strong>，因为可能正好没有大小合适的，那没有 10 页怎么不向操作系统申请 10 页？有一大堆 12 页搁在那不用去向操作系统申请干嘛，把的空闲内存尽可能用起来，用完了才会向操作系统申请，同样的当自由块归还给 Heap 的时候，这个自由块最好方式做<strong>合并处理</strong>，为什么要合并，10 页和 2 页在两个地方，现在要 12 页怎么办？10 页不合适 2 页不合适只能向操作系统申请？最好方式把 10 页回收的时候把 10 页和 2 页合并为 12 页，12 页就可以适应 12 种变化，无非是要么正好要么接着切，所以向堆去取内存的时候，一种是多的地方要切出来，释放的时候尽可能合并成大块，因为大块可以适应不同的变化。我们现在大概知道 Heap 是用来干嘛的，<strong>堆是用来管理大块的自由块，大块自由块以页为单位划分到不同的地方</strong>。</p>
+<h4 id="central">Central 机构的职责</h4>
+<p>接下来自由块需要有地方分配，所以需要一大堆门店，建门店有讲究了，一种方式是每个门店里有各种自由块，比如 1 页、2 页的，这样话会造成很多问题，一是各种规格的用户请求拥挤过来会造成排队堵死，二是要考虑每种自由块什么时候准备并且准备多少数量。换句话说，有很多这样的门店，用户请求也不知道应该去哪家，最好的方式怎么做呢？<strong>每种门店只提供一种规格的自由块</strong>，比如 1 页的、2 页的、以此类推，用户请求需要什么样的规格的自由块就去什么样的门店，这样也不会造成拥堵，如果说同一时间内要 1 页的用户请求多，那就排队，1 页和 2 页的申请快速分流，这是很简单的分布式做法。这样<strong>锁就分散</strong>了，不同规格放到一个地方不管取什么规格内存块都得上锁，我们把这种机构称之为 <strong>Central</strong>。</p>
+<h4 id="cache">Cache 机构的职责</h4>
+<p>接下来就是具体的用户请求，当用户请求 1 页自由块就去 1 号门店去申请，需要 2 页自由块就去 2 号门店申请。用户请求会关联一个<strong>缓存 Cache</strong>，这个缓存是以规格大小来保存，为什么要建立缓存呢？因为这个用户请求可以绑定到当前执行线程 Thread 上去，根据相同的理论，当一个算法频繁的执行，可能会使用相同规格的内存块，比如说 for 循环或者频繁执行一个函数的时候，这种内存分配实际上是很有规律性的。</p>
+<p>假设一个函数执行时候会使用 1、3、5 页这样规格的内存块，频繁的执行时候 1、3、5 页就会频繁的分配，换句话说这个用户请求就会频繁的去 1 号、3 号、5 号门店申请自由块，这种频繁的操作很显然会影响程序性能，最好的方式是需要 1 页的时候一次性拿回 10 个 1 页，需要 3 页的时候一次性拿回 10 个 3 页，这样去 1 号门店、3 号门店本来要去 20 次，在门口需要去抢 20 次锁，现在每次拿 10 个去两次就可以了，1 号门店去一次、3 号门店去一次。<strong>因为 Central 做一次分流，Cache 一次拿回更多的自由块做了第二次分流，减少同一个 Central 里大量拥挤的行为。</strong></p>
+<p>有这样的场景，高峰期时候去门店，前面很多请求需要排很长的队，如果每次去都申请很多的话，就不用太长时间排队了，这个门店实际上就被分流了，这是第二次分流。还有和线程绑定了之后，它从 Cache 中取内存块时候不需要加锁，因为每个 Cache 是和 Thread 是绑定的，所以实际上是一次<code>lock-free</code>无锁处理，Thread 从它绑定的 Cache 分配和释放内存块操作都是针对 Cache 做操作。Central 级是需要加锁的，Heap 级也是需要加锁的，因为有一堆请求都要往里面去挤。但是 Cache 级不需要加锁的，就是 Cache 每次去 Central 取 10 个加一次锁，接下来用这 10 个时候不需要加锁，因为每个 Cache 是同 Thread 绑定的，除非 Cache 拿回的 10 个全部用完了继续去门店时候才会去加锁，所以这地方用<strong>三级机构分解锁</strong>。</p>
+<p>所以现在的流程是分配内存时候，首先检查 Cache 里有没有，如果有的话直接返回，如果没有的话去检查应该去哪个门店，从门店取回一批，一批是 10 个，Go 语言在初始化时候建立一个静态表，通过这个表查出来到底需要多少个，这个数字基于大量的统计得到的，有些语言根据程序运行期动态调整这个数字。从 Central 里面去取，如果 Central 正好有这样的资源，那就拿回来，如果 Central 没有，它就去 Heap 中去取大块自由块，切回，如果 Heap 没有多余的自由块，去操作系统 OS 申请。</p>
+<p>接下来带来的问题是 Cache 上会积累了大量的可用资源，比如 1 号拿回 10 个，但是每次操作只使用 1 个操作完放回去，剩下 9 个长时间不用，这样浪费很严重，谁来触发回收操作呢？由 GC 来触发的，它把 9 个收回退回 Central 以后可以交给别的线程来用，这是第一级平衡。</p>
+<p>还有可能某段时间都频繁使用 2 号 Central，会造成一段时间 Central 会产生大量的内存，如果 Central 存在大量挤压，它会找出相对完整的大块，把它退还给 Heap，Heap 会把这些内存切成别的规格的内存在不同的 Central 之间做平衡，这样内存块才不会有大量的闲置浪费。<strong>这就涉及到两级平衡，一个是 Cache 不能有大量的积累，尽可能归还 Central，第二级是不同的 Central 之间的平衡，有可能 Central 有大量的闲散资源，把这些闲散资源交还给 Heap</strong>，Heap 可以把这些资源分配给 1 号 Central 或者 3 号 Central。</p>
+<p><img src="http://images.gitbook.cn/2f0309c0-179e-11e8-ab6f-c92a5ff63d5e" alt="enter image description here"></p>
+<p>任何时候内存管理都会涉及两个核心问题，第一个快速分配，比如实现<code>lock-free</code>，减少锁，因为 Central 肯定会被很多 Cache 共享的，取数据必须要排队或者加锁处理，Heap 是被不同的 Central 共享的，都会加锁。第二个不能有太多的浪费行为需要适可而止，分配的是 VA 地址，但是写过数据了，PA 还在，除非还给操作系统，有可能会占用大量的资源，所以尽可能在内存复用方面做到平衡，平衡既要在快速分配中进行操作，快速操作也就意味着用批处理代替单次处理，我们很多时候用批处理代替单次处理实现性能提升，但是批处理很显然会浪费大量的资源，在另一端我们要做节约，所以一是实现批处理来实现快速的性能，一是实现内存节约避免快速消耗，需要在中间找到平衡点。</p>
+<p>很显然，Go 语言使用了三级机构既照顾了快速分配同时又照顾了内存节约，所以它从一开始就是基于并发设计的一种内存分配模型。因为 Go 语言内存分配模型就是基于 tcmalloc。tcmalloc 本身就是 Google 开发的快速内存分配器，它本身就是基于并发设计的，这个原理在这个地方找到相对比较好的平衡，既有很高的性能同时内存消耗不会太夸张。</p>
+<h3 id="-2">如何释放物理内存</h3>
+<p>比如程序上午 10:00 访问高峰，可能各种原因分配大量的内存，下午 13:00 时候访问低峰，大量的内存会堆在 Heap 上，因为 Central 有大量的资源都会退还给 Heap，这样会涉及到内存释放，需要把大量的 Heap 还给操作系统，一种方式彻底告诉操作系统内存不用了可以释放了，这种释放是 VA 和 PA 全部释放掉，这种方式就会造成地址空间形成很多空洞，下次这些空洞很难复用，这种释放算法不太合理。</p>
+<p>Go 语言怎么做呢？不释放 VA，把 VA 挂在 Heap 上，只是向操作系统提个建议，某一段 VA 暂时不用，可以解除 VA 和 PA 的 mmu 映射，操作系统可能会触发两种行为，第一种行为操作系统物理内存的确不够用有大量的换入换出操作，就解除，第二种操作系统觉得物理内存挺大的，就搁那，但是知道了这段 PA 空间不可用了，在 Heap 中并没有把 VA 释放掉，下次分配正好用到当时解除的 VA，有可能会引发两种行为，第一种是 PA 映射没有解除直接拿过来用，第二种是 PA 被解除掉了会引发操作系统缺页异常，操作系统就会补上这段物理内存，这个过程对用户空间来说是不可见的，这样在用户空间觉得这段内存根本没有释放过，因为用户空间看到的永远是 VA，VA 上某段内存可能存在也可能不存在，它是否存在对用户逻辑来说根本不关心，这地方实际上是操作系统来管理，操作系统通过 mmu 建立映射，这会造成 64 位 VA 地址空间非常的大，只要申请就不释放，下次重复使用，只不过重复使用会补上。现在内存管理在 64 位下简单的多，无非 VA 用就用了，就不释放。Windows 操作系统没有建议解除，只能说全部释放掉。</p>
+<p>tcmalloc、jemalloc、supper 三种常见内存分配器，很多应用都是基于前两种，比如 Redis 使用前两种替换系统调用的内存分配提升性能。编译 MySQL 时候建议使用前两种内存分配器。实现原理在大的层面上有些类似，细节处理上有些区别，选择一种做深入了解有助于对内存分配有深入认识，另外可以看出来在 64 位系统下很多东西被简化了，还有对于物理内存释放，我们经常看到释放了大量的内存但是物理内存 RSS 一直没有下去就是操作系统也扮演着一些角色。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">自主实现内存管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">内存管理面临的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gotcmalloc"><span class="toc-number">3.</span> <span class="toc-text">Go 基于 Tcmalloc 实现的内存分配器工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#heap"><span class="toc-number">3.1.</span> <span class="toc-text">Heap 机构的职责</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#central"><span class="toc-number">3.2.</span> <span class="toc-text">Central 机构的职责</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cache"><span class="toc-number">3.3.</span> <span class="toc-text">Cache 机构的职责</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">4.</span> <span class="toc-text">如何释放物理内存</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&text=内存管理"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&is_video=false&description=内存管理"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=内存管理&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&title=内存管理"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/2_内存管理/2019/10/&name=内存管理&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

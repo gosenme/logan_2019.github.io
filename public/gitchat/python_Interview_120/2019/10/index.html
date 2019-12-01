@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Python面试120题   基本 Python 面试问题     1. Python 中的列表和元组有什么区别？     列表是可变的，即可以编辑它们；元组是不可变的（元组是无法编辑的列表）。     列表比元组慢；元组比列表更快。     列表语法：list1 = [10，&apos;Chelsea&apos;，20]；         元组语法：tup1 =（10，&apos;Chelsea&apos;，2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python面试">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="Python面试120题   基本 Python 面试问题     1. Python 中的列表和元组有什么区别？     列表是可变的，即可以编辑它们；元组是不可变的（元组是无法编辑的列表）。     列表比元组慢；元组比列表更快。     列表语法：list1 = [10，&apos;Chelsea&apos;，20]；         元组语法：tup1 =（10，&apos;Chelsea&apos;，2">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/6ec77050-85c0-11e9-9a8d-f9d4f0d85b82">
+<meta property="og:image" content="https://images.gitbook.cn/984aba40-85c0-11e9-9344-293841b71658">
+<meta property="og:image" content="https://images.gitbook.cn/a31e0760-85c0-11e9-9a4b-7f98565be244">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.215Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python面试">
+<meta name="twitter:description" content="Python面试120题   基本 Python 面试问题     1. Python 中的列表和元组有什么区别？     列表是可变的，即可以编辑它们；元组是不可变的（元组是无法编辑的列表）。     列表比元组慢；元组比列表更快。     列表语法：list1 = [10，&apos;Chelsea&apos;，20]；         元组语法：tup1 =（10，&apos;Chelsea&apos;，2">
+<meta name="twitter:image" content="https://images.gitbook.cn/6ec77050-85c0-11e9-9a8d-f9d4f0d85b82">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Python面试</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/gitchat/python_interview_190/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/gitchat/golang_web/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&text=Python面试"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&is_video=false&description=Python面试"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Python面试&body=Check out this article: http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&name=Python面试&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#python"><span class="toc-number">1.</span> <span class="toc-text">基本 Python 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1python"><span class="toc-number">1.1.</span> <span class="toc-text">1. Python 中的列表和元组有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2python"><span class="toc-number">1.2.</span> <span class="toc-text">2. Python 的主要功能是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3python"><span class="toc-number">1.3.</span> <span class="toc-text">3. python 是编程语言还是脚本语言？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4python"><span class="toc-number">1.4.</span> <span class="toc-text">4. Python 是一种解释性语言吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5pep8"><span class="toc-number">1.5.</span> <span class="toc-text">5. 什么是 pep 8？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6python"><span class="toc-number">1.6.</span> <span class="toc-text">6. 如何在 Python 中管理内存？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7python"><span class="toc-number">1.7.</span> <span class="toc-text">7. Python 中的命名空间是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8pythonpath"><span class="toc-number">1.8.</span> <span class="toc-text">8. 什么是 PYTHONPATH？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9pythonpython"><span class="toc-number">1.9.</span> <span class="toc-text">9. 什么是 python 模块？在 Python 中命名一些常用的内置模块？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10python"><span class="toc-number">1.10.</span> <span class="toc-text">10. Python 中的局部变量和全局变量是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11python"><span class="toc-number">1.11.</span> <span class="toc-text">11. python 是否区分大小写？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12python"><span class="toc-number">1.12.</span> <span class="toc-text">12. Python 中的类型转换是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#13python"><span class="toc-number">1.13.</span> <span class="toc-text">13. Python 中有哪些内置类型？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#14python"><span class="toc-number">1.14.</span> <span class="toc-text">14. python 中是否需要缩进？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#15pythonarray"><span class="toc-number">1.15.</span> <span class="toc-text">15. Python array和列表有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#16python"><span class="toc-number">1.16.</span> <span class="toc-text">16. Python 中的函数是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#17__init__"><span class="toc-number">1.17.</span> <span class="toc-text">17. init 是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#18lambda"><span class="toc-number">1.18.</span> <span class="toc-text">18. 什么是 lambda 函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#19pythonself"><span class="toc-number">1.19.</span> <span class="toc-text">19. Python 中的 self 是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#20"><span class="toc-number">1.20.</span> <span class="toc-text">20. 如何中断，继续并通过工作？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#211"><span class="toc-number">1.21.</span> <span class="toc-text">21. [:: - 1} 的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#22python"><span class="toc-number">1.22.</span> <span class="toc-text">22. 如何在 Python 中随机化列表中的项目？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#23python"><span class="toc-number">1.23.</span> <span class="toc-text">23. 什么是 python 迭代器？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#24python"><span class="toc-number">1.24.</span> <span class="toc-text">24. 如何在 Python 中生成随机数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#25rangexrange"><span class="toc-number">1.25.</span> <span class="toc-text">25. range＆xrange 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#26python"><span class="toc-number">1.26.</span> <span class="toc-text">26. 你如何在 python 中写注释？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#27picklingunpickling"><span class="toc-number">1.27.</span> <span class="toc-text">27. 什么是 pickling 和 unpickling？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#28python"><span class="toc-number">1.28.</span> <span class="toc-text">28. python 中的生成器是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#29"><span class="toc-number">1.29.</span> <span class="toc-text">29. 你如何把字符串的第一个字母大写？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#30"><span class="toc-number">1.30.</span> <span class="toc-text">30. 如何将字符串转换为全小写？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#31python"><span class="toc-number">1.31.</span> <span class="toc-text">31. 如何在 python 中注释多行？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#32pythondocstrings"><span class="toc-number">1.32.</span> <span class="toc-text">32. Python 中的 Docstrings 是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#33isnotin"><span class="toc-number">1.33.</span> <span class="toc-text">33. 操作符 is、not 和 in 的目的是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#34pythonhelpdir"><span class="toc-number">1.34.</span> <span class="toc-text">34. Python 中 help（）和 dir（）函数的用法是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#35python"><span class="toc-number">1.35.</span> <span class="toc-text">35. 每当 Python 退出时，为什么不是所有的内存都被解除分配？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#36pythondictionary"><span class="toc-number">1.36.</span> <span class="toc-text">36. Python 中的字典（dictionary）是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#37python"><span class="toc-number">1.37.</span> <span class="toc-text">37. 如何在 python 中使用三元运算符？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#38argskwargs"><span class="toc-number">1.38.</span> <span class="toc-text">38. 这是什么意思：* args，** kwargs？我们为什么要用呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#39len"><span class="toc-number">1.39.</span> <span class="toc-text">39. len（）的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#40pythonresplitsubsubn"><span class="toc-number">1.40.</span> <span class="toc-text">40. Python 中“re”模块的 split（），sub（），subn（）这三个方法的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#41"><span class="toc-number">1.41.</span> <span class="toc-text">41. 什么是负指数，为什么使用它们？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#42python"><span class="toc-number">1.42.</span> <span class="toc-text">42. 什么是 Python 包？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#43python"><span class="toc-number">1.43.</span> <span class="toc-text">43. 如何在 Python 中删除文件？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#44python"><span class="toc-number">1.44.</span> <span class="toc-text">44. 什么是 python 的内置类型？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#45numpypython"><span class="toc-number">1.45.</span> <span class="toc-text">45. NumPy 阵列在（嵌套）Python 列表中提供了哪些优势？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#46pythonarray"><span class="toc-number">1.46.</span> <span class="toc-text">46. 如何将值添加到 python array？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#47pythonarray"><span class="toc-number">1.47.</span> <span class="toc-text">47. 如何删除 python array的值？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#48pythonoops"><span class="toc-number">1.48.</span> <span class="toc-text">48. Python 有 OOps 概念吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#49"><span class="toc-number">1.49.</span> <span class="toc-text">49. 深拷贝和浅拷贝有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#50python"><span class="toc-number">1.50.</span> <span class="toc-text">50. 如何在 Python 中实现多线程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#51python"><span class="toc-number">1.51.</span> <span class="toc-text">51. 在 python 中编译和链接的过程是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#52python"><span class="toc-number">1.52.</span> <span class="toc-text">52. 什么是 Python 库？举几个例子。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#53"><span class="toc-number">1.53.</span> <span class="toc-text">53. 什么是拆分用于？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#54python"><span class="toc-number">1.54.</span> <span class="toc-text">54. 如何在 python 中导入模块？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#oops"><span class="toc-number">2.</span> <span class="toc-text">OOPS 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#55python"><span class="toc-number">2.1.</span> <span class="toc-text">55. 用一个例子解释 Python 中的继承。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#56python"><span class="toc-number">2.2.</span> <span class="toc-text">56. 如何在 Python 中创建类？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#57"><span class="toc-number">2.3.</span> <span class="toc-text">57. 什么是猴子补丁？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#58python"><span class="toc-number">2.4.</span> <span class="toc-text">58. python 是否支持多重继承？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#59python"><span class="toc-number">2.5.</span> <span class="toc-text">59. Python 中的多态是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#60python"><span class="toc-number">2.6.</span> <span class="toc-text">60. 在 Python 中怎样定义封装？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#61python"><span class="toc-number">2.7.</span> <span class="toc-text">61. 你如何在 Python 中进行数据抽象？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#62python"><span class="toc-number">2.8.</span> <span class="toc-text">62. python 是否使用了访问说明符？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#63python"><span class="toc-number">2.9.</span> <span class="toc-text">63. 如何在 Python 中创建一个空类？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#64object"><span class="toc-number">2.10.</span> <span class="toc-text">64. object（）有什么作用？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-1"><span class="toc-number">3.</span> <span class="toc-text">基本 Python 编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#65python"><span class="toc-number">3.1.</span> <span class="toc-text">65. 用 Python 编写程序来执行冒泡排序算法。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#66pythonstar"><span class="toc-number">3.2.</span> <span class="toc-text">66. 用 Python 编写程序来生成 Star 三角形。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#67pythonfibonacci"><span class="toc-number">3.3.</span> <span class="toc-text">67. 编写一个程序，用Python生成Fibonacci系列。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#68python"><span class="toc-number">3.4.</span> <span class="toc-text">68. 用 Python 编写程序来检查数字是否为素数。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#69python"><span class="toc-number">3.5.</span> <span class="toc-text">69. 用 Python 编写程序来检查序列是否是回文序列。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#70"><span class="toc-number">3.6.</span> <span class="toc-text">70. 写一个单行，用于计算文件中大写字母的数量。即使文件太大而无法放入内存，你的代码也应该可以正常工作。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#71python"><span class="toc-number">3.7.</span> <span class="toc-text">71. 在 Python 中为数值数据集编写排序算法。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#72a0a1an"><span class="toc-number">3.8.</span> <span class="toc-text">72. 查看下面的代码，记下 A0，A1，... An 的最终值。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-2"><span class="toc-number">4.</span> <span class="toc-text">Python 库面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#73flask"><span class="toc-number">4.1.</span> <span class="toc-text">73. 解释 Flask 是什么及其好处？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#74djangoflask"><span class="toc-number">4.2.</span> <span class="toc-text">74. Django 比 Flask 好吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#75djangopyramidflask"><span class="toc-number">4.3.</span> <span class="toc-text">75. 提到 Django，Pyramid 和 Flask 之间的差异。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#76django"><span class="toc-number">4.4.</span> <span class="toc-text">76. 讨论 Django 架构。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#77django"><span class="toc-number">4.5.</span> <span class="toc-text">77. 解释如何在 Django 中设置数据库。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#78djangoview"><span class="toc-number">4.6.</span> <span class="toc-text">78. 举例说明如何在 Django 中编写 VIEW？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#79django"><span class="toc-number">4.7.</span> <span class="toc-text">79. 提及 Django 模板的组成部分。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#80django"><span class="toc-number">4.8.</span> <span class="toc-text">80. 在 Django 框架中解释会话的使用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#81django"><span class="toc-number">4.9.</span> <span class="toc-text">81. 列出 Django 中的继承样式。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webscrapingpython"><span class="toc-number">5.</span> <span class="toc-text">Web Scraping - Python 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#82url"><span class="toc-number">5.1.</span> <span class="toc-text">82. 如何使用我已经知道的 URL 地址本地保存图像？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#83google"><span class="toc-number">5.2.</span> <span class="toc-text">83. 如何获取任何网址或网页的 Google 缓存时限？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#84imdb250"><span class="toc-number">5.3.</span> <span class="toc-text">84. 你需要从 IMDb 前 250 电影页面中删除数据。它应该只有字段电影名称，年份和评级。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-3"><span class="toc-number">6.</span> <span class="toc-text">数据分析 - Python 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#85pythonmap"><span class="toc-number">6.1.</span> <span class="toc-text">85. 什么是 Python 中的 map 函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#86pythonnumpy"><span class="toc-number">6.2.</span> <span class="toc-text">86. python numpy 比列表更好吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#87numpyarrayn"><span class="toc-number">6.3.</span> <span class="toc-text">87. 如何在 NumPy array中获得 N 个最大值的索引？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#88pythonnumpy"><span class="toc-number">6.4.</span> <span class="toc-text">88. 你如何用 Python / NumPy 计算百分位数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#89numpyscipy"><span class="toc-number">6.5.</span> <span class="toc-text">89. NumPy 和 SciPy 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#90numpyscipy3d"><span class="toc-number">6.6.</span> <span class="toc-text">90. 如何使用 NumPy / SciPy 制作 3D 绘图/可视化？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#91n20"><span class="toc-number">6.7.</span> <span class="toc-text">91. 检查给定数字n是否为2或0的幂</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#92ab"><span class="toc-number">6.8.</span> <span class="toc-text">92. 计算将A转换为B所需的位数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#93array"><span class="toc-number">6.9.</span> <span class="toc-text">93. 在重复元素array中查找两个非重复元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#94"><span class="toc-number">6.10.</span> <span class="toc-text">94. 找到具有相同设置位数的下一个较大和下一个较小的数字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#95nw"><span class="toc-number">6.11.</span> <span class="toc-text">95. 给定 n 个项目的重量和值，将这些物品放入容量为 W 的背包中背包中的最大总价值。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#96nn"><span class="toc-number">6.12.</span> <span class="toc-text">96. 给定一根长度为 n 英寸的杆和一系列价格，其中包含所有尺寸小于 n 的尺寸的价格。确定通过切割杆和销售件可获得的最大值。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#97str1str2str1str1str2"><span class="toc-number">6.13.</span> <span class="toc-text">97. 给定两个字符串 str1 和 str2 以及可以在 str1 上执行的操作。查找所需的最小编辑数（操作）将&#39;str1&#39;转换为&#39;str2&#39;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#98011"><span class="toc-number">6.14.</span> <span class="toc-text">98. 给定 0 和 1 的二维矩阵，找到最大的广场，其中包含全部 1。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#99"><span class="toc-number">6.15.</span> <span class="toc-text">99. 找到两者中存在的最长子序列的长度。子序列是以相同的相对顺序出现的序列，但不一定是连续的。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#100"><span class="toc-number">6.16.</span> <span class="toc-text">100. 找到给定序列的最长子序列的长度，以便对子序列的所有元素进行排序，按顺序递增。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#101mn"><span class="toc-number">6.17.</span> <span class="toc-text">101. 给定成本矩阵成本[] []和成本[] []中的位置（m，n），</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#102"><span class="toc-number">6.18.</span> <span class="toc-text">102. 将一个集合划分为两个子集，使得子集和的差异最小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#103"><span class="toc-number">6.19.</span> <span class="toc-text">103. 给定一组非负整数和一个值和，确定是否存在给定集合的子集，其总和等于给定总和。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#104hackerrankdp"><span class="toc-number">6.20.</span> <span class="toc-text">104. HackerRank 问题算法 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#105dist123"><span class="toc-number">6.21.</span> <span class="toc-text">105. 给定距离 dist，计算用 1,2 和 3 步覆盖距离的总方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#106"><span class="toc-number">6.22.</span> <span class="toc-text">106. 在字符板中查找所有可能的单词</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#107"><span class="toc-number">6.23.</span> <span class="toc-text">107. 广度优先搜索遍历</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#108"><span class="toc-number">6.24.</span> <span class="toc-text">108. 深度优先搜索遍历</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#109"><span class="toc-number">6.25.</span> <span class="toc-text">109. 在有向图中检测周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#110"><span class="toc-number">6.26.</span> <span class="toc-text">110. 检测无向图中的循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#111dijkstra"><span class="toc-number">6.27.</span> <span class="toc-text">111. Dijkstra的最短路径算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#112"><span class="toc-number">6.28.</span> <span class="toc-text">112. 在给定的边缘加权有向图中找出每对顶点之间的最短距离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#113"><span class="toc-number">6.29.</span> <span class="toc-text">113. 图形实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#114kruskal"><span class="toc-number">6.30.</span> <span class="toc-text">114. Kruskal的最小生成树算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#115"><span class="toc-number">6.31.</span> <span class="toc-text">115. 拓扑排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#116"><span class="toc-number">6.32.</span> <span class="toc-text">116. 以下哪个语句创建字典？（多选题）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#117"><span class="toc-number">6.33.</span> <span class="toc-text">117. 其中哪一个是分区？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#118"><span class="toc-number">6.34.</span> <span class="toc-text">118. 标识符的最大可能长度是多少？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#119"><span class="toc-number">6.35.</span> <span class="toc-text">119. 为什么不鼓励以下划线开头的局部变量名？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#120"><span class="toc-number">6.36.</span> <span class="toc-text">120. 以下哪项是无效声明？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#121output"><span class="toc-number">6.37.</span> <span class="toc-text">121. 以下是什么Output？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#122list12332221425list11"><span class="toc-number">6.38.</span> <span class="toc-text">122. 假设 list1 是[2,33,222,14,25]，什么是 list1 [-1]？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#123cscorestxt"><span class="toc-number">6.39.</span> <span class="toc-text">123. 要打开文件 c：scores.txt 进行写作，我们使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#124output"><span class="toc-number">6.40.</span> <span class="toc-text">124. 以下是什么 Output？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#125tryexceptelseelse"><span class="toc-number">6.41.</span> <span class="toc-text">125. try-except-else 的 else 部分什么时候执行？</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Python面试
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.211Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>Python面试120题</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out"><h3 id="python">基本 Python 面试问题</h3>
+    <h4 id="1python">1. Python 中的列表和元组有什么区别？</h4>
+    <p>列表是可变的，即可以编辑它们；元组是不可变的（元组是无法编辑的列表）。</p>
+    <p>列表比元组慢；元组比列表更快。</p>
+    <p>列表语法：list<em>1 = [10，'Chelsea'，20]；
+        元组语法：tup</em>1 =（10，'Chelsea'，20）。</p>
+    <h4 id="2python">2. Python 的主要功能是什么？</h4>
+    <ul>
+        <li><p>Python 是一种解释型语言。这意味着，与 C 语言及其衍生语言不同，Python 在运行之前不需要进行编译。其他解释性语言包括 PHP 和 Ruby。</p></li>
+        <li><p>Python 是动态类型的，当你声明变量时，你不需要声明变量的类型。你可以直接编写类似 x=111，或者 x="I'm a string" 这样的代码，程序不会报错。</p></li>
+        <li><p>Python 非常适合面向对象的编程（OOP），因为它允许类的定义以及组合和继承。Python 没有访问说明（如 C ++ 的 public，private）。</p></li>
+        <li><p>在 Python 中，函数是第一类对象。这意味着它们可以分配给变量，从其他函数返回并传递给函数。类也是第一类对象。</p></li>
+        <li><p>编写 Python 代码很快，但运行速度通常比编译语言慢。不过，Python 允许加入基于 C 语言编写的扩展，因此我们可以优化代码。numpy
+            就是一个很好的例子，它的运行速度相当快的，因为很多算数运算并不通过 Python 实现。</p></li>
+        <li><p>Python 用途非常广泛—— Web 应用程序、自动化、科学建模、大数据应用程序等等。它也经常被称作“胶水语言”，以使其他语言和组件发挥得很好。</p></li>
+    </ul>
+    <h4 id="3python">3. python 是编程语言还是脚本语言？</h4>
+    <p>Python 能够编写脚本，但从一般意义上讲，它被认为是一种通用的编程语言。</p>
+    <h4 id="4python">4. Python 是一种解释性语言吗？</h4>
+    <p>Python 是一种解释型语言。它的源代码可以直接运行，python 解释器会把源代码转换成中间语言，之后翻译成机器码再执行。</p>
+    <h4 id="5pep8">5. 什么是 pep 8？</h4>
+    <p>PEP 代表 Python Enhancement Proposal。它是一组规则，指定如何格式化 Python 代码以获得最大可读性。</p>
+    <h4 id="6python">6. 如何在 Python 中管理内存？</h4>
+    <p>python 中的内存管理由 Python 私有堆空间管理。所有 Python 对象和数据结构都位于私有堆中。程序员无权访问此私有堆。python 解释器负责处理这个问题。</p>
+    <p>Python 对象的堆空间分配由 Python 的内存管理器完成。核心 API 提供了一些程序员编写代码的工具。</p>
+    <p>Python 还有一个内置的垃圾收集器，它可以回收所有未使用的内存，并使其可用于堆空间。</p>
+    <h4 id="7python">7. Python 中的命名空间是什么？</h4>
+    <p>命名空间是一个命名系统，用于确保名称是唯一的，以避免命名冲突。</p>
+    <h4 id="8pythonpath">8. 什么是 PYTHONPATH？</h4>
+    <p>它是导入模块时使用的环境变量。每当导入模块时，也会查找 PYTHONPATH 以检查各个目录中是否存在导入的模块。解释器使用它来确定要加载的模块。</p>
+    <h4 id="9pythonpython">9. 什么是 python 模块？在 Python 中命名一些常用的内置模块？</h4>
+    <p>Python 模块是包含 Python 代码的文件。此代码可以是函数类或变量。Python 模块是包含可执行代码的 .py 文件。</p>
+    <p>一些常用的内置模块是：</p>
+    <ul>
+        <li>os</li>
+        <li>sys</li>
+        <li>math</li>
+        <li>random</li>
+        <li>data time</li>
+        <li>JSON</li>
+    </ul>
+    <h4 id="10python">10. Python 中的局部变量和全局变量是什么？</h4>
+    <p>全局变量：</p>
+    <p>在函数外或全局空间中声明的变量称为全局变量。这些变量可以由程序中的任何函数访问。</p>
+    <p>局部变量：</p>
+    <p>在函数内声明的任何变量都知道局部变量。此变量存在于本地空间中，而不是全局空间中。</p>
+    <p>例：</p>
+    <pre><code class="hljs makefile">a=2                       <span class="hljs-comment">#Global Variable</span>
+def add():
+b=3                       <span class="hljs-comment">#Local Variable</span>
+c=a+b
+print(c)
+add()
+Output：  5
+</code></pre>
+    <p>当你尝试访问函数 add（）之外的局部变量时，它将引发错误。</p>
+    <h4 id="11python">11. python 是否区分大小写？</h4>
+    <p>是的。Python 是一种区分大小写的语言。</p>
+    <h4 id="12python">12. Python 中的类型转换是什么？</h4>
+    <p>类型转换是指将一种数据类型转换为另一种数据类型。</p>
+    <ul>
+        <li><p>int（） - 将任何数据类型转换为整数类型</p></li>
+        <li><p>float（） - 将任何数据类型转换为 float 类型</p></li>
+        <li><p>ord（） - 将字符转换为整数</p></li>
+        <li><p>hex（） - 将整数转换为十六进制</p></li>
+        <li><p>oct（） - 将整数转换为八进制</p></li>
+        <li><p>tuple（） -此函数用于转换为元组。</p></li>
+        <li><p>set（） -此函数在转换为 set 后返回类型。</p></li>
+        <li><p>list（） - 此函数用于将任何数据类型转换为列表类型。</p></li>
+        <li><p>dict（） - 此函数用于将顺序元组（键，值）转换为字典。</p></li>
+        <li><p>str（） - 用于将整数转换为字符串。</p></li>
+        <li><p>complex（real，imag） - 此函数将实数转换为复数（实数，图像）数。</p></li>
+    </ul>
+    <h4 id="13python">13. Python 中有哪些内置类型？</h4>
+    <p>Python 的不可变内置数据类型</p>
+    <ul>
+        <li>数字</li>
+        <li>字符串</li>
+        <li>元组</li>
+    </ul>
+    <p>Python 的可变内置数据类型</p>
+    <ul>
+        <li>名单</li>
+        <li>字典</li>
+        <li>集</li>
+    </ul>
+    <h4 id="14python">14. python 中是否需要缩进？</h4>
+    <p>Python 需要缩进。它指定了一个代码块。循环，类，函数等中的所有代码都在缩进块中指定。通常使用四个空格字符来完成。如果你的代码没有必要缩进，它将无法准确执行并且也会抛出错误。</p>
+    <h4 id="15pythonarray">15. Python array和列表有什么区别？</h4>
+    <p>Python 中的array和列表具有相同的存储数据方式。但是，array只能包含单个数据类型元素，而列表可以包含任何数据类型元素。</p>
+    <p>例：</p>
+    <pre><code class="hljs php">import <span class="hljs-keyword">array</span> <span class="hljs-keyword">as</span> arr
+My_Array=arr.<span class="hljs-keyword">array</span>(<span class="hljs-string">'i'</span>,[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>])
+My_list=[<span class="hljs-number">1</span>,<span class="hljs-string">'abc'</span>,<span class="hljs-number">1.20</span>]
+<span class="hljs-keyword">print</span>(My_Array)
+<span class="hljs-keyword">print</span>(My_list)
+
+Output：
+<span class="hljs-keyword">array</span>（<span class="hljs-string">'i'</span>，[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]）[<span class="hljs-number">1</span>，<span class="hljs-string">'abc'</span>，<span class="hljs-number">1.2</span>]
+</code></pre>
+    <h4 id="16python">16. Python 中的函数是什么？</h4>
+    <p>函数是一个代码块，只有在被调用时才会执行。要在 Python 中定义函数，请使用 def 关键字。</p>
+    <p>例：</p>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Newfunc</span><span class="hljs-params">()</span>:</span>
+print(<span class="hljs-string">"Hi, Welcome to Edureka"</span>)
+Newfunc(); <span class="hljs-comment">#calling the function</span>
+Output：Hi, Welcome to Edureka
+</code></pre>
+    <h4 id="17__init__">17. <strong>init</strong> 是什么？</h4>
+    <p>__ init__ 是 Python 中的方法或构造函数。在创建类的新对象/实例时，将自动调用此方法来分配内存。所有类都有 <strong>init</strong> 方法。</p>
+    <p>以下是如何使用它的示例。</p>
+    <pre><code class="hljs objectivec"><span class="hljs-keyword">class</span> Employee:
+def __init__(<span class="hljs-keyword">self</span>, name, age,salary):
+<span class="hljs-keyword">self</span>.name = name
+<span class="hljs-keyword">self</span>.age = age
+<span class="hljs-keyword">self</span>.salary = <span class="hljs-number">20000</span>
+E1 = Employee(<span class="hljs-string">"XYZ"</span>, <span class="hljs-number">23</span>, <span class="hljs-number">20000</span>)
+ <span class="hljs-comment">/*E1 is the instance of class Employee.*/</span>
+<span class="hljs-comment">/*__init__ allocates memory for E1. */</span>
+print(E1.name)
+print(E1.age)
+print(E1.salary)
+Output：
+
+XYZ
+
+<span class="hljs-number">23</span>
+
+<span class="hljs-number">20000</span>
+</code></pre>
+    <h4 id="18lambda">18. 什么是 lambda 函数？</h4>
+    <p>匿名函数称为 lambda 函数。此函数可以包含任意数量的参数，但只能有一个语句。</p>
+    <p>例：</p>
+    <pre><code class="hljs makefile">a = lambda x,y : x+y
+print(a(5, 6))
+Output：  11
+</code></pre>
+    <h4 id="19pythonself">19. Python 中的 self 是什么？</h4>
+    <p>self 是类的实例或对象。在 Python 中，这显然包含在第一个参数中。但是，Java 中的情况并非如此，它是可选的。它有助于区分具有局部变量的类的方法和属性。</p>
+    <p>init 方法中的 self 变量引用新创建的对象，而在其他方法中，它引用其方法被调用的对象。</p>
+    <h4 id="20">20. 如何中断，继续并通过工作？</h4>
+    <ul>
+        <li>中断：当满足某些条件并且控制转移到下一个语句时允许循环终止。</li>
+        <li>继续：允许在满足某些特定条件时跳过循环的某些部分，并将控件转移到循环的开头。</li>
+        <li>通过：在语法上需要一些代码块时使用，但是你想跳过它的执行。这基本上是一个空操作。执行此操作时没有任何反应。</li>
+    </ul>
+    <h4 id="211">21. [:: - 1} 的作用是什么？</h4>
+    <p>[:: - 1] 用于反转array或序列的顺序。</p>
+    <p>例如：</p>
+    <pre><code class="hljs cpp"><span class="hljs-keyword">import</span> <span class="hljs-built_in">array</span> as arr
+My_Array=arr.<span class="hljs-built_in">array</span>(<span class="hljs-string">'i'</span>,[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>])
+My_Array[::<span class="hljs-number">-1</span>]
+Output：<span class="hljs-built_in">array</span>（<span class="hljs-string">'i'</span>，[<span class="hljs-number">5</span>,<span class="hljs-number">4</span>,<span class="hljs-number">3</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>]）
+</code></pre>
+    <p>[:: - 1] 重新打印有序数据结构的反转副本，例如array或列表。原始array或列表保持不变。</p>
+    <h4 id="22python">22. 如何在 Python 中随机化列表中的项目？</h4>
+    <p>考虑以下示例：</p>
+    <pre><code class="hljs coffeescript"><span class="hljs-keyword">from</span> random <span class="hljs-keyword">import</span> shuffle
+x = [<span class="hljs-string">'Keep'</span>, <span class="hljs-string">'The'</span>, <span class="hljs-string">'Blue'</span>, <span class="hljs-string">'Flag'</span>, <span class="hljs-string">'Flying'</span>, <span class="hljs-string">'High'</span>]
+shuffle(x)
+<span class="hljs-built_in">print</span>(x)
+
+Output：
+[<span class="hljs-string">'Flying'</span>，<span class="hljs-string">'Keep'</span>，<span class="hljs-string">'Blue'</span>，<span class="hljs-string">'High'</span>，<span class="hljs-string">'The'</span>，<span class="hljs-string">'Flag'</span>]
+</code></pre>
+    <h4 id="23python">23. 什么是 python 迭代器？</h4>
+    <p>迭代器是可以遍历或迭代的对象。</p>
+    <h4 id="24python">24. 如何在 Python 中生成随机数？</h4>
+    <p>随机模块是用于生成随机数的标准模块。该方法定义为：</p>
+    <pre><code class="hljs coffeescript"><span class="hljs-keyword">import</span> random
+random.random
+</code></pre>
+    <p>语句 random.random（）方法返回 [0,1] 范围内的浮点数。该函数生成随机浮点数。随机类使用的方法是隐藏实例的绑定方法。可以使用 Random
+        的实例来显示创建不同线程实例的多线程程序。其中使用的其他随机生成器是：</p>
+    <ul>
+        <li>randrange（a，b）：它选择一个整数并定义[a，b]之间的范围。它通过从指定范围中随机选择元素来返回元素。它不构建范围对象。</li>
+        <li>uniform（a，b）：它选择一个在[a，b）范围内定义的浮点数 .Itt 返回浮点数</li>
+        <li>normalvariate（mean，sdev）：它用于正态分布，其中 mu 是平均值，sdev 是用于标准偏差的 sigma。</li>
+        <li>使用和实例化的 Random 类创建一个独立的多个随机数生成器。</li>
+    </ul>
+    <h4 id="25rangexrange">25. range＆xrange 有什么区别？</h4>
+    <p>在大多数情况下，xrange 和 range 在功能方面完全相同。它们都提供了一种生成整数列表供你使用的方法，但是请你随意使用。唯一的区别是 range 返回一个 Python 列表对象，x range 返回一个 xrange
+        对象。</p>
+    <p>这意味着 xrange 实际上并不像运行时那样在运行时生成静态列表。它使用称为 yielding 的特殊技术根据需要创建值。该技术与一种称为生成器的对象一起使用。这意味着，如果你有一个非常巨大的范围，你想生成一个列表，比如
+        10 亿，xrange 就是要使用的功能。</p>
+    <p>如果你有一个真正的内存敏感系统，如你正在使用的手机，尤其如此，因为范围将使用尽可能多的内存来创建整数array，这可能会导致内存错误并导致崩溃程序。这是一个记忆饥饿的野兽。</p>
+    <h4 id="26python">26. 你如何在 python 中写注释？</h4>
+    <p>Python 中的注释以＃字符开头。但是，有时候，使用 docstrings（三重引号中包含的字符串）进行注释。</p>
+    <p>例：</p>
+    <pre><code class="hljs python"><span class="hljs-comment">#Comments in python start like this</span>
+<span class="hljs-keyword">print</span>（“comment <span class="hljs-keyword">in</span> python start <span class="hljs-keyword">with</span> a <span class="hljs-comment">#”）</span>
+Output：comment <span class="hljs-keyword">in</span> python start <span class="hljs-keyword">with</span> a <span class="hljs-comment">#</span>
+</code></pre>
+    <h4 id="27picklingunpickling">27. 什么是 pickling 和 unpickling？</h4>
+    <p>Pickle 模块接受任何 Python 对象并将其转换为字符串表示形式，并使用 dump 函数将其转储到文件中，此过程称为 pickling。从存储的字符串表示中检索原始 Python 对象的过程称为
+        unpickling。</p>
+    <h4 id="28python">28. python 中的生成器是什么？</h4>
+    <p>返回一组可迭代项的函数称为生成器。</p>
+    <h4 id="29">29. 你如何把字符串的第一个字母大写？</h4>
+    <p>在 Python 中，capitalize（）方法将字符串的第一个字母大写。如果字符串在开头已经包含大写字母，那么它将返回原始字符串。</p>
+    <h4 id="30">30. 如何将字符串转换为全小写？</h4>
+    <p>要将字符串转换为小写，可以使用 lower（）函数。</p>
+    <p>例：</p>
+    <pre><code class="hljs bash">stg=<span class="hljs-string">'ABCD'</span>
+<span class="hljs-built_in">print</span>(stg.lower())
+Output： abcd
+</code></pre>
+    <h4 id="31python">31. 如何在 python 中注释多行？</h4>
+    <p>多行注释出现在多行中。所有要评论的行都要以＃为前缀。你还可以使用非常好的 快捷方式来注释多行。你需要做的就是按住 Ctrl 键并在每个想要包含＃字符的地方左键单击并键入一次＃。这将注释你引入光标的所有行。</p>
+    <h4 id="32pythondocstrings">32. Python 中的 Docstrings 是什么？</h4>
+    <p>Docstrings 实际上不是评论，它们是文档字符串。这些文档字符串在三引号内。它们没有分配给任何变量，因此有时也用于评论的目的。</p>
+    <p>例：</p>
+    <pre><code class="hljs python"><span class="hljs-string">"""
+Using docstring as a comment.
+This code divides 2 numbers
+"""</span>
+x=<span class="hljs-number">8</span>
+y=<span class="hljs-number">4</span>
+z=x/y
+print(z)
+Output： <span class="hljs-number">2.0</span>
+</code></pre>
+    <h4 id="33isnotin">33. 操作符 is、not 和 in 的目的是什么？</h4>
+    <p>操作符是特殊功能。它们采用一个或多个值并产生相应的结果。</p>
+    <ul>
+        <li><p>is：当 2 个操作数为 true 时返回 true（例如：“a”是'a'）</p></li>
+        <li><p>not：返回布尔值的倒数</p></li>
+        <li><p>in：检查某个元素是否存在于某个序列中</p></li>
+    </ul>
+    <h4 id="34pythonhelpdir">34. Python 中 help（）和 dir（）函数的用法是什么？</h4>
+    <p>Help（）和dir（）这两个函数都可以从 Python 解释器访问，并用于查看内置函数的合并转储。 </p>
+    <ul>
+        <li>Help（）函数：help（）函数用于显示文档字符串，还可以帮助你查看与模块，关键字，属性等相关的帮助。</li>
+        <li>Dir（）函数：dir（）函数用于显示定义的符号。</li>
+    </ul>
+    <h4 id="35python">35. 每当 Python 退出时，为什么不是所有的内存都被解除分配？</h4>
+    <ul>
+        <li>每当 Python 退出时，尤其是那些对其他对象具有循环引用的 Python 模块或者从全局名称空间引用的对象并不总是被解除分配或释放。</li>
+        <li>无法解除分配C库保留的那些内存部分。</li>
+        <li>退出时，由于拥有自己的高效清理机制，Python 会尝试取消分配/销毁其他所有对象。</li>
+    </ul>
+    <h4 id="36pythondictionary">36. Python 中的字典（dictionary）是什么？</h4>
+    <p>Python 中的内置数据类型称为字典（dictionary）。它定义了键和值之间的一对一关系。字典包含一对键及其对应的值。字典由键索引。</p>
+    <p>我们来举个例子：</p>
+    <p>以下示例包含一些键，Country, Capital 和 PM。它们的相应值分别是 India, Delhi 和 Modi respectively。</p>
+    <pre><code class="hljs bash">dict={<span class="hljs-string">'Country'</span>:<span class="hljs-string">'India'</span>,<span class="hljs-string">'Capital'</span>:<span class="hljs-string">'Delhi'</span>,<span class="hljs-string">'PM'</span>:<span class="hljs-string">'Modi'</span>}
+<span class="hljs-built_in">print</span> dict[Country]
+India
+
+<span class="hljs-built_in">print</span> dict[Capital]
+Delhi
+
+<span class="hljs-built_in">print</span> dict[PM]
+Modi
+</code></pre>
+    <h4 id="37python">37. 如何在 python 中使用三元运算符？</h4>
+    <p>Ternary 运算符是用于显示条件语句的运算符。这包含 true 或 false 值，并且必须为其评估语句。</p>
+    <p>语法：</p>
+    <p>三元运算符将被给出为：</p>
+    <pre><code class="hljs cs">[<span class="hljs-meta">on_true</span>] <span class="hljs-keyword">if</span> [expression] <span class="hljs-keyword">else</span> [on_false] x，y = <span class="hljs-number">25</span>,<span class="hljs-number">50</span>big = x <span class="hljs-keyword">if</span> x &lt;y <span class="hljs-keyword">else</span> y
+</code></pre>
+    <p>例：</p>
+    <p>表达式的计算方式与 x &lt;y else y 一样，在这种情况下，如果 x &lt;y 为真，则返回值为 big = x，如果不正确则返回 big = y 作为结果。</p>
+    <h4 id="38argskwargs">38. 这是什么意思：* args，** kwargs？我们为什么要用呢？</h4>
+    <p>当我们不确定将多少个参数传递给函数，或者我们想要将存储的列表或参数元组传递给函数时，我们使用* args。*<em>当我们不知道将多少关键字参数传递给函数时使用 kwargs，或者它可以用于将字典的值作为关键字参数传递。标识符
+        args 和 kwargs 是一个约定，你也可以使用</em> bob 和 ** billy，但这不是明智之举。</p>
+    <h4 id="39len">39. len（）的作用是什么？</h4>
+    <p>用于确定字符串，列表，array等的长度。</p>
+    <p>例：</p>
+    <pre><code class="hljs makefile">stg='ABCD'
+len(stg)
+</code></pre>
+    <h4 id="40pythonresplitsubsubn">40. Python 中“re”模块的 split（），sub（），subn（）这三个方法的作用是什么？</h4>
+    <p>要修改字符串，Python 的“re”模块提供了 3 种方法。他们是：</p>
+    <ul>
+        <li>split（） - 使用正则表达式模式将给定字符串“拆分”到列表中。</li>
+        <li>sub（） - 查找正则表达式模式匹配的所有子字符串，然后用不同的字符串替换它们</li>
+        <li>subn（） - 它类似于sub（），并且还返回新字符串和替换的次数。</li>
+    </ul>
+    <h4 id="41">41. 什么是负指数，为什么使用它们？</h4>
+    <p>Python 中的序列被编入索引，它由正数和负array成。积极的数字使用'0'作为第一个索引，'1'作为第二个索引，进程继续使用。</p>
+    <p>负数的索引从'-1'开始，表示序列中的最后一个索引，' - 2'作为倒数第二个索引，序列像正数一样前进。</p>
+    <p>负索引用于从字符串中删除任何换行符，并允许该字符串除了作为S [： - 1]给出的最后一个字符。负索引还用于显示索引以正确的顺序表示字符串。</p>
+    <h4 id="42python">42. 什么是 Python 包？</h4>
+    <p>Python 包是包含多个模块的命名空间。</p>
+    <h4 id="43python">43. 如何在 Python 中删除文件？</h4>
+    <p>要在 Python 中删除文件，你需要导入操作系统模块。之后，你需要使用os.remove（）函数。</p>
+    <p>例：</p>
+    <pre><code class="hljs coffeescript"><span class="hljs-keyword">import</span> os
+os.remove(<span class="hljs-string">"xyz.txt"</span>)
+</code></pre>
+    <h4 id="44python">44. 什么是 python 的内置类型？</h4>
+    <p>Python 中的内置类型如下：</p>
+    <ul>
+        <li>整型</li>
+        <li>浮点</li>
+        <li>复数</li>
+        <li>字符串</li>
+        <li>布尔</li>
+        <li>内置功能</li>
+    </ul>
+    <h4 id="45numpypython">45. NumPy 阵列在（嵌套）Python 列表中提供了哪些优势？</h4>
+    <ul>
+        <li>Python 的列表是高效的通用容器。它们支持（相当）有效的插入，删除，追加和连接，Python 的列表推导使它们易于构造和操作。</li>
+        <li>它们有一定的局限性：它们不支持元素化加法和乘法等“向量化”操作，并且它们可以包含不同类型的对象这一事实意味着 Python 必须存储每个元素的类型信息，并且必须在操作时执行类型调度代码在每个元素上。</li>
+        <li>NumPy 不仅效率更高; 它也更方便。你可以免费获得大量的向量和矩阵运算，这有时可以避免不必要的工作。它们也得到有效实施。</li>
+        <li>NumPy array更快，你可以使用 NumPy、FFT、卷积、快速搜索、基本统计、线性代数、直方图等内置。</li>
+    </ul>
+    <h4 id="46pythonarray">46. 如何将值添加到 python array？</h4>
+    <p>可以使用 append（）， extend（） 和 insert（i，x） 函数将元素添加到array中 。</p>
+    <p>例：</p>
+    <pre><code class="hljs php">a=arr.<span class="hljs-keyword">array</span>(<span class="hljs-string">'d'</span>, [<span class="hljs-number">1.1</span> , <span class="hljs-number">2.1</span> ,<span class="hljs-number">3.1</span>] )
+a.append(<span class="hljs-number">3.4</span>)
+<span class="hljs-keyword">print</span>(a)
+a.extend([<span class="hljs-number">4.5</span>,<span class="hljs-number">6.3</span>,<span class="hljs-number">6.8</span>])
+<span class="hljs-keyword">print</span>(a)
+a.insert(<span class="hljs-number">2</span>,<span class="hljs-number">3.8</span>)
+<span class="hljs-keyword">print</span>(a)
+Output：
+
+<span class="hljs-keyword">array</span>（<span class="hljs-string">'d'</span>，[<span class="hljs-number">1.1</span>,<span class="hljs-number">2.1</span>,<span class="hljs-number">3.1</span>,<span class="hljs-number">3.4</span>]）
+
+<span class="hljs-keyword">array</span>（<span class="hljs-string">'d'</span>，[<span class="hljs-number">1.1</span>,<span class="hljs-number">2.1</span>,<span class="hljs-number">3.1</span>,<span class="hljs-number">3.4</span>,<span class="hljs-number">4.5</span>,<span class="hljs-number">6.3</span>,<span class="hljs-number">6.8</span>]）
+
+<span class="hljs-keyword">array</span>（<span class="hljs-string">'d'</span>，[<span class="hljs-number">1.1</span>,<span class="hljs-number">2.1</span>,<span class="hljs-number">3.8</span>,<span class="hljs-number">3.1</span>,<span class="hljs-number">3.4</span>,<span class="hljs-number">4.5</span>,<span class="hljs-number">6.3</span>,<span class="hljs-number">6.8</span>]）
+</code></pre>
+    <h4 id="47pythonarray">47. 如何删除 python array的值？</h4>
+    <p>可以使用 pop（） 或 remove（） 方法删除array元素 。这两个函数之间的区别在于前者返回已删除的值，而后者则不返回。</p>
+    <p>例：</p>
+    <pre><code class="hljs php">a=arr.<span class="hljs-keyword">array</span>(<span class="hljs-string">'d'</span>, [<span class="hljs-number">1.1</span>, <span class="hljs-number">2.2</span>, <span class="hljs-number">3.8</span>, <span class="hljs-number">3.1</span>, <span class="hljs-number">3.7</span>, <span class="hljs-number">1.2</span>, <span class="hljs-number">4.6</span>])
+<span class="hljs-keyword">print</span>(a.pop())
+<span class="hljs-keyword">print</span>(a.pop(<span class="hljs-number">3</span>))
+a.remove(<span class="hljs-number">1.1</span>)
+<span class="hljs-keyword">print</span>(a)
+Output：
+
+<span class="hljs-number">4.6</span>
+
+<span class="hljs-number">3.1</span>
+
+<span class="hljs-keyword">array</span>（<span class="hljs-string">'d'</span>，[<span class="hljs-number">2.2</span>,<span class="hljs-number">3.8</span>,<span class="hljs-number">3.7</span>,<span class="hljs-number">1.2</span>]）
+</code></pre>
+    <h4 id="48pythonoops">48. Python 有 OOps 概念吗？</h4>
+    <p>Python 是一种面向对象的编程语言。这意味着可以通过创建对象模型在 python 中解决任何程序。但是，Python 可以被视为程序语言和结构语言。</p>
+    <h4 id="49">49. 深拷贝和浅拷贝有什么区别？</h4>
+    <p>
+        创建新实例类型时使用浅拷贝，并保留在新实例中复制的值。浅拷贝用于复制引用指针，就像复制值一样。这些引用指向原始对象，并且在类的任何成员中所做的更改也将影响它的原始副本。浅拷贝允许更快地执行程序，它取决于所使用的数据的大小。</p>
+    <p>
+        深层复制用于存储已复制的值。深层复制不会将引用指针复制到对象。它引用一个对象，并存储一些其他对象指向的新对象。原始副本中所做的更改不会影响使用该对象的任何其他副本。由于为每个被调用的对象创建了某些副本，因此深层复制会使程序的执行速度变慢。</p>
+    <h4 id="50python">50. 如何在 Python 中实现多线程？</h4>
+    <ul>
+        <li>Python 有一个多线程包，但是如果你想要多线程来加速你的代码，那么使用它通常不是一个好主意。</li>
+        <li>Python 有一个名为 Global Interpreter Lock（GIL）的结构。GIL 确保每次只能执行一个“线程”。一个线程获取 GIL，做一点工作，然后将 GIL 传递到下一个线程。</li>
+        <li>这种情况很快发生，因此对于人眼看来，你的线程似乎并行执行，但它们实际上只是轮流使用相同的 CPU 核心。</li>
+        <li>所有这些 GIL 传递都增加了执行的开销。这意味着如果你想让代码运行得更快，那么使用线程包通常不是一个好主意。</li>
+    </ul>
+    <h4 id="51python">51. 在 python 中编译和链接的过程是什么？</h4>
+    <p>编译和链接允许正确编译新扩展而不会出现任何错误，并且只有在通过编译过程时才能进行链接。如果使用动态加载，则它取决于系统提供的样式。python 解释器可用于提供配置设置文件的动态加载，并将重建解释器。</p>
+    <p>这需要的步骤如下：</p>
+    <ol>
+        <li>使用任何名称以及系统编译器支持的任何语言创建文件。例如 file.c或 file.cpp</li>
+        <li>将此文件放在正在使用的发行版的 Modules /目录中。</li>
+        <li>在 Modules /目录中存在的 Setup.local 文件中添加一行。</li>
+        <li>使用 spam file.o 运行该文件</li>
+        <li>通过在顶级目录上使用 make 命令成功运行此重建解释器之后。</li>
+        <li>如果文件已更改，则使用命令“make Makefile”运行rebuildMakefile。</li>
+    </ol>
+    <h4 id="52python">52. 什么是 Python 库？举几个例子。</h4>
+    <p>Python 库是 Python 包的集合。一些主要使用的 python 库是 - Numpy，Pandas，Matplotlib，Scikit-learn 等等。</p>
+    <h4 id="53">53. 什么是拆分用于？</h4>
+    <p>split（）方法用于在 Python 中分隔给定的字符串。</p>
+    <p>例：</p>
+    <pre><code class="hljs perl">a=<span class="hljs-string">"edureka python"</span>
+<span class="hljs-keyword">print</span>(a.<span class="hljs-keyword">split</span>())
+Output：  [<span class="hljs-string">'edureka'</span>，<span class="hljs-string">'python'</span>]
+</code></pre>
+    <h4 id="54python">54. 如何在 python 中导入模块？</h4>
+    <p>可以使用 import 关键字导入模块。你可以通过三种方式导入模块 -</p>
+    <p>例：</p>
+    <pre><code class="hljs coffeescript"><span class="hljs-keyword">import</span> array           <span class="hljs-comment">#importing using the original module name</span>
+<span class="hljs-keyword">import</span> array <span class="hljs-keyword">as</span> arr    <span class="hljs-comment"># importing using an alias name</span>
+<span class="hljs-keyword">from</span> array <span class="hljs-keyword">import</span> *    <span class="hljs-comment">#imports everything present in the array module</span>
+</code></pre>
+    <h3 id="oops">OOPS 面试问题</h3>
+    <h4 id="55python">55. 用一个例子解释 Python 中的继承。</h4>
+    <p>继承允许一个类获得另一个类的所有成员（比如属性和方法）。继承提供代码可重用性，使创建和维护应用程序更容易。我们继承的类称为超类，继承的类称为派生/子类。</p>
+    <p>它们是 Python 支持的不同类型的继承：</p>
+    <ul>
+        <li>单一继承 - 派生类获取单个超类的成员。</li>
+        <li>多级继承 - 从基类base1继承的派生类d1，d2继承自base2。</li>
+        <li>分层继承 - 从一个基类可以继承任意数量的子类</li>
+        <li>多重继承 - 派生类从多个基类继承。</li>
+    </ul>
+    <h4 id="56python">56. 如何在 Python 中创建类？</h4>
+    <p>Python 中的类是使用 class 关键字创建的。</p>
+    <p>例：</p>
+    <pre><code class="hljs ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span>:</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name)</span></span>:
+<span class="hljs-keyword">self</span>.name = name
+E1=Employee(<span class="hljs-string">"abc"</span>)
+print(E1.name)
+Output： abc
+</code></pre>
+    <h4 id="57">57. 什么是猴子补丁？</h4>
+    <p>在 Python 中，术语猴子补丁仅指在运行时对类或模块的动态修改。
+        考虑以下示例：</p>
+    <pre><code class="m.py language-m.py">class MyClass:
+def f(self):
+print "f()"
+</code></pre>
+    <p>然后我们可以像这样运行猴子补丁测试：</p>
+    <pre><code class="hljs python"><span class="hljs-keyword">import</span> m
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">monkey_f</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-keyword">print</span> <span class="hljs-string">"monkey_f()"</span>
+
+m.MyClass.f = monkey_f
+obj = m.MyClass()
+obj.f()
+Output如下：
+
+monkey_f（）
+</code></pre>
+    <h4 id="58python">58. python 是否支持多重继承？</h4>
+    <p>多重继承意味着可以从多个父类派生一个类。与 Java 不同，Python 确实支持多重继承。</p>
+    <h4 id="59python">59. Python 中的多态是什么？</h4>
+    <p>多态意味着能够采取多种形式。因此，例如，如果父类具有名为 ABC 的方法，则子类也可以具有具有相同名称 ABC 的方法，该方法具有其自己的参数和变量。Python 允许多态。</p>
+    <h4 id="60python">60. 在 Python 中怎样定义封装？</h4>
+    <p>封装意味着将代码和数据绑定在一起。就是使用私有化的方法，把一些属性或者是方法私有化，外部无法调用。在 Python 中，私有化属性或者方法，可以在属性、方法名字前加上双下划线。</p>
+    <h4 id="61python">61. 你如何在 Python 中进行数据抽象？</h4>
+    <p>数据抽象仅提供所需的详细信息并将实现隐藏起来。它可以通过使用接口和抽象类在 Python 中实现。</p>
+    <h4 id="62python">62. python 是否使用了访问说明符？</h4>
+    <p>Python 不会剥夺对实例变量或函数的访问权限。Python 规定了使用单个或双下划线为变量，函数或方法的名称添加前缀的概念，以模仿受保护和私有访问说明符的行为。 </p>
+    <h4 id="63python">63. 如何在 Python 中创建一个空类？</h4>
+    <p>空类是一个没有在其块中定义的代码的类。它可以使用 pass 关键字创建 。但是，你可以在类本身之外创建此类的对象。IN PYTHON PASS 命令在执行时不执行任何操作。这是一个空语句。 </p>
+    <p>例如</p>
+    <pre><code class="hljs makefile">class a:
+    pass
+obj=a()
+obj.name=<span class="hljs-string">"xyz"</span>
+print(<span class="hljs-string">"Name = "</span>,obj.name)
+Output：
+
+Name = xyz
+</code></pre>
+    <h4 id="64object">64. object（）有什么作用？</h4>
+    <p>它返回一个无特征的对象，它是所有类的基础。此外，它不采取任何参数。</p>
+    <h3 id="python-1">基本 Python 编码</h3>
+    <h4 id="65python">65. 用 Python 编写程序来执行冒泡排序算法。</h4>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">bs</span><span class="hljs-params">(a)</span>:</span>             <span class="hljs-comment"># a = name of list</span>
+    b=len(a)<span class="hljs-number">-1</span>         <span class="hljs-comment"># minus 1 because we always compare 2 adjacent values</span>
+
+    <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> range(b):
+        <span class="hljs-keyword">for</span> y <span class="hljs-keyword">in</span> range(b-x):
+            <span class="hljs-keyword">if</span> a[y]&gt;a[y+<span class="hljs-number">1</span>]:
+                a[y],a[y+<span class="hljs-number">1</span>]=a[y+<span class="hljs-number">1</span>],a[y]
+    <span class="hljs-keyword">return</span> a
+a=[<span class="hljs-number">32</span>,<span class="hljs-number">5</span>,<span class="hljs-number">3</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">54</span>,<span class="hljs-number">87</span>]
+bs(a)
+产出：  [<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">32</span>,<span class="hljs-number">54</span>,<span class="hljs-number">87</span>]
+</code></pre>
+    <h4 id="66pythonstar">66. 用 Python 编写程序来生成 Star 三角形。</h4>
+    <pre><code class="hljs markdown">def pyfunc(r):
+<span class="hljs-code">    for x in range(r):</span>
+<span class="hljs-code">        print(' '*(r-x-1)+'*'*(2*x+1))    </span>
+pyfunc(9)
+Output：
+
+<span class="hljs-code">        *</span>
+<span class="hljs-code">       ***</span>
+<span class="hljs-code">      *****</span>
+<span class="hljs-code">     *******</span>
+<span class="hljs-code">    *********</span>
+   <span class="hljs-strong">*****</span><span class="hljs-strong">*****</span>*
+  <span class="hljs-strong">*****</span><span class="hljs-strong">*****</span><span class="hljs-emphasis">***</span>
+ <span class="hljs-strong">*****</span><span class="hljs-strong">*****</span><span class="hljs-strong">*****</span>
+<span class="hljs-strong">*****</span><span class="hljs-strong">*****</span><span class="hljs-strong">*****</span>**
+</code></pre>
+    <h4 id="67pythonfibonacci">67. 编写一个程序，用Python生成Fibonacci系列。</h4>
+    <pre><code class="hljs perl"><span class="hljs-comment"># Enter number of terms needed                   #0,1,1,2,3,5....</span>
+a=<span class="hljs-keyword">int</span>(input(<span class="hljs-string">"Enter the terms"</span>))
+f=<span class="hljs-number">0</span>                                         <span class="hljs-comment">#first element of series</span>
+<span class="hljs-keyword">s</span>=<span class="hljs-number">1</span>                                         <span class="hljs-comment">#second element of series</span>
+<span class="hljs-keyword">if</span> a&lt;=<span class="hljs-number">0</span>:
+    <span class="hljs-keyword">print</span>(<span class="hljs-string">"The requested series is
+"</span>,f)
+<span class="hljs-keyword">else</span>:
+    <span class="hljs-keyword">print</span>(f,<span class="hljs-keyword">s</span>,end=<span class="hljs-string">" "</span>)
+    <span class="hljs-keyword">for</span> <span class="hljs-keyword">x</span> in range(<span class="hljs-number">2</span>,a):
+        <span class="hljs-keyword">next</span>=f+<span class="hljs-keyword">s</span>
+        <span class="hljs-keyword">print</span>(<span class="hljs-keyword">next</span>,end=<span class="hljs-string">" "</span>)
+        f=<span class="hljs-keyword">s</span>
+        <span class="hljs-keyword">s</span>=<span class="hljs-keyword">next</span>&lt;<span class="hljs-regexp">/pre&gt;
+
+Output：input 5 0 1 1 2 3
+</span></code></pre>
+    <h4 id="68python">68. 用 Python 编写程序来检查数字是否为素数。</h4>
+    <pre><code class="hljs perl">a=<span class="hljs-keyword">int</span>(input(<span class="hljs-string">"enter number"</span>))
+<span class="hljs-keyword">if</span> a&gt;<span class="hljs-number">1</span>:
+    <span class="hljs-keyword">for</span> <span class="hljs-keyword">x</span> in range(<span class="hljs-number">2</span>,a):
+        <span class="hljs-keyword">if</span>(a%x)==<span class="hljs-number">0</span>:
+            <span class="hljs-keyword">print</span>(<span class="hljs-string">"not prime"</span>)
+            <span class="hljs-keyword">break</span>
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-keyword">print</span>(<span class="hljs-string">"Prime"</span>)
+<span class="hljs-keyword">else</span>:
+    <span class="hljs-keyword">print</span>(<span class="hljs-string">"not prime"</span>)
+Output：
+
+input <span class="hljs-number">3</span>
+
+Prime
+</code></pre>
+    <h4 id="69python">69. 用 Python 编写程序来检查序列是否是回文序列。</h4>
+    <pre><code class="hljs makefile">a=input(<span class="hljs-string">"enter sequence"</span>)
+b=a[::-1]
+if a==b:
+    print(<span class="hljs-string">"palindrome"</span>)
+<span class="hljs-section">else:</span>
+    print(<span class="hljs-string">"Not a Palindrome"</span>)
+Output：
+
+enter sequence 323 palindrome
+</code></pre>
+    <h4 id="70">70. 写一个单行，用于计算文件中大写字母的数量。即使文件太大而无法放入内存，你的代码也应该可以正常工作。</h4>
+    <p>让我们先写一个多行解决方案，然后将其转换为单行代码。</p>
+    <pre><code class="hljs cs"><span class="hljs-function">with <span class="hljs-title">open</span>(<span class="hljs-params">SOME_LARGE_FILE</span>) <span class="hljs-keyword">as</span> fh:
+count </span>= <span class="hljs-number">0</span>
+text = fh.read()
+<span class="hljs-keyword">for</span> character <span class="hljs-keyword">in</span> text:
+    <span class="hljs-keyword">if</span> character.isupper():
+count += <span class="hljs-number">1</span>
+我们现在尝试将其转换为单行。
+
+<span class="hljs-function">count <span class="hljs-title">sum</span>(<span class="hljs-params"><span class="hljs-number">1</span> <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> fh <span class="hljs-keyword">for</span> character <span class="hljs-keyword">in</span> line <span class="hljs-keyword">if</span> character.isupper(</span>))
+</span></code></pre>
+    <h4 id="71python">71. 在 Python 中为数值数据集编写排序算法。</h4>
+    <p>以下代码可用于在 Python 中对列表进行排序：</p>
+    <pre><code class="hljs cpp"><span class="hljs-built_in">list</span> = [<span class="hljs-string">"1"</span>, <span class="hljs-string">"4"</span>, <span class="hljs-string">"0"</span>, <span class="hljs-string">"6"</span>, <span class="hljs-string">"9"</span>]
+<span class="hljs-built_in">list</span> = [<span class="hljs-keyword">int</span>(i) <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">list</span>]
+<span class="hljs-built_in">list</span>.sort()
+print (<span class="hljs-built_in">list</span>)
+</code></pre>
+    <h4 id="72a0a1an">72. 查看下面的代码，记下 A0，A1，... An 的最终值。</h4>
+    <pre><code class="hljs makefile">A0 = dict(zip(('a','b','c','d','e'),(1,2,3,4,5)))
+A1 = range(10)A2 = sorted([i for i in A1 if i in A0])
+A3 = sorted([A0[s] for s in A0])
+A4 = [i for i in A1 if i in A3]
+A5 = {i:i*i for i in A1}
+A6 = [[i,i*i] for i in A1]
+print(A0,A1,A2,A3,A4,A5,A6)
+
+以下是 A0，A1，... A6 的最终 Output
+
+A0 = {'a'：1，'c'：3，'b'：2，'e'：5，'d'：4}
+A1 =range（0,10）
+A2 = []
+A3 = [1,2,3,4,5]
+A4 = [1,2,3,4,5]
+A5 = {0：0,1：1,2：4,3：9,4：16,5：25,6：36,7：49,8：64,9：81}
+A6 = [[0,0]，[1,1]，[2,4]，[3,9]，[4,16]，[5,25]，[6,36]，[7,49] ，[8,64]，[9,81]]
+</code></pre>
+    <h3 id="python-2">Python 库面试问题</h3>
+    <h4 id="73flask">73. 解释 Flask 是什么及其好处？</h4>
+    <p>Flask 是基于“Werkzeug，Jinja2 和良好意图”BSD 许可证的 Python 网络微框架。Werkzeug 和 Jinja2
+        是它的两个依赖项。这意味着它对外部库几乎没有依赖性。它使框架轻松，同时有一点依赖更新和更少的安全漏洞。</p>
+    <p>会话基本上允许你记住从一个请求到另一个请求的信息。在一个瓶子中，会话使用签名的 cookie，以便用户可以查看会话内容并进行修改。如果只有密钥 Flask.secret_key，则用户可以修改会话。</p>
+    <h4 id="74djangoflask">74. Django 比 Flask 好吗？</h4>
+    <p>Django 和 Flask 将 Web 浏览器中输入的 URL 或地址映射到 Python 中的函数。 </p>
+    <p>与 Django 相比，Flask 要简单得多，但 Flask 并没有为你做很多事情意味着你需要指定细节，而 Django 为你做了很多事情，你不需要做太多工作。Django 由预编写的代码组成，用户需要分析这些代码，而
+        Flask 则允许用户创建自己的代码，因此，使代码更容易理解。从技术上讲，两者都同样好，都有自己的优点和缺点。</p>
+    <h4 id="75djangopyramidflask">75. 提到 Django，Pyramid 和 Flask 之间的差异。</h4>
+    <ul>
+        <li>Flask 是一个“微框架”，主要用于具有更简单要求的小型应用程序。在烧瓶中，你必须使用外部库。Flask 已准备好使用。</li>
+        <li>Pyramid 适用于大型应用程序。它提供了灵活性，并允许开发人员为他们的项目使用正确的工具。开发人员可以选择数据库，URL 结构，模板样式等。金字塔是可配置的。</li>
+        <li>Django 也可以像 Pyramid 一样用于更大的应用程序。它包括一个ORM。</li>
+    </ul>
+    <h4 id="76django">76. 讨论 Django 架构。</h4>
+    <p>Django MVT 模式：</p>
+    <p><img src="https://images.gitbook.cn/6ec77050-85c0-11e9-9a8d-f9d4f0d85b82" alt="enter image description here"></p>
+    <p>开发人员提供模型，视图和模板，然后将其映射到URL，Django 可以为用户提供服务。</p>
+    <h4 id="77django">77. 解释如何在 Django 中设置数据库。</h4>
+    <p>你可以使用命令 edit mysite / setting.py，它是一个普通的 python 模块，模块级别代表 Django 设置。</p>
+    <p>Django 默认使用 SQLite; 对于 Django 用户来说这很容易，因此不需要任何其他类型的安装。如果你的数据库选择不同，则必须使用 DATABASE'default' 项中的以下键来匹配你的数据库连接设置。</p>
+    <ul>
+        <li>引擎：你可以使用
+            'django.db.backends.sqlite3'，'django.db.backeneds.mysql'，'django.db.backends.postgresql_psycopg2'，'django.db.backends.oracle'等来更改数据库。
+        </li>
+        <li>名称：数据库的名称。如果你使用 SQLite 作为数据库，那么在这种情况下，数据库将是你计算机上的文件，Name 应该是完整的绝对路径，包括该文件的文件名。</li>
+        <li>如果你不选择 SQLite 作为数据库，则必须添加密码，主机，用户等设置。</li>
+    </ul>
+    <p>Django 使用 SQLite 作为默认数据库，它将数据作为单个文件存储在文件系统中。如果你有数据库服务器-PostgreSQL，MySQL，Oracle，MSSQL-并且想要使用它而不是
+        SQLite，那么使用数据库的管理工具为你的 Django 项目创建一个新的数据库。无论哪种方式，在你的（空）数据库到位的情况下，剩下的就是告诉 Django 如何使用它。这是项目的 settings.py
+        文件的来源。</p>
+    <p>我们将以下代码行添加到 setting.py 文件中：</p>
+    <pre><code class="hljs cs">DATABASES = {
+     <span class="hljs-string">'default'</span>: {
+          <span class="hljs-string">'ENGINE'</span> : <span class="hljs-string">'django.db.backends.sqlite3'</span>,
+          <span class="hljs-string">'NAME'</span> : os.path.<span class="hljs-keyword">join</span>(BASE_DIR, <span class="hljs-string">'db.sqlite3'</span>),
+     }
+}
+</code></pre>
+    <h4 id="78djangoview">78. 举例说明如何在 Django 中编写 VIEW？</h4>
+    <p>这是我们在 Django 中使用 write 一个视图的方法：</p>
+    <pre><code class="hljs xml">from django.http import HttpResponse
+import datetime
+
+def Current_datetime(request):
+     now = datetime.datetime.now()
+     html = "<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>It is now %s<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span> % now
+     return HttpResponse(html)
+</code></pre>
+    <h4 id="79django">79. 提及 Django 模板的组成部分。</h4>
+    <p>模板是一个简单的文本文件。它可以创建任何基于文本的格式，如 XML、CSV、HTML 等。模板包含在评估模板时替换为值的变量和控制模板逻辑的标记（％tag％）。</p>
+    <p><img src="https://images.gitbook.cn/984aba40-85c0-11e9-9344-293841b71658" alt="enter image description here"></p>
+    <h4 id="80django">80. 在 Django 框架中解释会话的使用？</h4>
+    <p>Django 提供了一个会话，允许你基于每个站点访问者存储和检索数据。Django 通过在客户端放置会话 ID cookie 并在服务器端存储所有相关数据来抽象发送和接收 cookie 的过程。</p>
+    <p><img src="https://images.gitbook.cn/a31e0760-85c0-11e9-9a4b-7f98565be244" alt="enter image description here"></p>
+    <p>所以数据本身并不存储在客户端。从安全角度来看，这很好。</p>
+    <h4 id="81django">81. 列出 Django 中的继承样式。</h4>
+    <p>在 Django 中，有三种可能的继承样式：</p>
+    <ul>
+        <li>抽象基类：当你只希望父类包含你不想为每个子模型键入的信息时，使用此样式。</li>
+        <li>多表继承：使用此样式如果要对现有模型进行子类化，并且需要每个模型都有自己的数据库表。</li>
+        <li>代理模型：你可以使用此模型，如果你只想修改模型的Python级别行为，而无需更改模型的字段。</li>
+    </ul>
+    <h3 id="webscrapingpython">Web Scraping - Python 面试问题</h3>
+    <h4 id="82url">82. 如何使用我已经知道的 URL 地址本地保存图像？</h4>
+    <p>我们将使用以下代码从 URL 地址本地保存图像</p>
+    <pre><code class="hljs css"><span class="hljs-selector-tag">import</span> <span class="hljs-selector-tag">urllib</span><span class="hljs-selector-class">.request</span>
+<span class="hljs-selector-tag">urllib</span><span class="hljs-selector-class">.request</span><span class="hljs-selector-class">.urlretrieve</span>("<span class="hljs-selector-tag">URL</span>", "<span class="hljs-selector-tag">local-filename</span><span class="hljs-selector-class">.jpg</span>")
+</code></pre>
+    <h4 id="83google">83. 如何获取任何网址或网页的 Google 缓存时限？</h4>
+    <p>使用以下 URL 格式：</p>
+    <p>http://webcache.googleusercontent.com/search?q=cache:URLGOESHERE</p>
+    <p>请务必将“URLGOESHERE”替换为你要检索其缓存的页面或网站的正确网址，并查看时间。例如，要查看 edureka.co 的 Google Webcache 时代，你需要使用以下网址：</p>
+    <p>http://webcache.googleusercontent.com/search?q=cache:edureka.co</p>
+    <h4 id="84imdb250">84. 你需要从 IMDb 前 250 电影页面中删除数据。它应该只有字段电影名称，年份和评级。</h4>
+    <p>我们将使用以下代码行：</p>
+    <pre><code class="hljs perl">from bs4 import BeautifulSoup
+
+import requests
+import sys
+
+url = <span class="hljs-string">'http://www.imdb.com/chart/top'</span>
+response = requests.get(url)
+soup = BeautifulSoup(response.text)
+<span class="hljs-keyword">tr</span> = soup.findChildren(<span class="hljs-string">"tr"</span>)
+<span class="hljs-keyword">tr</span> = iter(<span class="hljs-keyword">tr</span>)
+<span class="hljs-keyword">next</span>(<span class="hljs-keyword">tr</span>)
+
+<span class="hljs-keyword">for</span> movie in <span class="hljs-keyword">tr</span>:
+title = movie.find(<span class="hljs-string">'td'</span>, {<span class="hljs-string">'class'</span>: <span class="hljs-string">'titleColumn'</span>} ).find(<span class="hljs-string">'a'</span>).contents[<span class="hljs-number">0</span>]
+year = movie.find(<span class="hljs-string">'td'</span>, {<span class="hljs-string">'class'</span>: <span class="hljs-string">'titleColumn'</span>} ).find(<span class="hljs-string">'span'</span>, {<span class="hljs-string">'class'</span>: <span class="hljs-string">'secondaryInfo'</span>}).contents[<span class="hljs-number">0</span>]
+rating = movie.find(<span class="hljs-string">'td'</span>, {<span class="hljs-string">'class'</span>: <span class="hljs-string">'ratingColumn imdbRating'</span>} ).find(<span class="hljs-string">'strong'</span>).contents[<span class="hljs-number">0</span>]
+row = title + <span class="hljs-string">' - '</span> + year + <span class="hljs-string">' '</span> + <span class="hljs-string">' '</span> + rating
+
+<span class="hljs-keyword">print</span>(row)
+</code></pre>
+    <p>上述代码将有助于从 IMDb 的前 250 名列表中删除数据</p>
+    <h3 id="python-3">数据分析 - Python 面试问题</h3>
+    <h4 id="85pythonmap">85. 什么是 Python 中的 map 函数？</h4>
+    <p>map 函数执行作为第一个参数给出的函数，该函数作为第二个参数给出的 iterable 的所有元素。如果给定的函数接受多于 1 个参数，则给出了许多迭代。</p>
+    <h4 id="86pythonnumpy">86. python numpy 比列表更好吗？</h4>
+    <p>我们使用 python numpy array而不是列表，原因如下：</p>
+    <ul>
+        <li>减少记忆</li>
+        <li>快速</li>
+        <li>方便</li>
+    </ul>
+    <h4 id="87numpyarrayn">87. 如何在 NumPy array中获得 N 个最大值的索引？</h4>
+    <p>我们可以使用下面的代码在 NumPy array中获得 N 个最大值的索引：</p>
+    <pre><code class="hljs markdown">import numpy as np
+arr = np.array([1, 3, 2, 4, 5])
+print(arr.argsort()[<span class="hljs-string">-3:</span>][<span class="hljs-symbol">::-1</span>])
+output：
+
+[4 3 1]
+</code></pre>
+    <h4 id="88pythonnumpy">88. 你如何用 Python / NumPy 计算百分位数？</h4>
+    <p>我们可以使用以下代码计算百分位数</p>
+    <pre><code class="hljs makefile">import numpy as np
+a = np.array([1,2,3,4,5])
+p = np.percentile(a, 50) <span class="hljs-comment">#Returns 50th percentile, e.g. median</span>
+print(p)
+output：
+
+3
+</code></pre>
+    <h4 id="89numpyscipy">89. NumPy 和 SciPy 有什么区别？</h4>
+    <ul>
+        <li>在理想的世界中，NumPy 只包含array数据类型和最基本的操作：索引，排序，重新整形，基本元素函数等等。</li>
+        <li>所有数字代码都将驻留在 SciPy 中。然而，NumPy 的一个重要目标是兼容性，因此 NumPy 试图保留其前任任何一个支持的所有功能。</li>
+        <li>因此，NumPy 包含一些线性代数函数，即使它们更恰当地属于 SciPy。无论如何，SciPy 包含更多全功能的线性代数模块版本，以及许多其他数值算法。</li>
+        <li>如果你使用 python 进行科学计算，你应该安装 NumPy 和 SciPy。大多数新功能属于 SciPy 而非 NumPy。</li>
+    </ul>
+    <h4 id="90numpyscipy3d">90. 如何使用 NumPy / SciPy 制作 3D 绘图/可视化？</h4>
+    <p>与 2D 绘图一样，3D 图形超出了 NumPy 和 SciPy 的范围，但就像 2D 情况一样，存在与 NumPy 集成的包。Matplotlib 在 mplot3d 子包中提供基本的 3D 绘图，而 Mayavi
+        使用功能强大的 VTK 引擎提供各种高质量的 3D 可视化功能。</p>
+    <h4 id="91n20">91. 检查给定数字n是否为2或0的幂</h4>
+    <pre><code class="hljs cs"><span class="hljs-function">def <span class="hljs-title">check_pow_2</span>(<span class="hljs-params">num</span>):
+    <span class="hljs-keyword">if</span> num </span>== <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+
+    <span class="hljs-keyword">if</span> num &amp; (num - <span class="hljs-number">1</span>) == <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>
+
+
+<span class="hljs-keyword">switch</span> = {
+    <span class="hljs-number">0</span>: <span class="hljs-string">"Number is 0"</span>,
+    <span class="hljs-number">1</span>: <span class="hljs-string">"Number is a power of 2"</span>,
+    <span class="hljs-number">-1</span>: <span class="hljs-string">"Number is neither a power of 2 nor 0"</span>
+}
+<span class="hljs-keyword">case</span> = check_pow_2(<span class="hljs-number">16</span>)
+
+print(<span class="hljs-keyword">switch</span>[<span class="hljs-keyword">case</span>])
+</code></pre>
+    <h4 id="92ab">92. 计算将A转换为B所需的位数</h4>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">count_bits_flip</span><span class="hljs-params">(a, b)</span>:</span>
+    <span class="hljs-comment"># XOR a and b to get 1 on opposite value bit position</span>
+    c = a ^ b
+
+    <span class="hljs-comment"># initialise the counter for 1</span>
+    count = <span class="hljs-number">0</span>
+
+    <span class="hljs-comment"># count the number of 1s while there is 1 in a ^ b</span>
+    <span class="hljs-keyword">while</span> c != <span class="hljs-number">0</span>:
+        count += <span class="hljs-number">1</span>
+        c &amp;= (c<span class="hljs-number">-1</span>)
+
+    <span class="hljs-comment"># return the count of 1s</span>
+    <span class="hljs-keyword">return</span> count
+<span class="hljs-comment"># 2 = 0010</span>
+<span class="hljs-comment"># 8 = 1000</span>
+print(count_bits_flip(<span class="hljs-number">2</span>, <span class="hljs-number">8</span>))
+</code></pre>
+    <h4 id="93array">93. 在重复元素array中查找两个非重复元素</h4>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">find_non_repeating_numbers</span><span class="hljs-params">(arr)</span>:</span>
+    xor = arr[<span class="hljs-number">0</span>]
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, len(arr)):
+        xor ^= arr[i]
+
+    right_set_bit = xor &amp; ~(xor<span class="hljs-number">-1</span>)
+    first = <span class="hljs-number">0</span>
+    second = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> arr:
+        <span class="hljs-keyword">if</span> i &amp; right_set_bit:
+            first ^= i
+        <span class="hljs-keyword">else</span>:
+            second ^= i
+
+    <span class="hljs-keyword">return</span> first, second
+
+
+arr = [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">7</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">11</span>]
+print(find_non_repeating_numbers(arr))
+</code></pre>
+    <h4 id="94">94. 找到具有相同设置位数的下一个较大和下一个较小的数字</h4>
+    <p>例子：</p>
+    <pre><code class="hljs python">num = <span class="hljs-number">6</span> bin = <span class="hljs-number">110</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">next_greater</span><span class="hljs-params">(num)</span>:</span>
+    res = num
+    <span class="hljs-keyword">if</span> num != <span class="hljs-number">0</span>:
+        <span class="hljs-comment"># Find the right most 1 position</span>
+        <span class="hljs-comment"># Ex. right_one = 2 bin = 10</span>
+        right_one = num &amp; -num
+
+        <span class="hljs-comment"># get the left pattern to merge</span>
+        <span class="hljs-comment"># Ex. left_pattern = 8 bin = 1000</span>
+        left_pattern = num + right_one
+
+        <span class="hljs-comment"># get the right patten to merge</span>
+        <span class="hljs-comment"># Ex. right_pattern = 1 bin = 0001</span>
+        right_pattern = (num ^ left_pattern) &gt;&gt; (right_one + <span class="hljs-number">1</span>)
+
+        <span class="hljs-comment"># OR both the patterns</span>
+        <span class="hljs-comment"># Ex. res = 9 bin = 1001</span>
+        res = left_pattern | right_pattern
+
+    <span class="hljs-keyword">return</span> res
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">next_smaller</span><span class="hljs-params">(num)</span>:</span>
+    <span class="hljs-keyword">return</span> ~next_greater(~num)
+
+
+print(next_greater(<span class="hljs-number">6</span>))
+print(next_smaller(<span class="hljs-number">6</span>))
+</code></pre>
+    <h4 id="95nw">95. 给定 n 个项目的重量和值，将这些物品放入容量为 W 的背包中背包中的最大总价值。</h4>
+    <p>换句话说，给定两个整数array val [0..n-1] 和 wt [0..n-1]分别代表与 n 项相关的值和权重。也给定一个表示背包容量的整数 W，找出 val [] 的最大值子集
+        这样，这个子集的权重之和小于或等于 W. 你不能破坏一个项目，要么选择完整的项目，要么不选择它（0-1 属性）。</p>
+    <pre><code class="hljs shell">def knapSack(W, wt, val, size):
+    k = [[0 for i in range(W+1)] for i in range(size+1)]
+    for i in range(size+1):
+        for w in range(W+1):
+            if i == 0 or w == 0:
+                k[i][w] = 0
+            elif wt[i-1] &lt;= w:
+                k[i][w] = max(val[i-1] + k[i-1][w-wt[i-1]], k[i-1][w])
+            else:
+                k[i][w] = k[i-1][w]
+
+    for w in k:
+        print(w)
+
+    return k
+<span class="hljs-meta">#</span><span class="bash"> def findElementsInSack(W, matrix, wt, val, size):</span>
+<span class="hljs-meta">#</span><span class="bash">     i = size</span>
+<span class="hljs-meta">#</span><span class="bash">     row = W</span>
+<span class="hljs-meta">#</span><span class="bash">     arr = []</span>
+<span class="hljs-meta">#</span><span class="bash">     <span class="hljs-keyword">while</span> i &gt; 0:</span>
+<span class="hljs-meta">#</span><span class="bash">         <span class="hljs-built_in">print</span>(matrix[i][row] - matrix[i-1][row - wt[i-1]] )</span>
+<span class="hljs-meta">#</span><span class="bash">         <span class="hljs-built_in">print</span>(val[i-1])</span>
+<span class="hljs-meta">#</span><span class="bash">         <span class="hljs-keyword">if</span> matrix[i][row] - matrix[i-1][row - wt[i-1]] == val[i-1]:</span>
+<span class="hljs-meta">#</span><span class="bash">             arr.append(val[i-1])</span>
+<span class="hljs-meta">#</span><span class="bash">             i -= 1</span>
+<span class="hljs-meta">#</span><span class="bash">             row -= wt[i-1]</span>
+<span class="hljs-meta">#</span><span class="bash">         <span class="hljs-keyword">else</span>:</span>
+<span class="hljs-meta">#</span><span class="bash">             i -= 1</span>
+<span class="hljs-meta">#</span><span class="bash"></span>
+<span class="hljs-meta">#</span><span class="bash">     <span class="hljs-built_in">return</span> arr</span>
+
+price = [60, 100, 120]
+wt = [1, 2, 3]
+W = 5
+n = len(price)
+k = knapSack(W, wt, price, n)
+print(k[n][W])
+<span class="hljs-meta">#</span><span class="bash"> <span class="hljs-built_in">print</span>(findElementsInSack(W, k, wt, price, n))</span>
+</code></pre>
+    <h4 id="96nn">96. 给定一根长度为 n 英寸的杆和一系列价格，其中包含所有尺寸小于 n 的尺寸的价格。确定通过切割杆和销售件可获得的最大值。</h4>
+    <pre><code class="hljs cs"><span class="hljs-function">def <span class="hljs-title">cutting_rod</span>(<span class="hljs-params">prices, n</span>):
+    dp </span>= [<span class="hljs-number">0</span> <span class="hljs-function"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params">n+<span class="hljs-number">1</span></span>)]
+    dp[0] </span>= <span class="hljs-number">0</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params"><span class="hljs-number">1</span>, n+<span class="hljs-number">1</span></span>):
+        max_val </span>= -<span class="hljs-keyword">float</span>(<span class="hljs-string">'inf'</span>)
+        <span class="hljs-function"><span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params">i</span>):
+            max_val </span>= max(max_val, prices[j] + dp[i-j<span class="hljs-number">-1</span>])
+        dp[i] = max_val
+
+    <span class="hljs-keyword">return</span> dp[n]
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    arr = [<span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">17</span>, <span class="hljs-number">20</span>]
+    size = len(arr)
+    print(<span class="hljs-string">"Maximum Obtainable Value is "</span> + str(cutting_rod(arr, size)))
+</code></pre>
+    <h4 id="97str1str2str1str1str2">97. 给定两个字符串 str1 和 str2 以及可以在 str1 上执行的操作。查找所需的最小编辑数（操作）将'str1'转换为'str2'</h4>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">edit_distance</span><span class="hljs-params">(str1, str2, m, n)</span>:</span>
+    matrix = [[<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(m+<span class="hljs-number">1</span>)]
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(m+<span class="hljs-number">1</span>):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>):
+
+            <span class="hljs-keyword">if</span> i == <span class="hljs-number">0</span>:
+                matrix[i][j] = j
+
+            <span class="hljs-keyword">elif</span> j == <span class="hljs-number">0</span>:
+                matrix[i][j] = i
+
+            <span class="hljs-keyword">elif</span> str1[i<span class="hljs-number">-1</span>] == str2[j<span class="hljs-number">-1</span>]:
+                matrix[i][j] = matrix[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>]
+
+            <span class="hljs-keyword">else</span>:
+                matrix[i][j] = <span class="hljs-number">1</span> + min(matrix[i][j<span class="hljs-number">-1</span>],      <span class="hljs-comment"># insert</span>
+                                       matrix[i<span class="hljs-number">-1</span>][j],      <span class="hljs-comment"># remove</span>
+                                       matrix[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>])    <span class="hljs-comment"># replace</span>
+
+    <span class="hljs-keyword">return</span> matrix[m][n]
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    str1 = <span class="hljs-string">'sunday'</span>
+    str2 = <span class="hljs-string">'saturday'</span>
+
+    print(edit_distance(str1, str2, len(str1), len(str2)))
+</code></pre>
+    <pre><code class="hljs">
+</code></pre>
+    <h4 id="98011">98. 给定 0 和 1 的二维矩阵，找到最大的广场，其中包含全部 1。</h4>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">find_largest_square</span><span class="hljs-params">(matrix)</span>:</span>
+    n = len(matrix)
+
+    <span class="hljs-comment"># make a matrix for storing the solutions</span>
+    cache = [[<span class="hljs-number">0</span>] * n <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> range(n)]
+    <span class="hljs-comment"># size of square and its bottom-right indexes</span>
+    size = <span class="hljs-number">0</span>
+    right_indx = <span class="hljs-number">-1</span>
+    bottom_indx = <span class="hljs-number">-1</span>
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(n):
+
+            <span class="hljs-comment"># if the value is 0 simply move forward as it cannot form a square of 1s</span>
+            <span class="hljs-keyword">if</span> matrix[i][j] == <span class="hljs-number">0</span>:
+                <span class="hljs-keyword">continue</span>
+
+            <span class="hljs-comment"># if it is first row or column, copy the matrix values as it is</span>
+            <span class="hljs-keyword">elif</span> i == <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> j == <span class="hljs-number">0</span>:
+                cache[i][j] = matrix[i][j]
+
+            <span class="hljs-comment"># Otherwise, check in the up, left, and diagonally top-left direction for minimum size of square</span>
+            <span class="hljs-comment"># if all are 1s at these positions in matrix, only then min value will be greater than 1</span>
+            <span class="hljs-comment"># hence add the previous square size to the cache + 1</span>
+            <span class="hljs-keyword">else</span>:
+                cache[i][j] = <span class="hljs-number">1</span> + min(cache[i - <span class="hljs-number">1</span>][j], cache[i][j - <span class="hljs-number">1</span>], cache[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>])
+
+            <span class="hljs-comment"># check if the current square size found is larger than the previously found size, if so, update it</span>
+            <span class="hljs-keyword">if</span> cache[i][j] &gt; size:
+                size = cache[i][j]
+                bottom_indx, right_indx = i, j
+
+    <span class="hljs-keyword">return</span> size, bottom_indx, right_indx
+
+
+mat = [[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+       [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+       [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+       [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>]]
+size, bottom, right = find_largest_square(mat)
+
+<span class="hljs-keyword">if</span> size &gt; <span class="hljs-number">0</span>:
+    print(<span class="hljs-string">"Size of the square:"</span>, size)
+    print(<span class="hljs-string">"Top-left Co-ordinates:"</span>, bottom-size+<span class="hljs-number">1</span>, <span class="hljs-string">","</span>, right-size+<span class="hljs-number">1</span>)
+    print(<span class="hljs-string">"Bottom-right Co-ordinates:"</span>, bottom, <span class="hljs-string">","</span>, right)
+<span class="hljs-keyword">else</span>:
+    print(<span class="hljs-string">"No square of 1s found"</span>)
+</code></pre>
+    <h4 id="99">99. 找到两者中存在的最长子序列的长度。子序列是以相同的相对顺序出现的序列，但不一定是连续的。</h4>
+    <p>例子：</p>
+    <pre><code class="hljs python">用于输入的LCS序列“ABCDGH”和“AEDFHR”是长度为<span class="hljs-number">3</span>的“ADH”。
+用于输入序列的LCS“AGGTAB”和“GXTXAYB”是长度为<span class="hljs-number">4</span>的“ GTAB”。
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lcs</span><span class="hljs-params">(str1, str2)</span>:</span>
+    m = len(str1)
+    n = len(str2)
+
+    matrix = [[<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(m+<span class="hljs-number">1</span>)]
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, m+<span class="hljs-number">1</span>):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):
+
+            <span class="hljs-keyword">if</span> i == <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> j == <span class="hljs-number">0</span>:
+                matrix[i][j] = <span class="hljs-number">0</span>
+
+            <span class="hljs-keyword">elif</span> str1[i<span class="hljs-number">-1</span>] == str2[j<span class="hljs-number">-1</span>]:
+                matrix[i][j] = <span class="hljs-number">1</span> + matrix[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>]
+
+            <span class="hljs-keyword">else</span>:
+                matrix[i][j] = max(matrix[i<span class="hljs-number">-1</span>][j], matrix[i][j<span class="hljs-number">-1</span>])
+
+    index = matrix[m][n]
+
+    res = [<span class="hljs-string">""</span>] * index
+    i = m
+    j = n
+
+    <span class="hljs-keyword">while</span> i &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> j &gt; <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">if</span> str1[i<span class="hljs-number">-1</span>] == str2[j<span class="hljs-number">-1</span>]:
+            res[index<span class="hljs-number">-1</span>] = str1[i<span class="hljs-number">-1</span>]
+            i -= <span class="hljs-number">1</span>
+            j -= <span class="hljs-number">1</span>
+            index -= <span class="hljs-number">1</span>
+
+        <span class="hljs-keyword">elif</span> matrix[i<span class="hljs-number">-1</span>][j] &gt; matrix[i][j<span class="hljs-number">-1</span>]:
+            i -= <span class="hljs-number">1</span>
+        <span class="hljs-keyword">else</span>:
+            j -= <span class="hljs-number">1</span>
+
+    <span class="hljs-keyword">return</span> res
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    X = <span class="hljs-string">"AGGTAB"</span>
+    Y = <span class="hljs-string">"GXTXAYB"</span>
+
+    str = <span class="hljs-string">''</span>.join(lcs(X, Y))
+
+    print(<span class="hljs-string">"Length of longest common subsequence is:"</span>, len(str),<span class="hljs-string">"\nAnd the subsequence is:"</span>, str)
+</code></pre>
+    <h4 id="100">100. 找到给定序列的最长子序列的长度，以便对子序列的所有元素进行排序，按顺序递增。</h4>
+    <p>例如，{10,22,9,33,21,50,41,60,80}的LIS长度为6，LIS为{10,22,33,50,60,80}。</p>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lis</span><span class="hljs-params">(arr)</span>:</span>
+    n = len(arr)
+    dp = [<span class="hljs-number">1</span>] * n
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(i):
+            <span class="hljs-keyword">if</span> arr[j] &lt; arr[i] <span class="hljs-keyword">and</span> dp[j] + <span class="hljs-number">1</span> &gt; dp[i]:
+                dp[i] = <span class="hljs-number">1</span> + dp[j]
+
+    <span class="hljs-keyword">return</span> max(dp)
+
+arr = [<span class="hljs-number">10</span>, <span class="hljs-number">22</span>, <span class="hljs-number">9</span>, <span class="hljs-number">33</span>, <span class="hljs-number">21</span>, <span class="hljs-number">50</span>, <span class="hljs-number">41</span>, <span class="hljs-number">60</span>, <span class="hljs-number">80</span>]
+print(lis(arr))
+</code></pre>
+    <h4 id="101mn">101. 给定成本矩阵成本[] []和成本[] []中的位置（m，n），</h4>
+    <p>编写一个函数，返回从（0,0）到达（m，n）的最小成本路径的成本。
+        到达路径的总成本（m，n）是该路径上所有成本的总和（包括源和目的地）。
+        你只能从给定的单元格中向下，向右和对角线降低单元格。</p>
+    <pre><code class="hljs cs"><span class="hljs-function">def <span class="hljs-title">min_cost</span>(<span class="hljs-params">cost, m, n</span>):
+    dp </span>= [[<span class="hljs-number">0</span> <span class="hljs-function"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params">n+<span class="hljs-number">1</span></span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params">m+<span class="hljs-number">1</span></span>)]
+
+    dp[0][0] </span>= cost[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]
+
+    <span class="hljs-function"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params"><span class="hljs-number">1</span>, m+<span class="hljs-number">1</span></span>):
+        dp[i][0] </span>= dp[i<span class="hljs-number">-1</span>][<span class="hljs-number">0</span>] + cost[i][<span class="hljs-number">0</span>]
+
+    <span class="hljs-function"><span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params"><span class="hljs-number">1</span>, n+<span class="hljs-number">1</span></span>):
+        dp[0][j] </span>= dp[<span class="hljs-number">0</span>][j<span class="hljs-number">-1</span>] + cost[<span class="hljs-number">0</span>][j]
+
+    <span class="hljs-function"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params"><span class="hljs-number">1</span>, m+<span class="hljs-number">1</span></span>):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params"><span class="hljs-number">1</span>, n+<span class="hljs-number">1</span></span>):
+            dp[i][j] </span>= cost[i][j] + min(dp[i<span class="hljs-number">-1</span>][j], dp[i][j<span class="hljs-number">-1</span>], dp[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>])
+
+    <span class="hljs-keyword">return</span> dp[m][n]
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    cost = [[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+            [<span class="hljs-meta">4, 8, 2</span>],
+            [<span class="hljs-meta">1, 5, 3</span>]]
+    m = <span class="hljs-number">2</span>
+    n = <span class="hljs-number">2</span>
+    print(<span class="hljs-string">"Minimum cost from (0, 0) to ({}, {}) is:"</span>.format(m, n), min_cost(cost, m, n))
+</code></pre>
+    <h4 id="102">102. 将一个集合划分为两个子集，使得子集和的差异最小</h4>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">find_min</span><span class="hljs-params">(arr)</span>:</span>
+    sum_of_arr = sum(arr)
+    n = len(arr)
+    dp = [[<span class="hljs-keyword">False</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(sum_of_arr+<span class="hljs-number">1</span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>):
+        dp[i][<span class="hljs-number">0</span>] = <span class="hljs-keyword">True</span>
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, sum_of_arr+<span class="hljs-number">1</span>):
+        dp[<span class="hljs-number">0</span>][i] = <span class="hljs-keyword">False</span>
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, sum_of_arr+<span class="hljs-number">1</span>):
+            dp[i][j] = dp[i<span class="hljs-number">-1</span>][j]
+
+            <span class="hljs-keyword">if</span> arr[i<span class="hljs-number">-1</span>] &lt;= j:
+                dp[i][j] |= dp[i<span class="hljs-number">-1</span>][j - arr[i<span class="hljs-number">-1</span>]]
+
+    diff = float(<span class="hljs-string">'inf'</span>)
+
+    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(int(sum_of_arr/<span class="hljs-number">2</span>), <span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>):
+        <span class="hljs-keyword">if</span> dp[n][j] <span class="hljs-keyword">is</span> <span class="hljs-keyword">True</span>:
+            diff = sum_of_arr - <span class="hljs-number">2</span> * j
+            <span class="hljs-keyword">break</span>
+
+    <span class="hljs-keyword">return</span> diff
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    arr = [<span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>]
+    print(<span class="hljs-string">"Minimum difference is:"</span>, find_min(arr))
+</code></pre>
+    <h4 id="103">103. 给定一组非负整数和一个值和，确定是否存在给定集合的子集，其总和等于给定总和。</h4>
+    <pre><code class="hljs python">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isSubsetSum</span><span class="hljs-params">(arr, check_sum)</span>:</span>
+    n = len(arr)
+    possible_sum = [[<span class="hljs-keyword">False</span>] * (n + <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> range(check_sum + <span class="hljs-number">1</span>)]
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>):
+        possible_sum[<span class="hljs-number">0</span>][i] = <span class="hljs-keyword">True</span>
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, check_sum + <span class="hljs-number">1</span>):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):
+            <span class="hljs-keyword">if</span> i &lt; arr[j - <span class="hljs-number">1</span>]:
+                possible_sum[i][j] = possible_sum[i][j<span class="hljs-number">-1</span>]
+            <span class="hljs-keyword">elif</span> i &gt;= arr[j - <span class="hljs-number">1</span>]:
+                possible_sum[i][j] = possible_sum[i][j<span class="hljs-number">-1</span>] <span class="hljs-keyword">or</span> possible_sum[i - arr[j - <span class="hljs-number">1</span>]][j<span class="hljs-number">-1</span>]
+
+    <span class="hljs-keyword">return</span> possible_sum[check_sum][n]
+
+arr = [<span class="hljs-number">3</span>, <span class="hljs-number">34</span>, <span class="hljs-number">4</span>, <span class="hljs-number">12</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>]
+check_sum = <span class="hljs-number">9</span>
+
+<span class="hljs-keyword">if</span> isSubsetSum(arr, check_sum):
+    print(<span class="hljs-string">"Found a subset with sum ="</span>, check_sum)
+<span class="hljs-keyword">else</span>:
+    print(<span class="hljs-string">"Subset with sum ="</span>, check_sum, <span class="hljs-string">"Not Found"</span>)
+</code></pre>
+    <h4 id="104hackerrankdp">104. HackerRank 问题算法 DP</h4>
+    <pre><code class="hljs cs"><span class="hljs-function">def <span class="hljs-title">maxSubArray</span>(<span class="hljs-params">a, size</span>):
+    currMax </span>= a[<span class="hljs-number">0</span>]
+    maxSoFar = a[<span class="hljs-number">0</span>]
+
+    <span class="hljs-function"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params"><span class="hljs-number">1</span>, size</span>):
+        currMax </span>= max(a[i], currMax + a[i])
+        maxSoFar = max(currMax, maxSoFar)
+
+    <span class="hljs-keyword">return</span> maxSoFar
+
+testcases = <span class="hljs-keyword">int</span>(input())
+
+<span class="hljs-function"><span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params">testcases</span>):
+    n </span>= <span class="hljs-keyword">int</span>(input())
+    arr = list(map(<span class="hljs-keyword">int</span>, input().split()))
+    tempList = list(filter(lambda x: x &gt; <span class="hljs-number">0</span>, arr))
+    <span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">len</span>(<span class="hljs-params">tempList</span>) !</span>= <span class="hljs-number">0</span>:
+        maximumSum = sum(tempList)
+    <span class="hljs-keyword">else</span>:
+        maximumSum = max(arr)
+    print(maxSubArray(arr, n), maximumSum)
+</code></pre>
+    <h4 id="105dist123">105. 给定距离 dist，计算用 1,2 和 3 步覆盖距离的总方式</h4>
+    <pre><code class="hljs makefile"><span class="hljs-section">Input:  n = 3</span>
+<span class="hljs-section">Output: 4</span>
+Below are the four ways
+ 1 step + 1 step + 1 step
+ 1 step + 2 step
+ 2 step + 1 step
+ 3 step<span class="hljs-string">""</span><span class="hljs-string">"
+
+def count_ways(n):
+    count = [0] * (n+1)
+    count[0] = 1
+    count[1] = 1
+    count[2] = 2
+
+    for i in range(3, n+1):
+        count[i] = count[i-1] + count[i-2] + count[i-3]
+
+    return count[n]
+
+
+if __name__ == '__main__':
+    print(count_ways(4))
+</span></code></pre>
+    <h4 id="106">106. 在字符板中查找所有可能的单词</h4>
+    <pre><code class="hljs python">Input: dictionary[] = {<span class="hljs-string">"GEEKS"</span>, <span class="hljs-string">"FOR"</span>, <span class="hljs-string">"QUIZ"</span>, <span class="hljs-string">"GO"</span>};
+       boggle[][]   = {{<span class="hljs-string">'G'</span>,<span class="hljs-string">'I'</span>,<span class="hljs-string">'Z'</span>},
+                       {<span class="hljs-string">'U'</span>,<span class="hljs-string">'E'</span>,<span class="hljs-string">'K'</span>},
+                       {<span class="hljs-string">'Q'</span>,<span class="hljs-string">'S'</span>,<span class="hljs-string">'E'</span>}};
+Output:  Following words of dictionary are present
+         GEEKS
+         QUIZ
+
+         <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">findWordsUtil</span><span class="hljs-params">(words, boggle, visited, found, r, c, str)</span>:</span>
+    rows = len(boggle)
+    cols = len(boggle[<span class="hljs-number">0</span>])
+
+    <span class="hljs-comment"># set the position of character as traversed</span>
+    visited[r][c] = <span class="hljs-keyword">True</span>
+
+    <span class="hljs-comment"># add the character to string</span>
+    str += boggle[r][c]
+
+    <span class="hljs-comment"># if the string is in dictionary add it to the set of found words</span>
+    <span class="hljs-keyword">if</span> str <span class="hljs-keyword">in</span> words:
+        found.add(str)
+
+    <span class="hljs-comment"># traverse all the nearby 8 adjacent cells</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(r<span class="hljs-number">-1</span>, r+<span class="hljs-number">2</span>):
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(c<span class="hljs-number">-1</span>, c+<span class="hljs-number">2</span>):
+            <span class="hljs-keyword">if</span> i &gt;= rows <span class="hljs-keyword">or</span> i &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> j &gt;= cols <span class="hljs-keyword">or</span> j &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> visited[i][j]:
+                <span class="hljs-keyword">continue</span>
+            findWordsUtil(words, boggle, visited, found, i, j, str)
+
+    <span class="hljs-comment"># backtrack and set the status of current character as not traversed</span>
+    visited[r][c] = <span class="hljs-keyword">False</span>
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">findWords</span><span class="hljs-params">(words, boggle)</span>:</span>
+    rows = len(boggle)
+    cols = len(boggle[<span class="hljs-number">0</span>])
+
+    <span class="hljs-comment"># initialize a matrix for DFS Traversal</span>
+    visited = [[<span class="hljs-keyword">False</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(cols)] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(rows)]
+
+    <span class="hljs-comment"># set to store the unique found words</span>
+    found = set({})
+    str = <span class="hljs-string">""</span>
+
+    <span class="hljs-comment"># traverse each character in the boggle and do DFS from there</span>
+    <span class="hljs-keyword">for</span> r <span class="hljs-keyword">in</span> range(rows):
+        <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> range(cols):
+            findWordsUtil(words, boggle, visited, found, r, c, str)
+
+    <span class="hljs-comment"># return the set of found words</span>
+    <span class="hljs-keyword">return</span> found
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    words = {<span class="hljs-string">"GEEKS"</span>, <span class="hljs-string">"FOR"</span>, <span class="hljs-string">"QUIZ"</span>, <span class="hljs-string">"GO"</span>, <span class="hljs-string">"SEEK"</span>}
+    boggle = [[<span class="hljs-string">'G'</span>, <span class="hljs-string">'I'</span>, <span class="hljs-string">'Z'</span>],
+              [<span class="hljs-string">'U'</span>, <span class="hljs-string">'E'</span>, <span class="hljs-string">'K'</span>],
+              [<span class="hljs-string">'Q'</span>, <span class="hljs-string">'S'</span>, <span class="hljs-string">'E'</span>]]
+
+    found = findWords(words, boggle)
+
+    print(<span class="hljs-string">"Words found in the boggle from the dictionary are:"</span>)
+    <span class="hljs-keyword">for</span> word <span class="hljs-keyword">in</span> found:
+        print(word)
+</code></pre>
+    <h4 id="107">107. 广度优先搜索遍历</h4>
+    <pre><code class="hljs ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Graph</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, directed=False)</span></span>:
+        <span class="hljs-keyword">self</span>.graph = defaultdict(list)
+        <span class="hljs-keyword">self</span>.directed = directed
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, frm, to)</span></span>:
+        <span class="hljs-keyword">self</span>.graph[frm].append(to)
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.directed is <span class="hljs-symbol">False:</span>
+            <span class="hljs-keyword">self</span>.graph[to].append(frm)
+        <span class="hljs-symbol">else:</span>
+            <span class="hljs-keyword">self</span>.graph[to] = <span class="hljs-keyword">self</span>.graph[to]
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">bfsUtil</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, s, visited)</span></span>:
+        queue = deque([])
+        queue.append(s)
+        visited[s] = True
+
+        <span class="hljs-keyword">while</span> <span class="hljs-symbol">queue:</span>
+            vertex = queue.popleft()
+            print(vertex, <span class="hljs-keyword">end</span>=<span class="hljs-string">' '</span>)
+
+            <span class="hljs-comment"># traverse vertices adjacent to vertex</span>
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph[vertex]:
+                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> visited[i]:
+                    visited[i] = True
+                    queue.append(i)
+        print()
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">bfs</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, s=None)</span></span>:
+        visited = {<span class="hljs-symbol">i:</span> False <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph}
+
+        <span class="hljs-comment"># do bfs from the node specified</span>
+        <span class="hljs-keyword">if</span> s is <span class="hljs-keyword">not</span> <span class="hljs-symbol">None:</span>
+            <span class="hljs-keyword">self</span>.bfsUtil(s, visited)
+        <span class="hljs-comment"># traverse for all the vertices in other components of graph</span>
+        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">graph:</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> visited[v]:
+                <span class="hljs-keyword">self</span>.bfsUtil(v, visited)
+
+<span class="hljs-keyword">if</span> __name_<span class="hljs-number">_</span> == <span class="hljs-string">'__main__'</span>:
+    graph = Graph()
+
+    <span class="hljs-comment"># component 1 of the graph</span>
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+    graph.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">4</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">5</span>)
+    graph.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">6</span>)
+
+    <span class="hljs-comment"># component 2 of the graph</span>
+    graph.addEdge(<span class="hljs-number">7</span>, <span class="hljs-number">8</span>)
+    graph.addEdge(<span class="hljs-number">8</span>, <span class="hljs-number">9</span>)
+    graph.addEdge(<span class="hljs-number">7</span>, <span class="hljs-number">10</span>)
+
+    <span class="hljs-comment"># call bfs from 2 vertex</span>
+    print(<span class="hljs-string">"Breadth First Traversal:"</span>)
+    graph.bfs(<span class="hljs-number">2</span>)
+</code></pre>
+    <h4 id="108">108. 深度优先搜索遍历</h4>
+    <pre><code class="hljs ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Graph</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, directed=False)</span></span>:
+        <span class="hljs-keyword">self</span>.graph = defaultdict(list)
+        <span class="hljs-keyword">self</span>.directed = directed
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, frm, to)</span></span>:
+        <span class="hljs-keyword">self</span>.graph[frm].append(to)
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.directed is <span class="hljs-symbol">False:</span>
+            <span class="hljs-keyword">self</span>.graph[to].append(frm)
+        <span class="hljs-symbol">else:</span>
+            <span class="hljs-keyword">self</span>.graph[to] = <span class="hljs-keyword">self</span>.graph[to]
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">dfsUtil</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, s, visited)</span></span>:
+        stack = []
+        stack.append(s)
+        visited[s] = True
+
+        <span class="hljs-keyword">while</span> <span class="hljs-symbol">stack:</span>
+            vertex = stack.pop()
+            print(vertex, <span class="hljs-keyword">end</span>=<span class="hljs-string">' '</span>)
+
+            <span class="hljs-comment"># traverse vertices adjacent to vertex</span>
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph[vertex]:
+                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> visited[i]:
+                    visited[i] = True
+                    stack.append(i)
+        print()
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, s=None)</span></span>:
+        visited = {<span class="hljs-symbol">i:</span> False <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph}
+
+        <span class="hljs-comment"># traverse specified vertex</span>
+        <span class="hljs-keyword">if</span> s is <span class="hljs-keyword">not</span> <span class="hljs-symbol">None:</span>
+            <span class="hljs-keyword">self</span>.dfsUtil(s, visited)
+
+        <span class="hljs-comment"># traverse for all the vertices in other components of graph</span>
+        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">graph:</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> visited[v]:
+                <span class="hljs-keyword">self</span>.dfsUtil(v, visited)
+
+
+<span class="hljs-keyword">if</span> __name_<span class="hljs-number">_</span> == <span class="hljs-string">'__main__'</span>:
+    <span class="hljs-comment"># make an undirected graph</span>
+    graph = Graph()
+
+    <span class="hljs-comment"># component 1 of the graph</span>
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+    graph.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">4</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">5</span>)
+    graph.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">6</span>)
+
+    <span class="hljs-comment"># component 2 of the graph</span>
+    graph.addEdge(<span class="hljs-number">7</span>, <span class="hljs-number">8</span>)
+    graph.addEdge(<span class="hljs-number">8</span>, <span class="hljs-number">9</span>)
+    graph.addEdge(<span class="hljs-number">7</span>, <span class="hljs-number">10</span>)
+
+    <span class="hljs-comment"># call dfs from 2 vertex</span>
+    print(<span class="hljs-string">"Depth First Traversal:"</span>)
+    graph.dfs(<span class="hljs-number">2</span>)
+</code></pre>
+    <h4 id="109">109. 在有向图中检测周期</h4>
+    <pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Graph</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, directed=False)</span>:</span>
+        self.graph = defaultdict(list)
+        self.directed = directed
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(self, frm, to)</span>:</span>
+        self.graph[frm].append(to)
+
+        <span class="hljs-keyword">if</span> self.directed <span class="hljs-keyword">is</span> <span class="hljs-keyword">False</span>:
+            self.graph[to].append(frm)
+        <span class="hljs-keyword">else</span>:
+            self.graph[to] = self.graph[to]
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isCyclicUtil</span><span class="hljs-params">(self, s, visited, recurStack)</span>:</span>
+
+        <span class="hljs-keyword">if</span> visited[s] <span class="hljs-keyword">is</span> <span class="hljs-keyword">False</span>:
+            recurStack[s] = <span class="hljs-keyword">True</span>
+            visited[s] = <span class="hljs-keyword">True</span>
+
+            <span class="hljs-comment"># traverse vertices adjacent to vertex</span>
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.graph[s]:
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">not</span> visited[i]) <span class="hljs-keyword">and</span> self.isCyclicUtil(i, visited, recurStack):
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
+                <span class="hljs-keyword">elif</span> recurStack[i]:
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
+        recurStack[s] = <span class="hljs-keyword">False</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">False</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isCyclic</span><span class="hljs-params">(self)</span>:</span>
+        visited = {i: <span class="hljs-keyword">False</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.graph}
+        recurStack = {i: <span class="hljs-keyword">False</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.graph}
+
+        <span class="hljs-comment"># traverse for all the vertices of graph</span>
+        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> self.graph:
+            <span class="hljs-keyword">if</span> self.isCyclicUtil(v, visited, recurStack):
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">False</span>
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    <span class="hljs-comment"># make a directed graph</span>
+    graph = Graph(<span class="hljs-keyword">True</span>)
+
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+    graph.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)
+
+    <span class="hljs-keyword">if</span> graph.isCyclic():
+        print(<span class="hljs-string">"Cycle exists"</span>)
+    <span class="hljs-keyword">else</span>:
+        print(<span class="hljs-string">"No cycle in the graph"</span>)
+
+© <span class="hljs-number">2019</span> GitHub, Inc.
+Terms
+Privacy
+</code></pre>
+    <h4 id="110">110. 检测无向图中的循环</h4>
+    <pre><code class="hljs ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Graph</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, directed=False)</span></span>:
+        <span class="hljs-keyword">self</span>.graph = defaultdict(list)
+        <span class="hljs-keyword">self</span>.directed = directed
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, frm, to)</span></span>:
+        <span class="hljs-comment"># True if edge has been traversed or seen once</span>
+        <span class="hljs-keyword">self</span>.graph[frm].append([to, False])
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.directed is <span class="hljs-symbol">False:</span>
+            <span class="hljs-keyword">self</span>.graph[to].append([frm, False])
+        <span class="hljs-symbol">else:</span>
+            <span class="hljs-keyword">self</span>.graph[to] = <span class="hljs-keyword">self</span>.graph[to]
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">findParent</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, sets, v)</span></span>:
+        <span class="hljs-keyword">if</span> sets[v] == -<span class="hljs-number">1</span>:
+            <span class="hljs-keyword">return</span> v
+        <span class="hljs-symbol">else:</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.findParent(sets, sets[v])
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">union</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, sets, x, y)</span></span>:
+        x_set = <span class="hljs-keyword">self</span>.findParent(sets, x)
+        y_set = <span class="hljs-keyword">self</span>.findParent(sets, y)
+        sets[x_set] = y_set
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isCyclic</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+        <span class="hljs-comment"># sets that show combined vertices or not</span>
+        sets = {<span class="hljs-symbol">i:</span> -<span class="hljs-number">1</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph}
+
+        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">graph:</span>
+            <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph[v]:
+                <span class="hljs-comment"># if an edge is traversed once skip it</span>
+                <span class="hljs-keyword">if</span> e[<span class="hljs-number">1</span>] is <span class="hljs-symbol">True:</span>
+                    continue
+
+                <span class="hljs-comment"># set True for traversing the edge and making union in both adjacency lists</span>
+                e[<span class="hljs-number">1</span>] = True
+
+                <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph[e[<span class="hljs-number">0</span>]]:
+                    <span class="hljs-keyword">if</span> i[<span class="hljs-number">0</span>] == <span class="hljs-symbol">v:</span>
+                        i[<span class="hljs-number">1</span>] = True
+                        <span class="hljs-keyword">break</span>
+
+                <span class="hljs-comment"># find parents of both vertices of the edge</span>
+                x = <span class="hljs-keyword">self</span>.findParent(sets, v)
+                y = <span class="hljs-keyword">self</span>.findParent(sets, e[<span class="hljs-number">0</span>])
+
+                <span class="hljs-comment"># if they share a common parent loop found</span>
+                <span class="hljs-keyword">if</span> x == <span class="hljs-symbol">y:</span>
+                    <span class="hljs-keyword">return</span> True
+                <span class="hljs-comment"># union the two vertices in the same set</span>
+                <span class="hljs-keyword">self</span>.union(sets, x, y)
+
+        <span class="hljs-comment"># if no loop or cycle found return false</span>
+        <span class="hljs-keyword">return</span> False
+
+
+<span class="hljs-keyword">if</span> __name_<span class="hljs-number">_</span> == <span class="hljs-string">'__main__'</span>:
+    <span class="hljs-comment"># make a graph</span>
+    graph = Graph()
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>)
+
+    <span class="hljs-keyword">if</span> graph.isCyclic():
+        print(<span class="hljs-string">"Cycle exists in the graph"</span>)
+    <span class="hljs-symbol">else:</span>
+        print(<span class="hljs-string">"No cycle in the graph"</span>)
+</code></pre>
+    <h4 id="111dijkstra">111. Dijkstra的最短路径算法</h4>
+    <pre><code class="hljs ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Graph</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, directed=False)</span></span>:
+        <span class="hljs-keyword">self</span>.graph = defaultdict(list)
+        <span class="hljs-keyword">self</span>.directed = directed
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, frm, to, weight)</span></span>:
+        <span class="hljs-keyword">self</span>.graph[frm].append([to, weight])
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.directed is <span class="hljs-symbol">False:</span>
+            <span class="hljs-keyword">self</span>.graph[to].append([frm, weight])
+        <span class="hljs-symbol">else:</span>
+            <span class="hljs-keyword">self</span>.graph[to] = <span class="hljs-keyword">self</span>.graph[to]
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">find_min</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, dist, visited)</span></span>:
+        minimum = float(<span class="hljs-string">'inf'</span>)
+        index = -<span class="hljs-number">1</span>
+        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph.keys():
+            <span class="hljs-keyword">if</span> visited[v] is False <span class="hljs-keyword">and</span> dist[v] &lt; <span class="hljs-symbol">minimum:</span>
+                minimum = dist[v]
+                index = v
+
+        <span class="hljs-keyword">return</span> index
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">dijkstra</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, src)</span></span>:
+        visited = {<span class="hljs-symbol">i:</span> False <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph}
+        dist = {<span class="hljs-symbol">i:</span> float(<span class="hljs-string">'inf'</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph}
+        parent = {<span class="hljs-symbol">i:</span> None <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph}
+
+        <span class="hljs-comment"># set distance of src vertex from itself 0</span>
+        dist[src] = <span class="hljs-number">0</span>
+
+        <span class="hljs-comment"># find shortest path for all vertices</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(<span class="hljs-keyword">self</span>.graph)-<span class="hljs-number">1</span>):
+            <span class="hljs-comment"># find minimum distance vertex from source</span>
+            <span class="hljs-comment"># initially src itself as dist[src] = 0</span>
+            u = <span class="hljs-keyword">self</span>.find_min(dist, visited)
+
+            <span class="hljs-comment"># mark the node as visited</span>
+            visited[u] = True
+            <span class="hljs-comment"># check if the distance through current edge is less than previously known distance to v</span>
+            <span class="hljs-keyword">for</span> v, w <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph[u]:
+
+                <span class="hljs-keyword">if</span> visited[v] is False <span class="hljs-keyword">and</span> dist[u] + w &lt; dist[v]:
+                    dist[v] = dist[u] + w
+                    parent[v] = u
+        <span class="hljs-comment"># return parent list and distance to each node from source</span>
+        <span class="hljs-keyword">return</span> parent, dist
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">printPath</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, parent, v)</span></span>:
+        <span class="hljs-keyword">if</span> parent[v] is <span class="hljs-symbol">None:</span>
+            <span class="hljs-keyword">return</span>
+        <span class="hljs-keyword">self</span>.printPath(parent, parent[v])
+        print(v, <span class="hljs-keyword">end</span>=<span class="hljs-string">' '</span>)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">printSolution</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, dist, parent, src)</span></span>:
+        print(<span class="hljs-string">'{}\t{}\t{}'</span>.format(<span class="hljs-string">'Vertex'</span>, <span class="hljs-string">'Distance'</span>, <span class="hljs-string">'Path'</span>))
+
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph.keys():
+            <span class="hljs-keyword">if</span> i == <span class="hljs-symbol">src:</span>
+                continue
+            print(<span class="hljs-string">'{} -&gt; {}\t\t{}\t\t{}'</span>.format(src, i, dist[i], src), <span class="hljs-keyword">end</span>=<span class="hljs-string">' '</span>)
+            <span class="hljs-keyword">self</span>.printPath(parent, i)
+            print()
+
+<span class="hljs-keyword">if</span> __name_<span class="hljs-number">_</span> == <span class="hljs-string">'__main__'</span>:
+    <span class="hljs-comment"># make an undirected graph</span>
+    graph = Graph()
+
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>)
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">8</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">7</span>, <span class="hljs-number">11</span>)
+    graph.addEdge(<span class="hljs-number">7</span>, <span class="hljs-number">6</span>, <span class="hljs-number">1</span>)
+    graph.addEdge(<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">7</span>)
+    graph.addEdge(<span class="hljs-number">6</span>, <span class="hljs-number">8</span>, <span class="hljs-number">6</span>)
+    graph.addEdge(<span class="hljs-number">6</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">8</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">7</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">4</span>)
+    graph.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">9</span>)
+    graph.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">14</span>)
+    graph.addEdge(<span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">10</span>)
+
+    parent, dist = graph.dijkstra(<span class="hljs-number">0</span>)
+
+    graph.printSolution(dist, parent, <span class="hljs-number">0</span>)
+</code></pre>
+    <h4 id="112">112. 在给定的边缘加权有向图中找出每对顶点之间的最短距离</h4>
+    <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">floyd_warshall</span><span class="hljs-params">(graph)</span>:</span>
+    shortest_dist = []
+
+    <span class="hljs-comment"># copy matrix for storing resultant shortest distances</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> graph:
+        shortest_dist.append(i)
+
+    <span class="hljs-comment"># Number of vertices in graph</span>
+    V = len(graph) - <span class="hljs-number">1</span>
+
+    <span class="hljs-comment"># k is intermediate vertex</span>
+    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> range(V+<span class="hljs-number">1</span>):
+        <span class="hljs-comment"># i is source</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(V+<span class="hljs-number">1</span>):
+            <span class="hljs-comment"># j is destination</span>
+            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(V+<span class="hljs-number">1</span>):
+                <span class="hljs-comment"># store the path which is shorter i.e. min(i-&gt;j, i-&gt;k-&gt;j)</span>
+                shortest_dist[i][j] = min(shortest_dist[i][j], shortest_dist[i][k] + shortest_dist[k][j])
+    <span class="hljs-comment"># return the resultant matrix</span>
+    <span class="hljs-keyword">return</span> shortest_dist
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    INF = float(<span class="hljs-string">'inf'</span>)
+    graph = [[<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, INF, <span class="hljs-number">10</span>],
+             [INF, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>, INF],
+             [INF, INF, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+             [INF, INF, INF, <span class="hljs-number">0</span>]]
+
+    shortest_dist_matrix = floyd_warshall(graph)
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> shortest_dist_matrix:
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> i:
+            <span class="hljs-keyword">if</span> j != float(<span class="hljs-string">'inf'</span>):
+                print(j, <span class="hljs-string">'\t'</span>, end=<span class="hljs-string">''</span>)
+            <span class="hljs-keyword">else</span>:
+                print(j, end=<span class="hljs-string">' '</span>)
+        print()
+</code></pre>
+    <h4 id="113">113. 图形实现</h4>
+    <pre><code class="hljs ruby"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Vertex</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, key)</span></span>:
+        <span class="hljs-keyword">self</span>.key = key
+        <span class="hljs-keyword">self</span>.adjacent = {}
+        <span class="hljs-keyword">self</span>.visited = False
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">setKey</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, key)</span></span>:
+        <span class="hljs-keyword">self</span>.key = key
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getKey</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.key
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getVisited</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.visited
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">setVisited</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, val=True)</span></span>:
+        <span class="hljs-keyword">self</span>.visited = val
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addNeighbour</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, neighbour, weight=<span class="hljs-number">0</span>)</span></span>:
+        <span class="hljs-keyword">self</span>.adjacent[neighbour] = weight
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getNeighbours</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.adjacent.keys()
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getWeight</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, neighbour)</span></span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.adjacent[neighbour]
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Graph</span>:</span>
+
+    <span class="hljs-comment"># Graph is undirected by default</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, directed=False)</span></span>:
+        <span class="hljs-keyword">self</span>.vertices = {}
+        <span class="hljs-keyword">self</span>.numberOfVertices = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">self</span>.directed = directed
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addVertex</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, key)</span></span>:
+        node = Vertex(key)
+        <span class="hljs-keyword">self</span>.vertices[key] = node
+        <span class="hljs-keyword">self</span>.numberOfVertices += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">return</span> node
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, frm, to, weight=<span class="hljs-number">0</span>)</span></span>:
+        <span class="hljs-keyword">if</span> frm <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">vertices:</span>
+            <span class="hljs-keyword">self</span>.addVertex(frm)
+
+        <span class="hljs-keyword">if</span> to <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">vertices:</span>
+            <span class="hljs-keyword">self</span>.addVertex(to)
+
+        <span class="hljs-keyword">self</span>.vertices[frm].addNeighbour(<span class="hljs-keyword">self</span>.vertices[to], weight)
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">directed:</span>
+            <span class="hljs-keyword">self</span>.vertices[to].addNeighbour(<span class="hljs-keyword">self</span>.vertices[frm], weight)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getVertex</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, key)</span></span>:
+        <span class="hljs-keyword">if</span> key <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">vertices:</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.vertices[key]
+        <span class="hljs-symbol">else:</span>
+            <span class="hljs-keyword">return</span> None
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getVertices</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.vertices.keys()
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getEdges</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+        edges = []
+        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">vertices:</span>
+            edgesFromVertex = []
+
+            <span class="hljs-keyword">for</span> w <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.vertices[v].getNeighbours():
+                frm = <span class="hljs-keyword">self</span>.vertices[v].getKey()
+                to = w.getKey()
+                weight = <span class="hljs-keyword">self</span>.vertices[v].getWeight(w)
+                edgesFromVertex.append((frm, to, weight))
+
+            <span class="hljs-keyword">if</span> len(edgesFromVertex) != <span class="hljs-number">0</span>:
+                edges.append(edgesFromVertex)
+
+        <span class="hljs-keyword">return</span> edges
+
+
+<span class="hljs-keyword">if</span> __name_<span class="hljs-number">_</span> == <span class="hljs-string">'__main__'</span>:
+    g = Graph(directed=False)
+    g.addVertex(<span class="hljs-string">'a'</span>)
+    g.addVertex(<span class="hljs-string">'b'</span>)
+    g.addVertex(<span class="hljs-string">'c'</span>)
+    g.addVertex(<span class="hljs-string">'d'</span>)
+    g.addVertex(<span class="hljs-string">'e'</span>)
+    g.addVertex(<span class="hljs-string">'f'</span>)
+    g.addEdge(<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-number">3</span>)
+    g.addEdge(<span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-number">2</span>)
+    g.addEdge(<span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>, <span class="hljs-number">1</span>)
+    g.addEdge(<span class="hljs-string">'d'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-number">5</span>)
+    g.addEdge(<span class="hljs-string">'d'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-number">5</span>)
+    g.addEdge(<span class="hljs-string">'d'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-number">2</span>)
+    g.addEdge(<span class="hljs-string">'e'</span>, <span class="hljs-string">'f'</span>, <span class="hljs-number">3</span>)
+    g.addEdge(<span class="hljs-string">'f'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-number">6</span>)
+    g.addEdge(<span class="hljs-string">'f'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-number">6</span>)
+    g.addEdge(<span class="hljs-string">'f'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-number">6</span>)
+
+    <span class="hljs-keyword">for</span> edgeSet <span class="hljs-keyword">in</span> g.getEdges():
+        print(<span class="hljs-string">'edges from'</span>, edgeSet[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] + <span class="hljs-string">': '</span>, <span class="hljs-keyword">end</span>=<span class="hljs-string">''</span>)
+        print(edgeSet)
+</code></pre>
+    <h4 id="114kruskal">114. Kruskal的最小生成树算法</h4>
+    <pre><code class="hljs sql">class Graph:
+    def __init__(self, directed=False):
+        self.edges = []
+        self.vertices = <span class="hljs-keyword">set</span>({})
+        self.directed = directed
+
+    <span class="hljs-keyword">def</span> addEdge(<span class="hljs-keyword">self</span>, frm, <span class="hljs-keyword">to</span>, weight):
+        self.edges.append([frm, <span class="hljs-keyword">to</span>, weight])
+        self.vertices.add(frm)
+        self.vertices.add(<span class="hljs-keyword">to</span>)
+
+    <span class="hljs-keyword">def</span> removeEdge(<span class="hljs-keyword">self</span>, frm, <span class="hljs-keyword">to</span>, weight):
+        self.edges.remove([frm, <span class="hljs-keyword">to</span>, weight])
+        flag1 = <span class="hljs-number">0</span>
+        flag2 = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> f, t, w <span class="hljs-keyword">in</span> self.edges:
+            <span class="hljs-keyword">if</span> frm == f <span class="hljs-keyword">or</span> frm == t:
+                flag1 = <span class="hljs-number">1</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">to</span> == f <span class="hljs-keyword">or</span> <span class="hljs-keyword">to</span> == t:
+                flag2 = <span class="hljs-number">1</span>
+            <span class="hljs-keyword">if</span> flag1 == <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> flag2 == <span class="hljs-number">1</span>:
+                break
+
+        <span class="hljs-keyword">if</span> flag1 != <span class="hljs-number">1</span>:
+            self.vertices.remove(frm)
+
+        <span class="hljs-keyword">if</span> flag2 != <span class="hljs-number">1</span>:
+            self.vertices.remove(<span class="hljs-keyword">to</span>)
+
+    <span class="hljs-keyword">def</span> findParent(<span class="hljs-keyword">self</span>, <span class="hljs-keyword">sets</span>, v):
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">sets</span>[v] == <span class="hljs-number">-1</span>:
+            <span class="hljs-keyword">return</span> v
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">return</span> self.findParent(<span class="hljs-keyword">sets</span>, <span class="hljs-keyword">sets</span>[v])
+
+    <span class="hljs-keyword">def</span> <span class="hljs-keyword">union</span>(<span class="hljs-keyword">self</span>, <span class="hljs-keyword">sets</span>, x, y):
+        x_set = self.findParent(<span class="hljs-keyword">sets</span>, x)
+        y_set = self.findParent(<span class="hljs-keyword">sets</span>, y)
+        <span class="hljs-keyword">sets</span>[x_set] = y_set
+
+    <span class="hljs-keyword">def</span> isCyclic(<span class="hljs-keyword">self</span>):
+        # <span class="hljs-keyword">sets</span> that <span class="hljs-keyword">show</span> combined vertices <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span>
+        <span class="hljs-keyword">sets</span> = {i: <span class="hljs-number">-1</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.vertices}
+        <span class="hljs-keyword">for</span> v1, v2, w <span class="hljs-keyword">in</span> self.edges:
+            # find parents <span class="hljs-keyword">of</span> <span class="hljs-keyword">both</span> vertices <span class="hljs-keyword">of</span> the edge
+            x = self.findParent(<span class="hljs-keyword">sets</span>, v1)
+            y = self.findParent(<span class="hljs-keyword">sets</span>, v2)
+
+            # <span class="hljs-keyword">if</span> they <span class="hljs-keyword">share</span> a common <span class="hljs-keyword">parent</span> <span class="hljs-keyword">loop</span> <span class="hljs-keyword">found</span>
+            <span class="hljs-keyword">if</span> x == y:
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+            # <span class="hljs-keyword">union</span> the two vertices <span class="hljs-keyword">in</span> the same <span class="hljs-keyword">set</span>
+            self.union(<span class="hljs-keyword">sets</span>, x, y)
+
+        # <span class="hljs-keyword">if</span> <span class="hljs-keyword">no</span> <span class="hljs-keyword">loop</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">cycle</span> <span class="hljs-keyword">found</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+
+    <span class="hljs-keyword">def</span> kruskalMST(<span class="hljs-keyword">self</span>):
+        g = Graph()
+
+        self.edges = sorted(self.edges, <span class="hljs-keyword">key</span>=lambda x: x[<span class="hljs-number">2</span>])
+
+        <span class="hljs-keyword">for</span> frm, <span class="hljs-keyword">to</span>, w <span class="hljs-keyword">in</span> self.edges:
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">len</span>(g.edges) == <span class="hljs-keyword">len</span>(graph.vertices)<span class="hljs-number">-1</span>:
+                break
+            g.addEdge(frm, <span class="hljs-keyword">to</span>, w)
+            <span class="hljs-keyword">if</span> g.isCyclic():
+                g.removeEdge(frm, <span class="hljs-keyword">to</span>, w)
+        <span class="hljs-keyword">return</span> g
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    # make an undirected graph
+    graph = Graph()
+
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10</span>)
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">6</span>)
+    graph.addEdge(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>)
+    graph.addEdge(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">15</span>)
+    graph.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>)
+
+    new_graph = graph.kruskalMST()
+
+    <span class="hljs-keyword">for</span> f, t, w <span class="hljs-keyword">in</span> new_graph.edges:
+        print(f, <span class="hljs-string">"--"</span>, t, <span class="hljs-string">"="</span>, w)
+</code></pre>
+    <h4 id="115">115. 拓扑排序</h4>
+    <pre><code class="hljs ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Graph</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, directed=False)</span></span>:
+        <span class="hljs-keyword">self</span>.graph = defaultdict(list)
+        <span class="hljs-keyword">self</span>.directed = directed
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, frm, to)</span></span>:
+        <span class="hljs-keyword">self</span>.graph[frm].append(to)
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.directed is <span class="hljs-symbol">False:</span>
+            <span class="hljs-keyword">self</span>.graph[to].append(frm)
+        <span class="hljs-symbol">else:</span>
+            <span class="hljs-keyword">self</span>.graph[to] = <span class="hljs-keyword">self</span>.graph[to]
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">topoSortUtil</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, s, visited, sortList)</span></span>:
+        visited[s] = True
+
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph[s]:
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> visited[i]:
+                <span class="hljs-keyword">self</span>.topoSortUtil(i, visited, sortList)
+
+        sortList.insert(<span class="hljs-number">0</span>, s)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">topologicalSort</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+        visited = {<span class="hljs-symbol">i:</span> False <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.graph}
+
+        sortList = []
+        <span class="hljs-comment"># traverse for all the vertices in other components of graph</span>
+        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.<span class="hljs-symbol">graph:</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> visited[v]:
+                <span class="hljs-keyword">self</span>.topoSortUtil(v, visited, sortList)
+
+        print(sortList)
+
+
+<span class="hljs-keyword">if</span> __name_<span class="hljs-number">_</span> == <span class="hljs-string">'__main__'</span>:
+    <span class="hljs-comment"># make an directed graph</span>
+    g = Graph(directed=True)
+
+    g.addEdge(<span class="hljs-number">5</span>, <span class="hljs-number">2</span>)
+    g.addEdge(<span class="hljs-number">5</span>, <span class="hljs-number">0</span>)
+    g.addEdge(<span class="hljs-number">4</span>, <span class="hljs-number">0</span>)
+    g.addEdge(<span class="hljs-number">4</span>, <span class="hljs-number">1</span>)
+    g.addEdge(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+    g.addEdge(<span class="hljs-number">3</span>, <span class="hljs-number">1</span>)
+
+    <span class="hljs-comment"># call topologicalSort()</span>
+    print(<span class="hljs-string">"Topological Sort:"</span>)
+    g.topologicalSort()
+</code></pre>
+    <h4 id="116">116. 以下哪个语句创建字典？（多选题）</h4>
+    <p>a）d = {}
+        b）d = {“john”：40，“peter”：45}
+        c）d = {40：“john”，45：“peter”}
+        d）d =（40：“john” ，45：“50”）</p>
+    <p>答案： b，c＆d。 </p>
+    <h4 id="117">117. 其中哪一个是分区？</h4>
+    <p>a）/
+        b）//
+        c）％
+        d）没有提到的</p>
+    <p>答案： b</p>
+    <p>当两个操作数都是整数时，python 会删除小数部分并给出舍入值，以获得准确的答案使用分层。例如，5/2 = 2.5，但两个操作数都是整数，因此在 python 中对此表达式的回答是2.要获得2.5作为答案，请使用//使用
+        floor division。所以，5 // 2 = 2.5</p>
+    <h4 id="118">118. 标识符的最大可能长度是多少？</h4>
+    <p>a）31个字符
+        b）63个字符
+        c）79个字符
+        d）以上都不是</p>
+    <p>答案： d）以上都不是</p>
+    <p>标识符可以是任意长度。</p>
+    <h4 id="119">119. 为什么不鼓励以下划线开头的局部变量名？</h4>
+    <p>a）它们用于表示类的私有变量
+        b）它们使解释器混淆
+        c）它们用于指示全局变量
+        d）它们减慢执行速度</p>
+    <p>答案： a）它们用于表示类的私有变量</p>
+    <p>由于 Python 没有私有变量的概念，因此前导下划线用于表示不能从类外部访问的变量。</p>
+    <h4 id="120">120. 以下哪项是无效声明？</h4>
+    <p>a）abc = 1,000,000
+        b）abc = 1000 2000 3000
+        c）a，b，c =
+        1000,2000,3000 d）a<em>b</em>c = 1,000,000</p>
+    <p>答案： b）abc = 1000 2000 3000</p>
+    <p>变量名中不允许使用空格。</p>
+    <h4 id="121output">121. 以下是什么Output？</h4>
+    <pre><code class="hljs python"><span class="hljs-keyword">try</span>:
+    <span class="hljs-keyword">if</span> <span class="hljs-string">'1'</span> != <span class="hljs-number">1</span>:
+        <span class="hljs-keyword">raise</span> <span class="hljs-string">"someError"</span>
+    <span class="hljs-keyword">else</span>:
+        print(<span class="hljs-string">"someError has not occured"</span>)
+<span class="hljs-keyword">except</span> <span class="hljs-string">"someError"</span>:
+    <span class="hljs-keyword">print</span> (<span class="hljs-string">"someError has occured"</span>)
+</code></pre>
+    <p>a）发生了 someError
+        b）没有发生 someError
+        c）无效代码
+        d）以上都没有</p>
+    <p>答案： c）代码无效</p>
+    <p>新的异常类必须从 BaseException 继承。这里没有这样的遗产。</p>
+    <h4 id="122list12332221425list11">122. 假设 list1 是[2,33,222,14,25]，什么是 list1 [-1]？</h4>
+    <p>a）错误
+        b）无
+        c）25
+        d）2</p>
+    <p>答案： c）25</p>
+    <p>索引 - 1 对应于列表中的最后一个索引。</p>
+    <h4 id="123cscorestxt">123. 要打开文件 c：scores.txt 进行写作，我们使用</h4>
+    <p>a）outfile = open（“c：scores.txt”，“r”）
+        b）outfile = open（“c：scores.txt”，“w”）
+        c）outfile = open（file =“c：scores.txt “，”r“）
+        d）outfile = open（file =”c：scores.txt“，”o“）</p>
+    <p>答案： b）该位置包含双斜杠（），w用于表示正在写入文件。</p>
+    <h4 id="124output">124. 以下是什么 Output？</h4>
+    <pre><code class="hljs python">f = <span class="hljs-keyword">None</span>
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range (<span class="hljs-number">5</span>):
+    <span class="hljs-keyword">with</span> open(<span class="hljs-string">"data.txt"</span>, <span class="hljs-string">"w"</span>) <span class="hljs-keyword">as</span> f:
+        <span class="hljs-keyword">if</span> i &gt; <span class="hljs-number">2</span>:
+            <span class="hljs-keyword">break</span>
+
+<span class="hljs-keyword">print</span> f.closed
+</code></pre>
+    <p>a）真
+        b）假
+        c）没有
+        d）错误</p>
+    <p>答案： a）是的 </p>
+    <p>与 open 文件一起使用时，WITH 语句可确保在 with 块退出时关闭文件对象。</p>
+    <h4 id="125tryexceptelseelse">125. try-except-else 的 else 部分什么时候执行？</h4>
+    <p>a）总是
+        b）当发生异常时
+        c）当没有异常发生时
+        d）当除了块之外发生异常时</p>
+    <p>答案： c）没有异常发生时</p>
+    <p>当没有异常发生时，执行 else 部分。</p></div>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#python"><span class="toc-number">1.</span> <span class="toc-text">基本 Python 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1python"><span class="toc-number">1.1.</span> <span class="toc-text">1. Python 中的列表和元组有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2python"><span class="toc-number">1.2.</span> <span class="toc-text">2. Python 的主要功能是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3python"><span class="toc-number">1.3.</span> <span class="toc-text">3. python 是编程语言还是脚本语言？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4python"><span class="toc-number">1.4.</span> <span class="toc-text">4. Python 是一种解释性语言吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5pep8"><span class="toc-number">1.5.</span> <span class="toc-text">5. 什么是 pep 8？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6python"><span class="toc-number">1.6.</span> <span class="toc-text">6. 如何在 Python 中管理内存？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7python"><span class="toc-number">1.7.</span> <span class="toc-text">7. Python 中的命名空间是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8pythonpath"><span class="toc-number">1.8.</span> <span class="toc-text">8. 什么是 PYTHONPATH？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9pythonpython"><span class="toc-number">1.9.</span> <span class="toc-text">9. 什么是 python 模块？在 Python 中命名一些常用的内置模块？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10python"><span class="toc-number">1.10.</span> <span class="toc-text">10. Python 中的局部变量和全局变量是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11python"><span class="toc-number">1.11.</span> <span class="toc-text">11. python 是否区分大小写？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12python"><span class="toc-number">1.12.</span> <span class="toc-text">12. Python 中的类型转换是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#13python"><span class="toc-number">1.13.</span> <span class="toc-text">13. Python 中有哪些内置类型？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#14python"><span class="toc-number">1.14.</span> <span class="toc-text">14. python 中是否需要缩进？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#15pythonarray"><span class="toc-number">1.15.</span> <span class="toc-text">15. Python array和列表有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#16python"><span class="toc-number">1.16.</span> <span class="toc-text">16. Python 中的函数是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#17__init__"><span class="toc-number">1.17.</span> <span class="toc-text">17. init 是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#18lambda"><span class="toc-number">1.18.</span> <span class="toc-text">18. 什么是 lambda 函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#19pythonself"><span class="toc-number">1.19.</span> <span class="toc-text">19. Python 中的 self 是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#20"><span class="toc-number">1.20.</span> <span class="toc-text">20. 如何中断，继续并通过工作？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#211"><span class="toc-number">1.21.</span> <span class="toc-text">21. [:: - 1} 的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#22python"><span class="toc-number">1.22.</span> <span class="toc-text">22. 如何在 Python 中随机化列表中的项目？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#23python"><span class="toc-number">1.23.</span> <span class="toc-text">23. 什么是 python 迭代器？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#24python"><span class="toc-number">1.24.</span> <span class="toc-text">24. 如何在 Python 中生成随机数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#25rangexrange"><span class="toc-number">1.25.</span> <span class="toc-text">25. range＆xrange 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#26python"><span class="toc-number">1.26.</span> <span class="toc-text">26. 你如何在 python 中写注释？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#27picklingunpickling"><span class="toc-number">1.27.</span> <span class="toc-text">27. 什么是 pickling 和 unpickling？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#28python"><span class="toc-number">1.28.</span> <span class="toc-text">28. python 中的生成器是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#29"><span class="toc-number">1.29.</span> <span class="toc-text">29. 你如何把字符串的第一个字母大写？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#30"><span class="toc-number">1.30.</span> <span class="toc-text">30. 如何将字符串转换为全小写？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#31python"><span class="toc-number">1.31.</span> <span class="toc-text">31. 如何在 python 中注释多行？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#32pythondocstrings"><span class="toc-number">1.32.</span> <span class="toc-text">32. Python 中的 Docstrings 是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#33isnotin"><span class="toc-number">1.33.</span> <span class="toc-text">33. 操作符 is、not 和 in 的目的是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#34pythonhelpdir"><span class="toc-number">1.34.</span> <span class="toc-text">34. Python 中 help（）和 dir（）函数的用法是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#35python"><span class="toc-number">1.35.</span> <span class="toc-text">35. 每当 Python 退出时，为什么不是所有的内存都被解除分配？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#36pythondictionary"><span class="toc-number">1.36.</span> <span class="toc-text">36. Python 中的字典（dictionary）是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#37python"><span class="toc-number">1.37.</span> <span class="toc-text">37. 如何在 python 中使用三元运算符？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#38argskwargs"><span class="toc-number">1.38.</span> <span class="toc-text">38. 这是什么意思：* args，** kwargs？我们为什么要用呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#39len"><span class="toc-number">1.39.</span> <span class="toc-text">39. len（）的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#40pythonresplitsubsubn"><span class="toc-number">1.40.</span> <span class="toc-text">40. Python 中“re”模块的 split（），sub（），subn（）这三个方法的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#41"><span class="toc-number">1.41.</span> <span class="toc-text">41. 什么是负指数，为什么使用它们？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#42python"><span class="toc-number">1.42.</span> <span class="toc-text">42. 什么是 Python 包？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#43python"><span class="toc-number">1.43.</span> <span class="toc-text">43. 如何在 Python 中删除文件？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#44python"><span class="toc-number">1.44.</span> <span class="toc-text">44. 什么是 python 的内置类型？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#45numpypython"><span class="toc-number">1.45.</span> <span class="toc-text">45. NumPy 阵列在（嵌套）Python 列表中提供了哪些优势？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#46pythonarray"><span class="toc-number">1.46.</span> <span class="toc-text">46. 如何将值添加到 python array？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#47pythonarray"><span class="toc-number">1.47.</span> <span class="toc-text">47. 如何删除 python array的值？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#48pythonoops"><span class="toc-number">1.48.</span> <span class="toc-text">48. Python 有 OOps 概念吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#49"><span class="toc-number">1.49.</span> <span class="toc-text">49. 深拷贝和浅拷贝有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#50python"><span class="toc-number">1.50.</span> <span class="toc-text">50. 如何在 Python 中实现多线程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#51python"><span class="toc-number">1.51.</span> <span class="toc-text">51. 在 python 中编译和链接的过程是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#52python"><span class="toc-number">1.52.</span> <span class="toc-text">52. 什么是 Python 库？举几个例子。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#53"><span class="toc-number">1.53.</span> <span class="toc-text">53. 什么是拆分用于？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#54python"><span class="toc-number">1.54.</span> <span class="toc-text">54. 如何在 python 中导入模块？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#oops"><span class="toc-number">2.</span> <span class="toc-text">OOPS 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#55python"><span class="toc-number">2.1.</span> <span class="toc-text">55. 用一个例子解释 Python 中的继承。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#56python"><span class="toc-number">2.2.</span> <span class="toc-text">56. 如何在 Python 中创建类？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#57"><span class="toc-number">2.3.</span> <span class="toc-text">57. 什么是猴子补丁？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#58python"><span class="toc-number">2.4.</span> <span class="toc-text">58. python 是否支持多重继承？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#59python"><span class="toc-number">2.5.</span> <span class="toc-text">59. Python 中的多态是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#60python"><span class="toc-number">2.6.</span> <span class="toc-text">60. 在 Python 中怎样定义封装？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#61python"><span class="toc-number">2.7.</span> <span class="toc-text">61. 你如何在 Python 中进行数据抽象？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#62python"><span class="toc-number">2.8.</span> <span class="toc-text">62. python 是否使用了访问说明符？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#63python"><span class="toc-number">2.9.</span> <span class="toc-text">63. 如何在 Python 中创建一个空类？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#64object"><span class="toc-number">2.10.</span> <span class="toc-text">64. object（）有什么作用？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-1"><span class="toc-number">3.</span> <span class="toc-text">基本 Python 编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#65python"><span class="toc-number">3.1.</span> <span class="toc-text">65. 用 Python 编写程序来执行冒泡排序算法。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#66pythonstar"><span class="toc-number">3.2.</span> <span class="toc-text">66. 用 Python 编写程序来生成 Star 三角形。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#67pythonfibonacci"><span class="toc-number">3.3.</span> <span class="toc-text">67. 编写一个程序，用Python生成Fibonacci系列。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#68python"><span class="toc-number">3.4.</span> <span class="toc-text">68. 用 Python 编写程序来检查数字是否为素数。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#69python"><span class="toc-number">3.5.</span> <span class="toc-text">69. 用 Python 编写程序来检查序列是否是回文序列。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#70"><span class="toc-number">3.6.</span> <span class="toc-text">70. 写一个单行，用于计算文件中大写字母的数量。即使文件太大而无法放入内存，你的代码也应该可以正常工作。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#71python"><span class="toc-number">3.7.</span> <span class="toc-text">71. 在 Python 中为数值数据集编写排序算法。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#72a0a1an"><span class="toc-number">3.8.</span> <span class="toc-text">72. 查看下面的代码，记下 A0，A1，... An 的最终值。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-2"><span class="toc-number">4.</span> <span class="toc-text">Python 库面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#73flask"><span class="toc-number">4.1.</span> <span class="toc-text">73. 解释 Flask 是什么及其好处？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#74djangoflask"><span class="toc-number">4.2.</span> <span class="toc-text">74. Django 比 Flask 好吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#75djangopyramidflask"><span class="toc-number">4.3.</span> <span class="toc-text">75. 提到 Django，Pyramid 和 Flask 之间的差异。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#76django"><span class="toc-number">4.4.</span> <span class="toc-text">76. 讨论 Django 架构。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#77django"><span class="toc-number">4.5.</span> <span class="toc-text">77. 解释如何在 Django 中设置数据库。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#78djangoview"><span class="toc-number">4.6.</span> <span class="toc-text">78. 举例说明如何在 Django 中编写 VIEW？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#79django"><span class="toc-number">4.7.</span> <span class="toc-text">79. 提及 Django 模板的组成部分。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#80django"><span class="toc-number">4.8.</span> <span class="toc-text">80. 在 Django 框架中解释会话的使用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#81django"><span class="toc-number">4.9.</span> <span class="toc-text">81. 列出 Django 中的继承样式。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webscrapingpython"><span class="toc-number">5.</span> <span class="toc-text">Web Scraping - Python 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#82url"><span class="toc-number">5.1.</span> <span class="toc-text">82. 如何使用我已经知道的 URL 地址本地保存图像？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#83google"><span class="toc-number">5.2.</span> <span class="toc-text">83. 如何获取任何网址或网页的 Google 缓存时限？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#84imdb250"><span class="toc-number">5.3.</span> <span class="toc-text">84. 你需要从 IMDb 前 250 电影页面中删除数据。它应该只有字段电影名称，年份和评级。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-3"><span class="toc-number">6.</span> <span class="toc-text">数据分析 - Python 面试问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#85pythonmap"><span class="toc-number">6.1.</span> <span class="toc-text">85. 什么是 Python 中的 map 函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#86pythonnumpy"><span class="toc-number">6.2.</span> <span class="toc-text">86. python numpy 比列表更好吗？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#87numpyarrayn"><span class="toc-number">6.3.</span> <span class="toc-text">87. 如何在 NumPy array中获得 N 个最大值的索引？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#88pythonnumpy"><span class="toc-number">6.4.</span> <span class="toc-text">88. 你如何用 Python / NumPy 计算百分位数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#89numpyscipy"><span class="toc-number">6.5.</span> <span class="toc-text">89. NumPy 和 SciPy 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#90numpyscipy3d"><span class="toc-number">6.6.</span> <span class="toc-text">90. 如何使用 NumPy / SciPy 制作 3D 绘图/可视化？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#91n20"><span class="toc-number">6.7.</span> <span class="toc-text">91. 检查给定数字n是否为2或0的幂</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#92ab"><span class="toc-number">6.8.</span> <span class="toc-text">92. 计算将A转换为B所需的位数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#93array"><span class="toc-number">6.9.</span> <span class="toc-text">93. 在重复元素array中查找两个非重复元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#94"><span class="toc-number">6.10.</span> <span class="toc-text">94. 找到具有相同设置位数的下一个较大和下一个较小的数字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#95nw"><span class="toc-number">6.11.</span> <span class="toc-text">95. 给定 n 个项目的重量和值，将这些物品放入容量为 W 的背包中背包中的最大总价值。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#96nn"><span class="toc-number">6.12.</span> <span class="toc-text">96. 给定一根长度为 n 英寸的杆和一系列价格，其中包含所有尺寸小于 n 的尺寸的价格。确定通过切割杆和销售件可获得的最大值。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#97str1str2str1str1str2"><span class="toc-number">6.13.</span> <span class="toc-text">97. 给定两个字符串 str1 和 str2 以及可以在 str1 上执行的操作。查找所需的最小编辑数（操作）将&#39;str1&#39;转换为&#39;str2&#39;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#98011"><span class="toc-number">6.14.</span> <span class="toc-text">98. 给定 0 和 1 的二维矩阵，找到最大的广场，其中包含全部 1。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#99"><span class="toc-number">6.15.</span> <span class="toc-text">99. 找到两者中存在的最长子序列的长度。子序列是以相同的相对顺序出现的序列，但不一定是连续的。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#100"><span class="toc-number">6.16.</span> <span class="toc-text">100. 找到给定序列的最长子序列的长度，以便对子序列的所有元素进行排序，按顺序递增。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#101mn"><span class="toc-number">6.17.</span> <span class="toc-text">101. 给定成本矩阵成本[] []和成本[] []中的位置（m，n），</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#102"><span class="toc-number">6.18.</span> <span class="toc-text">102. 将一个集合划分为两个子集，使得子集和的差异最小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#103"><span class="toc-number">6.19.</span> <span class="toc-text">103. 给定一组非负整数和一个值和，确定是否存在给定集合的子集，其总和等于给定总和。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#104hackerrankdp"><span class="toc-number">6.20.</span> <span class="toc-text">104. HackerRank 问题算法 DP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#105dist123"><span class="toc-number">6.21.</span> <span class="toc-text">105. 给定距离 dist，计算用 1,2 和 3 步覆盖距离的总方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#106"><span class="toc-number">6.22.</span> <span class="toc-text">106. 在字符板中查找所有可能的单词</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#107"><span class="toc-number">6.23.</span> <span class="toc-text">107. 广度优先搜索遍历</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#108"><span class="toc-number">6.24.</span> <span class="toc-text">108. 深度优先搜索遍历</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#109"><span class="toc-number">6.25.</span> <span class="toc-text">109. 在有向图中检测周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#110"><span class="toc-number">6.26.</span> <span class="toc-text">110. 检测无向图中的循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#111dijkstra"><span class="toc-number">6.27.</span> <span class="toc-text">111. Dijkstra的最短路径算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#112"><span class="toc-number">6.28.</span> <span class="toc-text">112. 在给定的边缘加权有向图中找出每对顶点之间的最短距离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#113"><span class="toc-number">6.29.</span> <span class="toc-text">113. 图形实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#114kruskal"><span class="toc-number">6.30.</span> <span class="toc-text">114. Kruskal的最小生成树算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#115"><span class="toc-number">6.31.</span> <span class="toc-text">115. 拓扑排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#116"><span class="toc-number">6.32.</span> <span class="toc-text">116. 以下哪个语句创建字典？（多选题）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#117"><span class="toc-number">6.33.</span> <span class="toc-text">117. 其中哪一个是分区？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#118"><span class="toc-number">6.34.</span> <span class="toc-text">118. 标识符的最大可能长度是多少？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#119"><span class="toc-number">6.35.</span> <span class="toc-text">119. 为什么不鼓励以下划线开头的局部变量名？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#120"><span class="toc-number">6.36.</span> <span class="toc-text">120. 以下哪项是无效声明？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#121output"><span class="toc-number">6.37.</span> <span class="toc-text">121. 以下是什么Output？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#122list12332221425list11"><span class="toc-number">6.38.</span> <span class="toc-text">122. 假设 list1 是[2,33,222,14,25]，什么是 list1 [-1]？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#123cscorestxt"><span class="toc-number">6.39.</span> <span class="toc-text">123. 要打开文件 c：scores.txt 进行写作，我们使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#124output"><span class="toc-number">6.40.</span> <span class="toc-text">124. 以下是什么 Output？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#125tryexceptelseelse"><span class="toc-number">6.41.</span> <span class="toc-text">125. try-except-else 的 else 部分什么时候执行？</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&text=Python面试"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&is_video=false&description=Python面试"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Python面试&body=Check out this article: http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&title=Python面试"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/python_Interview_120/2019/10/&name=Python面试&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

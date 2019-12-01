@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="常量展开const a = 100func main() {    const b = 200    println(a, b)}$ go tool objdump -s “main.main” testTEXT main.main(SB) main.go:7 CALL runtime.printlock(SB) main.go:7 MOVQ $0x64, 0(SP) main.go:7 CALL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-6">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="常量展开const a = 100func main() {    const b = 200    println(a, b)}$ go tool objdump -s “main.main” testTEXT main.main(SB) main.go:7 CALL runtime.printlock(SB) main.go:7 MOVQ $0x64, 0(SP) main.go:7 CALL">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:52:43.893Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-6">
+<meta name="twitter:description" content="常量展开const a = 100func main() {    const b = 200    println(a, b)}$ go tool objdump -s “main.main” testTEXT main.main(SB) main.go:7 CALL runtime.printlock(SB) main.go:7 MOVQ $0x64, 0(SP) main.go:7 CALL">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-6</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-7枚举是什么？/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-5常量定义/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&text=重学 Go 语言：基础篇-6"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&is_video=false&description=重学 Go 语言：基础篇-6"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-6&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&name=重学 Go 语言：基础篇-6&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">常量展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">指定类型的常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">常量陷阱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">原理：常量的本质</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-6
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:52:43.893Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>常量展开</h3><br><pre><code class="go language-go">const a = 100<br><br>func main() {<br>    const b = 200<br>    println(a, b)<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go tool objdump -s “main.main” test<br>TEXT main.main(SB)<br> main.go:7 CALL runtime.printlock(SB)<br> main.go:7 MOVQ $0x64, 0(SP)<br> main.go:7 CALL runtime.printint(SB)<br> main.go:7 CALL runtime.printsp(SB)<br> main.go:7 MOVQ $0xc8, 0(SP)<br> main.go:7 CALL runtime.printint(SB)<br> main.go:7 CALL runtime.printnl(SB)<br> main.go:7 CALL runtime.printunlock(SB)<br></code></pre><br><p>定义常量在哪里使用就会在哪里展开。可以通过汇编来确认。</p><br><p>反汇编可以看到 <code>MOVQ $0x64, 0(SP)</code>，其实编译器会把常量展开到调用的地方，所以和 println(100) 写法根本没有任何区别。</p><br><p>因为常量会被展开，可能导致一定的性能损失，但我们用常量的目的是为了代码有更好的阅读性。一个软件最终产出除了编译出来程序以外，它的代码也是很重要的资产，代码的可阅读性和可维护性同样是非常重要的。</p><br><h3 id="-1">指定类型的常量</h3><br><pre><code class="go language-go">func main() {<br>    const c = 100<br><br>    var x byte = c<br>    var y int16 = c<br>    var z int = c<br><br>    println(x, y, z)<br>}<br></code></pre><br><p>定义常量 c，赋值给 byte、int16、int 类型的变量，只要检查不溢出就可以了，因为常量只是展开。</p><br><p>下面例子除了符号定义以外还指定类型：</p><br><pre><code class="go language-go">func main() {<br>    const c int = 100 //8 byte<br><br>    //cannot use c (type int) as type byte in assignment<br>    var x byte = c //1 byte<br>    //cannot use c (type int) as type int16 in assignment<br>    var y int16 = c //2 byte<br>    var z int = c<br><br>    println(x, y, z)<br>}<br></code></pre><br><p>如果常量 c 指定类型，抛出异常“类型不匹配”。虽然没有溢出，但是类型不匹配，因为各种类型的宽度不一致，程序不知道截取高位还是低位。</p><br><p>所以同样是定义常量，指定类型和不指定类型是两个意思，不指定类型就是符号，指定类型就要做数据宽度检查，这实际是给编译器安全检查的手段。</p><br><h3 id="-2">常量陷阱</h3><br><p>假设程序 A 里面定义了常量 X=100，把程序 A 打包成一个动态库 so，它显然还是有个头文件 h。现在有个程序 B，引用了程序 A 的常量 X，例如 print(X)，编译完就是 print(100)。如果这时把程序 A 变量 X 改为 200 的话，那么 B 输出还是 100，除非程序 B 重新编译重新展开一次，否则输出还是 100，因为程序 B 已经不引用原来的东西了。那么就会存在一个陷阱，假设一个动态库里面提供标记位，这个标记位原来用的是常量 1 表示执行某个功能，有一天标记位 1 改为 2 了，但是调用地方还是执行 1，结果就是逻辑错误，这就是所谓的陷阱。</p><br><p>例如 lib.c 文件动态库输出颜色信息：</p><br><pre><code class="c language-c">#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include “lib.h”<br><br>void test(enum color c)<br>{<br>    switch (c)<br>    {<br>        case black:<br>            printf(“black\n”);<br>            break;<br>        // case yellow:<br>        //     printf(“yellow\n”);<br>        //     break;<br>        case red:<br>            printf(“red\n”);<br>            break;<br>        default:<br>            printf(“unknown\n”);<br>    }<br>}<br></code></pre><br><p>lib.h 头文件里面定义颜色信息：</p><br><pre><code class="c language-c">#ifndef <strong>LIB</strong><br>#define <strong>LIB</strong><br><br>#define X 10<br><br>enum color { black = 1, red };<br>//enum color { black = 1, yellow, red };<br><br>void test(enum color);<br><br>#endif<br></code></pre><br><p>main.c 引用 lib.h 库：</p><br><pre><code class="c language-c">#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include “lib.h”<br><br>int main(int argc, char **argv)<br>{<br>    test(red);<br>    return 0;<br>}<br></code></pre><br><p>编译，链接动态库：</p><br><pre><code class="bash language-bash">$ gcc -fPIC -shared -g -o libmy.so lib.c<br>$ gcc -g -O0 -I. -o test main.c ./libmy.so #正常编译<br>$ ./test #输出红色<br>$ ldd test #查看引用动态库，我们知道重新引用动态库是不需要重新编译test的。<br></code></pre><br><pre><code>linux-vdso.so.1 =&gt;  (0x00007fff48bdb000)<br>./libmy.so (0x00007fd3d3908000)<br>libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007fd3d3538000)<br>/lib64/ld-linux-x86-64.so.2 (0x0000560ed6d22000)<br></code></pre><br><pre><code class="bash language-bash">$ vim lib.c #修改case yellow块注释去掉<br>$ vim lib.h #修改color，对颜色进行扩充enum color { black = 1, yellow, red };<br></code></pre><br><p>重新编译动态库：</p><br><pre><code class="bash language-bash">$ rm libmy.so<br>$ gcc -fPIC -shared -g -o libmy.so lib.c #重新编译动态库<br>$ ./test #输出黄色，展开test(2)<br></code></pre><br><p>反汇编，查看常量展开：</p><br><pre><code class="bash language-bash">$ objdump -d -M intel test | grep -A10 “&lt;main&gt;:”<br></code></pre><br><pre><code class="bash language-bash">0000000000400686 &lt;main&gt;:<br>  400686:    55                      push   rbp<br>  400687:    48 89 e5                mov    rbp,rsp<br>  40068a:    48 83 ec 10             sub    rsp,0x10<br>  40068e:    89 7d fc                mov    DWORD PTR [rbp-0x4],edi<br>  400691:    48 89 75 f0             mov    QWORD PTR [rbp-0x10],rsi<br>  400695:    bf 02 00 00 00          mov    edi,0x2 #注意还是2<br>  40069a:    e8 d1 fe ff ff          call   400570 &lt;test@plt&gt;<br>  40069f:    b8 00 00 00 00          mov    eax,0x0<br>  4006a4:    c9                      leave<br>  4006a5:    c3                      ret<br></code></pre><br><p>对于这种常量陷阱，我们一般有两种办法解决，第一把常量取消改成变量，因为变量不会展开，必须引用变量所在的内存。第二把常量改成函数，因为函数必须每次执行才能动态返回结果。</p><br><p>常量和变量都是很常见的数据组织方式，不同的是变量总是在运行期分配的，它会有确切的内存地址，常量就未必了。</p><br><h3 id="-3">原理：常量的本质</h3><br><p>严格意义上来说，没有运行期常量的概念，常量会被直接展开到你需要用的地方，既然没有运行期常量，所以它没有地址，不能会对常量取地址。</p><br><p>换句话说，常量是数据，把数据放在某个地方才会有地址吧，那个地方有地址，也就是说虚拟空间有地址但数据本身没有地址。</p><br><p>变量是虚拟空间中真实给它分配一个地址空间的，这时候才会有地址。我把常量数据写到变量里面，你能说数据有地址么？是变量有地址，变量代表的是某一段内存空间，所以它才会有地址。常量只是数据，数据你可以放到任何地方。数据本身没有地址，只有变量有地址。常量因为需要展开，所以它是只读的。你可以把数据修改掉，但是原来数据本身并没有修改，只是用新的数据覆盖而已，你修改的变量并不是常量本身。</p><br><p>常量是数据，你在什么地方用就在什么地方展开，变量是地址空间，变量才会有地址，因为变量代表内存中某一段空间，是虚拟存储空间里有一段空间，那段空间代表一个变量，我们给这段空间起个名字，因为接下来需要引用它，所以起个名字。</p><br><p>常量是数据，变量是地址空间。它俩根本不是同一个维度的。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">常量展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">指定类型的常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">常量陷阱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">原理：常量的本质</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&text=重学 Go 语言：基础篇-6"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&is_video=false&description=重学 Go 语言：基础篇-6"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-6&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&title=重学 Go 语言：基础篇-6"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-6常量展开/2019/11/&name=重学 Go 语言：基础篇-6&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

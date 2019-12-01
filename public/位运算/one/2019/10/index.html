@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="位运算 一   位操作（Bit Manipulation）可以玩出很多奇技淫巧，但是这些技巧大部分都过于晦涩，没必要深究，读者只要记住一些有用的操作即可。 一、几个有趣的位操作  利用或操作 | 和空格将英文字符转换为小写  (&apos;a&apos; | &apos; &apos;) = &apos;a&apos; (&apos;A&apos; | &apos; &apos;) = &apos;a&apos;   利用与操作 &amp;amp; 和下划线将英文字符转换为大写  (&apos;b&apos; &amp;am">
+<meta property="og:type" content="article">
+<meta property="og:title" content="位运算 一">
+<meta property="og:url" content="http://logan_2019.github.io/位运算/one/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="位运算 一   位操作（Bit Manipulation）可以玩出很多奇技淫巧，但是这些技巧大部分都过于晦涩，没必要深究，读者只要记住一些有用的操作即可。 一、几个有趣的位操作  利用或操作 | 和空格将英文字符转换为小写  (&apos;a&apos; | &apos; &apos;) = &apos;a&apos; (&apos;A&apos; | &apos; &apos;) = &apos;a&apos;   利用与操作 &amp;amp; 和下划线将英文字符转换为大写  (&apos;b&apos; &amp;am">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://pic.leetcode-cn.com/d5fb62665d631eb3e0df38a9fb837e435bac2596ae1f645f2af552e7a55b0ad2-file_1564883369283">
+<meta property="og:image" content="https://pic.leetcode-cn.com/929359011ca9647a7e37428cbbbbfc32f7cf94794b67885fc88e231cd55dd770-file_1564883370574">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.249Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="位运算 一">
+<meta name="twitter:description" content="位运算 一   位操作（Bit Manipulation）可以玩出很多奇技淫巧，但是这些技巧大部分都过于晦涩，没必要深究，读者只要记住一些有用的操作即可。 一、几个有趣的位操作  利用或操作 | 和空格将英文字符转换为小写  (&apos;a&apos; | &apos; &apos;) = &apos;a&apos; (&apos;A&apos; | &apos; &apos;) = &apos;a&apos;   利用与操作 &amp;amp; 和下划线将英文字符转换为大写  (&apos;b&apos; &amp;am">
+<meta name="twitter:image" content="https://pic.leetcode-cn.com/d5fb62665d631eb3e0df38a9fb837e435bac2596ae1f645f2af552e7a55b0ad2-file_1564883369283">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>位运算 一</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/将26个小写字母与阿拉伯数字对应/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/work_coding/work0530/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/位运算/one/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/位运算/one/2019/10/&text=位运算 一"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/位运算/one/2019/10/&is_video=false&description=位运算 一"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=位运算 一&body=Check out this article: http://logan_2019.github.io/位运算/one/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/位运算/one/2019/10/&name=位运算 一&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">一、几个有趣的位操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">2.</span> <span class="toc-text">二、算法常用操作 n &amp; (n−1)n\ \&amp;\ (n-1)n &amp; (n−1)</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        位运算 一
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.249Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>位运算 一</title>
+</head>
+<body>
+<div class="e5i1odf1 css-15w1vkl-StyledMarkdown"><p>位操作（Bit Manipulation）可以玩出很多奇技淫巧，但是这些技巧大部分都过于晦涩，没必要深究，读者只要记住一些有用的操作即可。</p>
+<h3>一、几个有趣的位操作</h3>
+<ol>
+<li>利用或操作 <code>|</code> 和空格将英文字符转换为小写</li>
+</ol>
+<pre><code class="language-c">(<span class="hljs-string">'a'</span> | <span class="hljs-string">' '</span>) = <span class="hljs-string">'a'</span>
+(<span class="hljs-string">'A'</span> | <span class="hljs-string">' '</span>) = <span class="hljs-string">'a'</span>
+</code></pre>
+<ol start="2">
+<li>利用与操作 <code>&amp;</code> 和下划线将英文字符转换为大写</li>
+</ol>
+<pre><code class="language-c">(<span class="hljs-string">'b'</span> &amp; <span class="hljs-string">'_'</span>) = <span class="hljs-string">'B'</span>
+(<span class="hljs-string">'B'</span> &amp; <span class="hljs-string">'_'</span>) = <span class="hljs-string">'B'</span>
+</code></pre>
+<ol start="3">
+<li>利用异或操作 <code>^</code> 和空格进行英文字符大小写互换</li>
+</ol>
+<pre><code class="language-c">(<span class="hljs-string">'d'</span> ^ <span class="hljs-string">' '</span>) = <span class="hljs-string">'D'</span>
+(<span class="hljs-string">'D'</span> ^ <span class="hljs-string">' '</span>) = <span class="hljs-string">'d'</span>
+</code></pre>
+<p>PS：以上操作能够产生奇特效果的原因在于 ASCII 编码。字符其实就是数字，恰巧这些字符对应的数字通过位运算就能得到正确的结果，有兴趣的读者可以查 ASCII 码表自己算算，本文就不展开讲了。</p>
+<ol start="4">
+<li>判断两个数是否异号</li>
+</ol>
+<pre><code class="language-c"><span class="hljs-keyword">int</span> x = <span class="hljs-number">-1</span>, y = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">bool</span> f = ((x ^ y) &lt; <span class="hljs-number">0</span>); <span class="hljs-comment">// true</span>
+
+<span class="hljs-keyword">int</span> x = <span class="hljs-number">3</span>, y = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">bool</span> f = ((x ^ y) &lt; <span class="hljs-number">0</span>); <span class="hljs-comment">// false</span>
+</code></pre>
+<p>PS：这个技巧还是很实用的，利用的是补码编码的符号位。如果不用位运算来判断是否异号，需要使用 <code>if else</code> 分支，还挺麻烦的。读者可能想利用乘积或者商来判断两个数是否异号，但是这种处理方式可能造成溢出，从而出现错误。</p>
+<ol start="5">
+<li>交换两个数</li>
+</ol>
+<pre><code class="language-c"><span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>, b = <span class="hljs-number">2</span>;
+a ^= b;
+b ^= a;
+a ^= b;
+<span class="hljs-comment">// 现在 a = 2, b = 1</span>
+</code></pre>
+<ol start="6">
+<li>加一</li>
+</ol>
+<pre><code class="language-c"><span class="hljs-keyword">int</span> n = <span class="hljs-number">1</span>;
+n = -~n;
+<span class="hljs-comment">// 现在 n = 2</span>
+</code></pre>
+<ol start="7">
+<li>减一</li>
+</ol>
+<pre><code class="language-c"><span class="hljs-keyword">int</span> n = <span class="hljs-number">2</span>;
+n = ~-n;
+<span class="hljs-comment">// 现在 n = 1</span>
+</code></pre>
+<p>PS：上面这三个操作就纯属装逼用的，没啥实际用处，大家了解了解乐呵一下就行。</p>
+<h3>二、算法常用操作 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mtext>&nbsp;</mtext><mi mathvariant="normal">&amp;</mi><mtext>&nbsp;</mtext><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">n\ \&amp;\ (n-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">n</span><span class="mspace">&nbsp;</span><span class="mord">&amp;</span><span class="mspace">&nbsp;</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></h3>
+<p>这个操作是算法中常见的，作用是消除数字 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 的二进制表示中的最后一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>。</p>
+<p>看个图就很容易理解了：</p>
+<p align="center"><img src="https://pic.leetcode-cn.com/d5fb62665d631eb3e0df38a9fb837e435bac2596ae1f645f2af552e7a55b0ad2-file_1564883369283" alt="n" width="400" onerror="this.src='data:image/svg+xml,%3Csvg height=\'150\' viewBox=\'0 0 150 150\' width=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'m2465 2286.42347-18.95363-18.92555-50.0112 43.79935-24.62708-24.5906-33.41155 24.5906-22.99654-17.22567v-73.0716c0-2.20914 1.79086-4 4-4h142c2.20914 0 4 1.79086 4 4zm-122-25.59081c5.52285 0 10-4.47052 10-9.98518 0-5.51467-4.47715-9.98519-10-9.98519s-10 4.47052-10 9.98519c0 5.51466 4.47715 9.98518 10 9.98518zm122 40.89296v61.27438c0 2.20914-1.79086 4-4 4h-142c-2.20914 0-4-1.79086-4-4v-53.62625l22.99654 17.22567 33.41155-24.5906 24.62708 24.5906 50.0112-43.79935z\' fill=\'%23eee\' fill-rule=\'evenodd\' transform=\'translate(-2315 -2217)\'/%3E%3C/svg%3E'; "></p>
+<p><br></p>
+<ol>
+<li><strong>计算汉明权重（Hamming Weight）</strong></li>
+</ol>
+<p><img src="https://pic.leetcode-cn.com/929359011ca9647a7e37428cbbbbfc32f7cf94794b67885fc88e231cd55dd770-file_1564883370574" alt="title" width="350" onerror="this.src='data:image/svg+xml,%3Csvg height=\'150\' viewBox=\'0 0 150 150\' width=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'m2465 2286.42347-18.95363-18.92555-50.0112 43.79935-24.62708-24.5906-33.41155 24.5906-22.99654-17.22567v-73.0716c0-2.20914 1.79086-4 4-4h142c2.20914 0 4 1.79086 4 4zm-122-25.59081c5.52285 0 10-4.47052 10-9.98518 0-5.51467-4.47715-9.98519-10-9.98519s-10 4.47052-10 9.98519c0 5.51466 4.47715 9.98518 10 9.98518zm122 40.89296v61.27438c0 2.20914-1.79086 4-4 4h-142c-2.20914 0-4-1.79086-4-4v-53.62625l22.99654 17.22567 33.41155-24.5906 24.62708 24.5906 50.0112-43.79935z\' fill=\'%23eee\' fill-rule=\'evenodd\' transform=\'translate(-2315 -2217)\'/%3E%3C/svg%3E'; "></p>
+<p>就是让你返回 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 的二进制表示中有几个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>。因为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mtext>&nbsp;</mtext><mi mathvariant="normal">&amp;</mi><mtext>&nbsp;</mtext><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">n\ \&amp;\ (n-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">n</span><span class="mspace">&nbsp;</span><span class="mord">&amp;</span><span class="mspace">&nbsp;</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 可以消除最后一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，所以可以用一个循环不停地消除 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 同时计数，直到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 变成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 为止。</p>
+<pre><code class="language-cpp"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">hammingWeight</span><span class="hljs-params">(<span class="hljs-keyword">uint32_t</span> n)</span> </span>{
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (n != <span class="hljs-number">0</span>) {
+        n = n &amp; (n - <span class="hljs-number">1</span>);
+        res++;
+    }
+    <span class="hljs-keyword">return</span> res;
+}
+</code></pre>
+<ol start="2">
+<li><strong>判断一个数是不是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 的指数</strong></li>
+</ol>
+<p>一个数如果是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 的指数，那么它的二进制表示一定只含有一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>：</p>
+<pre><code class="language-cpp"><span class="hljs-number">2</span>^<span class="hljs-number">0</span> = <span class="hljs-number">1</span> = <span class="hljs-number">0b0001</span>
+<span class="hljs-number">2</span>^<span class="hljs-number">1</span> = <span class="hljs-number">2</span> = <span class="hljs-number">0b0010</span>
+<span class="hljs-number">2</span>^<span class="hljs-number">2</span> = <span class="hljs-number">4</span> = <span class="hljs-number">0b0100</span>
+</code></pre>
+<p>如果使用位运算技巧就很简单了（注意运算符优先级，括号不可以省略）：</p>
+<pre><code class="language-cpp"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isPowerOfTwo</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>{
+    <span class="hljs-keyword">if</span> (n &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">return</span> (n &amp; (n - <span class="hljs-number">1</span>)) == <span class="hljs-number">0</span>;
+}
+</code></pre>
+</div>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">一、几个有趣的位操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">2.</span> <span class="toc-text">二、算法常用操作 n &amp; (n−1)n\ \&amp;\ (n-1)n &amp; (n−1)</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/位运算/one/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/位运算/one/2019/10/&text=位运算 一"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/位运算/one/2019/10/&is_video=false&description=位运算 一"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=位运算 一&body=Check out this article: http://logan_2019.github.io/位运算/one/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/位运算/one/2019/10/&title=位运算 一"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/位运算/one/2019/10/&name=位运算 一&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="权值共享与局部连接 1. 卷积运算作用在局部, 因此在这个区域是权值共享的, 而上一级节点与下一级节点的连接关系则称为局部连接, 若下一级节点与上一级的所有节点都有连接关系则称为全连接。 2. Feature map使用同一个卷积核运算后得到一种特征。 3. 多种特征采用多个卷积核(channel), 具体为多少个卷积核取决于num_out。 卷积的参数量以及计算量 1. 参数量： (k_w*k_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积中的重要参数">
+<meta property="og:url" content="http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="权值共享与局部连接 1. 卷积运算作用在局部, 因此在这个区域是权值共享的, 而上一级节点与下一级节点的连接关系则称为局部连接, 若下一级节点与上一级的所有节点都有连接关系则称为全连接。 2. Feature map使用同一个卷积核运算后得到一种特征。 3. 多种特征采用多个卷积核(channel), 具体为多少个卷积核取决于num_out。 卷积的参数量以及计算量 1. 参数量： (k_w*k_">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/img/stride.png">
+<meta property="og:image" content="http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/img/pad.png">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="卷积中的重要参数">
+<meta name="twitter:description" content="权值共享与局部连接 1. 卷积运算作用在局部, 因此在这个区域是权值共享的, 而上一级节点与下一级节点的连接关系则称为局部连接, 若下一级节点与上一级的所有节点都有连接关系则称为全连接。 2. Feature map使用同一个卷积核运算后得到一种特征。 3. 多种特征采用多个卷积核(channel), 具体为多少个卷积核取决于num_out。 卷积的参数量以及计算量 1. 参数量： (k_w*k_">
+<meta name="twitter:image" content="http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/img/stride.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>卷积中的重要参数</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/Python3_TensorFlow_WechatApplet/全连接层/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python3_TensorFlow_WechatApplet/BatchNorm层/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&text=卷积中的重要参数"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&is_video=false&description=卷积中的重要参数"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=卷积中的重要参数&body=Check out this article: http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&name=卷积中的重要参数&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        卷积中的重要参数
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.172Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>权值共享与局部连接</p>
+<pre><code>1. 卷积运算作用在局部, 因此在这个区域是权值共享的, 而上一级节点与下一级节点的连接关系则称为局部连接, 若下一级节点与上一级的所有节点都有连接关系则称为全连接。
+2. Feature map使用同一个卷积核运算后得到一种特征。
+3. 多种特征采用多个卷积核(channel), 具体为多少个卷积核取决于num_out。
+</code></pre><p>卷积的参数量以及计算量</p>
+<pre><code>1. 参数量： (k_w*k_h*in_channel+1)*Out_Channel, 其中+1项由偏置操作产生。
+2. 计算量： in_w*in_h*(k_w*k_h*in_channel+1)*Out_Channel
+</code></pre><p>防止过拟合的策略</p>
+<pre><code>1. 正则化
+2. 早停DorpOut
+3. 增大数据集
+4. 减少参数量
+5. 增加BatchNorm层
+</code></pre><p>步长stride, 不会影响卷积核的参数量, 但是会影响卷积计算的计算量<br><img src="../../img/stride.png" alt></p>
+<pre><code>1. 在pooling层下采样过程中会直接受stride参数影响
+2. 在同一个卷积核的情况下，stride设置不同计算所得的Feature Map也会不同
+3. stride越大计算量会小，一般设置为1或者2，设置为2时，长、宽下采样都会增大至2倍，整体下采样则增大至4倍
+
+Output size: (N-F)/stride+1
+e.g. N=7, F=3
+stride 1    =&gt;  (7-3)/1 + 1 = 5
+stride 2    =&gt;  (7-3)/2 + 1 = 3
+stride 3    =&gt;  (7-3)/3 + 1 = 2.33
+</code></pre><p>pad 确保Feature Map整数倍变化，对尺度相关的任务非常重要<br><img src="../../img/pad.png" alt></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&text=卷积中的重要参数"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&is_video=false&description=卷积中的重要参数"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=卷积中的重要参数&body=Check out this article: http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&title=卷积中的重要参数"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python3_TensorFlow_WechatApplet/卷积中的重要参数/2019/10/&name=卷积中的重要参数&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

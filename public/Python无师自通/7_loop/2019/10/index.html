@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="循环       7.1　for 循环 7.2　range 函数 7.3　while 循环 7.4　break 语句 7.5　continue 语句 7.6　嵌套循环 7.7　术语表 7.8　挑战练习           “百分之八十的成功只是出席。”   ——伍迪 · 艾伦（Woody Allen）  之前书中介绍的第二个程序打印 Hello, World! 100 次">
+<meta property="og:type" content="article">
+<meta property="og:title" content="循环">
+<meta property="og:url" content="http://logan_2019.github.io/Python无师自通/7_loop/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="循环       7.1　for 循环 7.2　range 函数 7.3　while 循环 7.4　break 语句 7.5　continue 语句 7.6　嵌套循环 7.7　术语表 7.8　挑战练习           “百分之八十的成功只是出席。”   ——伍迪 · 艾伦（Woody Allen）  之前书中介绍的第二个程序打印 Hello, World! 100 次">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.208Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="循环">
+<meta name="twitter:description" content="循环       7.1　for 循环 7.2　range 函数 7.3　while 循环 7.4　break 语句 7.5　continue 语句 7.6　嵌套循环 7.7　术语表 7.8　挑战练习           “百分之八十的成功只是出席。”   ——伍迪 · 艾伦（Woody Allen）  之前书中介绍的第二个程序打印 Hello, World! 100 次">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>循环</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/Python无师自通/6_strings/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python无师自通/8_modules/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&text=循环"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&is_video=false&description=循环"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=循环&body=Check out this article: http://logan_2019.github.io/Python无师自通/7_loop/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&name=循环&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#71for"><span class="toc-number">1.</span> <span class="toc-text">7.1　for 循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#72range"><span class="toc-number">2.</span> <span class="toc-text">7.2　range 函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#73while"><span class="toc-number">3.</span> <span class="toc-text">7.3　while 循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#74break"><span class="toc-number">4.</span> <span class="toc-text">7.4　break 语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#75continue"><span class="toc-number">5.</span> <span class="toc-text">7.5　continue 语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#76"><span class="toc-number">6.</span> <span class="toc-text">7.6　嵌套循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#77"><span class="toc-number">7.</span> <span class="toc-text">7.7　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#78"><span class="toc-number">8.</span> <span class="toc-text">7.8　挑战练习</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        循环
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.208Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>循环</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#71for">7.1　for 循环</a></li>
+<li><a href="#72range">7.2　range 函数</a></li>
+<li><a href="#73while">7.3　while 循环</a></li>
+<li><a href="#74break">7.4　break 语句</a></li>
+<li><a href="#75continue">7.5　continue 语句</a></li>
+<li><a href="#76">7.6　嵌套循环</a></li>
+<li><a href="#77">7.7　术语表</a></li>
+<li><a href="#78">7.8　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“百分之八十的成功只是出席。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——伍迪 · 艾伦（Woody Allen）</span></p>
+</blockquote>
+<p>之前书中介绍的第二个程序打印 <code>Hello, World!</code> 100 次，就是使用<strong>循环</strong>（loop）实现的。循环的意义是直到代码中定义的条件满足时才停止执行的代码块。本章将学习循环及其使用方法。</p>
+<h3 id="71for">7.1　for 循环</h3>
+<p>本节将介绍如何使用 <strong>for 循环</strong>：一种用来遍历可迭代对象的循环。这个过程被称为<strong>遍历</strong>（iterating）。我们可使用 for 循环来定义可迭代对象中每个元素都要执行一次的指令，然后在指令中对每个元素进行访问和操作。例如，可使用 for 循环遍历一个字符串列表，并使用 <code>upper</code> 方法打印每个字符大写后的字符串。</p>
+<p>可使用语法 <code>"for [变量名] in [可迭代对象名]: [指令]"</code> 定义 for 循环，其中[变量名]是计划赋给可迭代对象中每个元素值的变量名称，[指令]是每次循环要执行的代码。下面是一个遍历字符串中每个字符的 for 循环：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jya6kpm</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  name = <span class="hljs-string">"Ted"</span>
+<span class="hljs-number">5</span>  <strong><span class="hljs-keyword">for</span></strong> character <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">name:</span>
+<span class="hljs-number">6</span>      print(character)
+
+<span class="hljs-meta">&gt;&gt;</span> T
+<span class="hljs-meta">&gt;&gt;</span> e
+<span class="hljs-meta">&gt;&gt;</span> d</code></pre>
+<p>每一次循环，变量 <code>character</code> 都会被赋给可迭代对象 <code>name</code> 中的一个元素。第一次循环时打印的结果是 <code>T</code>，因为变量 <code>character</code> 被赋予了可迭代对象 <code>name</code> 中第一个元素的值；以此类推，第二次打印的结果就是 <code>e</code>，直到可迭代对象中的每个元素都遍历完。</p>
+<p>下面是使用 for 循环遍历列表元素的示例：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zeftpq8</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  shows = [<span class="hljs-string">"GOT"</span>,
+<span class="hljs-number">5</span>           <span class="hljs-string">"Narcos"</span>,
+<span class="hljs-number">6</span>           <span class="hljs-string">"Vice"</span>]
+<span class="hljs-number">7</span>  <strong><span class="hljs-keyword">for</span></strong> show <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">shows:</span>
+<span class="hljs-number">8</span>      print(show)
+
+<span class="hljs-meta">&gt;&gt;</span> GOT
+<span class="hljs-meta">&gt;&gt;</span> Narcos
+<span class="hljs-meta">&gt;&gt;</span> Vice</code></pre>
+<p>下面是 for 循环遍历元组中元素的示例：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gpr5a6e</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  coms = (<span class="hljs-string">"A. Development"</span>,
+<span class="hljs-number">5</span>          <span class="hljs-string">"Friends"</span>,
+<span class="hljs-number">6</span>          <span class="hljs-string">"Always Sunny"</span>)
+<span class="hljs-number">7</span>  <strong><span class="hljs-keyword">for</span></strong> show <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">coms:</span>
+<span class="hljs-number">8</span>      print(show)
+
+<span class="hljs-meta">&gt;&gt;</span> A. Development
+<span class="hljs-meta">&gt;&gt;</span> Friends
+<span class="hljs-meta">&gt;&gt;</span> Always Sunny</code></pre>
+<p>下面是 for 循环遍历字典元素的示例：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jk7do9b</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  people = {<span class="hljs-string">"G. Bluth II"</span>:
+<span class="hljs-number">5</span>            <span class="hljs-string">"A. Development"</span>,
+<span class="hljs-number">6</span>            <span class="hljs-string">"Barney"</span>:
+<span class="hljs-number">7</span>            <span class="hljs-string">"HIMYM"</span>,
+<span class="hljs-number">8</span>            <span class="hljs-string">"Dennis"</span>:
+09            <span class="hljs-string">"Always Sunny"</span>
+<span class="hljs-number">10</span>            }
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  <strong><span class="hljs-keyword">for</span></strong> character <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">people:</span>
+<span class="hljs-number">14</span>      print(character)
+
+<span class="hljs-meta">&gt;&gt;</span> Dennis
+<span class="hljs-meta">&gt;&gt;</span> Barney
+<span class="hljs-meta">&gt;&gt;</span> G. Bluth II</code></pre>
+<p>也可以使用 for 循环修改可变且可迭代对象中的元素，示例如下：</p>
+<pre class="代码无行号"><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/j8wvp8c</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  tv = [<span class="hljs-string">"GOT"</span>,
+<span class="hljs-number">05</span>        <span class="hljs-string">"Narcos"</span>,
+<span class="hljs-number">06</span>        <span class="hljs-string">"Vice"</span>]
+<span class="hljs-number">07</span>  i = <span class="hljs-number">0</span>
+<span class="hljs-number">08</span>  <strong><span class="hljs-keyword">for</span></strong> show <strong><span class="hljs-keyword">in</span></strong> tv:
+<span class="hljs-number">09</span>      <span class="hljs-keyword">new</span> = tv[i]
+<span class="hljs-number">10</span>      <span class="hljs-keyword">new</span> = <span class="hljs-keyword">new</span>.upper()
+<span class="hljs-number">11</span>      tv[i] = <span class="hljs-keyword">new</span>
+<span class="hljs-number">12</span>      i += <span class="hljs-number">1</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  <span class="hljs-built_in">print</span>(tv)
+
+&gt;&gt; [<span class="hljs-string">'GOT'</span>, <span class="hljs-string">'NARCOS'</span>, <span class="hljs-string">'VICE'</span>]</code></pre>
+<p>上例中使用 for 循环遍历了列表 <code>tv</code>，并通过一个<strong>索引变量</strong>（index variable）跟踪列表内当前的元素。索引变量是代表可迭代对象中索引的一个整数，起始值为 0，每循环一次索引变量的值递增一个。可以通过索引变量来获取列表中当前的元素，保存在变量 <code>new</code> 中。然后对 <code>new</code> 调用 <code>upper</code> 方法并保存结果，再用索引变量替换列表中的当前元素。最后，将 <code>i</code> 的值递增，确保在下一次循环时可以获得下一个元素。</p>
+<p>由于访问可迭代对象中索引和元素是很常见的操作，Python 提供了一个专门的语法：</p>
+<pre class="代码无行号"><code class="hljs coffeescript"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z45g63j</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  tv = [<span class="hljs-string">"GOT"</span>, <span class="hljs-string">"Narcos"</span>,
+<span class="hljs-number">5</span>        <span class="hljs-string">"Vice"</span>]
+<span class="hljs-number">6</span>  <strong><span class="hljs-keyword">for</span></strong> i, show <strong><span class="hljs-keyword">in</span></strong> enumerate(tv):
+<span class="hljs-number">07</span>      <span class="hljs-keyword">new</span> = tv[i]
+<span class="hljs-number">08</span>      <span class="hljs-keyword">new</span> = <span class="hljs-keyword">new</span>.upper()
+<span class="hljs-number">09</span>      tv[i] = <span class="hljs-keyword">new</span>
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>  <span class="hljs-built_in">print</span>(tv)
+
+&gt;&gt; [<span class="hljs-string">'GOT'</span>, <span class="hljs-string">'NARCOS'</span>, <span class="hljs-string">'VICE'</span>]</code></pre>
+<p>上例中没有遍历 <code>tv</code> 列表，而是将其调给了 <code>enumerate</code> 函数去遍历该函数返回的结果。<code>enumerate</code> 函数会返回一个对应当前元素索引的值，可保存在变量 <code>i</code> 中。</p>
+<p>还可以使用 for 循环在可变可迭代对象之间传递数据。例如，使用两个 for 循环获取两个不同列表中的所有字符串，然后将每个字符大写，并放入一个新的列表中：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zcvgklh</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  tv = [<span class="hljs-string">"GOT"</span>, <span class="hljs-string">"Narcos"</span>,
+<span class="hljs-number">05</span>        <span class="hljs-string">"Vice"</span>]
+<span class="hljs-number">06</span>  coms = [<span class="hljs-string">"Arrested Development"</span>,
+<span class="hljs-number">07</span>          <span class="hljs-string">"friends"</span>,
+08          <span class="hljs-string">"Always Sunny"</span>]
+09  all_shows = []
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>  <strong><span class="hljs-keyword">for</span></strong> show <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">tv:</span>
+<span class="hljs-number">13</span>      show = show.upper()
+<span class="hljs-number">14</span>      all_shows.append(show)
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>  <strong><span class="hljs-keyword">for</span></strong> show <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">coms:</span>
+<span class="hljs-number">18</span>      show = show.upper()
+<span class="hljs-number">19</span>      all_shows.append(show)
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>
+<span class="hljs-number">22</span>  print(all_shows)
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-string">'GOT'</span>, <span class="hljs-string">'NARCOS'</span>, <span class="hljs-string">'VICE'</span>, <span class="hljs-string">'ARRESTED DEVELOPMENT'</span>, <span class="hljs-string">'FRIENDS'</span>, <span class="hljs-string">'ALWAYS SUNNY'</span>]</code></pre>
+<p>上例中有 3 个列表：<code>tv</code>、<code>coms</code> 和 <code>all_shows</code>。在第一个循环中，遍历了列表 <code>tv</code> 中的所有元素，使用 <code>upper</code> 方法将其中每个元素都大写，然后再通过 <code>append</code> 方法添加每个元素至 <code>all_shows</code>。在第二个循环中，对列表 <code>coms</code> 做同样的操作。打印 <code>all_shows</code> 时，列表会包含另外两个列表中所有的元素，并且每个元素都是大写的。</p>
+<h3 id="72range">7.2　range 函数</h3>
+<p>可使用内置的 <code>range</code> 函数创建一个整数序列，然后通过 for 循环遍历。<code>range</code> 函数接受两个参数：序列起始数字和结束数字，返回的整数序列包含从第一个参数到第二个参数之间（不含第二个参数）的所有整数。使用 <code>range</code> 函数创建数字序列并遍历的示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hh5t8rw</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span> <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">1</span>, <span class="hljs-number">11</span>):
+<span class="hljs-number">5</span>      print(i)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+…
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">9</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">10</span></code></pre>
+<p>上例中使用 for 循环打印了 <code>range</code> 函数返回的可迭代对象中的所有数字。程序员通常将用来遍历整数列表的变量命名为 i。</p>
+<h3 id="73while">7.3　while 循环</h3>
+<p>下面介绍如何使用 <strong>while 循环</strong>：它是一种只要表达式的值为 <code>True</code> 就一直执行代码的循环。while 循环的语法是“<code>while [表达式]: [执行代码]</code>”，其中“<code>[表达式]</code>”是决定循环是否继续进行的表达式，“<code>[执行代码]</code>”则是只要循环继续就执行的代码。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j2gwlcy</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">5</span>  <strong><span class="hljs-keyword">while</span></strong> x &gt; <span class="hljs-number">0</span>:
+<span class="hljs-number">6</span>      print(<span class="hljs-string">'{}'</span>.format(x))
+<span class="hljs-number">7</span>      x -= <span class="hljs-number">1</span>
+<span class="hljs-number">8</span>  print(<span class="hljs-string">"Happy New Year!"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">10</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">9</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">8</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">7</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">6</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">5</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">3</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;</span> Happy New Year!</code></pre>
+<p>只要 while 循环的代码头中定义的表达式“<code>x &gt; 0</code>”求值为 <code>True</code>，循环主体中定义的代码将一直执行下去。第一次循环时，<code>x</code> 的值为 10，表达式 <code>x &gt; 0</code> 的值为 <code>True</code>，因此 while 循环打印 <code>x</code> 的值，并将它的值递减 <code>1</code>，这时 <code>x</code> 的值变成了 9。下一次循环时，还会打印 <code>x</code> 的值，并递减为 8。这个过程一直持续到 <code>x</code> 的值递减为 0，这时 <code>x &gt; 0</code> 的求值为 <code>False</code>，循环结束。Python 将执行循环后面的下一行代码，打印 <code>Happy New Year!</code>。</p>
+<p>如果你定义的 while 循环的表达式求值永远为 <code>True</code>，循环将不会停止执行。一个不会停止执行的循环也被称为<strong>死循环</strong>（infinite loop）。下面就是一个死循环的示例（准备好按 Ctrl+c 强制终止死循环）：</p>
+<pre class="代码无行号"><code class="hljs php"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hcwvfk8</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">while</span></strong> <span class="hljs-keyword">True</span>:
+<span class="hljs-number">5</span>      <span class="hljs-keyword">print</span>(<span class="hljs-string">"Hello, World!"</span>)
+
+&gt;&gt; Hello, World!
+…</code></pre>
+<p>因为只要代码头中定义的表达式求值为 <code>True</code>，<code>True</code> 的值永远为 <code>True</code>，所以该循环将一直执行下去。</p>
+<h3 id="74break">7.4　break 语句</h3>
+<p>可使用 break <strong>语句</strong>（带关键字 <code>break</code> 的语句）来终止循环。下面这个循环示例会执行 100 次：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zrdh88c</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>):
+<span class="hljs-number">5</span>      print(i)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+…</code></pre>
+<p>如果添加一个 break 语句，那么循环只会执行一次：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zhxf3uk</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>):
+<span class="hljs-number">5</span>      print(i)
+<span class="hljs-number">6</span>      <strong><span class="hljs-keyword">break</span></strong>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span></code></pre>
+<p>只要 Python 遇到 break 语句，循环就会终止。我们可以使用 while 循环和 <code>break</code> 关键字编写一个程序，不断地请求用户提供输入，如果输入 q 则退出。示例如下：</p>
+<pre class="代码无行号"><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jmak8tr</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  qs = [<span class="hljs-string">"What is your name?"</span>,
+<span class="hljs-number">05</span>        <span class="hljs-string">"What is your fav. color?"</span>,
+<span class="hljs-number">06</span>        <span class="hljs-string">"What is your quest?"</span>]
+<span class="hljs-number">07</span>  n = <span class="hljs-number">0</span>
+<span class="hljs-number">08</span>  <strong><span class="hljs-keyword">while</span></strong> True:
+<span class="hljs-number">09</span>      <strong><span class="hljs-built_in">print</span></strong>(<span class="hljs-string">"Type q to quit"</span>)
+<span class="hljs-number">10</span>      a  = input(qs[n])
+<span class="hljs-number">11</span>      <strong><span class="hljs-keyword">if</span></strong> a == <span class="hljs-string">"q"</span>:
+<span class="hljs-number">12</span>          <strong><span class="hljs-keyword">break</span></strong>
+<span class="hljs-number">13</span>      n = (n + <span class="hljs-number">1</span>) % <span class="hljs-number">3</span>
+
+Type q to quit
+What <span class="hljs-keyword">is</span> your name?</code></pre>
+<p>每次循环，程序都会向用户询问一个 <code>qs</code> 列表中的问题。</p>
+<p>其中，<code>n</code> 是索引变量。每次循环都会将表达式 <code>(n + 1) % 3</code> 的值赋给 <code>n</code>，这可以让程序循环调用 <code>qs</code> 列表中的问题。第一次循环的结果是 <code>n</code> 的值为 0。第二次时，<code>n</code> 被赋予了 <code>(0 + 1) % 3</code> 的结果，即 1。接下来，被赋予 <code>(1 + 1) % 3</code> 的结果，即 2。因为只要求模表达式中的第一个数字比第二个小，结果就是第一个数字。最后，<code>n</code> 被赋予 <code>(2 + 1) % 3</code> 的值，又重新变成了 0。</p>
+<h3 id="75continue">7.5　continue 语句</h3>
+<p>可使用 continue <strong>语句</strong>（带关键字 <code>continue</code> 的语句）来终止循环的当前迭代，并进入下一次迭代。假设你想打印从 1 到 5 之间除了 3 以外的所有数字，可通过 for 循环和 continue 语句实现。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hflun4p</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">1</span>, <span class="hljs-number">6</span>):
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">if</span></strong> i == <span class="hljs-number">3</span>:
+<span class="hljs-number">6</span>          <strong>continue</strong>
+<span class="hljs-number">7</span>      print(i)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">5</span></code></pre>
+<p>在上述循环中，当 <code>i</code> 的值等于 3 时，程序执行 continue 语句，但不会像 <code>break</code> 关键字那样让循环完全终止，而是会继续进行下一次迭代，跳过本应该执行的其他代码。当 <code>i</code> 等于 3 时，Python 会执行 continue 语句，而不是打印 3。</p>
+<p>通过 while 循环和 continue 语句也可以实现相同的结果。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/gp7forl</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  i = <span class="hljs-number">1</span>
+<span class="hljs-number">05</span>  <strong><span class="hljs-keyword">while</span></strong> i &lt;= <span class="hljs-number">5</span> :
+<span class="hljs-number">06</span>      <strong><span class="hljs-keyword">if</span></strong> i == <span class="hljs-number">3</span>:
+<span class="hljs-number">07</span>          i += <span class="hljs-number">1</span>
+08          <strong>continue</strong>
+09      print(i)
+<span class="hljs-number">10</span>      i += <span class="hljs-number">1</span>
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">5</span></code></pre>
+<h3 id="76">7.6　嵌套循环</h3>
+<p>可以通过多种方式对循环进行组合。例如，可以在一个循环里加入另一个循环，甚至在加入的循环里再加一个循环。循环中可嵌套的循环数量没有限制，但是最好要控制数量不要过多。当一个循环位于另一个循环之内时，它就是嵌套在第一个循环中。这种情况下，内部包含一个循环的循环称为<strong>外循环</strong>（outer loop），嵌套的循环称为<strong>内循环</strong>（inner loop）。当存在嵌套循环时，外循环每遍历一次，内循环就遍历一次其可迭代对象中的所有元素。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gqjxjtq</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>):
+<span class="hljs-number">5</span>      print(i)
+<span class="hljs-number">6</span>      <strong><span class="hljs-keyword">for</span></strong> letter <strong><span class="hljs-keyword">in</span></strong> [<span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"c"</span>]:
+<span class="hljs-number">7</span>          print(letter)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;</span> a
+<span class="hljs-meta">&gt;&gt;</span> b
+<span class="hljs-meta">&gt;&gt;</span> c
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;</span> a
+<span class="hljs-meta">&gt;&gt;</span> b
+<span class="hljs-meta">&gt;&gt;</span> c</code></pre>
+<p>不管外循环运行多少次，嵌套的 for 循环都会遍历完列表 <code>["a", "b", "c"]</code>。如果将外循环改为运行 3 次，内循环也会遍历列表 3 次。</p>
+<p>可使用两个 for 循环将一个列表中的所有数字，与另一个列表中的所有数字相加。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/z7duawp</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  list1 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]
+<span class="hljs-number">05</span>  list2 = [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>]
+<span class="hljs-number">06</span>  added = []
+<span class="hljs-number">07</span>  <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">list1:</span>
+08      <strong><span class="hljs-keyword">for</span></strong> j <strong><span class="hljs-keyword">in</span></strong> <span class="hljs-symbol">list2:</span>
+09          added.append(i + j)
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>  print(added)
+
+<span class="hljs-meta">&gt;&gt;</span> [<span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">12</span>]</code></pre>
+<p>对于第一个循环遍历列表 <code>list1</code> 中的每个整数，第二个循环遍历自身可迭代对象中的每个整数，并将其与 <code>list1</code> 中的数字相加，然后将结果添加至列表 <code>added</code>。这里将第二个 for 循环中的索引变量命名为 <code>j</code>，因为第一个循环中已使用了 <code>i</code>。</p>
+<p>还可以在 while 循环中嵌套 for 循环，反之亦可。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hnprmmv</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span> <strong><span class="hljs-keyword">while</span></strong> input(<span class="hljs-string">'y or n?'</span>) != <span class="hljs-string">'n'</span>:
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">for</span></strong> i <strong><span class="hljs-keyword">in</span></strong> range(<span class="hljs-number">1</span>, <span class="hljs-number">6</span>):
+<span class="hljs-number">6</span>          print(i)
+
+<span class="hljs-meta">&gt;&gt;</span> y or n?y
+<span class="hljs-number">1</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>
+<span class="hljs-number">5</span>
+y <span class="hljs-keyword">or</span> n?y
+<span class="hljs-number">1</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>
+<span class="hljs-number">5</span>
+y <span class="hljs-keyword">or</span> n?n
+<span class="hljs-meta">&gt;&gt;</span></code></pre>
+<p>程序在用户输入 n 之前，将会不断地打印数字 1 至 5。</p>
+<h3 id="77">7.7　术语表</h3>
+<p><strong>循环</strong>：在代码中定义的条件未满足之前，将持续执行的一段代码。</p>
+<p><strong>遍历</strong>：使用循环访问可迭代对象中的每个元素。</p>
+<p><strong>for 循环</strong>：用来迭代字符串、列表、元组或字典等可迭代对象的一种循环。</p>
+<p><strong>索引变量</strong>：变量的值为代表可迭代对象中索引的一个数字。</p>
+<p><strong>while 循环</strong>：只要表达式的值为 <code>True</code> 则持续执行的一种循环。</p>
+<p><strong>死循环</strong>：永远都不会终止的循环。</p>
+<p><strong>break 语句</strong>：带关键字 <code>break</code> 的语句，用来终止循环。</p>
+<p><strong>continue 语句</strong>：带关键字 <code>continue</code> 的语句，用来终止循环的当前迭代，并进入到下一次迭代。</p>
+<p><strong>外循环</strong>：内部包含嵌套循环的循环。</p>
+<p><strong>内循环</strong>：嵌套在另一个循环中的循环。</p>
+<h3 id="78">7.8　挑战练习</h3>
+<p>1．打印以下列表 <code>["The Walking Dead", "Entourage", "The Sopranos", "The Vampire Diaries"]</code> 中的每个元素。</p>
+<p>2．打印从 25 到 50 之间的所有数字。</p>
+<p>3．打印第一个挑战练习中的每个元素及其索引。</p>
+<p>4．编写一个包含死循环和数字列表的程序（可选择输入 q 退出）。每次循环时，请用户猜一个在列表中的数字，然后告知其猜测是否正确。</p>
+<p>5．将列表 <code>[8, 19, 148, 4]</code> 中的所有数字，与列表 <code>[9, 1, 33, 83]</code> 中的所有数字相乘，并将结果添加到第 3 个列表中。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#71for"><span class="toc-number">1.</span> <span class="toc-text">7.1　for 循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#72range"><span class="toc-number">2.</span> <span class="toc-text">7.2　range 函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#73while"><span class="toc-number">3.</span> <span class="toc-text">7.3　while 循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#74break"><span class="toc-number">4.</span> <span class="toc-text">7.4　break 语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#75continue"><span class="toc-number">5.</span> <span class="toc-text">7.5　continue 语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#76"><span class="toc-number">6.</span> <span class="toc-text">7.6　嵌套循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#77"><span class="toc-number">7.</span> <span class="toc-text">7.7　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#78"><span class="toc-number">8.</span> <span class="toc-text">7.8　挑战练习</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&text=循环"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&is_video=false&description=循环"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=循环&body=Check out this article: http://logan_2019.github.io/Python无师自通/7_loop/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&title=循环"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/7_loop/2019/10/&name=循环&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

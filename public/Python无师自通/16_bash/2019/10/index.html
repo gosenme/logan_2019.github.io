@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Bash       16.1　跟随练习 16.2　找到 Bash 16.3　命令 16.4　最近命令 16.5　相对路径与绝对路径 16.6　导航 16.7　旗标 16.8　隐藏文件 16.9　管道 16.10　环境变量 16.11　用户 16.12　了解更多 16.13　术语表 16.14　挑战练习           “除了计算机编程外，我想不出还有其他让我感兴趣的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bash">
+<meta property="og:url" content="http://logan_2019.github.io/Python无师自通/16_bash/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="Bash       16.1　跟随练习 16.2　找到 Bash 16.3　命令 16.4　最近命令 16.5　相对路径与绝对路径 16.6　导航 16.7　旗标 16.8　隐藏文件 16.9　管道 16.10　环境变量 16.11　用户 16.12　了解更多 16.13　术语表 16.14　挑战练习           “除了计算机编程外，我想不出还有其他让我感兴趣的">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/aabba550-7011-11e9-be31-a34bfde053f0">
+<meta property="og:image" content="https://images.gitbook.cn/21e6b200-7012-11e9-83ce-bf64b45f6e99">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.174Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bash">
+<meta name="twitter:description" content="Bash       16.1　跟随练习 16.2　找到 Bash 16.3　命令 16.4　最近命令 16.5　相对路径与绝对路径 16.6　导航 16.7　旗标 16.8　隐藏文件 16.9　管道 16.10　环境变量 16.11　用户 16.12　了解更多 16.13　术语表 16.14　挑战练习           “除了计算机编程外，我想不出还有其他让我感兴趣的">
+<meta name="twitter:image" content="https://images.gitbook.cn/aabba550-7011-11e9-be31-a34bfde053f0">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Bash</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/Python无师自通/15_opp_testing/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python无师自通/17_RegEx/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&text=Bash"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&is_video=false&description=Bash"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Bash&body=Check out this article: http://logan_2019.github.io/Python无师自通/16_bash/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&name=Bash&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#161"><span class="toc-number">1.</span> <span class="toc-text">16.1　跟随练习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#162bash"><span class="toc-number">2.</span> <span class="toc-text">16.2　找到 Bash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#163"><span class="toc-number">3.</span> <span class="toc-text">16.3　命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#164"><span class="toc-number">4.</span> <span class="toc-text">16.4　最近命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#165"><span class="toc-number">5.</span> <span class="toc-text">16.5　相对路径与绝对路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#166"><span class="toc-number">6.</span> <span class="toc-text">16.6　导航</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#167"><span class="toc-number">7.</span> <span class="toc-text">16.7　旗标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#168"><span class="toc-number">8.</span> <span class="toc-text">16.8　隐藏文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#169"><span class="toc-number">9.</span> <span class="toc-text">16.9　管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1610"><span class="toc-number">10.</span> <span class="toc-text">16.10　环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1611"><span class="toc-number">11.</span> <span class="toc-text">16.11　用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1612"><span class="toc-number">12.</span> <span class="toc-text">16.12　了解更多</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1613"><span class="toc-number">13.</span> <span class="toc-text">16.13　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1614"><span class="toc-number">14.</span> <span class="toc-text">16.14　挑战练习</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Bash
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.174Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>Bash</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#161">16.1　跟随练习</a></li>
+<li><a href="#162bash">16.2　找到 Bash</a></li>
+<li><a href="#163">16.3　命令</a></li>
+<li><a href="#164">16.4　最近命令</a></li>
+<li><a href="#165">16.5　相对路径与绝对路径</a></li>
+<li><a href="#166">16.6　导航</a></li>
+<li><a href="#167">16.7　旗标</a></li>
+<li><a href="#168">16.8　隐藏文件</a></li>
+<li><a href="#169">16.9　管道</a></li>
+<li><a href="#1610">16.10　环境变量</a></li>
+<li><a href="#1611">16.11　用户</a></li>
+<li><a href="#1612">16.12　了解更多</a></li>
+<li><a href="#1613">16.13　术语表</a></li>
+<li><a href="#1614">16.14　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“除了计算机编程外，我想不出还有其他让我感兴趣的工作。我可以无中生有地创造出精美的范式和结构，在此过程中也解决了无数的小谜团。</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——皮特 · 范德林登（Peter Van Der Linden）</span></p>
+</blockquote>
+<p>本章将学习使用一种被称为 <strong>Bash</strong> 的<strong>命令行接口</strong>（command-line interface）。命令行接口是一种可以支持用户输入指令，并由操作系统执行的程序。Bash 则是大部分类 UNIX 操作系统都具备的命令行接口实现。因此，本章中命令行接口和<strong>命令行</strong>可交替使用。</p>
+<p>笔者刚得到第一份编程工作时，犯了将所有时间都用来练习编程的错误。当然，要想做到职业编程的水平，需要一定的天赋。但是还有其他应该掌握的技能，比如命令行的使用。命令行是除了编码之外，其他工作的“控制中心”。</p>
+<p>例如，本书后续章节将会提到如何使用包管理器安装他人的程序，以及如何使用版本控制系统与他人进行协作。这两个工具都需要从命令行进行操作。另外，如今大部分软件都需要从互联网获取数据，而世界上大部分 Web 服务器运行的都是 Linux 系统。这些服务器没有图形化的用户界面，只能通过命令行访问。</p>
+<p>命令行、包管理器、正则表达式和版本控制，这些都是程序员工具库中的核心成员。笔者所共事过的团队中，没有成员不擅长使用这些工具。</p>
+<p>当你以编程为职业时，也需要做到可以熟练使用上述工具。笔者花了很长时间才做到这点，也很后悔当初没有更早地学习如何使用这些工具。</p>
+<h3 id="161">16.1　跟随练习</h3>
+<p>如果你使用的是 Ubuntu 或 UNIX 系统，那么计算机中会自带 Bash。如果使用的是 Windows 系统，其自带的命令行接口叫做<strong>命令提示符</strong>（Command Prompt），本章中并没有用到。最新版的 Windows 10 操作系统中已经提供了 Bash。可以前往网页 http://theselftaughtprogrammer.io/windows10bash 了解如何在 Windows 10 操作系统中使用 Bash。</p>
+<p>如果你的计算机是 Windows 操作系统，那么可以使用亚马逊的 AWS 服务创建一个运行 Ubuntu 的免费 Web 服务器。服务器的搭建很简单，而且 AWS 在编程圈子里使用也很广泛，因此对你来说这是非常有价值的经验。可以前往 http://theselftaughtprogrammer.io/aws 进行了解。</p>
+<p>如果使用的是 Windows 操作系统，又不想搭建服务器，那么可以打开网页 http://theselftaughtprogrammer.io/bashapp，里面有一个 Web 应用的链接，可以模拟 Bash 的行为，用来跟随本章中的大部分练习示例。</p>
+<p>接下来的两章中，可以使用 Windows 的命令操作符来完成练习示例。按下运行窗口键后，搜索 <code>Command Prompt</code> 即可打开。</p>
+<h3 id="162bash">16.2　找到 Bash</h3>
+<p>如果你使用的是 Ubuntu，可以点击名为搜索本地和在线资源的图标，搜索 <code>Terminal</code> 即可找到 Bash；如果你使用的是 Mac，则可通过 Spotlight 搜索查找 Bash，如图 16-1 所示。</p>
+<p><img src="https://images.gitbook.cn/aabba550-7011-11e9-be31-a34bfde053f0" alt="enter image description here"></p>
+<p>图 16-1　Bash</p>
+<h3 id="163">16.3　命令</h3>
+<p>Bash 与 Python 的 shell 类似，可以向其中输入命令（类似 Python 中的函数）。然后输入空格，以及传入命令的参数，按下回车键后，Bash 就会返回结果。<code>echo</code> 命令类似 Python 中的 <code>print</code> 函数。</p>
+<p>在本书或其他编程文档中看到美元符号后面跟着一个命令时，就意味着需要在命令行输入命令。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/junx62n</span>
+$ echo Hello, World!
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+</code></pre>
+<p>首先键入的是命令 <code>echo</code>，然后是一个空格符，以及参数 <code>Hello, World!</code>。按下回车之后，Bash 就会打印出 <code>Hello, World!</code>。</p>
+<p>也可以从命令行直接使用 Python 等已经安装好的程序。输入命令 <code>python3</code>（在编写本书时，模拟 Bash 的 Web 应用还不支持 Python3。那么则输入 <code>Python</code> 使用 Python2）：</p>
+<pre><code class="hljs cpp"><span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/htoospk</span></span>
+$ python3
+</code></pre>
+<p>现在可以执行 Python 代码了：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/jk2acua</span>
+print(<span class="hljs-string">"Hello, World!"</span>)
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+</code></pre>
+<p>输入 <code>exit()</code> 可退出 Python。</p>
+<h3 id="164">16.4　最近命令</h3>
+<p>可通过上下箭头按键，查看在 Bash 中近期执行的命令。如需查看所有最近命令的列表，可使用命令 <code>history</code> 查看：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/go2spbt</span>
+$ history
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>. echo Hello, World!
+</code></pre>
+<h3 id="165">16.5　相对路径与绝对路径</h3>
+<p>操作系统中包含各种目录和文件。<strong>目录</strong>（directory）是文件夹的另一种叫法。所有的目录和文件都有一个路径，即目录或文件在操作系统中的存放地址。在使用 Bash 时，其必然是会位于某个目录中。可使用命令 <code>pwd[表示打印工作目录（working directory）]</code> 来打印当前所在的目录的名称：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/hptsqhp</span>
+$ pwd
+<span class="hljs-meta">&gt;&gt;</span> /Users/coryalthoff
+</code></pre>
+<p>操作系统使用树状结构来表示其目录和目录位置。在计算机科学中，树状结构是一种非常重要的数据结构（本书第四部分会详细介绍）。在树状结构中，位于顶部的是根，根可以有多个分支，每个分支又可以拥有其他分支，以此类推，直至无穷。图 16-2 所示是一个表示操作系统中目录结构的树状结构示例：</p>
+<p><img src="https://images.gitbook.cn/21e6b200-7012-11e9-83ce-bf64b45f6e99" alt="enter image description here"></p>
+<p>图 16-2　树状结构</p>
+<p>树状结构的每个分支就是一个目录，包括根目录在内。该结构显示了目录之间是如何连接的。只要是在使用 Bash 时，就必然位于操作系统树状结构的某个位置。<strong>路径</strong>（path）就是表达该位置的一种方式。类 UNIX 操作系统中一个文件或目录的路径，有两种表示方式：<strong>绝对路径</strong>（absolute path）和<strong>相对路径</strong>（relative path）。</p>
+<p>绝对路径提供的是从根目录开始的文件或目录的位置，由树结构中的目录名称组成，按照与根目录之间的距离从近至远依次用斜杠分隔。例如笔者的计算机中 <code>bernie</code> 目录的绝对路径（如图 16-2 所示）是 <code>/home/bernie</code>。第一个斜杠表示的是根目录，之后是 <code>home</code> 目录，然后是一个斜杠和 <code>bernie</code> 目录的名称。</p>
+<p>表示目录在计算机中所处位置的另一种方法，是相对路径。相对路径是从当前工作目录开始，而非根目录。如果路径不是以斜杠开头，Bash 会明白使用的是相对路径。假设我们目前如上例中所示正位于图 16-2 所示的 <code>home</code> 目录下，<code>projects</code> 目录的相对路径则是 <code>bernie/projects</code>。如果我们位于 <code>home</code> 目录下，<code>bernie</code> 目录的相对路径就是 <code>bernie</code>。如果我们位于 <code>root</code> 目录下，<code>projects</code> 目录的相对路径则为 <code>home/bernie/projects</code>。</p>
+<h3 id="166">16.6　导航</h3>
+<p>将绝对路径或相对路径作为参数传给命令 <code>cd</code>，即可改变当前所在的目录。输入 <code>cd</code> 命令，在之后输入绝对路径 <code>/</code>，前往操作系统的根目录。示例如下：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># http://tinyurl.com/hjgz79h</span>
+$ <span class="hljs-built_in">cd</span> /
+</code></pre>
+<p>可通过命令 pwd 验证当前所在的位置：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/j6ax35s</span>
+$ pwd
+<span class="hljs-meta">&gt;&gt;</span> /
+</code></pre>
+<p><code>ls</code> 命令可打印当前工作目录下的所有目录和文件夹：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/gw4d5yw</span>
+$ ls
+<span class="hljs-meta">&gt;&gt;</span> bin dev initrd.img lost+found ...
+</code></pre>
+<p>将希望创建的目录名称传给 <code>mkdir</code> 命令，即可新建目录。目录名称中不能有空格。前往 <code>home</code> 目录（<code>~</code> 是类 UNIX 操作系统中 <code>home</code> 目录的快捷键），并使用 <code>mkdir</code> 命令创建一个名为 <code>tstp</code> 的新目录。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/zavhjeq</span>
+$ cd ~
+$ mkdir tstp
+</code></pre>
+<p>通过 <code>ls</code> 命令，验证新目录是否创建成功：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/hneq2f6</span>
+$ ls
+<span class="hljs-meta">&gt;&gt;</span> tstp
+</code></pre>
+<p>接着，使用 <code>cd</code> 命令进入 <code>tstp</code> 目录。将 <code>tstp</code> 作为参数传给 <code>cd</code> 命令即可实现：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># http://tinyurl.com/zp3nb21</span>
+$ <span class="hljs-built_in">cd</span> tstp
+</code></pre>
+<p><code>cd</code> 命令后接两个英文句号，可以回到上一层目录：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># http://tinyurl.com/z2gevk2</span>
+$ <span class="hljs-built_in">cd</span> ..
+</code></pre>
+<p>使用命令 <code>rmdir</code> 可删除目录。这里使用该命令删除 <code>tstp</code> 目录：</p>
+<pre><code class="hljs cpp"><span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/jkjjo6s</span></span>
+% rmdir tstp
+</code></pre>
+<p>最后，通过 <code>ls</code> 命令验证是否成功删除目录：</p>
+<pre><code class="hljs cpp"><span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/z32xn2n</span></span>
+$ ls
+</code></pre>
+<h3 id="167">16.7　旗标</h3>
+<p>命令支持一个叫旗标（flag）的概念，可以改变命令的执行方式。旗标对于命令来说，是一些值为 <code>True</code> 或 <code>False</code> 的执行选项。一个命令的所有旗标默认置为 <code>False</code>。如果向命令中添加一个旗标，Bash 将把该旗标的值设为 <code>True</code>，命令的执行方式也会随之改变。在旗标的名称前面加一个（-）或两个连字符（--），即可将旗标置为 <code>True</code>。</p>
+<p>例如，可在 <code>ls</code> 命令后加上旗标 <code>--author</code>，并将 <code>author</code> 旗标设置为 <code>True</code>。加上该旗标后，<code>ls</code> 命令的执行方式将会改变，除了打印目录下所有的目录和文件之外，还将打印创建目录或文件的作者名字。</p>
+<p>在 UNIX 系统中，需要在旗标前使用一个连字符：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/j4y5kz4</span>
+$ ls -author
+<span class="hljs-meta">&gt;&gt;</span> drwx------+ <span class="hljs-number">13</span> coryalthoff <span class="hljs-number">442</span>B Sep <span class="hljs-number">16</span> <span class="hljs-number">17</span><span class="hljs-symbol">:</span><span class="hljs-number">25</span> Pictures
+<span class="hljs-meta">&gt;&gt;</span> drwx------+ <span class="hljs-number">25</span> coryalthoff <span class="hljs-number">850</span>B Nov <span class="hljs-number">23</span> <span class="hljs-number">18</span><span class="hljs-symbol">:</span>09 Documents
+</code></pre>
+<p>在 Linux 系统中，需使用两个连字符：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/hu9c54q</span>
+$ ls --author
+<span class="hljs-meta">&gt;&gt;</span> drwx------+ <span class="hljs-number">13</span> coryalthoff <span class="hljs-number">442</span>B Sep <span class="hljs-number">16</span> <span class="hljs-number">17</span><span class="hljs-symbol">:</span><span class="hljs-number">25</span> Pictures
+<span class="hljs-meta">&gt;&gt;</span> drwx------+ <span class="hljs-number">25</span> coryalthoff <span class="hljs-number">850</span>B Nov <span class="hljs-number">23</span> <span class="hljs-number">18</span><span class="hljs-symbol">:</span>09 Documents
+</code></pre>
+<h3 id="168">16.8　隐藏文件</h3>
+<p>操作系统和很多程序都会将数据保存在隐藏文件中。隐藏文件指的是默认不会展示给用户的文件，因为修改隐藏文件会影响依赖这些文件的程序。隐藏文件的名称以英文句点开头，如 <code>.hidden</code>。在 <code>ls</code> 命令后加上旗标 <code>-a</code>（表示所有文件），即可查看隐藏文件。<code>touch</code> 命令支持从命令行新建文件。</p>
+<p><code>touch</code> 命令可新建文件。这里使用该命令创建一个名为 <code>.self_taught</code> 的隐藏文件：</p>
+<pre><code class="hljs cpp"><span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/hfawo8t</span></span>
+$ touch .self_taught
+</code></pre>
+<p>使用命令 <code>ls</code> 和 <code>ls-a</code> 检查是否可以看到隐藏文件。</p>
+<h3 id="169">16.9　管道</h3>
+<p>在类 UNIX 操作性系统中，竖直线“<code>|</code>”被称为<strong>管道</strong>（pipe）。可使用管道将一个命令的输出，传入另一个命令作为输入。例如，可使用 <code>ls</code> 命令的输出，作为 <code>less</code> 命令的输入（需确保当前目录不是空目录）：</p>
+<pre><code class="hljs cpp"><span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/zjne9f5</span></span>
+$ ls | less
+&gt;&gt; Applications ...
+</code></pre>
+<p>执行结果是一个用 less 程序打开的文本文件，内容为 <code>ls</code> 命令的输出（按 <code>q</code> 推出 less 程序）。</p>
+<h3 id="1610">16.10　环境变量</h3>
+<p><strong>环境变量</strong>（environment variable）是保存在操作系统中的变量，程序可通过这些变量获取当前运行环境的相关数据，如运行程序的计算机的名称，或运行程序的用户的名称。使用语法 <code>export[变量名]=[变量值]</code>，即可在 Bash 中新建一个环境变量。如需在 Bash 中引用环境变量，必须在其名称前加一个美元符号。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/jjbc9v2</span>
+$ export x=<span class="hljs-number">100</span>
+$ echo $x
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100</span>
+</code></pre>
+<p>这样创建的环境变量只能存在于当前的 Bash 窗口。如果退出 Bash 之后再打开，输入 <code>echo $x</code> 将不会打印 <code>100</code>，因为环境变量 <code>x</code> 已经不存在了。</p>
+<p>将环境变量添加到类 UNIX 操作系统使用的一个隐藏文件中，可使得环境变量持久存在。该隐藏文件位于 <code>home</code> 目录下，名为 <code>.profile</code>。使用图形用户界面前往 <code>home</code> 目录。可在命令行输入 <code>pwd ~</code>，找到 <code>home</code> 目录的绝对路径。然后，使用文本编辑器创建一个名为 <code>.profile</code> 的文件，在第一行输入 <code>export x=100</code> 并保存文件。之后，退出并重新打开 Bash，这时就能够打印环境变量 <code>x</code> 了。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/j5wjwdf</span>
+$ echo $x
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100</span>
+</code></pre>
+<p>只要 <code>.profile</code> 文件中包含该变量，即可持久性地使用。从 <code>.profile</code> 中移除相关内容，即可删除变量。</p>
+<h3 id="1611">16.11　用户</h3>
+<p>操作系统支持多用户使用。用户指的是使用操作系统的人。每个用户都分配了用户名和密码，可用来登录和使用操作系统。每个用户还有对应的权限：能够执行的操作范围。使用命令 <code>whoami</code> 可打印操作系统用户的名称（本节的示例无法在 Windows 系统的 Bash 或 Web 应用上复现）：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>　$ whoami
+<span class="hljs-meta">&gt;&gt;</span> coryalthoff
+</code></pre>
+<p>正常情况下，打印的就是在安装操作系统时所创建的用户。但该用户并不是操作系统中权限最高的用户。权限最高的用户被称为根用户。每个系统都有一个根用户，可以创建或删除其他用户。</p>
+<p>由于安全原因，我们通常不会以根用户身份登录系统。在需要以根用户权限执行命令时，可在命令前加上 <code>sudo</code>（superuser do 的简称）。<code>sudo</code> 可在不影响操作系统安全性的前提下，让我们以根用户的身份执行命令。下面是通过 <code>sudo</code> 使用 <code>echo</code> 命令的示例：</p>
+<pre><code class="hljs ruby">$ sudo echo Hello, World!
+<span class="hljs-meta">&gt;&gt;</span> Hello, World!
+</code></pre>
+<p>如果已经设置过密码，使用 <code>sudo</code> 时程序将要求你输入密码。<code>sudo</code> 会穿透那些保护操作系统的屏障，因此除非你自信命令不会损害操作系统，否则不要随便执行 <code>sudo</code> 命令。</p>
+<h3 id="1612">16.12　了解更多</h3>
+<p>本章中只介绍了 Bash 的基础知识。如需了解更多，可访问 http://theselftaughtprogrammer.io/bash。</p>
+<h3 id="1613">16.13　术语表</h3>
+<p><strong>命令行接口</strong>：一种可以支持用户输入指令，由操作系统执行的程序。</p>
+<p><strong>命令行</strong>：命令行接口的另一个叫法。</p>
+<p><strong>Bash</strong>：大部分类 UNIX 操作系统都具备的命令行接口实现。</p>
+<p><strong>命令提示符</strong>：Windows 操作系统提供的命令行接口。</p>
+<p><strong>目录</strong>：文件夹的另一个叫法。</p>
+<p><strong>工作目录</strong>：当前所在的目录。</p>
+<p><strong>路径</strong>：表示目录或文件在操作系统中的存放地址的一种方式。</p>
+<p><strong>绝对路径</strong>：绝对路径提供的是从根目录开始的文件或目录的位置。</p>
+<p><strong>相对路径</strong>：相对路径是从当前工作目录开始，而非根目录。</p>
+<p><strong>管道</strong>：竖直线 <code>|</code>。可使用管道将一个命令的输出，传入另一个命令作为输入。</p>
+<p><strong>环境变量</strong>：操作系统和其他程序用来保存数据的变量。</p>
+<p><strong>$PATH</strong>：在 Bash 中输入该命令时，Bash 将从名为 <code>'$PATH'</code> 的环境变量所保存的所有目录中查到对应命令。</p>
+<p><strong>用户</strong>：使用操作系统的人。</p>
+<p><strong>权限</strong>：操作系统用户可以执行的操作范围。</p>
+<p><strong>根用户</strong>：在操作系统中拥有最高权限的用户。</p>
+<h3 id="1614">16.14　挑战练习</h3>
+<p>1．在 Bash 中打印 <code>Self-taught</code>。</p>
+<p>2．使用绝对路径和相对路径，从一个目录前往 <code>home</code> 目录。</p>
+<p>3．创建一个名为 <code>$python_projects</code> 的环境变量，其值为保存 Python 文件的目录的绝对路径。将变量保存在 <code>.profile</code> 文件中，然后使用 <code>cd $python_projects</code> 命令进入该目录。</p>
+</div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#161"><span class="toc-number">1.</span> <span class="toc-text">16.1　跟随练习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#162bash"><span class="toc-number">2.</span> <span class="toc-text">16.2　找到 Bash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#163"><span class="toc-number">3.</span> <span class="toc-text">16.3　命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#164"><span class="toc-number">4.</span> <span class="toc-text">16.4　最近命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#165"><span class="toc-number">5.</span> <span class="toc-text">16.5　相对路径与绝对路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#166"><span class="toc-number">6.</span> <span class="toc-text">16.6　导航</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#167"><span class="toc-number">7.</span> <span class="toc-text">16.7　旗标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#168"><span class="toc-number">8.</span> <span class="toc-text">16.8　隐藏文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#169"><span class="toc-number">9.</span> <span class="toc-text">16.9　管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1610"><span class="toc-number">10.</span> <span class="toc-text">16.10　环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1611"><span class="toc-number">11.</span> <span class="toc-text">16.11　用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1612"><span class="toc-number">12.</span> <span class="toc-text">16.12　了解更多</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1613"><span class="toc-number">13.</span> <span class="toc-text">16.13　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1614"><span class="toc-number">14.</span> <span class="toc-text">16.14　挑战练习</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&text=Bash"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&is_video=false&description=Bash"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Bash&body=Check out this article: http://logan_2019.github.io/Python无师自通/16_bash/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&title=Bash"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/16_bash/2019/10/&name=Bash&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

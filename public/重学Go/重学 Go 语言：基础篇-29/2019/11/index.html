@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="闭包的实现机制我们对上面的代码进行 GBD 和反汇编看看究竟：$ gdb test$ l$ l$ b 13 #打断点$ r #执行$ set disassembly-flavor intel #设置intel样式$ disass #反汇编Dump of assembler code for function main.main:   0x0000000000450ac0 &amp;lt;+0&amp;gt;:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-29">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="闭包的实现机制我们对上面的代码进行 GBD 和反汇编看看究竟：$ gdb test$ l$ l$ b 13 #打断点$ r #执行$ set disassembly-flavor intel #设置intel样式$ disass #反汇编Dump of assembler code for function main.main:   0x0000000000450ac0 &amp;lt;+0&amp;gt;:">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:15.887Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-29">
+<meta name="twitter:description" content="闭包的实现机制我们对上面的代码进行 GBD 和反汇编看看究竟：$ gdb test$ l$ l$ b 13 #打断点$ r #执行$ set disassembly-flavor intel #设置intel样式$ disass #反汇编Dump of assembler code for function main.main:   0x0000000000450ac0 &amp;lt;+0&amp;gt;:">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-29</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-30什么是递归/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-28何为闭包/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&text=重学 Go 语言：基础篇-29"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&is_video=false&description=重学 Go 语言：基础篇-29"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-29&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&name=重学 Go 语言：基础篇-29&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-number">2.</span> <span class="toc-text">闭包的实现机制</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-29
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:15.887Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h2 id>闭包的实现机制</h2><br><p>我们对上面的代码进行 GBD 和反汇编看看究竟：</p><br><pre><code class="bash language-bash">$ gdb test<br>$ l<br>$ l<br>$ b 13 #打断点<br>$ r #执行<br>$ set disassembly-flavor intel #设置intel样式<br>$ disass #反汇编<br></code></pre><br><pre><code class="bash language-bash">Dump of assembler code for function main.main:<br>   0x0000000000450ac0 &lt;+0&gt;:    mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x0000000000450ac9 &lt;+9&gt;:    cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x0000000000450acd &lt;+13&gt;:    jbe    0x450b03 &lt;main.main+67&gt;<br>   0x0000000000450acf &lt;+15&gt;:    sub    rsp,0x20 #main函数分配的栈帧<br>   0x0000000000450ad3 &lt;+19&gt;:    mov    QWORD PTR [rsp+0x18],rbp<br>   0x0000000000450ad8 &lt;+24&gt;:    lea    rbp,[rsp+0x18]<br>   0x0000000000450add &lt;+29&gt;:    mov    QWORD PTR [rsp],0x64 #把100传进去<br>   0x0000000000450ae5 &lt;+37&gt;:    call   0x4509b0 &lt;main.test&gt; #调用test<br>   0x0000000000450aea &lt;+42&gt;:    mov    rdx,QWORD PTR [rsp+0x8] #因为test有个参数，所以0x8才是它的返回值<br>   # [rsp+0x8]就是它的返回值就是包装对象放到rdx里面<br>   0x0000000000450aef &lt;+47&gt;:    mov    QWORD PTR [rsp+0x10],rdx #通过rdx放到[rsp+0x10]里面<br>=&gt; 0x0000000000450af4 &lt;+52&gt;:    mov    rax,QWORD PTR [rdx] #取出来匿名函数的地址<br>   0x0000000000450af7 &lt;+55&gt;:    call   rax<br>   0x0000000000450af9 &lt;+57&gt;:    mov    rbp,QWORD PTR [rsp+0x18]<br>   0x0000000000450afe &lt;+62&gt;:    add    rsp,0x20<br>   0x0000000000450b02 &lt;+66&gt;:    ret<br>   0x0000000000450b03 &lt;+67&gt;:    call   0x448790 &lt;runtime.morestack_noctxt&gt;<br>   0x0000000000450b08 &lt;+72&gt;:    jmp    0x450ac0 &lt;main.main&gt;<br></code></pre><br><p>内存示意图</p><br><pre><code>    |—————+—sp<br>    |       100     |<br>    |—————|—+8<br>    |   test返回值  |         包装对象   取匿名函数main.test.func1地址<br>    |—————|–+10—-rdx —————&gt; rax<br>    | 匿名函数返回值 |<br>    |—————|–+18<br>    |               |<br>    |—————|–+20—main<br></code></pre><br><pre><code class="bash language-bash">$ p/x $rdx #包装对象<br>$ x/1xg 0xc82006c010 #查看匿名函数地址<br>$ info symbol 0x0000000000401160 #匿名函数main.test.func1<br>$ nm test | grep “main.“ #查看符号<br>$ x/xg $rsp+0x10 #rsp+0x10包装对象<br>$ x/xg 0x0000000c82000a0f0 #包装对象地址<br></code></pre><br><p>闭包返回的结构和匿名函数返回的包装对象其实一回事，区别是匿名函数返回的包装对象在编译期就生成了然后放到 rodata 段里面，闭包也是类似的包装对象，但是是在运行期生成的，因为运行期生成的情况下这时就没有符号名。</p><br><p>运行期生成这样一个对象，这个对象包含了匿名函数的地址。也就是匿名函数作为返回值不管有没有闭包，调用过程是一样的。</p><br><pre><code class="bash language-bash">$ b main.test.func1 #匿名函数打断点<br>$ c #执行<br>$ set disassembly-flavor intel #设置intel样式<br>$ disass #反汇编<br></code></pre><br><pre><code class="bash language-bash">of assembler code for function main.test.func1:<br>=&gt; 0x0000000000450b10 &lt;+0&gt;:    mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x0000000000450b19 &lt;+9&gt;:    cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x0000000000450b1d &lt;+13&gt;:    jbe    0x450ba4 &lt;main.test.func1+148&gt;<br>   0x0000000000450b23 &lt;+19&gt;:    sub    rsp,0x30 #分配的栈帧<br>   0x0000000000450b27 &lt;+23&gt;:    mov    QWORD PTR [rsp+0x28],rbp<br>   0x0000000000450b2c &lt;+28&gt;:    lea    rbp,[rsp+0x28]<br>   0x0000000000450b31 &lt;+33&gt;:    mov    rax,QWORD PTR [rdx+0x8] ##rdx保存的是包装对象，包装对象的第一位是匿名函数的地址。<br>   # +0x8就是闭包返回对象x的地址。把x的地址值放到rax中。这样一来闭包调用就能找到环境变量。<br>   0x0000000000450b35 &lt;+37&gt;:    mov    QWORD PTR [rsp+0x20],rax<br>   0x0000000000450b3a &lt;+42&gt;:    mov    QWORD PTR [rsp+0x18],rax<br>   0x0000000000450b3f &lt;+47&gt;:    mov    rax,QWORD PTR [rsp+0x20]<br>   0x0000000000450b44 &lt;+52&gt;:    mov    rax,QWORD PTR [rax]<br>   0x0000000000450b47 &lt;+55&gt;:    mov    QWORD PTR [rsp+0x10],rax<br>   0x0000000000450b4c &lt;+60&gt;:    call   0x423890 &lt;runtime.printlock&gt;<br>   0x0000000000450b51 &lt;+65&gt;:    lea    rax,[rip+0x1deb2]        # 0x46ea0a<br>   0x0000000000450b58 &lt;+72&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450b5c &lt;+76&gt;:    mov    QWORD PTR [rsp+0x8],0xb<br>   0x0000000000450b65 &lt;+85&gt;:    call   0x424230 &lt;runtime.printstring&gt;<br>   0x0000000000450b6a &lt;+90&gt;:    call   0x423ae0 &lt;runtime.printsp&gt;<br>   0x0000000000450b6f &lt;+95&gt;:    mov    rax,QWORD PTR [rsp+0x18]<br>   0x0000000000450b74 &lt;+100&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450b78 &lt;+104&gt;:    call   0x4241f0 &lt;runtime.printpointer&gt;<br>   0x0000000000450b7d &lt;+109&gt;:    call   0x423ae0 &lt;runtime.printsp&gt;<br>   0x0000000000450b82 &lt;+114&gt;:    mov    rax,QWORD PTR [rsp+0x10]<br>   0x0000000000450b87 &lt;+119&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450b8b &lt;+123&gt;:    call   0x424070 &lt;runtime.printint&gt;<br>   0x0000000000450b90 &lt;+128&gt;:    call   0x423b40 &lt;runtime.printnl&gt;<br>   0x0000000000450b95 &lt;+133&gt;:    call   0x423920 &lt;runtime.printunlock&gt;<br>   0x0000000000450b9a &lt;+138&gt;:    mov    rbp,QWORD PTR [rsp+0x28]<br>   0x0000000000450b9f &lt;+143&gt;:    add    rsp,0x30<br>   0x0000000000450ba3 &lt;+147&gt;:    ret<br>   0x0000000000450ba4 &lt;+148&gt;:    call   0x4486f0 &lt;runtime.morestack&gt;<br>   0x0000000000450ba9 &lt;+153&gt;:    jmp    0x450b10 &lt;main.test.func1&gt;<br></code></pre><br><pre><code class="bash language-bash">$ gdb test<br>$ l<br>$ l<br>$ b 13 #打断点<br>$ r #执行<br>$ p/x &amp;f<br>$ x/2xg 0xc820039f40<br>$ x/2xg 0x000000c82000a0f0<br></code></pre><br><p>闭包返回的包装对象是一个复合对象，首先是匿名函数的地址，然后是闭包环境变量的地址。只有返回复合结构在调用匿名函数时候才能拿到环境变量地址。所以当<code>test(x int)</code>函数返回的时候，它除了把匿名函数<code>func()</code>地址以外，还返回<code>x</code>的地址，把这两个共同打包成一个包装对象。当调用匿名函数的时候，<code>main</code>函数去调用<code>test</code>，首先传递了所需要的参数 100，返回了一个复合结构。</p><br><p>没有闭包的情况下，包装对象只有匿名函数地址没有环境变量指针，因为匿名函数地址是固定的，所以这个包装对象不需要每次生成，编译器把它写到 rodata 里面。如果有闭包的话环境变量的地址在堆上分配的，那么这个地址肯定是在运行期动态生成的，那么包装对象就没有办法在编译期确定，所以这个包装对象就不能生成到 rodata 里面。</p><br><p>所以如果没有闭包，所有信息都是固定的，完全可以用唯一的一个对象存在 rodata 里，每次返回出来就可以了。</p><br><p>所以包装对象的含义是编译器生成的，是匿名函数，同样的调用机制来实现，区别在于如果有闭包，返回的包装对象就是动态的，如果没有闭包，返回的包装对象就是编译期确定的只读对象。它们的调用规则完全一样。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-number">2.</span> <span class="toc-text">闭包的实现机制</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&text=重学 Go 语言：基础篇-29"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&is_video=false&description=重学 Go 语言：基础篇-29"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-29&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&title=重学 Go 语言：基础篇-29"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-29/2019/11/&name=重学 Go 语言：基础篇-29&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

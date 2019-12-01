@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="4-12 拼接字符串实现方式4-12 拼接字符串实现方式在很多语言里对字符串的性能优化变成一个很麻烦的问题。对字符串的引用做了优化，但是对字符串的写操作怎么做，对字符串的修改究竟怎么样去优化，很多语言里都会有这样的一些规则。字符串对象既然是只读的不可变的，那么需要修改这个字符串有几种做法？有种做法把字符串内容复制到字节数组里面去，比如有个字符串对象头信息指向一个字节数组，修改字符串简单做法把这个字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-49">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="4-12 拼接字符串实现方式4-12 拼接字符串实现方式在很多语言里对字符串的性能优化变成一个很麻烦的问题。对字符串的引用做了优化，但是对字符串的写操作怎么做，对字符串的修改究竟怎么样去优化，很多语言里都会有这样的一些规则。字符串对象既然是只读的不可变的，那么需要修改这个字符串有几种做法？有种做法把字符串内容复制到字节数组里面去，比如有个字符串对象头信息指向一个字节数组，修改字符串简单做法把这个字">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://asciinema.org/a/rEOEkIw1QknKnKLxuRwdYKmkc.png">
+<meta property="og:updated_time" content="2019-11-30T10:53:44.335Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-49">
+<meta name="twitter:description" content="4-12 拼接字符串实现方式4-12 拼接字符串实现方式在很多语言里对字符串的性能优化变成一个很麻烦的问题。对字符串的引用做了优化，但是对字符串的写操作怎么做，对字符串的修改究竟怎么样去优化，很多语言里都会有这样的一些规则。字符串对象既然是只读的不可变的，那么需要修改这个字符串有几种做法？有种做法把字符串内容复制到字节数组里面去，比如有个字符串对象头信息指向一个字节数组，修改字符串简单做法把这个字">
+<meta name="twitter:image" content="https://asciinema.org/a/rEOEkIw1QknKnKLxuRwdYKmkc.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-49</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-50字符串内部实现/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-48/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&text=重学 Go 语言：基础篇-49"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&is_video=false&description=重学 Go 语言：基础篇-49"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-49&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&name=重学 Go 语言：基础篇-49&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#412"><span class="toc-number">1.1.</span> <span class="toc-text">4-12 拼接字符串实现方式</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-49
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:44.335Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><p><div class="toc"><br><ul><br><li><ul><br><li><ul><br><li><a href="#412">4-12 拼接字符串实现方式</a></li><br></ul><br></li><br></ul><br></li><br></ul><br></div><br></p><br><h3 id="412">4-12 拼接字符串实现方式</h3><br><p>在很多语言里对字符串的性能优化变成一个很麻烦的问题。对字符串的引用做了优化，但是对字符串的写操作怎么做，对字符串的修改究竟怎么样去优化，很多语言里都会有这样的一些规则。</p><br><p>字符串对象既然是只读的不可变的，那么需要修改这个字符串有几种做法？</p><br><p>有种做法把字符串内容复制到字节数组里面去，比如有个字符串对象头信息指向一个字节数组，修改字符串简单做法把这个字节数组复制到buffer里面，buffer修改完之后再去重新生成字符串。这样一来面临的问题是在buffer时候分配一次内存，然后把它转换为字符串的时候有得分配一次内存，这样一来性能就会很差。</p><br><p>为什么要重新复制内存呢？因为要从不可变类型变成可变类型。不可变类型情况下不能直接修改，不能保证有多少人引用它，在不能保证有多少引用它的情况下修改它的内容的话实际上会带来一些安全风险。最好做法是把它复制一遍然后去生成，这样确保你的修改不会影响多人的引用。</p><br><p>很多语言里要求拼接字符串的时候有这样的说法，比如说尽可能避免对多字符串进行加号。为什么使用加号方式比用函数方式性能差呢？</p><br><p>以Go语言为例：</p><br><p>strings.go</p><br><pre><code class="go language-go">func Join(a []string, sep string) string {<br>    switch len(a) {<br>    case 0:<br>        return “”<br>    case 1:<br>        return a[0]<br>    case 2:<br>        return a[0] + sep + a[1]<br>    case 3:<br>        return a[0] + sep + a[1] + sep + a[2]<br>    }<br>    //首先计算出一共有多少个间隔符<br>    n := len(sep) <em> (len(a) - 1)<br>    //把所有拼接的字符串长度计算出来<br>    for i := 0; i &lt; len(a); i++ {<br>        n += len(a[i])<br>    }<br>    //一次性分配内存<br>    b := make([]byte, n)<br>    //把数据全部拷贝到内存块里面去<br>    bp := copy(b, a[0])<br>    for _, s := range a[1:] {<br>        bp += copy(b[bp:], sep)<br>        bp += copy(b[bp:], s)<br>    }<br>    return string(b)<br>}<br></em></code></pre><br><p>Join方法用于拼接多个字符串，sep传空格。</p><br><pre><code class="go language-go">func main() {<br>    s1 := “aaa”<br>    s2 := “bbb”<br>    s3 := “ccc”<br>    println(s1 + s2 + s3)<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build -o test test3.go<br>$ go tool objdump -s “main.main” test<br></code></pre><br><pre><code>TEXT main.main(SB)<br>  3        0x450b40        64488b0c25f8ffffff  MOVQ FS:0xfffffff8, CX<br>  3        0x450b49        483b6110        CMPQ 0x10(CX), SP<br>  3        0x450b4d        0f86a6000000        JBE 0x450bf9<br>  3        0x450b53        4881ec80000000      SUBQ $0x80, SP<br>  3        0x450b5a        48896c2478      MOVQ BP, 0x78(SP)<br>  3        0x450b5f        488d6c2478      LEAQ 0x78(SP), BP<br>  3        0x450b64        488d442450      LEAQ 0x50(SP), AX<br>  7        0x450b69        48890424        MOVQ AX, 0(SP)<br>  4        0x450b6d        488d05b1d60100      LEAQ 0x1d6b1(IP), AX<br>  7        0x450b74        4889442408      MOVQ AX, 0x8(SP)<br>  7        0x450b79        48c744241003000000  MOVQ $0x3, 0x10(SP)<br>  7        0x450b82        488d05a2d60100      LEAQ 0x1d6a2(IP), AX<br>  7        0x450b89        4889442418      MOVQ AX, 0x18(SP)<br>  7        0x450b8e        48c744242003000000  MOVQ $0x3, 0x20(SP)<br>  7        0x450b97        488d0590d60100      LEAQ 0x1d690(IP), AX<br>  7        0x450b9e        4889442428      MOVQ AX, 0x28(SP)<br>  7        0x450ba3        48c744243003000000  MOVQ $0x3, 0x30(SP)<br>  7        0x450bac        e88f89feff      CALL runtime.concatstring3(SB)<br></code></pre><br><p>LEAQ代码是有复制操作的，用gdb调试下内部细节：</p><br><pre><code class="bash language-bash">$ gdb test<br>$ l<br>$ b 7<br>$ r<br>$ set disassembly-flavor intel #设置intel样式<br>$ disass<br></code></pre><br><pre><code>Dump of assembler code for function main.main:<br>   0x0000000000450b40 &lt;+0&gt;:    mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x0000000000450b49 &lt;+9&gt;:    cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x0000000000450b4d &lt;+13&gt;:    jbe    0x450bf9 &lt;main.main+185&gt;<br>   0x0000000000450b53 &lt;+19&gt;:    sub    rsp,0x80<br>   0x0000000000450b5a &lt;+26&gt;:    mov    QWORD PTR [rsp+0x78],rbp<br>   0x0000000000450b5f &lt;+31&gt;:    lea    rbp,[rsp+0x78]<br>   0x0000000000450b64 &lt;+36&gt;:    lea    rax,[rsp+0x50]<br>=&gt; 0x0000000000450b69 &lt;+41&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450b6d &lt;+45&gt;:    lea    rax,[rip+0x1d6b1]        # 0x46e225<br>   0x0000000000450b74 &lt;+52&gt;:    mov    QWORD PTR [rsp+0x8],rax<br>   0x0000000000450b79 &lt;+57&gt;:    mov    QWORD PTR [rsp+0x10],0x3<br>   0x0000000000450b82 &lt;+66&gt;:    lea    rax,[rip+0x1d6a2]        # 0x46e22b<br>   0x0000000000450b89 &lt;+73&gt;:    mov    QWORD PTR [rsp+0x18],rax<br>   0x0000000000450b8e &lt;+78&gt;:    mov    QWORD PTR [rsp+0x20],0x3<br>   0x0000000000450b97 &lt;+87&gt;:    lea    rax,[rip+0x1d690]        # 0x46e22e<br>   0x0000000000450b9e &lt;+94&gt;:    mov    QWORD PTR [rsp+0x28],rax<br>   0x0000000000450ba3 &lt;+99&gt;:    mov    QWORD PTR [rsp+0x30],0x3<br>   0x0000000000450bac &lt;+108&gt;:    call   0x439540 &lt;runtime.concatstring3&gt;<br>End of assembler dump.<br></code></pre><br><pre><code>$ x/s 0x46e225<br>$ x/s 0x46e22b<br>$ x/s 0x46e22e<br></code></pre><br><p>lea 后面出现三个地址，三个地址的数据全部复制到栈上了，最后通过调用<code>runtime.concatstring3</code>函数来实现的。这从可以看出分配了多少次的内存么？</p><br><p>string.go</p><br><pre><code class="go language-go">func concatstrings(buf tmpBuf, a []string) string {<br>    idx := 0<br>    l := 0<br>    count := 0<br>    //计算出所有长度<br>    for i, x := range a {<br>        n := len(x)<br>        if n == 0 {<br>            continue<br>        }<br>        if l+n &lt; l {<br>            throw(“string concatenation too long”)<br>        }<br>        l += n<br>        count++<br>        idx = i<br>    }<br>    if count == 0 {<br>        return “”<br>    }<br><br>    if count == 1 &amp;&amp; (buf != nil || !stringDataOnStack(a[idx])) {<br>        return a[idx]<br>    }<br>    s, b := rawstringtmp(buf, l)<br>    //最后进行复制<br>    for _, x := range a {<br>        copy(b, x)<br>        b = b[len(x):]<br>    }<br>    return s<br>}<br></code></pre><br><p>很显然<code>s1 + s2 + s3</code>和<code>strings.Join()</code>基本上差不多，所以究竟有没有被优化过或者它分配多少次内存我们自己去看，在不同的语言里可能不一样，某些语言里它可能的确是每做一次加法就分配一次内存，但有些时候也未必，不同的语言有不同的做法。这个时候以Go语言来说，用<code>join</code>和<code>+</code>没有什么区别。其它语言里究竟有没有差异自己研究一下。</p><br><p>那么你可能说了，上面是用三个字面量来实现的所以只做了一次分配。如果是用动态内存呢？</p><br><pre><code class="go language-go">func main() {<br>    s1 := strings.Repeat(“aaa”, 2)<br>    s2 := strings.Repeat(“bbb”, 2)<br>    s3 := strings.Repeat(“bbb”, 2)<br>    println(s1 + s2 + s3)<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go build -o test test4.go<br>$ go tool objdump -s “main.main” test<br></code></pre><br><pre><code>TEXT main.main(SB)<br>  7        0x457f70        64488b0c25f8ffffff  MOVQ FS:0xfffffff8, CX<br>  7        0x457f79        488d4424e0      LEAQ -0x20(SP), AX<br>  7        0x457f7e        483b4110        CMPQ 0x10(CX), AX<br>  7        0x457f82        0f864c010000        JBE 0x4580d4<br>  7        0x457f88        4881eca0000000      SUBQ $0xa0, SP<br>  7        0x457f8f        4889ac2498000000    MOVQ BP, 0x98(SP)<br>  7        0x457f97        488dac2498000000    LEAQ 0x98(SP), BP<br>  8        0x457f9f        488d05d4220200      LEAQ 0x222d4(IP), AX<br>  8        0x457fa6        48890424        MOVQ AX, 0(SP)<br>  8        0x457faa        48c744240803000000  MOVQ $0x3, 0x8(SP)<br>  8        0x457fb3        48c744241002000000  MOVQ $0x2, 0x10(SP)<br>  8        0x457fbc        e82ffdffff      CALL strings.Repeat(SB)<br>  8        0x457fc1        488b442418      MOVQ 0x18(SP), AX<br>  8        0x457fc6        4889842488000000    MOVQ AX, 0x88(SP)<br>  8        0x457fce        488b4c2420      MOVQ 0x20(SP), CX<br>  8        0x457fd3        48894c2450      MOVQ CX, 0x50(SP)<br>  8        0x457fd8        488d15a1220200      LEAQ 0x222a1(IP), DX<br>  9        0x457fdf        48891424        MOVQ DX, 0(SP)<br>  9        0x457fe3        48c744240803000000  MOVQ $0x3, 0x8(SP)<br>  9        0x457fec        48c744241002000000  MOVQ $0x2, 0x10(SP)<br>  9        0x457ff5        e8f6fcffff      CALL strings.Repeat(SB)<br>  9        0x457ffa        488b442418      MOVQ 0x18(SP), AX<br>  9        0x457fff        4889842480000000    MOVQ AX, 0x80(SP)<br>  9        0x458007        488b4c2420      MOVQ 0x20(SP), CX<br>  9        0x45800c        48894c2448      MOVQ CX, 0x48(SP)<br>  9        0x458011        488d1568220200      LEAQ 0x22268(IP), DX<br>  10    0x458018        48891424        MOVQ DX, 0(SP)<br>  10    0x45801c        48c744240803000000  MOVQ $0x3, 0x8(SP)<br>  10    0x458025        48c744241002000000  MOVQ $0x2, 0x10(SP)<br>  10    0x45802e        e8bdfcffff      CALL strings.Repeat(SB)<br>  10    0x458033        488b442418      MOVQ 0x18(SP), AX<br>  10    0x458038        488b4c2420      MOVQ 0x20(SP), CX<br>  10    0x45803d        488d542460      LEAQ 0x60(SP), DX<br>  11    0x458042        48891424        MOVQ DX, 0(SP)<br>  11    0x458046        488b942488000000    MOVQ 0x88(SP), DX<br>  11    0x45804e        4889542408      MOVQ DX, 0x8(SP)<br>  11    0x458053        488b542450      MOVQ 0x50(SP), DX<br>  11    0x458058        4889542410      MOVQ DX, 0x10(SP)<br>  11    0x45805d        488b942480000000    MOVQ 0x80(SP), DX<br>  11    0x458065        4889542418      MOVQ DX, 0x18(SP)<br>  11    0x45806a        488b542448      MOVQ 0x48(SP), DX<br>  11    0x45806f        4889542420      MOVQ DX, 0x20(SP)<br>  11    0x458074        4889442428      MOVQ AX, 0x28(SP)<br>  11    0x458079        48894c2430      MOVQ CX, 0x30(SP)<br>  11    0x45807e        e80d1bfeff      CALL runtime.concatstring3(SB)<br></code></pre><br><p>我们看到用动态字符串它依然用<code>runtime.concatstring3</code>函数来拼接字符串。这地方提醒是不要以为用加法一定有多次的内存分配，在不同的语言里面未必是一样的。</p><br><p>想一想背后的道理，如果自己写一个编译器，对于<code>s1 + s2 + s3</code>最简单的做法直接把这条语句翻译成<code>strings.Join(s1, s2, s3)</code>。因为这个优化规则很简单，直接优化成类似这样的东西。为什么不用<code>strings.Join()</code>呢？因为<code>strings.Join()</code>是标准库的内容，而<code>runtime.concatstring3</code>是运行时的拼接，但它们的本质和算法结构是差不多的。</p><br><p>这个例子说明对于字符串处理很特殊的地方在不同的语言里有不同的规则。字符串很多时候很多处理都有很特殊的地方。字符串的优化在不同语言里面是不一样的。不要把别的语言里面习惯性经验带到一种新的语言里面。比如加法就是一个例子。对于字符串的处理我们一定要验证一下，因为我们只有验证之后我们才会知道这里面有哪些东西需要我们注意的。</p><br><p>视频演示：</p><br><p><a href="https://asciinema.org/a/rEOEkIw1QknKnKLxuRwdYKmkc" target="_blank" rel="noopener"><img src="https://asciinema.org/a/rEOEkIw1QknKnKLxuRwdYKmkc.png" alt="asciicast"></a></p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#412"><span class="toc-number">1.1.</span> <span class="toc-text">4-12 拼接字符串实现方式</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&text=重学 Go 语言：基础篇-49"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&is_video=false&description=重学 Go 语言：基础篇-49"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-49&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&title=重学 Go 语言：基础篇-49"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-49/2019/11/&name=重学 Go 语言：基础篇-49&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

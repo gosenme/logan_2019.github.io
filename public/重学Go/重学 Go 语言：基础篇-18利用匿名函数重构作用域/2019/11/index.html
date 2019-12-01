@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="利用匿名函数重构作用域以便 defer 能在合适时机执行。// 错误的例子func example() {    var m sync.Mutex    for i := 0; i &amp;lt; 5; i++ {        m.Lock()        defer m.Unlock()        println(i)    }}这地方有个问题，example 函数是一个加锁操作。m.Unlo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-18">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="利用匿名函数重构作用域以便 defer 能在合适时机执行。// 错误的例子func example() {    var m sync.Mutex    for i := 0; i &amp;lt; 5; i++ {        m.Lock()        defer m.Unlock()        println(i)    }}这地方有个问题，example 函数是一个加锁操作。m.Unlo">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:00.857Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-18">
+<meta name="twitter:description" content="利用匿名函数重构作用域以便 defer 能在合适时机执行。// 错误的例子func example() {    var m sync.Mutex    for i := 0; i &amp;lt; 5; i++ {        m.Lock()        defer m.Unlock()        println(i)    }}这地方有个问题，example 函数是一个加锁操作。m.Unlo">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-18</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-17概况/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&text=重学 Go 语言：基础篇-18"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&is_video=false&description=重学 Go 语言：基础篇-18"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-18&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&name=重学 Go 语言：基础篇-18&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">利用匿名函数重构作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defer"><span class="toc-number">1.2.</span> <span class="toc-text">使用 defer 改善错误处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">函数重构方式，演进步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.2.2.</span> <span class="toc-text">重构是否使用闭包</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-18
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:00.857Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>利用匿名函数重构作用域</h3><br><p>以便 defer 能在合适时机执行。</p><br><pre><code class="go language-go">// 错误的例子<br>func example() {<br>    var m sync.Mutex<br><br>    for i := 0; i &lt; 5; i++ {<br>        m.Lock()<br>        defer m.Unlock()<br>        println(i)<br>    }<br>}<br></code></pre><br><p>这地方有个问题，example 函数是一个加锁操作。m.Unlock() 只有在 example 函数结束的时候才执行，那么每次循环实际上是执行 m.Lock() 语句，这个时候解锁操作会被延迟到函数结束。</p><br><p>很显然这个逻辑并不是我们想要的，我们当时写的意思是加锁，defer 为了保证锁会被释放，defer 就是语句后面就算出错也会执行解锁。</p><br><p>显然现在逻辑出错了，解锁被延长了。</p><br><p>很显然，它会认为程序死锁，为什么死锁，是因为你不停地加锁，解锁没有执行。</p><br><p>怎么重构呢？最简单的做法用匿名函数 <code>func(){}</code> 把 for 循环里面逻辑包起来，因为这个时候 defer 是在匿名函数执行完执行，所以你每次循环都可以保证加锁解锁都可以被执行。</p><br><pre><code class="go language-go">func example() {<br>    var m sync.Mutex<br><br>    for i := 0; i &lt; 5; i++ {<br>        func(){<br>            m.Lock()<br>            defer m.Unlock()<br>            println(i)<br>        }()<br>    }<br>}<br></code></pre><br><p>所以利用匿名函数缩小作用域，因为不用匿名函数这个作用域相当于example。如果做了匿名函数重构，当前作用域就变成作用域了。</p><br><h3 id="defer">使用 defer 改善错误处理</h3><br><p>有很多种方式去改善代码，就是写代码的能力，怎么控制让代码写得更干净。例如下面例子，很多函数需要判断 error。重构思路构建一个类似方法表或者函数表，如果参数签名不一样，直接把它打包成匿名函数。</p><br><pre><code class="go language-go">func test1() (int, error) {<br>    return 1, io.EOF<br>}<br><br>func test2() (int, error) {<br>    return 1, io.EOF<br>}<br><br>func test3(x int) (int, error) {<br>    return x, io.EOF<br>}<br><br>func main() {<br>    fns := []func() (int, error){test1, test2, func() (int, error) { return test3(1) }}<br>    for _, fn := range fns {<br>        n, err := fn()<br>        if err != nil {<br>            log.Println(err)<br>        }<br>        log.Println(n)<br>    }<br>}<br></code></pre><br><h4 id="-1">函数重构方式，演进步骤</h4><br><p>重构的一个核心是解耦，而且使得框架基于组装模式（mock、service），各部分可独立测试（缩小变化范围），隐藏细节。</p><br><h4 id="-2">重构是否使用闭包</h4><br><ul><br><li>闭包环境变量的前置要求</li><br><li>闭包匿名函数定义限制</li><br><li>闭包侵入式控制</li><br><li>闭包共享内存限制</li><br></ul><br><p>延迟调用做的不是特别优雅，例如结构化异常流程控制相对来说比较干净一点，当然要付出相应的代价，因为结构化异常在编译时候需要在调用堆栈上维持一定的状态，否则流程跳转会有问题。</p><br><p>我们用一个例子说明，这段代码先打开数据库可能出错，接下来立即判断是否出错，然后启动事务，启动事务有可能失败，选择的数据库万一不支持事务呢，接下来执行插入操作的时候又可能失败，不但要记录错误信息，事务还要回滚，写下来一半的代码就是判断。如果把错误信息全部去掉真正的代码就很少，使用结构化异常就很干净。</p><br><p>因为 Go 对于错误处理是基于 C 语言的，我们知道 C 语言没有结构化异常都是返回一个错误。</p><br><p>这个错误有两种方式返回：</p><br><ul><br><li>第一种是函数显式的返回；</li><br><li>第二种是有个全局变量记录错误，如果出错检查全局变量。</li><br></ul><br><p>其实是一回事，无非是全局变量还是本地变量，相对来说本地变量理论上更好一点，尤其现在高并发状态下，全局变量不知道什么地方出错的。</p><br><p>所以结构化异常和错误返回值判断是两种不同的风格。错误返回值好处是对于编译器来说麻烦更少而且相对来说比较轻量级，它就是普通的返回值不需要做特别的处理，包括对调用堆栈的跟踪变得非常简单，因为所有的返回值都会返回到调用方内存里面去。</p><br><p>缺点在于源码上特别难看。结构化异常的好处是源码上干净，缺点是实现结构化异常需要专门的机制去支持，相对来说付出更大的代价，因为结构化异常需要安装调用堆栈跟踪。</p><br><pre><code class="go language-go">func testdb() {<br>    db, err := sql.Open(“sqlite3”, “./test.db”)<br>    if err != nil {<br>        log.Fatalln(err)<br>    }<br><br>    defer db.Close()<br><br>    tx, err := db.Begin()<br>    if err != nil {<br>        log.Fatalln(err)<br>    }<br><br>    _, err = tx.Exec(“INSERT INTO user(name, age) VALUES (?,?)”, “userx”, 90)<br>    if err != nil {<br>        tx.Rollback()<br>        log.Fatalln(err)<br>    }<br>    var id int<br>    err = tx.QueryRow(“SELECT id FROM user LIMIT 1”).Scan(&amp;id)<br>    if err != nil {<br>        tx.Rollback()<br>        log.Fatalln(err)<br>    }<br>    println(id)<br><br>    if err := tx.Commit(); err != nil &amp;&amp; err != sql.ErrTxDone {<br>        log.Fatalln(err)<br>    }<br>}<br></code></pre><br><p>Go 没有结构化异常，只能错误返回值方式，这种方式真的有必要这样写么？我们尝试用匿名函数对它重构。</p><br><p>首先数据库那块不打算重构，因为整个进程就唯一的一份，大家都共有一个，程序启动时候打开数据库连接池。</p><br><p>启动事务代码块不需要重构，因为启动事务出错的话，后面代码就不需要了。启动事务不属于业务逻辑而是属于底层机制的。</p><br><p>我们把业务逻辑独立出来，用匿名函数包起来，返回错误值。后面只要出错就立即终止。最后延迟调用捕获这个错误，一旦错误不为空就回滚。</p><br><p>用延迟调用做事务回滚记录错误，因为事务回滚记录错误和业务逻辑无关，属于执行底层机制。</p><br><pre><code class="go language-go">func testdb2(db <em>sql.DB) {<br>    tx, err := db.Begin()<br>    if err != nil {<br>        log.Fatalln(err)<br>    }<br><br>    func() (err error) {<br>        defer func() {<br>            if err != nil {<br>                tx.Rollback()<br>                log.Fatalln(err)<br>            }<br>        }()<br><br>        _, err = tx.Exec(“INSERT INTO user(name, age) VALUES (?,?)”, “userx”, 90)<br>        if err != nil {<br>            return<br>        }<br>        var id int<br>        err = tx.QueryRow(“SELECT id FROM user LIMIT 1”).Scan(&amp;id)<br>        if err != nil {<br>            return<br>        }<br>        println(id)<br>        return<br>    }()<br><br>    if err := tx.Commit(); err != nil &amp;&amp; err != sql.ErrTxDone {<br>        log.Fatalln(err)<br>    }<br>}<br><br>func main() {<br>    db, err := sql.Open(“sqlite3”, “./test.db”)<br>    if err != nil {<br>        log.Fatalln(err)<br>    }<br><br>    defer db.Close()<br>    testdb2(db)<br>}<br></em></code></pre><br><p>框架和业务分离：</p><br><pre><code class="go language-go">func framework(db sql.DB, bi func(tx <em>sql.Tx) error) {<br>    //启动事务<br>    tx, err := db.Begin()<br>    if err != nil {<br>        log.Fatalln(err)<br>    }<br><br>    //执行业务逻辑<br>    func() (err error) {<br>        //保证出错回滚<br>        defer func() {<br>            if err != nil {<br>                tx.Rollback()<br>                log.Fatalln(err)<br>            }<br>        }()<br>        err = bi(tx) //panic<br>        return<br>    }()<br><br>    if err := tx.Commit(); err != nil &amp;&amp; err != sql.ErrTxDone {<br>        log.Fatalln(err)<br>    }<br>}<br><br>func bi(tx </em>sql.Tx) (err error) {<br>    _, err = tx.Exec(“INSERT INTO user(name, age) VALUES (?,?)”, “userx”, 90)<br>    if err != nil {<br>        return<br>    }<br>    var id int<br>    err = tx.QueryRow(“SELECT id FROM user LIMIT 1”).Scan(&amp;id)<br>    if err != nil {<br>        return<br>    }<br>    println(id)<br>    return<br>}<br><br>func main() {<br>    db, err := sql.Open(“sqlite3”, “./test.db”)<br>    if err != nil {<br>        log.Fatalln(err)<br>    }<br><br>    defer db.Close()<br><br>    framework(db, bi)<br>}<br></code></pre></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">利用匿名函数重构作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defer"><span class="toc-number">1.2.</span> <span class="toc-text">使用 defer 改善错误处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">函数重构方式，演进步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-number">1.2.2.</span> <span class="toc-text">重构是否使用闭包</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&text=重学 Go 语言：基础篇-18"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&is_video=false&description=重学 Go 语言：基础篇-18"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-18&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&title=重学 Go 语言：基础篇-18"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/&name=重学 Go 语言：基础篇-18&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

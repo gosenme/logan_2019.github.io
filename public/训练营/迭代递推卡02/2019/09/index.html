@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="雅可比迭代法 通过计算一次矩阵和向量的乘法， 且计算过程中原始矩阵 A 保持不变， 便于用多线程并行计算的方式优化效率。 对于 n 阶线性方程组 Ax=b， 假如其系数矩阵 A 是非奇异矩阵， 且对角线元素非 0， 就可以证明雅可比迭代过程是收敛的。  雅可比迭代原理和算法实现都很简单， 但是雅可比迭代存在收敛速度慢的问题。 工程中一般不直接使用雅可比迭代法， 而是使用各种基于雅可比迭代法的改进方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数方程组的求解">
+<meta property="og:url" content="http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="雅可比迭代法 通过计算一次矩阵和向量的乘法， 且计算过程中原始矩阵 A 保持不变， 便于用多线程并行计算的方式优化效率。 对于 n 阶线性方程组 Ax=b， 假如其系数矩阵 A 是非奇异矩阵， 且对角线元素非 0， 就可以证明雅可比迭代过程是收敛的。  雅可比迭代原理和算法实现都很简单， 但是雅可比迭代存在收敛速度慢的问题。 工程中一般不直接使用雅可比迭代法， 而是使用各种基于雅可比迭代法的改进方">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.120Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线性代数方程组的求解">
+<meta name="twitter:description" content="雅可比迭代法 通过计算一次矩阵和向量的乘法， 且计算过程中原始矩阵 A 保持不变， 便于用多线程并行计算的方式优化效率。 对于 n 阶线性方程组 Ax=b， 假如其系数矩阵 A 是非奇异矩阵， 且对角线元素非 0， 就可以证明雅可比迭代过程是收敛的。  雅可比迭代原理和算法实现都很简单， 但是雅可比迭代存在收敛速度慢的问题。 工程中一般不直接使用雅可比迭代法， 而是使用各种基于雅可比迭代法的改进方">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>线性代数方程组的求解</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/训练营/迭代递推卡01/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/训练营/迭代递推卡03/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&text=线性代数方程组的求解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&is_video=false&description=线性代数方程组的求解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=线性代数方程组的求解&body=Check out this article: http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&name=线性代数方程组的求解&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        线性代数方程组的求解
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.120Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>雅可比迭代法</p>
+<pre><code>通过计算一次矩阵和向量的乘法，
+且计算过程中原始矩阵 A 保持不变，
+便于用多线程并行计算的方式优化效率。
+对于 n 阶线性方程组 Ax=b，
+假如其系数矩阵 A 是非奇异矩阵，
+且对角线元素非 0，
+就可以证明雅可比迭代过程是收敛的。
+
+雅可比迭代原理和算法实现都很简单，
+但是雅可比迭代存在收敛速度慢的问题。
+工程中一般不直接使用雅可比迭代法，
+而是使用各种基于雅可比迭代法的改进方法。
+</code></pre><p>高斯-赛德尔迭代法</p>
+<pre><code>雅可比迭代法每次迭代计算时，
+将上一次的迭代变量整体带入到迭代关系式中，
+计算新的迭代变量值，
+也就是所谓的整体迭代。
+在迭代收敛的前提下，
+如果迭代变量中的每个分量 x 在计算出新的迭代值后，
+直接带入迭代，
+参与其他迭代分量的计算，
+则能显著地提高迭代效果，
+这种改进的方法就是高斯-赛德尔迭代法。
+</code></pre>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&text=线性代数方程组的求解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&is_video=false&description=线性代数方程组的求解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=线性代数方程组的求解&body=Check out this article: http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&title=线性代数方程组的求解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/迭代递推卡02/2019/09/&name=线性代数方程组的求解&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

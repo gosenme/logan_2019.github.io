@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="简短定义x := 123符号不同（:=）必须显式提供初始化值不能提供数据类型只能用于函数内部这种简短定义必须有初始化值，同时不能提供类型，必须通过初始化值进行推导，只能用于函数内部。在变量定义时候，Go 语言有个很特殊的习惯是在函数内部用简短定义方式，即有初始化值的时候可以省略类型，编译器通过初始化值推断出它的类型，相当于补全类型，因为有类型的变量编译器才知道分配多大空间和存储什么格式，我们管这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-3">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="简短定义x := 123符号不同（:=）必须显式提供初始化值不能提供数据类型只能用于函数内部这种简短定义必须有初始化值，同时不能提供类型，必须通过初始化值进行推导，只能用于函数内部。在变量定义时候，Go 语言有个很特殊的习惯是在函数内部用简短定义方式，即有初始化值的时候可以省略类型，编译器通过初始化值推断出它的类型，相当于补全类型，因为有类型的变量编译器才知道分配多大空间和存储什么格式，我们管这个">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/FsONnMw_1O_6pkv-U-ji0U1injRm">
+<meta property="og:updated_time" content="2019-11-30T10:52:39.432Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-3">
+<meta name="twitter:description" content="简短定义x := 123符号不同（:=）必须显式提供初始化值不能提供数据类型只能用于函数内部这种简短定义必须有初始化值，同时不能提供类型，必须通过初始化值进行推导，只能用于函数内部。在变量定义时候，Go 语言有个很特殊的习惯是在函数内部用简短定义方式，即有初始化值的时候可以省略类型，编译器通过初始化值推断出它的类型，相当于补全类型，因为有类型的变量编译器才知道分配多大空间和存储什么格式，我们管这个">
+<meta name="twitter:image" content="https://images.gitbook.cn/FsONnMw_1O_6pkv-U-ji0U1injRm">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-3</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-4多变量赋值/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-2变量是什么?/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&text=重学 Go 语言：基础篇-3"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&is_video=false&description=重学 Go 语言：基础篇-3"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-3&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&name=重学 Go 语言：基础篇-3&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">简短定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">简短定义的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">同名定义的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">退化赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-4"><span class="toc-number">1.5.</span> <span class="toc-text">反汇编退化赋值</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-3
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:52:39.432Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>简短定义</h3><br><pre><code class="go language-go">x := 123<br></code></pre><br><ul><br><li>符号不同（:=）</li><br><li>必须显式提供初始化值</li><br><li>不能提供数据类型</li><br><li>只能用于函数内部</li><br></ul><br><p>这种简短定义必须有初始化值，同时不能提供类型，必须通过初始化值进行推导，只能用于函数内部。</p><br><p>在变量定义时候，Go 语言有个很特殊的习惯是在函数内部用简短定义方式，即有初始化值的时候可以省略类型，编译器通过初始化值推断出它的类型，相当于补全类型，因为有类型的变量编译器才知道分配多大空间和存储什么格式，我们管这个叫类型推断。第二必须在函数内部使用，也就是说不能在全局变量中使用。</p><br><p>在函数内部 <code>x := 0x100</code> 定义就相当于 <code>var x int = 0x100</code>。</p><br><h3 id="-1">简短定义的问题</h3><br><pre><code class="go language-go">var x int<br><br>func main() {<br>    x := 100<br>}<br></code></pre><br><ul><br><li>对新手而言，需明确要操作的目标。</li><br><li>通过命名方式改善。</li><br></ul><br><p>在函数内部我们可以使用简短定义，简短定义使用了一个特殊的符号 <code>x := 100</code>，完整的定义是这样 <code>var x = 100</code> 或者 <code>var x int = 100</code>，我们编写代码时需要明确，是修改全局变量还是定义局部变量。如果有相同名称的全局变量，本来想对全局变量修改却不小心定义了新的变量。所以 <code>x := 100</code> 是变量定义而不是变量赋值，定义的话实际上分配了新的内存，修改的话就是赋值。</p><br><p>这种简短定义的问题，一般通过命名的方式来解决。也就是说使用全局变量的时候，不应该使用短名，明确使用全名。</p><br><p>全局变量或者全局常量定义倾向使用多个单词组成的全名，而对于函数内部的局部变量命名倾向于使用短名。因为全局变量可能跨很多函数甚至在不同文件。对应用开发来说，我们通常会把一个函数的控制在有限的规模，短名给我们提供更好的可阅读性。</p><br><p>现在知道了变量是什么，声明和定义有什么不同，另外简短定义可能会带来一些潜在的问题。以后换一个新的语言可以找一个比较熟悉的方式，或者这门语言有几种风格，尝试用一种比较接受的风格去写。</p><br><pre><code class="go language-go">var (<br>    x int = 0x100<br>)<br><br>func main() {<br>    println(x) //global var<br>    x := “abc” //var x string =”abc”<br>    {<br>        x := 0x200 //var x int = 0x200<br>        println(x) // print x int<br>    }<br>    println(x) //print var x string<br>}<br></code></pre><br><p>在第一行打印是全局变量，第二行重新定义局部变量，相当于 <code>var x string =”abc”</code>，第七行实际打印 x 字符串，很显然是局部变量。</p><br><p>在同一个函数内部用同一个符号名引用了完全不同的变量，变量名只在当前作用域上有效，超出作用域可能指向外层空间的引用。<code>x := 0x200</code> 虽然看上去少写点代码，但是很容易引起误解。</p><br><h3 id="-2">同名定义的问题</h3><br><pre><code class="go language-go">var x = 100<br><br>func main() {<br>    x := x<br>    if x := 20; x &gt; 10 {<br>        x := x<br>        println(x)<br>    }<br>    println(x)<br>}<br></code></pre><br><p>不同作用域形成的遮蔽效应。</p><br><p>同名定义的问题属于编码不规范，变量命名作用域按照块进行的。什么叫块？对于函数里面就是左右大括号构成一个块。</p><br><p>上面例子中，在 main 块里面定义的 <code>x := x</code> 右值 x 是全局变量，if 语句有个初始化变量 <code>x := 20</code>，在 if 块里面又定义一个 <code>x := x</code>。当我们打印 x 的时候，实际上会找一个离它最近的变量，如果没有，往外找一直找到全局。</p><br><p>这种命名习惯带来代码看上去非常别扭。会造成变量的遮蔽效应。所谓遮蔽效应就是最近的变量会遮蔽稍微远的变量。往外遮蔽总是访问最近的变量，但是最近的不好说，因为源码和汇编不是一回事。</p><br><p>汇编如何去理解？可能官方的文档里说访问相同作用域的优先。什么叫相同作用域？两个大括号匹配的区域叫做相同作用域，找不着就接着往外找。</p><br><p>那么最好的方式是变量命名有明确的定义，在相同作用域里对一个变量名的复用一定要慎重。代码的可阅读性和可维护性也是非常重要的，不要产生歧义或者误导。</p><br><h3 id="-3">退化赋值</h3><br><pre><code class="go language-go">//go:noinline<br>func test() (int, int) {<br>    return 1, 2<br>}<br>func main() {<br>    a, x := test()<br>    println(&amp;a, &amp;x)<br>    b, x := test()<br>    println(&amp;b, &amp;x)<br>}<br></code></pre><br><ul><br><li>简短定义退化为对同一变量的赋值操作</li><br><li>必须有新变量被定义</li><br><li>常用于处理错误返回值（err）</li><br></ul><br><p>Go 语言函数允许返回多个值。test() 函数有两个返回值，<code>a, x := test()</code> 是简短定义写法，它同时定义了 a 和 x 两个变量，a 和 x 用于接收 test() 函数的返回值。<code>b, x := test()</code> 在相同作用域重复定义了 x 变量，但是这样写法是可以编译的。a 和 b 的地址不一样，但 x 地址一样，这就是所谓退化赋值的概念。第一次的时候 a 和 x 都是定义，但是第二次的时候 x 不是定义而是赋值，也就是说它会重复使用上面 x 的内存。</p><br><p>为什么出现退化赋值的概念呢？因为 Go 语言很多函数通过返回一个值和一个错误值来判断函数的结果对不对，我们为每个 err 定义内存是不合理的，最好的方式是复用内存，这样一来就变成所谓退化赋值的概念。</p><br><p>退化赋值有些要求，当进行所谓退化赋值的时候最少必须有一个新的变量未定义。</p><br><p>退化赋值在语法设计上有二义性，同一个符号 <code>:=</code> 在不同的地方有不同的解释。因为退化赋值必须有新的变量出现，所以符号 <code>:=</code> 是针对 b 的，而 x 只是顺便做赋值操作。</p><br><h3 id="-4">反汇编退化赋值</h3><br><pre><code class="bash language-bash">$ go build<br>$ go tool objdump -s “main.main” test<br>TEXT main.main(SB)<br> main.go:9 CALL main.test(SB)<br> main.go:9 MOVQ 0(SP), AX<br> main.go:9 MOVQ 0x8(SP), CX<br> main.go:9 MOVQ AX, 0x20(SP) ; a<br> main.go:9 MOVQ CX, 0x10(SP) ; x<br> main.go:11 CALL main.test(SB)<br> main.go:11 MOVQ 0(SP), AX<br> main.go:11 MOVQ 0x8(SP), CX<br> main.go:11 MOVQ AX, 0x18(SP) ; b<br> main.go:11 MOVQ CX, 0x10(SP) ; x<br></code></pre><br><p>我们通过输出变量的内存地址知道 x 复用内存空间。内部机制怎么实现呢？我们现在怎么去验证？</p><br><p>反汇编，调用 test 函数返回两个值，返回值应该保存在 0(SP) 和 0x8(SP)。第一次调用 AX 返回 a、a 指向 0x20(SP)，CX 返回 x、x 指向 0x10(SP)。第二次调用的时候，返回值 b 指向新的内存 0x18(SP)，x 依然指向 0x10(SP) 内存地址。很显然不管 print 输出内存地址还是反汇编都明确地知道 x 指向同一块内存。</p><br><p>我们为本专栏<strong>付费读者</strong>创建了微信交流群，以方便更有针对性地讨论专栏相关的问题。入群方式请添加 GitChat 小助手伽利略的微信号：GitChatty6（或扫描以下二维码），然后给小助手发「361」消息，即可拉你进群~</p><br><p><img src="https://images.gitbook.cn/FsONnMw_1O_6pkv-U-ji0U1injRm" width="40%"></p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">简短定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">简短定义的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">同名定义的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.4.</span> <span class="toc-text">退化赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-4"><span class="toc-number">1.5.</span> <span class="toc-text">反汇编退化赋值</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&text=重学 Go 语言：基础篇-3"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&is_video=false&description=重学 Go 语言：基础篇-3"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-3&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&title=重学 Go 语言：基础篇-3"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-3简短定义/2019/11/&name=重学 Go 语言：基础篇-3&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

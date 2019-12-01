@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Title       1. 前言 1.1 为什么使用 Go 作 Web 后端 1.2 环境依赖   2. 概念与使用 2.1 Web 应用 2.2 HTTP(S) 的请求与响应 2.3 RESTful 2.4 JSON 2.5 Gin 2.6 PostgreS 2.7 Redis 2.8 Mongo   3. 实例 3.1 app-center 3.2 backend">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang web 实战">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/golang_web/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="Title       1. 前言 1.1 为什么使用 Go 作 Web 后端 1.2 环境依赖   2. 概念与使用 2.1 Web 应用 2.2 HTTP(S) 的请求与响应 2.3 RESTful 2.4 JSON 2.5 Gin 2.6 PostgreS 2.7 Redis 2.8 Mongo   3. 实例 3.1 app-center 3.2 backend">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/4a295bc0-9126-11e9-9e5b-796b6c017d39">
+<meta property="og:image" content="https://images.gitbook.cn/c7d675d0-8b31-11e9-bf27-d36a1bb36f12">
+<meta property="og:image" content="https://images.gitbook.cn/d1902be0-8b4d-11e9-95e5-6f0d9ecb3f92">
+<meta property="og:image" content="https://images.gitbook.cn/3e1c2780-8c22-11e9-9aa2-f543c13cf434">
+<meta property="og:image" content="https://images.gitbook.cn/773ab170-8c23-11e9-9aa2-f543c13cf434">
+<meta property="og:image" content="https://images.gitbook.cn/6172b4c0-8b2c-11e9-a137-5b56e873ea5e">
+<meta property="og:image" content="https://images.gitbook.cn/3f7a31c0-8b2e-11e9-95e5-6f0d9ecb3f92">
+<meta property="og:image" content="https://images.gitbook.cn/1a1ae890-8bea-11e9-95e5-6f0d9ecb3f92">
+<meta property="og:image" content="https://images.gitbook.cn/f79c8b90-8c1e-11e9-a7e7-eb4c90aeca8f">
+<meta property="og:image" content="https://images.gitbook.cn/754fdfe0-8cbc-11e9-b28c-cf1027a14046">
+<meta property="og:image" content="https://images.gitbook.cn/dfc50850-8cb2-11e9-9dcb-df1530b9063d">
+<meta property="og:image" content="https://images.gitbook.cn/1b93fa50-8cb6-11e9-b28c-cf1027a14046">
+<meta property="og:image" content="https://images.gitbook.cn/f6ea92b0-8cb8-11e9-b28c-cf1027a14046">
+<meta property="og:image" content="https://images.gitbook.cn/935fc8f0-8cb8-11e9-9dcb-df1530b9063d">
+<meta property="og:image" content="https://images.gitbook.cn/eaad9080-8cc5-11e9-9dcb-df1530b9063d">
+<meta property="og:image" content="https://images.gitbook.cn/7e040180-9125-11e9-9e5b-796b6c017d39">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.069Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="golang web 实战">
+<meta name="twitter:description" content="Title       1. 前言 1.1 为什么使用 Go 作 Web 后端 1.2 环境依赖   2. 概念与使用 2.1 Web 应用 2.2 HTTP(S) 的请求与响应 2.3 RESTful 2.4 JSON 2.5 Gin 2.6 PostgreS 2.7 Redis 2.8 Mongo   3. 实例 3.1 app-center 3.2 backend">
+<meta name="twitter:image" content="https://images.gitbook.cn/4a295bc0-9126-11e9-9e5b-796b6c017d39">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>golang web 实战</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/gitchat/python_asyncio_guidelines/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/gitchat/python_Interview_120/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/golang_web/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&text=golang web 实战"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&is_video=false&description=golang web 实战"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=golang web 实战&body=Check out this article: http://logan_2019.github.io/gitchat/golang_web/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&name=golang web 实战&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">1.</span> <span class="toc-text">1. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#11goweb"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 为什么使用 Go 作 Web 后端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 环境依赖</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">2.</span> <span class="toc-text">2. 概念与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#21web"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Web 应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#22https"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 HTTP(S) 的请求与响应</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#23restful"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 RESTful</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#24json"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 JSON</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#25gin"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 Gin</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#26postgres"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 PostgreS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#27redis"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 Redis</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#28mongo"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 Mongo</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">3.</span> <span class="toc-text">3. 实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#31appcenter"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 app-center</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#32backend"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 backend</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#33activity"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 activity</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        golang web 实战
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.069Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="article_content" class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#1">1. 前言</a><ul>
+<li><a href="#11goweb">1.1 为什么使用 Go 作 Web 后端</a></li>
+<li><a href="#12">1.2 环境依赖</a></li>
+</ul>
+</li>
+<li><a href="#2">2. 概念与使用</a><ul>
+<li><a href="#21web">2.1 Web 应用</a></li>
+<li><a href="#22https">2.2 HTTP(S) 的请求与响应</a></li>
+<li><a href="#23restful">2.3 RESTful</a></li>
+<li><a href="#24json">2.4 JSON</a></li>
+<li><a href="#25gin">2.5 Gin</a></li>
+<li><a href="#26postgres">2.6 PostgreS</a></li>
+<li><a href="#27redis">2.7 Redis</a></li>
+<li><a href="#28mongo">2.8 Mongo</a></li>
+</ul>
+</li>
+<li><a href="#3">3. 实例</a><ul>
+<li><a href="#31appcenter">3.1 app-center</a></li>
+<li><a href="#32backend">3.2 backend</a></li>
+<li><a href="#33activity">3.3 activity</a></li>
+</ul>
+</li>
+<li><a href="#">总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<h3 id="1">1. 前言</h3>
+<p>在开发一个应用，也就是我们俗称 App 时，最低的配置是需要一个前端和一个后端。由前端技术人员为用户开发接触到的页面，由后端为前端的各类用户事件提供处理和数据响应。比较常见的，如手机 App 应用（QQ、微信），网页 Web 应用（GitChat、CSDN 页面），桌面应用（YY、QQ 游戏）…… 不管是什么应用，都需要有后端技术与之匹配。而我们今天介绍的，就是其中的 Web 后端技术及相关实战。</p>
+<p>由于 Chat 篇幅不适合描述过多实战无关的细节，对一些需要深入了解的知识，作者会贴上一些链接给读者们参阅。</p>
+<p><strong>思维导图</strong></p>
+<p><img src="https://images.gitbook.cn/4a295bc0-9126-11e9-9e5b-796b6c017d39" alt="enter image description here"></p>
+<p><strong>代码托管仓库</strong>：</p>
+<blockquote>
+  <p><a href="https://github.com/fwhezfwhez/gitchat/tree/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98" target="_blank" rel="noopener">https://github.com/fwhezfwhez/gitchat</a></p>
+</blockquote>
+<h4 id="11goweb">1.1 为什么使用 Go 作 Web 后端</h4>
+<p><strong>可操作多核，实现高负载</strong></p>
+<p>Golang 可以使用 Go 关键字轻松操作多协程，并指定 CPU 数。</p>
+<pre><code class="golang language-golang">runtime.GOMAXPROCS(runtime.NumCPU())
+go func(){}()
+</code></pre>
+<p><strong>可以跨平台编译</strong>，比如在 Windows 上开发，交叉编译成 Linux 的可执行文件。</p>
+<p><img src="https://images.gitbook.cn/c7d675d0-8b31-11e9-bf27-d36a1bb36f12" alt="enter image description here"></p>
+<p><strong>编程友好</strong></p>
+<p>Golang 易学、性能好，并且它是为了降低 C++/C 开发维护复杂度而诞生的新型语言，处理业务相当简单。上手成本几乎是零（不需要了解 Spring 全家桶）。</p>
+<h4 id="12">1.2 环境依赖</h4>
+<ul>
+<li>安装 Go（1.11、1.12 最佳）</li>
+<li>安装 Docker（使用免费的 CE 版本）</li>
+<li>安装 PostgreS（可镜像）</li>
+<li>安装 Mongo（可镜像）</li>
+<li>安装 Redis（可镜像）</li>
+</ul>
+<p>大部分中间件（Redis、Mongo、Consul、etcd……） 服务仅仅只需要相应的 IP 和端口，没有严格意义上要求本机安装，而正好 Docker 提供隔离级别良好的镜像服务，可以达到本机安装的效果。Gopher 的开发者大部分使用 Windows 和 Mac，今天也是拿 Win10 举例。正确安装好 Go 和 Docker 后，需要达到一下效果：</p>
+<pre><code class="hljs sql">go <span class="hljs-comment">--version</span>
+docker <span class="hljs-comment">--version</span>
+</code></pre>
+<p><img src="https://images.gitbook.cn/d1902be0-8b4d-11e9-95e5-6f0d9ecb3f92" alt="enter image description here"></p>
+<p>顺便贴一下，具备 Docker 环境下，如何准备 PostgreS、Redis 和 Mongo。</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">docker</span> <span class="hljs-selector-tag">pull</span> <span class="hljs-selector-tag">postgres</span><span class="hljs-selector-pseudo">:9.6</span>
+<span class="hljs-selector-tag">docker</span> <span class="hljs-selector-tag">pull</span> <span class="hljs-selector-tag">redis</span><span class="hljs-selector-pseudo">:latest</span>
+<span class="hljs-selector-tag">docker</span> <span class="hljs-selector-tag">pull</span> <span class="hljs-selector-tag">mongo</span><span class="hljs-selector-pseudo">:latest</span>
+</code></pre>
+<p><img src="https://images.gitbook.cn/3e1c2780-8c22-11e9-9aa2-f543c13cf434" alt="enter image description here"></p>
+<p>开启（长期） 以上三个中间件服务：</p>
+<p><strong>因为本机已包含 PostgreS，5432 已经被占用，使用本机 5433 映射进 docker5432</strong>。</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">docker</span> run -itd --restart=<span class="hljs-literal">on</span>-failure:<span class="hljs-number">20</span> -p <span class="hljs-number">6379</span>:<span class="hljs-number">6379</span> redis:latest
+docker run -itd --restart=<span class="hljs-literal">on</span>-failure:<span class="hljs-number">20</span> -p <span class="hljs-number">5433</span>:<span class="hljs-number">5432</span> postgres:<span class="hljs-number">9</span>.<span class="hljs-number">6</span>
+docker run -itd --restart=<span class="hljs-literal">on</span>-failure:<span class="hljs-number">20</span> -p <span class="hljs-number">27017</span>:<span class="hljs-number">27017</span> mongo:latest
+</code></pre>
+<p><img src="https://images.gitbook.cn/773ab170-8c23-11e9-9aa2-f543c13cf434" alt="enter image description here"></p>
+<h3 id="2">2. 概念与使用</h3>
+<p>为了让接下来的实战场景通俗易懂，需要为读者介绍一些概念。这些概念根据其定义并结合了作者的认知而得出，如果和大家的一些理念相悖，可以在作者的读者圈提出自己的看法。技术的领域里，希望能抱着求同存异的心态来对待分歧。</p>
+<h4 id="21web">2.1 Web 应用</h4>
+<p>Web 是浏览器/服务器架构下的产物，通俗来说，就是网页应用与服务器之间的通信，通信之间需要有协议支撑，Web 网络里最常见的协议便是 HTTP 与 HTTPS。</p>
+<p>关于这些协议的描述，不需要做太深入地了解，只需要知道如下三点：</p>
+<ol>
+<li>HTTP 传输过程中，信息是明文的，HTTPS 传输时是被加密的，所以 HTTPS 协议下的传输时更安全的。</li>
+<li>HTTP 走的是 80 端口，在做域名解析时，HTTP 开头的域名请求，会进入服务器的 80 端口，HTTPS 则是 443 端口。</li>
+<li>HTTP 与 HTTPS 都是基于 TCP 实现的应答式模型，客户端发送一个请求，服务端响应该请求，通信的建立一定源自于客户端，并且极少有服务端推送的场景。</li>
+</ol>
+<h4 id="22https">2.2 HTTP(S) 的请求与响应</h4>
+<p>浏览器与服务器之间是基于 HTTP(S) 的应答式通信，那么 HTTP 请求与响应长啥样呢，不妨按照如下操作看看（包括但不限于在 360 浏览器/Chrome 浏览器中尝试）：</p>
+<ol>
+<li>浏览器输入 www.baidu.com，按下 F12 进入调试窗；
+<img src="https://images.gitbook.cn/6172b4c0-8b2c-11e9-a137-5b56e873ea5e" alt></li>
+<li>点击 network，并过滤选择 xhr，F5 刷新页面；</li>
+<li>随意选中一个文本，每个文本对应一个 HTTP 请求响应，可以看一下它的组成（Headers、Response）。
+<img src="https://images.gitbook.cn/3f7a31c0-8b2e-11e9-95e5-6f0d9ecb3f92" alt="gif-请求"></li>
+</ol>
+<h4 id="23restful">2.3 RESTful</h4>
+<p>RESTful 描述了基于一个或多个对象的 CRUD（增删改查）路由形式，假设我们需要对对象为用户（user） 进行接口操作，可以大体以下几类：</p>
+<pre><code class="hljs coffeescript">POST <span class="hljs-regexp">/user/</span> 增加一条用户记录
+GET <span class="hljs-regexp">/user/</span>  获取用户列表
+GET <span class="hljs-regexp">/user/1/</span> 获取id为<span class="hljs-number">1</span>的用户记录
+PATCH  <span class="hljs-regexp">/user/1/</span> 修改id为<span class="hljs-number">1</span>的用户的属性
+DELETE <span class="hljs-regexp">/user/1/</span> 删除id为<span class="hljs-number">1</span>的用户
+</code></pre>
+<p>RESTful 的路径里，没有下划线和驼峰，没有纯动词，需要连接时，使用 <code>-</code>：</p>
+<pre><code class="go language-go">/user/add-money/
+/user/order/amount/
+</code></pre>
+<h4 id="24json">2.4 JSON</h4>
+<p>HTTP 请求的结构序列化方式，大部分是 application/json、application/xml、application/x-www-form-urlencoded，其中 JSON 使用的最多，三者都是文本协议，JSON 大体长这样：</p>
+<pre><code class="json language-json hljs">{
+    <span class="hljs-attr">"chat_name"</span>:<span class="hljs-string">"golang gitchat"</span>,
+    <span class="hljs-attr">"readers"</span>: [
+       {
+           <span class="hljs-attr">"username"</span>:<span class="hljs-string">"张三"</span>
+       },
+       {
+           <span class="hljs-attr">"username"</span>:<span class="hljs-string">"李四"</span>
+       }
+    ]
+}
+</code></pre>
+<h4 id="25gin">2.5 Gin</h4>
+<p>Gin 是 Golang 实现的 Web 框架，上手难度极低，使用时贴合了 RESTful 习惯。</p>
+<p>仓库坐标：</p>
+<blockquote>
+  <p><a href="https://github.com/gin-gonic/gin" target="_blank" rel="noopener">https://github.com/gin-gonic/gin</a></p>
+</blockquote>
+<p>对一个陌生的框架，我们不要求全部掌握，但可以通过功能点，来学习如何使用。</p>
+<p><strong>如何搭建 RESTful 样式的 HTTP 服务，监听 POST/GET/PATCH/DELETE 请求</strong></p>
+<p><a href="https://github.com/fwhezfwhez/gitchat/blob/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/gin/restful.go" target="_blank" rel="noopener">restful.go</a></p>
+<pre><code class="go language-go">package main
+
+import (
+    "github.com/gin-gonic/gin"
+    "strconv"
+)
+
+type User struct {
+    Id       int    `json:"id"`
+    Username string `json:"username"`
+}
+
+var users = []User{{1, "张三"}, {2, "李四"}, {3, "王五"}}
+
+func main() {
+    r := gin.Default()
+    r.GET("/user/", get)
+    r.GET("/user/:id/", getOne)
+    r.POST("/user/", post)
+
+    r.PATCH("/user/:id/", patch)
+    r.DELETE("/user/:id/", delete)
+
+    r.Run(":8080")
+}
+
+func get(c *gin.Context) {
+    c.JSON(200, users)
+}
+func post(c *gin.Context) {
+    var user User
+    c.Bind(&amp;user)
+    users = append(users, User{Username: user.Username, Id: user.Id})
+    c.JSON(200, users)
+}
+func patch(c *gin.Context) {
+    var user User
+    c.Bind(&amp;user)
+    id := c.Param("id")
+    for i,v:=range users{
+        if strconv.Itoa(v.Id) == id {
+            users[i].Username = user.Username
+            user.Id = v.Id
+        }
+    }
+    c.JSON(200, user)
+}
+func deleteById(c *gin.Context) {
+    id := c.Param("id")
+    for i,v:=range users{
+        if strconv.Itoa(v.Id) == id {
+            users = append(users[:i], users[i+1:]...)
+        }
+    }
+    c.JSON(200, users)
+}
+func getOne(c *gin.Context) {
+    var user User
+    id := c.Param("id")
+    for _,v:=range users{
+        if strconv.Itoa(v.Id) == id {
+            user = v
+            break
+        }
+    }
+    c.JSON(200, user)
+}
+</code></pre>
+<pre><code class="hljs css"><span class="hljs-selector-tag">go</span> <span class="hljs-selector-tag">run</span> <span class="hljs-selector-tag">restful</span><span class="hljs-selector-class">.go</span>
+</code></pre>
+<p><img src="https://images.gitbook.cn/1a1ae890-8bea-11e9-95e5-6f0d9ecb3f92" alt="enter image description here"></p>
+<p><strong>如何使用中间件</strong></p>
+<p>使用中间件验证身份（是否带 token）</p>
+<p><a href="https://github.com/fwhezfwhez/gitchat/blob/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/gin/middleware.go" target="_blank" rel="noopener">middleware.go</a></p>
+<pre><code class="go language-go">package main
+
+import (
+    "fmt"
+    "github.com/gin-gonic/gin"
+    "time"
+)
+
+func validateToken(c *gin.Context) {
+    token := c.Request.Header.Get("Authorization")
+    if token != "a token example" {
+        c.Abort()
+        c.JSON(403, gin.H{"message": "token invalid"})
+        return
+    }
+    c.Next()
+}
+
+func main() {
+    r := gin.Default()
+    r.GET("/login/", login)
+
+    r.Use(validateToken)
+    r.POST("/weather/", weather)
+    r.Run(":8081")
+}
+
+func login(c *gin.Context) {
+    c.JSON(200, gin.H{"token": "a token example"})
+}
+func weather(c *gin.Context) {
+    c.JSON(200, gin.H{"message": fmt.Sprintf("%s 晴", time.Now().Format("2006-01-02"))})
+}
+</code></pre>
+<pre><code class="hljs css"><span class="hljs-selector-tag">go</span> <span class="hljs-selector-tag">run</span> <span class="hljs-selector-tag">middleware</span><span class="hljs-selector-class">.go</span>
+</code></pre>
+<p><img src="https://images.gitbook.cn/f79c8b90-8c1e-11e9-a7e7-eb4c90aeca8f" alt="enter image description here"></p>
+<h4 id="26postgres">2.6 PostgreS</h4>
+<p>PostgreS 是一款免费的功能强大的开源数据库，端口号为 5432，安装时可以选择本机安装，也可以使用 Docker。这里使用 Docker。</p>
+<p>在前面，我们已经通过 Docker 安装了 PostgreS，并且运行了，那么我要如何操作呢?</p>
+<p>关系型数据库基本上都是通过 SQL 语句来完成数据的增删改查，具体的概念，可以参考：</p>
+<blockquote>
+  <p><a href="https://www.runoob.com/postgresql/postgresql-tutorial.html" target="_blank" rel="noopener">https://www.runoob.com/postgresql/postgresql-tutorial.html</a></p>
+</blockquote>
+<p>在前面的 RESTful 服务里，我们将数据放进了程序内存中，每次重启服务时，都会回到初始状态，为了让程序中交互的数据持久地保存进磁盘里，需要使用到数据库，也就是 PostgreS（当然也可以持久化进 Redis 和 Mongo 中）。</p>
+<p>关于 PostgreS、Redis、Mongo，数据存哪里的问题：</p>
+<blockquote>
+  <p>三者里，PostgreS 有事务支持，并且读写速度都很好，唯一的缺陷是和众多关系数据库一样，连接数的上限存在瓶颈，它是库表列形式的关系型数据库，可以通过规范的 SQL 语句操作。</p>
+  <p>Redis 和 Mongo 都是无事务的非关系型数据库，前者有众多模型（队列、键值、管道等），后者以集合、文档、字段的形式存放 JSON 字段。</p>
+  <p>Redis 和 Mongo 都是内存数据库，读写效率都比 PostgreS 快，前者在应用中经常作为缓存，降低数据库连接开销，后者可以存放弱事务的记录（日志、社区论坛的各种数据……）</p>
+</blockquote>
+<p>现在，我们尝试将操作的对象 users 从程序内存中，转储进 PostgreS。以下为涉及到的命令语句，使用场景都凝结进 GIF 了。</p>
+<p>进入 PostgreS 终端：</p>
+<pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span>  -it &lt;postgres容器id&gt; sh
+</code></pre>
+<p>以超管 PostgreS 进入 PostgreS 数据库命令行：</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">psql</span> -U postgres -d postgres
+</code></pre>
+<p>创建 gitchat 用户，密码 123456：</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> gitchat <span class="hljs-keyword">with</span> <span class="hljs-keyword">password</span> <span class="hljs-string">'123456'</span>
+</code></pre>
+<p>创建 test 数据库，用来存放我们的数据表：</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">database</span> <span class="hljs-keyword">test</span>
+</code></pre>
+<p>将测试数据库 test 所有权限赋予用户 gitchat：</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">grant</span> all <span class="hljs-keyword">privileges</span> <span class="hljs-keyword">on</span> <span class="hljs-keyword">database</span> <span class="hljs-keyword">test</span> <span class="hljs-keyword">to</span> gitchat
+</code></pre>
+<p>退出命令行：</p>
+<pre><code class="hljs">\q
+</code></pre>
+<p>以 gitchat 账户进入 test 账户：</p>
+<pre><code class="hljs bash">psql -U gitchat -d <span class="hljs-built_in">test</span>
+</code></pre>
+<pre><code class="sql language-sql hljs"><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> user_info(
+    <span class="hljs-keyword">id</span> <span class="hljs-built_in">serial</span> primary <span class="hljs-keyword">key</span>,
+    username <span class="hljs-built_in">varchar</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">null</span> <span class="hljs-keyword">default</span> <span class="hljs-string">''</span>
+)
+</code></pre>
+<p><img src="https://images.gitbook.cn/754fdfe0-8cbc-11e9-b28c-cf1027a14046" alt="enter image description here"></p>
+<p><a href="https://github.com/fwhezfwhez/gitchat/blob/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/gorm-postgres/restful-pg.go" target="_blank" rel="noopener">restful-pg.go</a></p>
+<pre><code class="go language-go">package main
+
+import (
+    "fmt"
+    "github.com/gin-gonic/gin"
+    "github.com/jinzhu/gorm"
+    _ "github.com/lib/pq"
+    "time"
+)
+
+type User struct {
+    Id       int    `json:"id"`
+    Username string `json:"username"`
+}
+
+var db *gorm.DB
+
+func init() {
+    var err error
+    db, err = gorm.Open("postgres",
+        fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
+            "localhost",
+            "5433",
+            "gitchat",
+            "test",
+            "disable",
+            "123456",
+        ),
+    )
+
+    db.SingularTable(true)
+    db.LogMode(true)
+    db.DB().SetConnMaxLifetime(10 * time.Second)
+    db.DB().SetMaxIdleConns(30)
+    if err != nil {
+        panic(err)
+    }
+}
+
+func main() {
+    r := gin.Default()
+    r.GET("/user/", get)
+    r.GET("/user/:id/", getOne)
+    r.POST("/user/", post)
+
+    r.PATCH("/user/:id/", patch)
+    r.DELETE("/user/:id/", deleteById)
+
+    r.Run(":8082")
+}
+
+func get(c *gin.Context) {
+    var users []User
+    if e := db.Raw("select * from user_info").Scan(&amp;users).Error; e != nil {
+        c.JSON(500, gin.H{"message": e.Error()})
+        return
+    }
+    c.JSON(200, users)
+}
+func post(c *gin.Context) {
+    var user User
+    if e:=c.Bind(&amp;user);e!=nil{
+        panic(e)
+    }
+
+    if e := db.Raw("insert into user_info(username) values(?) returning *", user.Username).Scan(&amp;user).Error; e != nil {
+        c.JSON(500, gin.H{"message": e.Error()})
+        return
+    }
+    c.JSON(200, user)
+}
+func patch(c *gin.Context) {
+    var user User
+    c.Bind(&amp;user)
+    id := c.Param("id")
+    db.Raw("update user_info set username=? where id=? returning *", user.Username, id).Scan(&amp;user)
+    c.JSON(200, user)
+}
+func deleteById(c *gin.Context) {
+    id := c.Param("id")
+    db.Exec("delete from user_info where id=?", id)
+    c.JSON(200, gin.H{"message": "success"})
+}
+func getOne(c *gin.Context) {
+    var user User
+    id := c.Param("id")
+    db.Raw("select * from user_info where id=?", id).Scan(&amp;user)
+    c.JSON(200, user)
+}
+</code></pre>
+<pre><code class="hljs css"><span class="hljs-selector-tag">go</span> <span class="hljs-selector-tag">run</span> <span class="hljs-selector-tag">restful-pg</span><span class="hljs-selector-class">.go</span>
+</code></pre>
+<p><img src="https://images.gitbook.cn/dfc50850-8cb2-11e9-9dcb-df1530b9063d" alt="enter image description here"></p>
+<h4 id="27redis">2.7 Redis</h4>
+<p>Redis 是一款非关系型数据库，具备多种业务模型。前面我们通过 Docker 已经启动过了 Redis，并将主机 6379 端口和 Redis 容器 6379 映射到了一起。</p>
+<p><strong>Redis 的主要业务场景：为查询提供缓存，跨服务通信数据传递</strong>。</p>
+<p>后者我们不做演示，其原理是两个服务之间不进行收发，当需要通信时，一个服务把需要传递的消息以 Key-Value 的形式放入 Redis，另一个服务去取。Redis 的各种命令我们不去深入，这里用到了 SETEX 和 GET 来进行数据缓存的测试。</p>
+<p>连接 Redis 需要有对应语言的客户端，下面我们测试 Go 客户端，并为上面的 user 查询制定缓存。</p>
+<p><a href="https://github.com/fwhezfwhez/gitchat/blob/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/redis/redis-example.go" target="_blank" rel="noopener">redis-example.go</a></p>
+<pre><code class="go language-go">package main
+
+import (
+    "fmt"
+    "github.com/garyburd/redigo/redis"
+    "time"
+)
+
+func main() {
+    var pool = GetRedis("redis://localhost:6379")
+    conn := pool.Get()
+    defer conn.Close()
+    key:= "test_redis_key"
+    value := "test_redis_value"
+    _,e:=conn.Do("SETEX", key, 60*60*24 ,value)
+    if e!=nil {
+        panic(e)
+    }
+
+    getValue,e:=redis.String(conn.Do("GET", key))
+    if e!=nil {
+        panic(e)
+    }
+    fmt.Println("receive from redis key 'test_redis_key':" ,getValue)
+}
+
+func GetRedis(url string) *redis.Pool {
+    return &amp;redis.Pool{
+        MaxIdle: 200,
+        //MaxActive:   0,
+        IdleTimeout: 180 * time.Second,
+        Dial: func() (redis.Conn, error) {
+            c, err := redis.DialURL(url)
+            if err != nil {
+                fmt.Println(err)
+                return nil, err
+            }
+            return c, err
+        },
+        TestOnBorrow: func(c redis.Conn, t time.Time) error {
+            _, err := c.Do("PING")
+            return err
+        },
+    }
+}
+</code></pre>
+<p><img src="https://images.gitbook.cn/1b93fa50-8cb6-11e9-b28c-cf1027a14046" alt="redis_example"></p>
+<p><strong>将数据库 user_info 表按照 id 缓存进 Redis</strong></p>
+<p><a href="https://github.com/fwhezfwhez/gitchat/blob/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/redis/restful-redis-pg.go" target="_blank" rel="noopener">restful-redis-pg.go</a></p>
+<pre><code class="go language-go">package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "github.com/garyburd/redigo/redis"
+    "github.com/gin-gonic/gin"
+    "github.com/jinzhu/gorm"
+    _ "github.com/lib/pq"
+    "time"
+)
+
+type User struct {
+    Id       int    `json:"id"`
+    Username string `json:"username"`
+}
+
+var pool = getRedis("redis://localhost:6379")
+
+func (u *User) SyncRedis(conn redis.Conn) {
+    if conn == nil {
+        conn = pool.Get()
+        defer conn.Close()
+    }
+    buf, _ := json.Marshal(u)
+    key := fmt.Sprintf("gitchat:user_info:%d", u.Id)
+    _, e := conn.Do("SETEX", key, 60*60*24, buf)
+    if e != nil {
+        panic(e)
+    }
+}
+
+var db *gorm.DB
+
+func init() {
+    var err error
+    db, err = gorm.Open("postgres",
+        fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
+            "localhost",
+            "5433",
+            "gitchat",
+            "test",
+            "disable",
+            "123456",
+        ),
+    )
+
+    db.SingularTable(true)
+    db.LogMode(true)
+    db.DB().SetConnMaxLifetime(10 * time.Second)
+    db.DB().SetMaxIdleConns(30)
+    if err != nil {
+        panic(err)
+    }
+}
+
+func main() {
+    r := gin.Default()
+    r.GET("/user/", get)
+    r.GET("/user/:id/", getOne)
+    r.POST("/user/", post)
+
+    r.PATCH("/user/:id/", patch)
+    r.DELETE("/user/:id/", deleteById)
+
+    r.Run(":8082")
+}
+
+func get(c *gin.Context) {
+    var users []User
+    if e := db.Raw("select * from user_info").Scan(&amp;users).Error; e != nil {
+        c.JSON(500, gin.H{"message": e.Error()})
+        return
+    }
+    conn := pool.Get()
+    defer conn.Close()
+    for i, _ := range users {
+        users[i].SyncRedis(conn)
+    }
+    c.JSON(200, users)
+}
+func post(c *gin.Context) {
+    var user User
+    if e := c.Bind(&amp;user); e != nil {
+        panic(e)
+    }
+
+    if e := db.Raw("insert into user_info(username) values(?) returning *", user.Username).Scan(&amp;user).Error; e != nil {
+        c.JSON(500, gin.H{"message": e.Error()})
+        return
+    }
+    user.SyncRedis(nil)
+    c.JSON(200, user)
+}
+func patch(c *gin.Context) {
+    var user User
+    c.Bind(&amp;user)
+    id := c.Param("id")
+    db.Raw("update user_info set username=? where id=? returning *", user.Username, id).Scan(&amp;user)
+    user.SyncRedis(nil)
+    c.JSON(200, user)
+}
+func deleteById(c *gin.Context) {
+    id := c.Param("id")
+    db.Exec("delete from user_info where id=?", id)
+    c.JSON(200, gin.H{"message": "success"})
+}
+func getOne(c *gin.Context) {
+    var user User
+    id := c.Param("id")
+
+    conn :=pool.Get()
+    defer conn.Close()
+
+    buf,e :=redis.Bytes(conn.Do("GET", fmt.Sprintf("gitchat:user_info:%s", id)))
+    if e!=nil {
+        panic(e)
+    }
+
+    if len(buf) !=0 {
+        e= json.Unmarshal(buf, &amp;user)
+        if e!=nil {
+            panic(e)
+        }
+    } else {
+        db.Raw("select * from user_info where id=?", id).Scan(&amp;user)
+    }
+
+    c.JSON(200, user)
+}
+func getRedis(url string) *redis.Pool {
+    return &amp;redis.Pool{
+        MaxIdle: 200,
+        //MaxActive:   0,
+        IdleTimeout: 180 * time.Second,
+        Dial: func() (redis.Conn, error) {
+            c, err := redis.DialURL(url)
+            if err != nil {
+                fmt.Println(err)
+                return nil, err
+            }
+            return c, err
+        },
+        TestOnBorrow: func(c redis.Conn, t time.Time) error {
+            _, err := c.Do("PING")
+            return err
+        },
+    }
+}
+</code></pre>
+<p>缓存以前</p>
+<p><img src="https://images.gitbook.cn/f6ea92b0-8cb8-11e9-b28c-cf1027a14046" alt="enter image description here"></p>
+<p>缓存之后</p>
+<p><img src="https://images.gitbook.cn/935fc8f0-8cb8-11e9-9dcb-df1530b9063d" alt="cache"></p>
+<p>调用 <code>GET localhost:8082/user/1/</code> 时， 已经不再存在数据库连接和 SQL 语句了, 并且平均查询速度也更快了。</p>
+<h4 id="28mongo">2.8 Mongo</h4>
+<p>Mongo 和 Redis 一样，是内存数据库，对高并发的支持比 Redis 可用性更高，因为 Redis 是单线程的。</p>
+<p>Mongo 的业务场景面向一些量级很大（未来可能会变得很大）的数据，下面我们在前面的 restful-redis-pg 的基础上，增加一个访问日志记录，这些日志被记入 Mongo。</p>
+<p><strong>Mongo 除了快以外，还有一个好处，如果 DB 和 Collection 不存在时，会自动创建。</strong></p>
+<p><a href="https://github.com/fwhezfwhez/gitchat/blob/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/mongodb/restful-redis-mongo-pg.go" target="_blank" rel="noopener">restful-redis-mongo-pg.go</a></p>
+<pre><code class="go language-go">package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "github.com/garyburd/redigo/redis"
+    "github.com/gin-gonic/gin"
+    "github.com/jinzhu/gorm"
+    _ "github.com/lib/pq"
+    "gopkg.in/mgo.v2"
+    "io/ioutil"
+    "time"
+)
+
+type User struct {
+    Id       int    `json:"id"`
+    Username string `json:"username"`
+}
+
+var pool = getRedis("redis://localhost:6379")
+
+func (u *User) SyncRedis(conn redis.Conn) {
+    if conn == nil {
+        conn = pool.Get()
+        defer conn.Close()
+    }
+    buf, _ := json.Marshal(u)
+    key := fmt.Sprintf("gitchat:user_info:%d", u.Id)
+    _, e := conn.Do("SETEX", key, 60*60*24, buf)
+    if e != nil {
+        panic(e)
+    }
+}
+
+var db *gorm.DB
+var mgoSession *mgo.Session
+var col *mgo.Collection
+
+func init() {
+    var err error
+    db, err = gorm.Open("postgres",
+        fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
+            "localhost",
+            "5433",
+            "gitchat",
+            "test",
+            "disable",
+            "123456",
+        ),
+    )
+
+    db.SingularTable(true)
+    db.LogMode(true)
+    db.DB().SetConnMaxLifetime(10 * time.Second)
+    db.DB().SetMaxIdleConns(30)
+    if err != nil {
+        panic(err)
+    }
+    mgoSession, err = mgo.Dial("localhost:27017")
+    if err != nil {
+        panic(err)
+    }
+
+    // Optional. Switch the session to a monotonic behavior.
+    mgoSession.SetMode(mgo.Monotonic, true)
+    col = mgoSession.DB("test").C("user_info")
+}
+
+func clear() {
+    mgoSession.Close()
+    db.Close()
+}
+
+type VisitLog struct {
+    URL         string    `json:"url"`
+    IP          string    `json:"ip"`
+    ContentType string    `json:"content_type"`
+    Body        []byte    `json:"body"`
+    Query       string    `json:"query"`
+    CreatedAt   time.Time `json:"created_at"`
+}
+
+func VisitLogMiddleware(c *gin.Context) {
+    defer c.Next()
+    var vl VisitLog
+    vl.URL = c.Request.URL.String()
+    vl.ContentType = c.ContentType()
+    vl.IP = c.ClientIP()
+    buf, _ := ioutil.ReadAll(c.Request.Body)
+    if len(buf) != 0 {
+        vl.Body = buf
+        c.Request.Body = ioutil.NopCloser(bytes.NewReader(buf))
+    }
+    vl.Query = c.Request.URL.Query().Encode()
+    vl.CreatedAt = time.Now()
+
+    err := col.Insert(&amp;vl)
+    if err != nil {
+        panic(err)
+    }
+}
+
+func main() {
+    defer clear()
+    r := gin.Default()
+    r.Use(VisitLogMiddleware)
+    r.GET("/user/", get)
+    r.GET("/user/:id/", getOne)
+    r.POST("/user/", post)
+
+    r.PATCH("/user/:id/", patch)
+    r.DELETE("/user/:id/", deleteById)
+
+    r.GET("/visit-log/", visitLogControl)
+
+    r.Run(":8082")
+}
+
+func get(c *gin.Context) {
+    var users []User
+    if e := db.Raw("select * from user_info").Scan(&amp;users).Error; e != nil {
+        c.JSON(500, gin.H{"message": e.Error()})
+        return
+    }
+    conn := pool.Get()
+    defer conn.Close()
+    for i, _ := range users {
+        users[i].SyncRedis(conn)
+    }
+    c.JSON(200, users)
+}
+func post(c *gin.Context) {
+    var user User
+    if e := c.Bind(&amp;user); e != nil {
+        panic(e)
+    }
+
+    if e := db.Raw("insert into user_info(username) values(?) returning *", user.Username).Scan(&amp;user).Error; e != nil {
+        c.JSON(500, gin.H{"message": e.Error()})
+        return
+    }
+    user.SyncRedis(nil)
+    c.JSON(200, user)
+}
+func patch(c *gin.Context) {
+    var user User
+    c.Bind(&amp;user)
+    id := c.Param("id")
+    db.Raw("update user_info set username=? where id=? returning *", user.Username, id).Scan(&amp;user)
+    user.SyncRedis(nil)
+    c.JSON(200, user)
+}
+func deleteById(c *gin.Context) {
+    id := c.Param("id")
+    db.Exec("delete from user_info where id=?", id)
+    c.JSON(200, gin.H{"message": "success"})
+}
+func getOne(c *gin.Context) {
+    var user User
+    id := c.Param("id")
+
+    conn := pool.Get()
+    defer conn.Close()
+
+    buf, e := redis.Bytes(conn.Do("GET", fmt.Sprintf("gitchat:user_info:%s", id)))
+    if e != nil {
+        panic(e)
+    }
+
+    if len(buf) != 0 {
+        e = json.Unmarshal(buf, &amp;user)
+        if e != nil {
+            panic(e)
+        }
+    } else {
+        db.Raw("select * from user_info where id=?", id).Scan(&amp;user)
+    }
+
+    c.JSON(200, user)
+}
+func getRedis(url string) *redis.Pool {
+    return &amp;redis.Pool{
+        MaxIdle: 200,
+        //MaxActive:   0,
+        IdleTimeout: 180 * time.Second,
+        Dial: func() (redis.Conn, error) {
+            c, err := redis.DialURL(url)
+            if err != nil {
+                fmt.Println(err)
+                return nil, err
+            }
+            return c, err
+        },
+        TestOnBorrow: func(c redis.Conn, t time.Time) error {
+            _, err := c.Do("PING")
+            return err
+        },
+    }
+}
+
+func visitLogControl(c *gin.Context) {
+    var results []VisitLog
+    err := col.Find(nil).All(&amp;results)
+    if err != nil {
+        c.JSON(500, gin.H{"message": err.Error()})
+        panic(err)
+    }
+    c.JSON(200, results)
+}
+</code></pre>
+<p><img src="https://images.gitbook.cn/eaad9080-8cc5-11e9-9dcb-df1530b9063d" alt="enter image description here"></p>
+<h3 id="3">3. 实例</h3>
+<blockquote>
+  <p>仓库：<a href="https://github.com/fwhezfwhez/gitchat/tree/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/project" target="_blank" rel="noopener">https://github.com/fwhezfwhez/gitchat</a></p>
+</blockquote>
+<p>game 项目提供了简要的游戏后端架构模型，根据业务的集中和分布性，重新拆分成了（最少 3 个) 子 Broker，分别为 app-center、backend、activities。</p>
+<p>共享出来的仅仅是这个后端项目的基础架构，并没有把所有的核心代码放进来，但这一部分代码也足以给我们提供启发。</p>
+<h4 id="31appcenter">3.1 app-center</h4>
+<p>app-center 是该后端项目里的核心 Broker，应对来自所有客户端的请求。它提供了以下四种协议供不同的游戏客户端选择，可以适用大多数的业务场景。</p>
+<p>TCP</p>
+<pre><code class="go language-go">     srv := tcpx.NewTcpX(tcpx.ProtobufMarshaller{})
+    srv.HeartBeatMode(true, 10*time.Second)
+    srv.AddHandler(1, func(c *tcpx.Context) {
+        // HeartBeat
+        c.RecvHeartBeat()
+    })
+    fmt.Println("tcp listens on 7001")
+    _ = srv.ListenAndServe("tcp", ":7001")
+</code></pre>
+<p>TCP 协议维持着 App 客户端与服务端的驻连接通信，选用了自主开发的 TCP 框架 <a href="https://github.com/fwhezfwhez/tcpx" target="_blank" rel="noopener">https://github.com/fwhezfwhez/tcpx</a>，解决了游戏内即聊、数据对发、服务端通知等场景。</p>
+<p>上例为部分代码，TCP 连接使用的序列化协议为 Protobuf。</p>
+<p>Protobuf 有别于 JSON，它是一个二进制协议，具备极高的传输效率以及很小的体积。并且，Protobuf 随着 gRPC 的普及，几乎为所有的客户端/服务端语言支持。</p>
+<p>和基本的 TCP 使用相比，TCPX 解决了粘包、易用、路由、中间件、心跳等常见问题。</p>
+<p>相关了解：</p>
+<ul>
+<li><a href="https://blog.csdn.net/fwhezfwhez/article/details/92740978" target="_blank" rel="noopener">如何使用 Protobuf 序列化结构</a></li>
+<li><a href="https://github.com/fwhezfwhez/TestX/tree/master/test_tcp/basic" target="_blank" rel="noopener">如何在 Golang 中使用 TCP</a></li>
+</ul>
+<p>HTTP</p>
+<pre><code class="go language-go">    r := gin.Default()
+
+    r.GET("/ping", func(c *gin.Context) {
+        c.String(200, "pong")
+    })
+
+    // prop
+    propRouter.HTTPRouter(r)
+    // activity
+    activityRouter.HTTPRouter(r)
+
+    s := &amp;http.Server{
+        Addr:           "8001",
+        Handler:        cors.AllowAll().Handler(r),
+        ReadTimeout:    60 * time.Second,
+        WriteTimeout:   60 * time.Second,
+        MaxHeaderBytes: 1 &lt;&lt; 21,
+    }
+    fmt.Println("http listens on 8001")
+    s.ListenAndServe()
+</code></pre>
+<p>app-center 里会对一些快速上线的需求使用 HTTP 协议，因为 HTTP 的开发效率是极快的, 尤其是和第三方或者其他团队接入的时候。因为 TCP 在解析时，需要处理粘包、拆包，提高了对接上的协议复杂度，而 HTTP 的协议约定几乎不需要磨合，统一使用 application/json，少数场景会使用 Form 和 XML。</p>
+<p>比如，在对接 HTTP 时，前后端只需要协定：</p>
+<pre><code class="hljs json">{
+   <span class="hljs-attr">"username"</span>: <span class="hljs-string">"gitchat"</span>
+}
+</code></pre>
+<p>而对接 TCP 时，最少需要协定：</p>
+<pre><code class="go language-go">[4]byte length
+[]byte payload
+</code></pre>
+<p>而根据组包的预设来看，有的协议会配置成诸如：</p>
+<pre><code class="go language-go">[4]byte length
+[4]byte messageID
+[4]byte headerLength
+[4]byte bodyLength
+[]byte header
+[]byte body
+</code></pre>
+<p>这样复杂的样式。</p>
+<p>gRPC</p>
+<pre><code class="go language-go">    lis, err := net.Listen("tcp", ":6001")
+    if err != nil {
+        fmt.Println(err.Error())
+        return
+    }
+    s := grpc.NewServer()
+    // prop
+    propPb.RegisterPropServiceServer(s, &amp;propService.PropService{})
+
+    fmt.Println("grpc listens on 6001")
+    s.Serve(lis)
+</code></pre>
+<p>gRPC 在内部服务间的使用十分频繁，本身并不是暴露给外界用的。可以把 gRPC 理解成 HTTP 和 TCP 的集成，统筹了二者的优势，既有 TCP 的效率，又和 HTTP 一样高度统一。统一体现在 Proto 文件上，协议的内部细节不像 TCP 一样需要很长的对接期（当然，Stream 模式的 gRPC，据说也是要拆组包滴）。</p>
+<p>在服务中心，gRPC 为 Broker 之间的服务调用，起了很好的疏导作用。比如 <strong>Broker</strong> activity 就是通过 gRPC 来调用 app-center 中的“赠送道具”接口的。 因为活动是以插件的形式开发，新增一个活动，大概率会包给其他的团队，不会直接给他们提供数据库的操作权，而是通过把服务通过 gRPC 外放给他们用。</p>
+<p>KCP</p>
+<p>这部分代码其实在库中注释掉了，实际的游戏客户端也没有介入。</p>
+<p>KCP 的载速是 TCP 的 1.3 到 1.5 倍，代价是一定程度的带宽。项目里原本考虑用 KCP 供给用户选择做提速方案，可是因为本来就很快了，没有速度上的瓶颈，所以才暂时没有启用！</p>
+<p>但 KCP 在代码上确实是没有成本的，在 TCPX 里集成了如下：</p>
+<pre><code class="go language-go">    srv := tcpx.NewTcpX(tcpx.ProtobufMarshaller{})
+    srv.HeartBeatMode(true, 10*time.Second)
+    srv.AddHandler(1, func(c *tcpx.Context) {
+        // HeartBeat
+        c.RecvHeartBeat()
+    })
+    + go func() {
+    +   fmt.Println("kcp listens on 7002")
+    +   _ = srv.ListenAndServe("kcp","7002")
+    + }()
+
+    fmt.Println("tcp listens on 7001")
+    _ = srv.ListenAndServe("tcp", ":7001")
+</code></pre>
+<p>7002 的 KCP 和 7001 的 TCP，共享了服务路由，所有进入 TCP 的请求，只需要接入 KCP 里，就能达到完全一样的业务效果，牺牲一部分带宽来提升速度，WiFi 中有惊喜。</p>
+<h4 id="32backend">3.2 backend</h4>
+<p>backend 是很传统的 HTTP 后端业务。在刚开始时，服务仅有一个 app-center，业务和后端共用了一个服务。</p>
+<p>可随之而来有个问题，后端的代码经常变动，影响到了游戏业务中的游戏体验。</p>
+<p>为了解决<strong>后端业务经常更新，造成服务重启频繁</strong>问题，将它从 app-center 中分离是很有必要的。</p>
+<p>和 app-center 相比，HTTP 的业务，在验证方式上也有不同。</p>
+<p>backend HTTP 后端需要有登陆和人工管理，使用的是 JWT。</p>
+<p>app-center HTTP 后端提供客户端调用，不存在传统的 JWT 场景，大部分是通过 <code>hash(app-secret, salt)</code> 来校验。</p>
+<p>JWT</p>
+<pre><code class="go language-go">func JWTValidate(c *gin.Context) {
+    token := c.Request.Header.Get("Authorization")
+    if token == "" {
+        c.JSON(402, gin.H{"message": "valid fail"})
+        c.Abort()
+        return
+    }
+
+    tk, info := jwt_util.JwtTool.ValidateJWT(token)
+    if !tk.Valid {
+        c.JSON(402, gin.H{"message": info})
+        c.Abort()
+        return
+    }
+    r := tk.Claims.(jwt.MapClaims)
+    c.Set("user_id", r["user_id"])
+}
+</code></pre>
+<pre><code class="go language-go">    r.POST("/login/", genToken)
+    r.Use(middleware.JWTValidate)
+    // activity
+    activityRouter.Router(r)
+    // prop
+    propRouter.HTTPRouter(r)
+</code></pre>
+<p>后台业务，可以说是后端里最基本了，因为仅仅使用 HTTP 协议，涉及到的概念，几乎只有几个标签 RESTful、Gin、PostgreS，是标准的 CRUD 业务领域。</p>
+<h4 id="33activity">3.3 activity</h4>
+<p>activity 和 backend 一样，原本是 app-center 中的一个子模块，但和其他模块相比，它有一个很显著的特性：<strong>经常更新，维护团队相对更大。</strong></p>
+<p>和 backend 相比，游戏的活动变动更加剧烈：</p>
+<ul>
+<li>新的活动推广，需要根据不同的统计需求，在各个地方埋点，每一次埋点，都是一次变动，需要更新；</li>
+<li>每一个活动都需要运营关注，在多个业务联动的活动场景里，团队的组成远比后台复杂；</li>
+<li>活动引流是极高的负载点之一，需要均衡。</li>
+</ul>
+<p>上述列表的每一个点都说明了一件事，把 activity 单独拉出来做服务十分必要。单独拉子服务，可以有下列好处：</p>
+<ul>
+<li>子业务更新，可以不对主业务重启。活动在上架、关闭、更新时，activity 不会要求 app-center 重启。</li>
+<li>子业务可以由不同的团队单独运营。比方说，需要在两款游戏之间联动，斗地主和麻将集中推出合作业务，这样的活动可以临时开辟团队开发和维护。</li>
+<li>方便均衡。收缩的子业务，可以小巧轻便地部署在多个服务器，也可以很方便做负载均衡，几乎可以算是微服务了，但是粒度上会更大一点。</li>
+</ul>
+<p>这次的实践里，主要是以插件化的形式，开发一个子活动——邀请有礼。</p>
+<p>整个开发的模块，只在 game/brokers/activities/inviteActivity 里，backend 和 app-center 作为预设，提供了活动的 CRUD、道具的 CRUD，以及一些关键的 gRPC 接口，<a href="https://github.com/fwhezfwhez/gitchat/tree/master/chat1-web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/project" target="_blank" rel="noopener">项目</a>的文档和指引正在慢慢补全。</p>
+<p><img src="https://images.gitbook.cn/7e040180-9125-11e9-9e5b-796b6c017d39" alt="enter image description here"></p>
+<p><strong>邀请活动的要求</strong>：</p>
+<ul>
+<li>邀请方为甲方，被邀请方为乙方；</li>
+<li>乙方应邀进入游戏时，赠送甲方一枚“人缘好的证明”，每天最多赠送 5 枚；</li>
+<li>每天凌晨 4 点重置甲方进度；</li>
+<li>每个星期统计上周人缘好的证明最多的玩家前十名，并发放“人气少年王”。</li>
+</ul>
+<p><strong>登陆活动的要求</strong>：</p>
+<ul>
+<li>登陆时，赠送“今日的太阳”一枚。</li>
+</ul>
+<p>邀请活动在库里已经完成了，登陆活动留下来练手。</p>
+<h3 id>总结</h3>
+<p>本次 Chat 达到了以下目的:</p>
+<ol>
+<li>关于 HTTP<ul>
+<li>如何通过浏览器 F12 调试，查看 Request 和 Response</li>
+<li>HTTP 和 HTTPS 的区别</li>
+<li>了解了 RESTful 的概念和形式</li></ul></li>
+<li>关于中间件<ul>
+<li>用 PostgreS 存储用户数据</li>
+<li>用 Redis 为 Web 提供缓存，避免直接数据库操作</li>
+<li>用 MongoDB 作日志统计</li></ul></li>
+<li>关于 Golang<ul>
+<li>使用 Gin 搭建基本的 HTTP 服务，提供 RESTful 接口</li>
+<li>使用 Golang 连接 PostgreS、Mongo、Redis</li></ul></li>
+
+<li>如何将 Windows 开发的程序，部署至云服务器，绑定域名，实现外部访问。</li>
+<li>项目团队开发时的项目架构。</li>
+<li>Nginx 调度端口映射与 Supervisor 程序守护。</li>
+<li>使用 Git 作仓库管理, 进入 GitHub 开源社区。</li>
+<li>再深入理解一下 gRPC、TCP、UDP、KCP 这几个协议用法。</li>
+</ol></div>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">1.</span> <span class="toc-text">1. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#11goweb"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 为什么使用 Go 作 Web 后端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 环境依赖</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">2.</span> <span class="toc-text">2. 概念与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#21web"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Web 应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#22https"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 HTTP(S) 的请求与响应</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#23restful"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 RESTful</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#24json"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 JSON</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#25gin"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 Gin</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#26postgres"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 PostgreS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#27redis"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 Redis</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#28mongo"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 Mongo</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">3.</span> <span class="toc-text">3. 实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#31appcenter"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 app-center</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#32backend"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 backend</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#33activity"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 activity</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/golang_web/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&text=golang web 实战"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&is_video=false&description=golang web 实战"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=golang web 实战&body=Check out this article: http://logan_2019.github.io/gitchat/golang_web/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&title=golang web 实战"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/golang_web/2019/09/&name=golang web 实战&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

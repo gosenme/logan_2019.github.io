@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Linux内存管理     在linux下，使用top，vmstat,free等命令查看系统或者进程的内存使用情况时，经常看到buff/cache memeory，swap，avail Mem等，他们都代表什么意思呢？这篇文章将来聊一聊Linux下的内存管理并解答这个问题。 讨论Linux下的内存管理其实就是讨论Linux下虚拟内存的实现方式，本人不是内核专家，所以这篇文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux内存管理">
+<meta property="og:url" content="http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="Linux内存管理     在linux下，使用top，vmstat,free等命令查看系统或者进程的内存使用情况时，经常看到buff/cache memeory，swap，avail Mem等，他们都代表什么意思呢？这篇文章将来聊一聊Linux下的内存管理并解答这个问题。 讨论Linux下的内存管理其实就是讨论Linux下虚拟内存的实现方式，本人不是内核专家，所以这篇文">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.114Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux内存管理">
+<meta name="twitter:description" content="Linux内存管理     在linux下，使用top，vmstat,free等命令查看系统或者进程的内存使用情况时，经常看到buff/cache memeory，swap，avail Mem等，他们都代表什么意思呢？这篇文章将来聊一聊Linux下的内存管理并解答这个问题。 讨论Linux下的内存管理其实就是讨论Linux下虚拟内存的实现方式，本人不是内核专家，所以这篇文">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Linux内存管理</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/数据结构与算法/基本数据结构/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/操作系统/Linux系统优质文章/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&text=Linux内存管理"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&is_video=false&description=Linux内存管理"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux内存管理&body=Check out this article: http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&name=Linux内存管理&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader0"><span class="toc-number">1.</span> <span class="toc-text">虚拟内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader1"><span class="toc-number">2.</span> <span class="toc-text">虚拟内存和物理内存的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader2"><span class="toc-number">3.</span> <span class="toc-text">虚拟内存的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader3"><span class="toc-number">4.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader4"><span class="toc-number">5.</span> <span class="toc-text">memory mapping</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.1.</span> <span class="toc-text">file backed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.2.</span> <span class="toc-text">device backed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.3.</span> <span class="toc-text">anonymous</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.4.</span> <span class="toc-text">shared</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.5.</span> <span class="toc-text">copy on write</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader5"><span class="toc-number">6.</span> <span class="toc-text">其它概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader6"><span class="toc-number">6.1.</span> <span class="toc-text">MMU（Memory Management Unit）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader7"><span class="toc-number">6.2.</span> <span class="toc-text">TLB（Translation Lookaside Buffer）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader8"><span class="toc-number">6.3.</span> <span class="toc-text">按需分配物理页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader9"><span class="toc-number">6.4.</span> <span class="toc-text">交换空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader10"><span class="toc-number">6.5.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader11"><span class="toc-number">6.6.</span> <span class="toc-text">访问控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader12"><span class="toc-number">6.7.</span> <span class="toc-text">huge pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader13"><span class="toc-number">6.8.</span> <span class="toc-text">Caches</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader14"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader15"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Linux内存管理
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.114Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>Linux内存管理</title>
+</head>
+<body>
+<div class="article fmt article__content" data-id="1190000008125006" data-license="cc">
+
+<p>在linux下，使用top，vmstat,free等命令查看系统或者进程的内存使用情况时，经常看到buff/cache memeory，swap，avail Mem等，他们都代表什么意思呢？这篇文章将来聊一聊Linux下的内存管理并解答这个问题。</p>
+<p>讨论Linux下的内存管理其实就是讨论Linux下虚拟内存的实现方式，本人不是内核专家，所以这篇文章只会介绍一些概念性的东西，不会深入实现细节，有些地方描述的有可能不精确。</p>
+<p>在早些时候，物理内存比较有限，人们希望程序可以使用的内存空间能超过实际物理内存，于是出现了虚拟内存的概念，不过随着时间的推移，虚拟内存的意义已经远远的超过了最初的想法。</p>
+<h2 id="articleHeader0">虚拟内存</h2>
+<p>虚拟内存是Linux管理内存的一种技术。它使得每个应用程序都认为自己拥有独立且连续的可用的内存空间（一段连续完整的地址空间），而实际上，它通常是被映射到多个物理内存段，还有部分暂时存储在外部磁盘存储器上，在需要时再加载到内存中来。</p>
+<p>每个进程所能使用的虚拟地址大小和CPU位数有关，在32位的系统上，虚拟地址空间大小是4G，在64位系统上，是2^64=？（算不过来了）。而实际的物理内存可能远远小于虚拟地址空间的大小。</p>
+<p>虚拟地址和进程息息相关，不同进程里的同一个虚拟地址指向的物理地址不一定一样，所以离开进程谈虚拟地址没有任何意义。</p>
+<blockquote><p><strong>注意</strong>：网上很多文章将虚拟内存等同于交换空间，其实描述不够严谨，交换空间只是虚拟内存这张大蓝图中的一部分。</p></blockquote>
+<h2 id="articleHeader1">虚拟内存和物理内存的关系</h2>
+<p>下面这张表很直观的表述了它们之间的关系</p>
+<div class="widget-codetool" style="display: none;">
+      <div class="widget-codetool--inner">
+      <span class="selectCode code-tool" data-toggle="tooltip" data-placement="top" title data-original-title="全选"></span>
+      <span type="button" class="copyCode code-tool" data-toggle="tooltip" data-placement="top" data-clipboard-text="  进程X                                                                      进程Y
++-------+                                                                  +-------+
+| VPFN7 |--+                                                               | VPFN7 |
++-------+  |       进程X的                                 进程Y的           +-------+
+| VPFN6 |  |      Page Table                              Page Table     +-| VPFN6 |
++-------+  |      +------+                                +------+       | +-------+
+| VPFN5 |  +----->| .... |---+                    +-------| .... |<---+  | | VPFN5 |
++-------+         +------+   |        +------+    |       +------+    |  | +-------+
+| VPFN4 |    +--->| .... |---+-+      | PFN4 |    |       | .... |    |  | | VPFN4 |
++-------+    |    +------+   | |      +------+    |       +------+    |  | +-------+
+| VPFN3 |--+ |    | .... |   | | +--->| PFN3 |<---+  +----| .... |<---+--+ | VPFN3 |
++-------+  | |    +------+   | | |    +------+       |    +------+    |    +-------+
+| VPFN2 |  +-+--->| .... |---+-+-+    | PFN2 |<------+    | .... |    |    | VPFN2 |
++-------+    |    +------+   | |      +------+            +------+    |    +-------+
+| VPFN1 |    |               | +----->| FPN1 |                        +----| VPFN1 |
++-------+    |               |        +------+                             +-------+
+| VPFN0 |----+               +------->| PFN0 |                             | VPFN0 |
++-------+                             +------+                             +-------+
+ 虚拟内存                               物理内存                               虚拟内存
+
+
+PFN(the page frame number)： 页编号" title data-original-title="复制"></span>
+      </div>
+      </div><pre class="hljs ruby"><code>  进程X                                                                      进程Y
++-------+                                                                  +-------+
+<span class="hljs-params">| VPFN7 |</span>--+                                                               <span class="hljs-params">| VPFN7 |</span>
++-------+  <span class="hljs-params">|       进程X的                                 进程Y的           +-------+
+|</span> VPFN6 <span class="hljs-params">|  |</span>      Page Table                              Page Table     +-<span class="hljs-params">| VPFN6 |</span>
++-------+  <span class="hljs-params">|      +------+                                +------+       |</span> +-------+
+<span class="hljs-params">| VPFN5 |</span>  +-----&gt;<span class="hljs-params">| .... |</span>---+                    +-------<span class="hljs-params">| .... |</span>&lt;---+  <span class="hljs-params">| |</span> VPFN5 <span class="hljs-params">|
++-------+         +------+   |</span>        +------+    <span class="hljs-params">|       +------+    |</span>  <span class="hljs-params">| +-------+
+|</span> VPFN4 <span class="hljs-params">|    +---&gt;|</span> .... <span class="hljs-params">|---+-+      |</span> PFN4 <span class="hljs-params">|    |</span>       <span class="hljs-params">| .... |</span>    <span class="hljs-params">|  |</span> <span class="hljs-params">| VPFN4 |</span>
++-------+    <span class="hljs-params">|    +------+   |</span> <span class="hljs-params">|      +------+    |</span>       +------+    <span class="hljs-params">|  |</span> +-------+
+<span class="hljs-params">| VPFN3 |</span>--+ <span class="hljs-params">|    |</span> .... <span class="hljs-params">|   |</span> <span class="hljs-params">| +---&gt;|</span> PFN3 <span class="hljs-params">|&lt;---+  +----|</span> .... <span class="hljs-params">|&lt;---+--+ |</span> VPFN3 <span class="hljs-params">|
++-------+  |</span> <span class="hljs-params">|    +------+   |</span> <span class="hljs-params">| |</span>    +------+       <span class="hljs-params">|    +------+    |</span>    +-------+
+<span class="hljs-params">| VPFN2 |</span>  +-+---&gt;<span class="hljs-params">| .... |</span>---+-+-+    <span class="hljs-params">| PFN2 |</span>&lt;------+    <span class="hljs-params">| .... |</span>    <span class="hljs-params">|    |</span> VPFN2 <span class="hljs-params">|
++-------+    |</span>    +------+   <span class="hljs-params">| |</span>      +------+            +------+    <span class="hljs-params">|    +-------+
+|</span> VPFN1 <span class="hljs-params">|    |</span>               <span class="hljs-params">| +-----&gt;|</span> FPN1 <span class="hljs-params">|                        +----|</span> VPFN1 <span class="hljs-params">|
++-------+    |</span>               <span class="hljs-params">|        +------+                             +-------+
+|</span> VPFN<span class="hljs-number">0</span> <span class="hljs-params">|----+               +-------&gt;|</span> PFN<span class="hljs-number">0</span> <span class="hljs-params">|                             |</span> VPFN<span class="hljs-number">0</span> <span class="hljs-params">|
++-------+                             +------+                             +-------+
+ 虚拟内存                               物理内存                               虚拟内存
+
+
+PFN(the page frame number)： 页编号</span></code></pre>
+<p>当进程执行一个程序时，需要先从先内存中读取该进程的指令，然后执行，获取指令时用到的就是虚拟地址，这个地址是程序链接时确定的（内核加载并初始化进程时会调整动态库的地址范围），为了获取到实际的数据，CPU需要将虚拟地址转换成物理地址，CPU转换地址时需要用到进程的page table，而page table里面的数据由操作系统维护。</p>
+<blockquote><p>注意：Linux内核代码访问内存时用的都是实际的物理地址，所以不存在虚拟地址到物理地址的转换，只有应用层程序才需要。</p></blockquote>
+<p>为了转换方便，Linux将虚拟内存和物理内存都拆分为固定大小的页，x86的系统一般内存页大小是4K，每个页都会分配一个唯一的编号，这就是页编号（PFN）.</p>
+<p>从上面的图中可以看出，虚拟内存和物理内存的page之间通过page table进行映射。进程X和Y的虚拟内存是相互独立的，且page table也是独立的，它们之间共享物理内存。进程可以随便访问自己的虚拟地址空间，而page table和物理内存由内核维护。当进程需要访问内存时，CPU会根据进程的page table将虚拟地址翻译成物理地址，然后进行访问。</p>
+<blockquote><p>注意：并不是每个虚拟地址空间的page都有对应的Page Table相关联，只有虚拟地址被分配给进程后，也即进程调用类似malloc函数之后，系统才会为相应的虚拟地址在Page Table中添加记录，如果进程访问一个没有和Page Table关联的虚拟地址，系统将会抛出SIGSEGV信号，导致进程退出，这也是为什么我们访问野指针时会经常出现segmentfault的原因。换句话说，虽然每个进程都有4G（32位系统）的虚拟地址空间，但只有向系统申请了的那些地址空间才能用，访问未分配的地址空间将会出segmentfault错误。Linux会将虚拟地址0不映射到任何地方，这样我们访问空指针就一定会报segmentfault错误。</p></blockquote>
+<h2 id="articleHeader2">虚拟内存的优点</h2>
+<ul>
+<li><p>更大的地址空间：并且是连续的，使得程序编写、链接更加简单</p></li>
+<li><p>进程隔离：不同进程的虚拟地址之间没有关系，所以一个进程的操作不会对其它进程造成影响</p></li>
+<li><p>数据保护：每块虚拟内存都有相应的读写属性，这样就能保护程序的代码段不被修改，数据块不能被执行等，增加了系统的安全性</p></li>
+<li><p>内存映射：有了虚拟内存之后，可以直接映射磁盘上的文件（可执行文件或动态库）到虚拟地址空间，这样可以做到物理内存延时分配，只有在需要读相应的文件的时候，才将它真正的从磁盘上加载到内存中来，而在内存吃紧的时候又可以将这部分内存清空掉，提高物理内存利用效率，并且所有这些对应用程序来说是都透明的</p></li>
+<li><p>共享内存：比如动态库，只要在内存中存储一份就可以了，然后将它映射到不同进程的虚拟地址空间中，让进程觉得自己独占了这个文件。进程间的内存共享也可以通过映射同一块物理内存到进程的不同虚拟地址空间来实现共享</p></li>
+<li><p>物理内存管理：物理地址空间全部由操作系统管理，进程无法直接分配和回收，从而系统可以更好的利用内存，平衡进程间对内存的需求</p></li>
+<li><p>其它：有了虚拟地址空间后，交换空间和COW（copy on write）等功能都能很方便的实现</p></li>
+</ul>
+<h2 id="articleHeader3">page table</h2>
+<p>page table可以简单的理解为一个memory mapping的链表（当然实际结构很复杂），里面的每个memory mapping都将一块虚拟地址映射到一个特定的资源（物理内存或者外部存储空间）。每个进程拥有自己的page table，和其它进程的page table没有关系。</p>
+<h2 id="articleHeader4">memory mapping</h2>
+<p>每个memory mapping就是对一段虚拟内存的描述，包括虚拟地址的起始位置，长度，权限(比如这段内存里的数据是否可读、写、执行), 以及关联的资源(如物理内存page，swap空间上的page，磁盘上的文件内容等)。</p>
+<p>当进程申请内存时，系统将返回虚拟内存地址，同时为相应的虚拟内存创建memory mapping并将它放入page table，但这时系统不一定会分配相应的物理内存，系统一般会在进程真正访问这段内存的时候才会分配物理内存并关联到相应的memory mapping，这就是所谓的延时分配/按需分配。</p>
+<p>每个memory mapping都有一个标记，用来表示所关联的物理资源类型，一般分两大类，那就是anonymous和file backed，在这两大类中，又分了一些小类，比如anonymous下面有更具体的shared和copy on write类型, file backed下面有更具体的device backed类型。下面是每个类型所代表的意思：</p>
+<h4>file backed</h4>
+<p>这种类型表示memory mapping对应的物理资源存放在磁盘上的文件中，它所包含的信息包括文件的位置、offset、rwx权限等。</p>
+<p>当进程第一次访问对应的虚拟page的时候，由于在memory mapping中找不到对应的物理内存，CPU会报page fault中断，然后操作系统就会处理这个中断并将文件的内容加载到物理内存中，然后更新memory mapping，这样下次CPU就能访问这块虚拟地址了。以这种方式加载到内存的数据一般都会放到page cache中，关于page cache会在后面介绍到.</p>
+<p>一般程序的可执行文件，动态库都是以这种方式映射到进程的虚拟地址空间的。</p>
+<h4>device backed</h4>
+<p>和file backed类似，只是后端映射到了磁盘的物理地址，比如当物理内存被swap out后，将被标记为device backed。</p>
+<h4>anonymous</h4>
+<p>程序自己用到的数据段和堆栈空间，以及通过mmap分配的共享内存，它们在磁盘上找不到对应的文件，所以这部分内存页被叫做anonymous page。anonymous page和file backed最大的差别是当内存吃紧时，系统会直接删除掉file backed对应的物理内存，因为下次需要的时候还能从磁盘加载到内存，但anonymous page不能被删除，只能被swap out。</p>
+<h4>shared</h4>
+<p>不同进程的Page Table里面的多个memory mapping可以映射到相同的物理地址，通过虚拟地址（不同进程里的虚拟地址可能不一样）可以访问到相同的内容，当一个进程里面修改内存的内容后，在另一个进程中可以立即读取到。这种方式一般用来实现进程间高速的共享数据（如mmap）。当标记为shared的memory mapping被删除回收时，需要更新物理page上的引用计数，便于物理page的计数变0后被回收。</p>
+<h4>copy on write</h4>
+<p>copy on write基于shared技术，当读这种类型的内存时，系统不需要做任何特殊的操作，而当要写这块内存时，系统将会生成一块新的内存并拷贝原来内存中的数据到新内存中，然后将新内存关联到相应的memory mapping，然后执行写操作。Linux下很多功能都依赖于copy on write技术来提高性能，比如fork等。</p>
+<p>通过上面的介绍，我们可以简单的将内存的使用过程总结如下：</p>
+<ol>
+<li><p>进程向系统发出内存申请请求</p></li>
+<li><p>系统会检查进程的虚拟地址空间是否被用完，如果有剩余，给进程分配虚拟地址</p></li>
+<li><p>系统为这块虚拟地址创建相应的memory mapping（可能多个），并将它放进该进程的page table</p></li>
+<li><p>系统返回虚拟地址给进程，进程开始访问该虚拟地址</p></li>
+<li><p>CPU根据虚拟地址在该进程的page table中找到了相应的memory mapping，但是该mapping没有和物理内存关联，于是产生缺页中断</p></li>
+<li><p>操作系统收到缺页中断后，分配真正的物理内存并将它关联到相应的memory mapping</p></li>
+<li><p>中断处理完成后，CPU就可以访问该内存了</p></li>
+</ol>
+<p>当然缺页中断不是每次都会发生，只有系统觉得有必要延迟分配内存的时候才用的着，也即很多时候在上面的第3步系统会分配真正的物理内存并和memory mapping关联。</p>
+<h2 id="articleHeader5">其它概念</h2>
+<p>操作系统只要实现了虚拟内存和物理内存之间的映射关系，就能正常工作了，但要使内存访问更高效，还有很多东西需要考虑，在这里我们可以看看跟内存有关的一些其它概念以及它们的作用。</p>
+<h3 id="articleHeader6">MMU（Memory Management Unit）</h3>
+<p>MMU是CPU的一个用来将进程的虚拟地址转换成物理地址的模块，简单点说，这个模块的输入是进程的page table和虚拟地址，输出是物理地址。将虚拟地址转换成物理地址的速度直接影响着系统的速度，所以CPU包含了这个模块用来加速。</p>
+<h3 id="articleHeader7">TLB（Translation Lookaside Buffer）</h3>
+<p>上面介绍到，MMU的输入是page table，而page table又存在内存里面，跟CPU的cache相比，内存的速度很慢，所以为了进一步加快虚拟地址到物理地址的转换速度，Linux发明了TLB，它存在于CPU的L1 cache里面，用来缓存已经找到的虚拟地址到物理地址的映射，这样下次转换前先查一下TLB，如果已经在里面了就不需要调用MMU了.</p>
+<h3 id="articleHeader8">按需分配物理页</h3>
+<p>由于实际情况下物理内存要比虚拟内存少很多，所以操作系统必须很小心的分配物理内存，以使内存的使用率达到最大化。一个节约物理内存的办法就是只加载当前正在使用的虚拟page对应的数据到内存。比如，一个很大的数据库程序，如果你只是用了查询操作，那么负责插入删除等部分的代码段就没必要加载到内存中，这样就能节约很多物理内存，这种方法就叫做物理内存页按需分配，也可以称作延时加载。</p>
+<p>其实现原理很简单，就是当CPU访问一个虚拟内存页的时候，如果这个虚拟内存页对应的数据还没加载到物理内存中，则CPU就会通知操作系统发生了page fault，然后由操作系统负责将数据加载进物理内存。由于将数据加载进内存比较耗时，所以CPU不会等在那里，而是去调度其它进程，当它下次再调度到该进程时，数据已经在物理内存上了。</p>
+<p>Linux主要使用这种方式来加载可执行文件和动态库，当程序被内核开始调度执行时，内核将进程的可执行文件和动态库映射到进程的虚拟地址空间，并只加载马上要用到的那小部分数据到物理内存中，其它的部分只有当CPU访问到它们时才去加载。</p>
+<h3 id="articleHeader9">交换空间</h3>
+<p>当一个进程需要加载数据到物理内存中，但实际的物理内存已经被用完时，操作系统需要回收一些物理内存中的page以满足当前进程的需要。</p>
+<p>对于file backed的内存数据，即物理内存里面的数据来自于磁盘上的文件，那么内核将直接将该部分数据从内存中移除掉来释放出更多的内存，当下次有进程需要访问这部分数据时，再将它从磁盘上加载到内存中来。但是，如果这部分数据被修改过且没被写入文件，那这部分数据就变成了脏数据，脏数据不能被直接删掉，只能被移动到交换空间上去。（可执行文件和动态库文件不会被修改，但通过mmap+private的方式映射到内存的磁盘文件有可能被修改，这种方式映射的内存比较特殊，没修改之前是file backed，修改后但没有写回磁盘之前就变成了anonymous的）</p>
+<p>对于anonymous的内存数据，在磁盘上没有对应的文件，这部分数据不能直接被删除，而是被系统移到交换空间上去。交换空间就是磁盘上预留的一块特殊空间，被系统用来临时存放内存中不常被访问的数据，当下次有进程需要访问交换空间上的数据时，系统再将数据加载到内存中。由于交换空间在磁盘上，所以访问速度要比内存慢很多，频繁的读写交换空间会带来性能问题。</p>
+<p>关于swap空间的详细介绍请参考<a href="https://segmentfault.com/a/1190000008125116" target="_blank" rel="noopener">Linux交换空间</a></p>
+<h3 id="articleHeader10">共享内存</h3>
+<p>有了虚拟内存之后，进程间共享内存变得特别的方便。进程所有的内存访问都通过虚拟地址来实现，而每个进程都有自己的page tables。当两个进程共享一块物理内存时，只要将物理内存的页号映射到两个进程的page table中就可以了，这样两个进程就可以通过不同的虚拟地址来访问同一块物理内存。</p>
+<p>从上面的那个图中可以看出，进程X和进程Y共享了物理内存页PFN3，在进程X中，PFN3被映射到了VPFN3，而在进程Y中，PFN3被映射到了VPFN1，但两个进程通过不同的虚拟地址访问到的物理内存是同一块。</p>
+<h3 id="articleHeader11">访问控制</h3>
+<p>page table里面的每条虚拟内存到物理内存的映射记录（memory mapping）都包含一份控制信息，当进程要访问一块虚拟内存时，系统可以根据这份控制信息来检查当前的操作是否是合法的。</p>
+<p>为什么需要做这个检查呢？比如有些内存里面放的是程序的可执行代码，那么就不应该去修改它；有些内存里面存放的是程序运行时用到的数据，那么这部分内存只能被读写，不应该被执行；有些内存里面存放的是内核的代码，那么在用户态就不应该去执行它；有了这些检查之后会大大增强系统的安全性。</p>
+<h3 id="articleHeader12">huge pages</h3>
+<p>由于CPU的cache有限，所以TLB里面缓存的数据也有限，而采用了huge page后，由于每页的内存变大（比如由原来的4K变成了4M），虽然TLB里面的纪录数没变，但这些纪录所能覆盖的地址空间变大，相当于同样大小的TLB里面能缓存的映射范围变大，从而减少了调用MMU的次数，加快了虚拟地址到物理地址的转换速度。</p>
+<h3 id="articleHeader13">Caches</h3>
+<p>为了提高系统性能，Linux使用了一些跟内存管理相关的cache，并且尽量将空闲的内存用于这些cache。这些cache都是系统全局共享的：</p>
+<ul>
+<li><p>Buffer Cache<br>用来缓冲块设备上的数据，比如磁盘，当读写块设备时，系统会将相应的数据存放到这个cache中，等下次再访问时，可以直接从cache中拿数据，从而提高系统效率。它里面的数据结构是一个块设备ID和block编号到具体数据的映射，只要根据块设备ID和块的编号，就能找到相应的数据。</p></li>
+<li><p>Page Cache<br>这个cache主要用来加快读写磁盘上文件的速度。它里面的数据结构是文件ID和offset到文件内容的映射，根据文件ID和offset就能找到相应的数据（这里文件ID可能是inode或者path，本人没有仔细去研究）。</p></li>
+</ul>
+<p>从上面的定义可以看出，page cache和buffer cache有重叠的地方，不过实际情况是buffer cache只缓存page cache不缓存的那部分内容，比如磁盘上文件的元数据。所以一般情况下和page cache相比，Buffer Cache的大小基本可以忽略不计。</p>
+<p>当然，使用cache也有一些不好的地方，比如需要时间和空间去维护cache，cache一旦出错，整个系统就挂了。</p>
+<h2 id="articleHeader14">总结</h2>
+<p>有了上面介绍的知识，再来看看我们刚开始提出来的问题，以top命令的输出为例：</p>
+<div class="widget-codetool" style="display:none;">
+      <div class="widget-codetool--inner">
+      <span class="selectCode code-tool" data-toggle="tooltip" data-placement="top" title data-original-title="全选"></span>
+      <span type="button" class="copyCode code-tool" data-toggle="tooltip" data-placement="top" data-clipboard-text="KiB Mem :   500192 total,   349264 free,    36328 used,   114600 buff/cache
+KiB Swap:   524284 total,   524284 free,        0 used.   433732 avail Mem" title data-original-title="复制"></span>
+      </div>
+      </div><pre class="hljs groovy"><code>KiB <span class="hljs-string">Mem :</span>   <span class="hljs-number">500192</span> total,   <span class="hljs-number">349264</span> free,    <span class="hljs-number">36328</span> used,   <span class="hljs-number">114600</span> buff/cache
+KiB <span class="hljs-string">Swap:</span>   <span class="hljs-number">524284</span> total,   <span class="hljs-number">524284</span> free,        <span class="hljs-number">0</span> used.   <span class="hljs-number">433732</span> avail Mem</code></pre>
+<p>KiB Mem代表物理内存，KiB Swap代表交换空间，它们的单位都是KiB。</p>
+<p>total、used和free没什么好介绍的，就是总共多少，然后用了多少，还剩多少。</p>
+<p>buff/cached代表了buff和cache总共用了多少，buff代表buffer cache占了多少空间，由于它主要用来缓存磁盘上文件的元数据，所以一般都比较小，跟cache比可以忽略不计；cache代表page cache和其它一些占用空间比较小且大小比较固定的cache的总和，基本上cache就约等于page cache，page cache的准确值可以通过查看/proc/meminf中的Cached得到。由于page cache是用来缓存磁盘上文件内容的，所以占有空间很大，Linux一般会尽可能多的将空闲物理内存用于page cache。</p>
+<p>avail Mem表示可用于进程下一次分配的物理内存数量，这个大小一般比free大一点，因为除了free的空间外，系统还能立即释放出一些空间来。</p>
+<p>那么怎么判断当前内存使用情况出现了异常呢？有下面几点供参考：</p>
+<ul>
+<li><p>Mem free的值比较小，并且buff/cache的值也小<br>free的值比较少并不一定代表有问题，因为Linux会尽可能多的将内存用于page cache，但是如果buff/cache的值也小，就说明内存吃紧了，系统没有足够多的内存用于cache，如果当前服务器部署是一个需要频繁的读写磁盘的应用，如FTP服务器，那么对性能的影响将会非常大。</p></li>
+<li><p>Swap used的值比较大，<br>这种情况比上面的更严重，正常情况下swap应该很少被使用，used值比较大说明交换空间被使用的比较多，如果通过vmstat命令看到swap in/out的比较频繁的话，说明系统内存严重不足，整体性能已经受到严重影响</p></li>
+</ul>
+<h2 id="articleHeader15">参考</h2>
+<ul>
+<li><p><a href="http://www.tldp.org/LDP/tlk/mm/memory.html" rel="nofollow noreferrer" target="_blank">Memory Management</a></p></li>
+<li><p><a href="http://landley.net/writing/memory-faq.txt" rel="nofollow noreferrer" target="_blank">Mmemory FAQ</a></p></li>
+</ul>
+
+                </div>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader0"><span class="toc-number">1.</span> <span class="toc-text">虚拟内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader1"><span class="toc-number">2.</span> <span class="toc-text">虚拟内存和物理内存的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader2"><span class="toc-number">3.</span> <span class="toc-text">虚拟内存的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader3"><span class="toc-number">4.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader4"><span class="toc-number">5.</span> <span class="toc-text">memory mapping</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.1.</span> <span class="toc-text">file backed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.2.</span> <span class="toc-text">device backed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.3.</span> <span class="toc-text">anonymous</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.4.</span> <span class="toc-text">shared</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">5.0.5.</span> <span class="toc-text">copy on write</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader5"><span class="toc-number">6.</span> <span class="toc-text">其它概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader6"><span class="toc-number">6.1.</span> <span class="toc-text">MMU（Memory Management Unit）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader7"><span class="toc-number">6.2.</span> <span class="toc-text">TLB（Translation Lookaside Buffer）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader8"><span class="toc-number">6.3.</span> <span class="toc-text">按需分配物理页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader9"><span class="toc-number">6.4.</span> <span class="toc-text">交换空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader10"><span class="toc-number">6.5.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader11"><span class="toc-number">6.6.</span> <span class="toc-text">访问控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader12"><span class="toc-number">6.7.</span> <span class="toc-text">huge pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#articleHeader13"><span class="toc-number">6.8.</span> <span class="toc-text">Caches</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader14"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#articleHeader15"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&text=Linux内存管理"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&is_video=false&description=Linux内存管理"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux内存管理&body=Check out this article: http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&title=Linux内存管理"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/操作系统/Linux内存管理/2019/09/&name=Linux内存管理&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

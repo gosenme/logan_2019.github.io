@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="指针三种指针相关数据结构。p：普通指针。（强引用）unsafe.Pointer：无类型指针。（强引用）uintptr：存储地址的整数。（弱引用）go有三种方式的指针，第一种是普通指针，肯定是强引用。还有一种无类型指针或者万能指针，它也是强引用。第三种uintptr只是一个普通的整数，只是把目标对象地址存进来，它与目标对象之间没有任何关联，作用有点像弱类型。强引用对垃圾回收器造成影响。指针转换与计算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-63">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="指针三种指针相关数据结构。p：普通指针。（强引用）unsafe.Pointer：无类型指针。（强引用）uintptr：存储地址的整数。（弱引用）go有三种方式的指针，第一种是普通指针，肯定是强引用。还有一种无类型指针或者万能指针，它也是强引用。第三种uintptr只是一个普通的整数，只是把目标对象地址存进来，它与目标对象之间没有任何关联，作用有点像弱类型。强引用对垃圾回收器造成影响。指针转换与计算">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:04.094Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-63">
+<meta name="twitter:description" content="指针三种指针相关数据结构。p：普通指针。（强引用）unsafe.Pointer：无类型指针。（强引用）uintptr：存储地址的整数。（弱引用）go有三种方式的指针，第一种是普通指针，肯定是强引用。还有一种无类型指针或者万能指针，它也是强引用。第三种uintptr只是一个普通的整数，只是把目标对象地址存进来，它与目标对象之间没有任何关联，作用有点像弱类型。强引用对垃圾回收器造成影响。指针转换与计算">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-63</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-64方法 vs 函数/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-62空结构的用途/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&text=重学 Go 语言：基础篇-63"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&is_video=false&description=重学 Go 语言：基础篇-63"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-63&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&name=重学 Go 语言：基础篇-63&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">指针转换与计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26"><span class="toc-number">1.3.</span> <span class="toc-text">26 不同指针对垃圾回收的影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26uintptrkeepalive"><span class="toc-number">1.4.</span> <span class="toc-text">26 指针uintptr,KeepAlive阻止回收</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-63
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:04.094Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>指针</h3><br><p>三种指针相关数据结构。</p><br><ul><br><li><em>p：普通指针。（强引用）</em></li><br><li>unsafe.Pointer：无类型指针。（强引用）</li><br><li>uintptr：存储地址的整数。（弱引用）</li><br></ul><br><p>go有三种方式的指针，第一种是普通指针，肯定是强引用。还有一种无类型指针或者万能指针，它也是强引用。第三种<code>uintptr</code>只是一个普通的整数，只是把目标对象地址存进来，它与目标对象之间没有任何关联，作用有点像弱类型。强引用对垃圾回收器造成影响。</p><br><h3 id="-1">指针转换与计算</h3><br><p>Go语言默认情况下不支持指针运算。在Go语言里面为了处理指针专门有个指针类型<code>uintptr</code>专门用于存储指针。普通指针进行指针运算的前提是把它转换成一个普通的整数，因为指针类型的长度其实和int类型是等长的。</p><br><p>一种类型的指针转换成另外一种类型的指针的时候必须通过<code>unsafe.Pointer</code>函数进行转换，指针不能直接转换。</p><br><p>还有种方式对指针做简单的加法。<code>uintptr</code>严格来说不是一个指针，只是用来存储指针的数据，这个数据可能是个地址。但是对GC来说<code>uintptr</code>就是一个整数，所以它不能持有一个对象的。</p><br><p>指针转换是非常规手段，通常情况下要慎重使用，因为对GC会带来一定的问题，例如指向没有分配过的内存或者指向其他内存某个区域。</p><br><p>下面例子对指针p进行指针类型转换和指针计算：</p><br><pre><code class="go language-go">func main() {<br>    x := 0x11223344<br>    // 指针<br>    var p int = &amp;x<br><br>    // 指针类型转换<br>    // <em>int指针 -&gt; 通过unsafe.Pointer转换成 -&gt; </em>[8]byte指针<br>    // 把一个整数转换成字节数组，查看整数在内存中的布局。<br>    a := (<em>[8]byte)(unsafe.Pointer(p))<br><br>    fmt.Printf(“% x\n”, </em>a)<br><br>    // 指针计算<br>    // <em>[8]byte指针 -&gt; 通过unsafe.Pointer转换成 -&gt; uintptr整数<br>    u := (uintptr)(unsafe.Pointer(a))<br>    u++<br>    fmt.Println(u)<br>}<br></em></code></pre><br><h3 id="26">26 不同指针对垃圾回收的影响</h3><br><pre><code class="go language-go">func main() {<br>    //创建大的数据样本<br>    type data struct {<br>        x int<br>        _ [1 &lt;&lt; 20]byte<br>    }<br>    var s []int // []unsafe.Pointer, []uintptr<br><br>    //创建100个大对象<br>    for i := 0; i &lt; 100; i++ {<br>        d := data{x: 1}<br>        s = append(s, &amp;d.x)<br>    }<br>    for {<br>        println(len(s), s[0])<br>        runtime.GC()<br>        time.Sleep(time.Second)<br>    }<br>}<br></code></pre><br><p>用的普通指针肯定会构成强引用关系，所以这个对象一直会活着。接下来换成<code>unsafe.Pointer</code>也构成强引用关系。第三种<code>uintptr</code>目标对象被回收掉。</p><br><pre><code class="bash language-bash">$ go build &amp;&amp; GODEBUG=gctrace=1 ./test<br></code></pre><br><h3 id="26uintptrkeepalive">26 指针uintptr,KeepAlive阻止回收</h3><br><p><code>uintptr</code>是个整数，它只能记录一个地址，但是不能告诉GC有任何引用关系。就相当于你拿纸条记录一个人的名字，并不表示纸条和这个人一定有关系。</p><br><p>这对于垃圾回收有什么影响。</p><br><pre><code class="go language-go">func uintptrCollect() {<br>    const x = 1 &lt;&lt; 20 <em> 100<br>    p := new([x]byte)<br>    p[1] = 100<br><br>    //var p2 </em>[x]byte = p<br>    //p2[2] = 200<br><br>    //var p2 uintptr = uintptr(unsafe.Pointer(p))<br><br>    //for {<br>    for i := 0; i &lt; 60; i++ {<br>        runtime.GC()<br>        time.Sleep(time.Second)<br>    }<br><br>    //runtime.KeepAlive(p2)<br>}<br></code></pre><br><p>我们在堆上创建很大的数组<code>p</code>，返回它的指针，做垃圾回收看是否释放掉。</p><br><pre><code class="bash language-bash">$ go build &amp;&amp; GODEBUG=gctrace=1 ./test<br></code></pre><br><p>显然被回收掉了。</p><br><p>我们用另外一个普通指针<code><em>[x]byte</em></code>p2引用它。</p><br><p><code>runtime.KeepAlive(p2)</code>保证对象活着。这是Go1.7版本提供新的功能，有很多时候我们需要把一个对象转成<code>uintptr</code>穿过去或者调用CPU时候传过去，这样会导致对象的引用消失，因为cpu、系统调用的指针和Go的指针不是一回事，它们是不同的内存管理空间。这样会导致系统调用返回之前中间执行里一次垃圾回收，可能是主动执行或者达到系统阈值自己执行，结果在后面处理的时候对象已经没有了，<code>runtime.KeepAlive(p2)</code>保证在这个点的位置这个对象依然活着。原理就是一次普通函数调用加上一个参数。</p><br><p>但是我们换成<code>uintptr</code>,<code>runtime.KeepAlive(p2)</code>不能保证<code>p</code>活着，因为保留里整数<code>p2</code>在这个地方还可以用，但是<code>p2</code>不是一个指针，它不能保证<code>p</code>依然活着。因为垃圾回收器认为<code>p2</code>不构成引用关系。所以<code>uintptr</code>虽然可以用来存储地址，但是不能保证这个地址依然构成引用关系，所以对垃圾回收器影响是非常重要的。</p><br><p>如果循环<code>for i := 0; i &lt; 60; i++ {</code>改成<code>for {</code>死循环，那么后面的代码段肯定不会被执行，编译器就优化了后面的代码。</p><br><p>就像在系统运行时写段代码用来确保代码肯定不会执行，写这段代码是用来测试前面的逻辑不会出错，因为一旦执行到这段代码的时候程序就崩溃了。这也是常见的做法。</p><br><pre><code class="go language-go">int(0) = 1 //对为0的地址进行赋值，肯定会出错。<br></code></pre></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">指针转换与计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26"><span class="toc-number">1.3.</span> <span class="toc-text">26 不同指针对垃圾回收的影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26uintptrkeepalive"><span class="toc-number">1.4.</span> <span class="toc-text">26 指针uintptr,KeepAlive阻止回收</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&text=重学 Go 语言：基础篇-63"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&is_video=false&description=重学 Go 语言：基础篇-63"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-63&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&title=重学 Go 语言：基础篇-63"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-63指针/2019/11/&name=重学 Go 语言：基础篇-63&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

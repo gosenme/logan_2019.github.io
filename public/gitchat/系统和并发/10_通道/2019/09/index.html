@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="通道   本节内容：  通道基本原理 同步通道和异步通道的区别  通道基本原理 前面知道了并发，包括并发的方式有很多种，可能多台服务器、多进程的、多线程的甚至还涉及到协程。他们的粒度不同，选择什么样的模型和我们的架构有关系，比如我们做负载均衡或者灾备的时候可能选择多台服务器，如果我们希望可以把某些调度固定到某些核上面避免频繁这种上下文切换，可能会采用多进程模型，而多线程尤">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通道">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="通道   本节内容：  通道基本原理 同步通道和异步通道的区别  通道基本原理 前面知道了并发，包括并发的方式有很多种，可能多台服务器、多进程的、多线程的甚至还涉及到协程。他们的粒度不同，选择什么样的模型和我们的架构有关系，比如我们做负载均衡或者灾备的时候可能选择多台服务器，如果我们希望可以把某些调度固定到某些核上面避免频繁这种上下文切换，可能会采用多进程模型，而多线程尤">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://images.gitbook.cn/0f785d00-17a1-11e8-a7d2-1b331958097a">
+<meta property="og:image" content="http://images.gitbook.cn/25bdcf50-17a1-11e8-92e0-d983a1e85cb7">
+<meta property="og:image" content="http://images.gitbook.cn/49fd9850-17a1-11e8-ab6f-c92a5ff63d5e">
+<meta property="og:image" content="http://images.gitbook.cn/6f0237f0-17a1-11e8-ac0a-03d2406b28d7">
+<meta property="og:image" content="http://images.gitbook.cn/91864730-17a1-11e8-ab6f-c92a5ff63d5e">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.084Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通道">
+<meta name="twitter:description" content="通道   本节内容：  通道基本原理 同步通道和异步通道的区别  通道基本原理 前面知道了并发，包括并发的方式有很多种，可能多台服务器、多进程的、多线程的甚至还涉及到协程。他们的粒度不同，选择什么样的模型和我们的架构有关系，比如我们做负载均衡或者灾备的时候可能选择多台服务器，如果我们希望可以把某些调度固定到某些核上面避免频繁这种上下文切换，可能会采用多进程模型，而多线程尤">
+<meta name="twitter:image" content="http://images.gitbook.cn/0f785d00-17a1-11e8-a7d2-1b331958097a">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>通道</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/gitchat/系统和并发/3_垃圾回收常用方式/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/gitchat/系统和并发/11_Goroutine架构设计/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&text=通道"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&is_video=false&description=通道"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通道&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&name=通道&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">通道基本原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">同步通道和异步通道的区别</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        通道
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.084Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>通道</title>
+</head>
+<body>
+<article id="articleDiv" style="overflow: hidden;padding-bottom:20px;text-align: justify;"><div class="mazi-article-content dont-break-out"><p>本节内容：</p>
+<ul>
+<li>通道基本原理</li>
+<li>同步通道和异步通道的区别</li>
+</ul>
+<h3 id>通道基本原理</h3>
+<p>前面知道了并发，包括并发的方式有很多种，可能多台服务器、多进程的、多线程的甚至还涉及到协程。他们的粒度不同，选择什么样的模型和我们的架构有关系，比如我们做负载均衡或者灾备的时候可能选择多台服务器，如果我们希望可以把某些调度固定到某些核上面避免频繁这种上下文切换，可能会采用多进程模型，而多线程尤其系统线程可以让我们更多的获得时间片，协程则是在单个时间片上尽可能减少时间片的浪费。</p>
+<p>实际上我们很少会使用单种模型，我们会把几种模型叠加起来使用，从大的架构层面一直到算法层面去逐步优化，用多种模型方式去把我们的执行性能调度到最佳状态，但这地方存在一个问题，因为我们通常的逻辑很难有单个并发单元来完成，数据往往就像一条流水线上，从一个单元传递到另一个单元。如果这两个单元都是并发的时候，怎么样传递数据呢？</p>
+<p>如果是网络的话，通过网络传输，但是从编程开始我们就知道，事情往往是被抽象，抽象成不同的状态，我们实际上是屏蔽底层的一些东西，包括网络通讯我们都应该屏蔽的，那么可以从几个方面来看一下，究竟网络传输也好，数据共享也好，哪种方式，该怎么选择，依然是我们的架构和逻辑有关系。</p>
+<p><img src="http://images.gitbook.cn/0f785d00-17a1-11e8-a7d2-1b331958097a" alt="enter image description here"></p>
+<p>最简单的方式，一个数据可以被 G1、G2 共享，这是一种最简单的状态，这种状态实际上是多线程去找局部线程共享一个变量。这是最常见的方式，为了避免相互之间产生数据竞争效应，我们通常会使用叫做锁的概念，锁最常见的用互斥 Mutex 这种方式来实现。互斥这种方式就意味着当多个并发单元共享一个状态的时候，那么它需要首先拿到一把锁，那么只有一个人拿到这把锁，在它释放之前其他的并发单元都会陷入阻塞状态。</p>
+<p><img src="http://images.gitbook.cn/25bdcf50-17a1-11e8-92e0-d983a1e85cb7" alt="enter image description here"></p>
+<p>另外还有类似的方式是在多进程之间，假如一个父进程创建两个子进程，那么如果在父进程中用 mmap 创建一个内存块，这个内存块可以声明为多个子进程共享的，这种方式可以实现在两个进程之间去共享同一块内存，这样也是在多进程之间交换数据的方法。</p>
+<p>这两种方法都是基于内存共享的方式，除了内存共享方式以外最常见的还有基于文件交换，在单台机器内通过文件交换，因为我们可以为文件加锁，确保只有一个进程能打开文件，还有种方式是通过网络传输。</p>
+<p><img src="http://images.gitbook.cn/49fd9850-17a1-11e8-ab6f-c92a5ff63d5e" alt="enter image description here"></p>
+<p>为了把这些东西抽象的话，通常会涉及到架构问题，在我们现在架构中最常见的方式是在 G1 和 G2 之间构建一个消息队列，这种架构模型是现在最常见的。消息队列的种类有很多，最常见的有类似于 Kafka、Redis，这种方式通常是跨进程的甚至是跨机器实现，好处在于可以实现离线的操作，很显然这种模型是从大的层面上实现的。</p>
+<p>除此之外，我们还有两种方式并发模型，第一种像 Erlang 语言最常见的 Actor，另外一种是 Go 语言的 Channel 模型。这两种模型有什么区别呢？他们看上去都像是实现用通讯来代替内存共享这样的方式，我们把这种方式通常称之为类似 CSP 模型。</p>
+<p>实际是有区别的，Actor 模型的特点有点像电子邮件，电子邮件其实就是一种消息通讯方式。当你把邮件扔给另外一个人的时候，你根本不关心这中间经过多少服务器多少路由具体怎么发送你根本不关心，你关心的是把这封邮件交给谁，所以你得知道对方的信箱。所以 Actor 模型其实很关心的是你把消息打包以后扔到哪个 MailBox 里面去，它关心的是谁接收这个事情，至于这中间怎么传输的，是本机的内存共享传输还是跨机器网络传输还是用其他方式它并不关心，Actor 模型定义的时候，并底层的通讯方式并不关心，对它关心的是你把数据放到哪个 MailBox 里面去。所以这样一来，它天生就是异步的，就像你发送邮件肯定不需要对方当前实时接收，它天生就是异步的，你把邮件发送到对方的信箱里就可以了，至于接下来怎么处理那就跟你无关了。</p>
+<p>Go 语言的 Channel 模型和它有区别的，它关心的是数据被放到哪个管道里面去了，至于后面谁接收，几个人接收都跟它无关，它不关心这个，它只关心把这个数据放入正确的通道里。所以从本质上来说它天生就是同步的，因为通道本身实际上就是有状态的，所以这两个模型是有很大差别的。Actor 模型关心的是你交给谁，那个人具体我不关心，我只知道它有具体的 MailBox。Channel 模型关心的是你放到哪个通道里去了，这个通道最终由谁处理由几个人来处理跟你无关。</p>
+<p>所以他们俩关注点不同就决定了我们选择的模型是不一样的，Channel 这种模型很多时候可以做类似的实时计算，而 Actor 模型很适合做天生的分布式模型，所以当你选择一个东西的时候它本身的特点是什么，这和你的架构就会有很大的关系。</p>
+<p>当然，目前 Go 语言的 Channel 模型只能在进程内进行通讯，但是也有项目基于这种模型开发基于 TCP 通讯，比如 CoreOS 实际上就在尝试开发 NctChan 这样的东西，但是不管怎么样他们俩都会做到一点就是解耦，把两个串行的东西变成中间有缓冲机制来解除对方的耦合，比如 Actor 模型我只需要把数据放到某个信箱里面去，那么我和对方处理只需要保证数据解包就可以，这个信箱实际上就是一个缓冲池，而 Channel 模型根本不需要对方是谁，那么我和它中间就没有耦合关系，我只需要把我们约定好的格式化数据放到某个通道里去，那么我们中间的联系就是这个通道，至于你现在是否挂着通道上面或者有几人挂在通道上面与我无关。这实际上都是架构层面上的解耦。</p>
+<p>很显然 Channel 模型也好，Actor 模型也好，它实际上是大的解决方案，更倾向于类似架构层面上的东西。虽然在 Channel 上，Go 语言频繁的使用会出现在各种各样的算法里面，但是要很显然比内存共享要花的代价大很多，它的抽象层面可以做到解耦，所以当你选择内存共享也好还是 Channel 也好归根结底和你的需求有关系，相比较内存共享它的抽象度更高，缺点就是性能上要付出额外的代价。</p>
+<h3 id="-1">同步通道和异步通道的区别</h3>
+<p>接下来看下 Channel 通道怎么做的，它实际上有两种方式，一种称之为同步方式，一种称之为异步方式。</p>
+<p><img src="http://images.gitbook.cn/6f0237f0-17a1-11e8-ac0a-03d2406b28d7" alt="enter image description here"></p>
+<p>同步方式是什么意思呢，例如我给你送封信，那么我们提前说好到某个地方去等，那个地方实际上就是通道，同步方式也就意味着如果我先来了，你没来，那么我就在这个地方等，我得等到你来了，那么如果你来了，我就把手上的信交给你，也就意味着同步方式更关心的是发送方和接收方，它们俩人要碰面，然后把数据直接交给对方，我们并不需要额外缓存这个数据，那么同样的，你来了也得等。</p>
+<p>究竟怎么等法呢？实际上同步方式实现了两个队列，一个称之为发送的等待队列，一个是接收的等待队列，假如我先来，你不在，我就把自己放到发送者队列里去休眠，因为我们说过 Goroutine 方式当你被阻塞了以后你必须把你的 M、P 交出来，这样的话不至于让成千上万这样的任务堵死在那，或者饿死，那么我就变成等待状态，那么你过来了以后，他发现没人，他就发送一个信号从发送等待队列进行唤醒，执行一个唤醒操作，那么有人被唤醒了，接下来进行交换数据。但同样的，如果接收方先来，它也会进入接收的等待队列进行休眠，然后由发送方进行唤醒，唤醒了以后接收方和发送方并不需要知道对方的身份，就要知道我们俩处于同一个队列上，我们俩无非是数据的生产数据的消费，我们并不需要对方是谁，我们只需要对方要么是送信的要么是收信的。我唤醒任何一个送信的把数据给我就行了，或者我唤醒任何一个收信的我把数据给它就行了。所以同步方式更关心的是发送接收队列，数据是发送和接收配对以后然后直接交给对方就可以了，因为通道决定了你们俩干同样的事，否则和通道就没有关系。</p>
+<p>所以这个通道理论上是抽象的，它并不会缓存数据，所以同步方式给人的感觉是缓冲区为零的这种通道，也就意味着我不会在缓冲区存任何东西，实际上这个通道会关联两个队列，一个是等待队列，一个是发送队列，这是在同步方式下典型的工作方式。通道只是确定生产和消费双方的角色，但是并不关心对方的身份，所以同步方式虽然需要配对，但依然是低耦合的。因为你并不需要知道对方的身份，你只需要把数据给它就可以了，至于对方是哪个对象跟你没关系。</p>
+<p><img src="http://images.gitbook.cn/91864730-17a1-11e8-ab6f-c92a5ff63d5e" alt="enter image description here"></p>
+<p>异步方式和同步方式的区别在于它的通道本身是个数据槽，你可以决定这个槽到底建多大，发送方首先看看槽里有没有空位，如果有空位，他就把数据放到里面，然后立马就走，也就意味着发送方如果发现有空槽的时候我就把数据扔到里面就可以了，我不需要等接收方，同样的接收方如果发现数据槽里有数据，它把这数据拿走就行了，它也不需要去等发送方。这是它的很大特点，但是这样很大的问题在于如果发送方发现槽满了，那么这时候它得把自己放到等待队列里去，因为满了没地方搁了，这时候它依然会阻塞，那么同样的有很多人都堵在这，因为这个都满了，这时候有任何一个接收方来了，因为数据槽是满的，它可以拿走任何其中的一个数据，就有一个空位，它执行一次消费以后起码可以确保有一个槽变成空了，然后它向发送方等待队列发送一个信号，有个槽空了，谁来补上吧。至于最后谁来填这个空槽跟它没关系，它只负责发送一个信号然后立马走人，它是异步的，它不知道最后生产者究竟是谁。同样的换个角度来说，如果接收方跑过来发现槽里的数据全是空的，它也得去等，同样的不管多个人来，都得去等，这时候发送方有个人来了，填了块数据就意味着这个槽里有数据了，这时候它会向接收方队列里发送信号，同样，它也不知道具体的消费方是谁。</p>
+<p>所以异步方式、生产方和消费方都围绕着数据槽来进行操作，如果数据槽为空或者不为空，他们就是异步的，只有生产方发现满了就会阻塞，消费方槽里没数据就得阻塞。不管是哪方不管是拿走数据还是放入数据时候都有责任唤醒另一方的等待队列，至于最后究竟谁激活了跟你没关系。所以这个时候得搞清楚异步方式下面他们围绕着是这个槽，如果我们把这个槽的数量变成零，其实它就变成了同步方式。区别就是数据放入槽里面还是私下进行交换，异步方式通过槽来交换，你依然不需要对方到底是谁。这是同步方式和异步方式很简单的实现模型。</p>
+<p>其实我们注意到了，不管是同步方式也好，异步方式也好，其实还是很简单的内存复制，无非就是同步方式是在生成方和消费方进行复制，异步方式是往槽里进行复制或者从槽里复制出去。所以这东西从本质上来说虽然是种抽象的东西，但是它的底层其实很简单，还是对数据很简单的操作。</p>
+<p>你了解汇编的话会发觉其实所有的东西归结到最后都是很简单的数据操作，就是无非数据从一个地方搬到另外一个地方，一种方式通过地址总线在不同的内存段进行搬移，另外一种方式通过网卡或者通过硬盘文件来搬移，没有太复杂的东西无非就是把数据抽象成不同的状态，所以不要把这东西想象成很复杂。就这个模型如果把这个复制操作从内存复制改成从网络复制那么就变成跨机器的了，那模型本身实际上可以被放大的，这种消息通讯可以很简单的通过信号量来实现，如果是网络的话可以用 UCP 或者 TCP 发送消息也一样的。</p>
+<p>要记得任何一个模型和实现实际上没有多大关系的，具体怎么去实现，把你的模型实现成什么样的状态和你的需求有关系，但这个模型本身可以抽象成架构层面上的东西，你可以把这种模型实现多个版本，你可以实现进程内的，比如类似 IPC，可以通过跨机器的 RPC 实现，也可以通过 MQ 来实现，MQ 可以看作类似的 RPC，RPC 也可以进化成 Restful。你得搞清楚架构模型和你用哪个技术实现是两码事，架构模型抛开这些技术，首先从逻辑上你要保证它要能够工作的，就像这种异步方式下面，我们可以有数据和没数据时候我们进入等待，那么当我们进行等待的时候必须有另一方帮我们唤醒，否则一直处于休眠状态，你在逻辑上必须确保这种东西需要走通的。</p>
+<p>以后设计架构的时候，先不要一股脑的砸在用什么技术去实现，一上来就搞个数据库 Redis 之类的，先不要去想这些，也不要想进程内的还是进程外的，首先用这种抽象模型从逻辑上是通的，然后再去考虑用什么样的技术去实现。这是两码事，不要一上来就把脑袋砸在代码上，那样就不是在做架构了。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">通道基本原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">同步通道和异步通道的区别</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&text=通道"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&is_video=false&description=通道"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通道&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&title=通道"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/10_通道/2019/09/&name=通道&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="死代码//go:noinlinefunc count() int {    return 3}func main() {    if x := count(); x &amp;gt; 5 {        println(“a”)    } else if x &amp;gt; 7 { // dead code        println(“b”)    }}反汇编查看：$ go build &amp;amp;&amp;amp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-14">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="死代码//go:noinlinefunc count() int {    return 3}func main() {    if x := count(); x &amp;gt; 5 {        println(“a”)    } else if x &amp;gt; 7 { // dead code        println(“b”)    }}反汇编查看：$ go build &amp;amp;&amp;amp">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:52:55.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-14">
+<meta name="twitter:description" content="死代码//go:noinlinefunc count() int {    return 3}func main() {    if x := count(); x &amp;gt; 5 {        println(“a”)    } else if x &amp;gt; 7 { // dead code        println(“b”)    }}反汇编查看：$ go build &amp;amp;&amp;amp">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-14</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-15switch 执行顺序/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&text=重学 Go 语言：基础篇-14"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&is_video=false&description=重学 Go 语言：基础篇-14"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-14&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&name=重学 Go 语言：基础篇-14&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">死代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">使用代码覆盖测试检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">查看编译器能否优化掉死代码</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-14
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:52:55.186Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>死代码</h3><br><pre><code class="go language-go">//go:noinline<br>func count() int {<br>    return 3<br>}<br>func main() {<br>    if x := count(); x &gt; 5 {<br>        println(“a”)<br>    } else if x &gt; 7 { // dead code<br>        println(“b”)<br>    }<br>}<br></code></pre><br><p>反汇编查看：</p><br><pre><code>$ go build &amp;&amp; go tool objdump -s “main.main” test<br></code></pre><br><p>死代码（Dead Code）是指永远不会被执行的代码，可使用专门的工具，或用代码覆盖率（Code Coverage）测试进行检查。通过覆盖率检查，我们知道哪些代码从来都不会执行，如果从来都不会执行的话，可能认为它是死代码。编译器也可主动清除死代码（Dead Code Elimination，DCE）。</p><br><p>比如 x 返回 3，总是会被 x &gt; 5 捕捉，后边永远都不可能捕捉。通过代码覆盖率测试，可以找到这个代码永远不会被执行。死代码要检查是不是逻辑写错还是测试数据没有覆盖到。</p><br><p>类似于这样的一种失误是很多的，包括一些高手可能莫名其妙地因为一个条件判断或者其它原因，写了一些永远不会被执行的代码。</p><br><p>通常情况下怎么测试这一点呢？我们写些代码来测试，或者进行单元测试。最好的方式用单元测试做到这一点：</p><br><pre><code class="go language-go">//go:noinline<br>func demo(x int) string {<br>    if x &gt; 0 {<br>        return “a”<br>    } else if x &gt; 5 { // dead code<br>        return “b”<br>    }<br><br>    return “c”<br>}<br><br>func main() {<br>    println(demo(6))<br>}<br></code></pre><br><pre><code class="go language-go">func TestDemo(t <em>testing.T) {<br>    datas := []struct {<br>        x      int<br>        expect string<br>    }{<br>        {1, “a”},<br>        {6, “b”},<br>        {0, “c”},<br>    }<br><br>    for _, d := range datas {<br>        s := demo(d.x)<br>        if s != d.expect {<br>            t.Errorf(“demo(%d): expect: %s, actual: %s\n”, d.x, d.expect, s)<br>        }<br>    }<br>}<br></em></code></pre><br><p>除了上面测试逻辑的，有些时候因为测试覆盖面不够，或者在代码中写了很多东西，由于后来某种原因就不再使用了，但是我们并没有把死代码删掉。这段代码逻辑本身没有错误，但是依然用不上就是死代码。这东西理论上应该从项目里面删除掉，留在项目里面是一种污染。</p><br><h3 id="-1">使用代码覆盖测试检查</h3><br><p>通过什么方式找到死代码呢？很简单的做法用代码覆盖测试。因为理论上单元测试覆盖了整个程序的所有逻辑，当所有逻辑被单元测试覆盖了，而且所有的单元测试都通过了以后，那么没有被覆盖到的代码理论上就是死代码。</p><br><pre><code class="bash language-bash"># 将 .go 拷贝到 workspace，然后执行<br>$ go test -v -cover -coverprofile cover.out #生成代码覆盖<br>$ go tool cover -html=cover.out #覆盖的文件用浏览器打开<br></code></pre><br><p>红色的就表示这段代码永远没有被执行。要么是单元测试覆盖面不够，要么是这段代码是多余的。</p><br><p>任何时候不要让死代码留到代码文件里面，得有种途径保证代码永远是干净的。因为死代码只有两种可能：算法错误或者单元测试数据覆盖率不够。</p><br><h3 id="-2">查看编译器能否优化掉死代码</h3><br><p>上面的 Go 例子中，一段代码永远不会被执行的。理论上编译器能帮我们优化掉死代码，最终生成的汇编指令里面不应该有死代码，虽然是在源码里面，但是编译器应该能找到且永远不能被执行。那么编译器是否能把死代码优化掉呢？</p><br><pre><code class="bash language-bash">$ go build -gcflags “-l” -o test main.go<br>$ go tool objdump -s “main.demo” test<br></code></pre><br><pre><code>  main.go:5        0x4509b0        488b442408      MOVQ 0x8(SP), AX<br>  main.go:4        0x4509b5        4885c0          TESTQ AX, AX<br>  main.go:4        0x4509b8        7e16            JLE 0x4509d0<br>  main.go:5        0x4509ba        488d055fd70100      LEAQ 0x1d75f(IP), AX<br>  main.go:5        0x4509c1        4889442410      MOVQ AX, 0x10(SP)<br>  main.go:5        0x4509c6        48c744241801000000  MOVQ $0x1, 0x18(SP)<br>  main.go:5        0x4509cf        c3          RET<br>  main.go:10    0x4509d0        488d054ad70100      LEAQ 0x1d74a(IP), AX<br>  main.go:10    0x4509d7        4889442410      MOVQ AX, 0x10(SP)<br>  main.go:10    0x4509dc        48c744241801000000  MOVQ $0x1, 0x18(SP)<br>  main.go:10    0x4509e5        c3          RET<br></code></pre><br><p>看到对 5 的比较，Go 的编译器 1.9 版本以上把死代码优化掉了。</p><br><p>那么我们看看 GCC 能不能优化掉：</p><br><pre><code class="c language-c">#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br><br><strong>attribute</strong>((noinline)) char<em> demo(int x)<br>{<br>    if (x &gt; 0)<br>    {<br>        return “a”;<br>    }<br>    else if (x &gt; 5)<br>    {<br>        return “b”;<br>    }<br><br>    return “c”;<br>}<br><br>int main()<br>{<br>    printf(“%s\n”, demo(6));<br>}<br></em></code></pre><br><pre><code class="bash language-bash">$ gcc -O2 -o test test.c<br>$ objdump -d -M intel test | grep -A20 “&lt;demo&gt;:”<br></code></pre><br><pre><code class="bash language-bash">0000000000400550 &lt;demo&gt;:<br>  400550:    85 ff                   test   edi,edi #先把值做简单的判断<br>  400552:    ba f6 05 40 00          mov    edx,0x4005f6<br>  400557:    b8 f4 05 40 00          mov    eax,0x4005f4<br>  40055c:    48 0f 4e c2             cmovle rax,rdx<br>  400560:    c3                      ret<br>  400561:    66 2e 0f 1f 84 00 00    nop    WORD PTR cs:[rax+rax1+0x0]<br>  400568:    00 00 00<br>  40056b:    0f 1f 44 00 00          nop    DWORD PTR [rax+rax*1+0x0]<br></code></pre><br><p>GCC 把这个代码优化得很干净，死代码去掉了，这就是编译器上的差异。不要让用不到的代码（就算代码写的再好只要项目用不到它就是死代码）保留在项目中。</p><br><p>编译器有可能优化掉死代码，也可能优化不掉死代码，编译器聪明或者不聪明，都不能取代人的能力。我们需要超脱语言的限制，超脱编译器的限制，甚至超脱算法数据结构本身的限制。每种东西、每种数据结构、每种算法、每种语言，甚至每个操作系统、每种文件结构，它都有适合的场合。</p><br><p>除了单元测试以外，编译器在非优化模式下面依然保留死代码分支，生成了机器指令，在优化模式下优化了死代码。</p><br><p>我们自己写代码的时候，死代码保留在源码里，成为维护上的一个漏洞，所以我们需要通过单元测试的一些手段，来找到类似于这样的代码。第一要确保所有代码是被监控的，第二不应该出现无关的代码，保证代码简洁。</p><br><p>通过不同的视角去观察一件事情，你会发觉有些很多的东西和你以往看到的方式不太一样，最安全的手段是用单元测试来托管你的代码，监控你的代码。</p><br><p>在正式项目开发当中，</p><br><ul><br><li>第一，用调试器来进行乱序调试；</li><br><li>第二，用单元测试来管理的代码，然后用性能测试来保证算法符合我们的预期。</li><br></ul><br><p>通过一系列的手段管控这些代码，开发一个软件会得到两份产品，第一个是上线的产品，第二份是代码，代码本身也是一个产品，需要精心维护。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">死代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">使用代码覆盖测试检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">查看编译器能否优化掉死代码</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&text=重学 Go 语言：基础篇-14"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&is_video=false&description=重学 Go 语言：基础篇-14"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-14&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&title=重学 Go 语言：基础篇-14"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/&name=重学 Go 语言：基础篇-14&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

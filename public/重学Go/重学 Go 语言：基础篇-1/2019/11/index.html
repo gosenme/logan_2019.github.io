@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Go 语言，你真的学会了吗？为什么是 Go？传统的编程语言都存在一些通用的缺点：学习成本高：诸如 C++ 要理解作者思想，Java 要学习大量库；编译速度慢：代码的编写、预处理、编译与运行流程花费时间太长；无法使用现代计算机发展：软件已经不能充分发挥它们的优势，比如多 CPU 下；项目迭代周期短：996 已经成为常态，任务压的又压，在如何提高团队生产效率、又能保证项目质量两者之间，权衡成了一个比较">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-1">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="Go 语言，你真的学会了吗？为什么是 Go？传统的编程语言都存在一些通用的缺点：学习成本高：诸如 C++ 要理解作者思想，Java 要学习大量库；编译速度慢：代码的编写、预处理、编译与运行流程花费时间太长；无法使用现代计算机发展：软件已经不能充分发挥它们的优势，比如多 CPU 下；项目迭代周期短：996 已经成为常态，任务压的又压，在如何提高团队生产效率、又能保证项目质量两者之间，权衡成了一个比较">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/15742317608583">
+<meta property="og:image" content="https://images.gitbook.cn/15742244451218">
+<meta property="og:image" content="https://images.gitbook.cn/15742317608610">
+<meta property="og:updated_time" content="2019-11-30T10:52:36.538Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-1">
+<meta name="twitter:description" content="Go 语言，你真的学会了吗？为什么是 Go？传统的编程语言都存在一些通用的缺点：学习成本高：诸如 C++ 要理解作者思想，Java 要学习大量库；编译速度慢：代码的编写、预处理、编译与运行流程花费时间太长；无法使用现代计算机发展：软件已经不能充分发挥它们的优势，比如多 CPU 下；项目迭代周期短：996 已经成为常态，任务压的又压，在如何提高团队生产效率、又能保证项目质量两者之间，权衡成了一个比较">
+<meta name="twitter:image" content="https://images.gitbook.cn/15742317608583">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-1</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-2变量是什么?/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/图/图的基础知识与相关算法/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&text=重学 Go 语言：基础篇-1"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&is_video=false&description=重学 Go 语言：基础篇-1"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-1&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&name=重学 Go 语言：基础篇-1&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#go"><span class="toc-number">2.</span> <span class="toc-text">Go 语言，你真的学会了吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#go-1"><span class="toc-number">2.1.</span> <span class="toc-text">为什么是 Go？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#go-2"><span class="toc-number">2.1.1.</span> <span class="toc-text">Go 语言的优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#go-3"><span class="toc-number">2.1.2.</span> <span class="toc-text">如何重学 Go 语言</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#go-4"><span class="toc-number">2.2.</span> <span class="toc-text">所以，与我一起来重学 Go 语言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-number">2.2.1.</span> <span class="toc-text">基础篇</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">进阶篇</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">2.3.</span> <span class="toc-text">你将获得什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">2.4.</span> <span class="toc-text">作者介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-4"><span class="toc-number">2.5.</span> <span class="toc-text">适宜人群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-5"><span class="toc-number">2.6.</span> <span class="toc-text">购买须知</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-6"><span class="toc-number">2.7.</span> <span class="toc-text">订阅福利</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-7"><span class="toc-number">2.8.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-1
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:52:36.537Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h2 id="go">Go 语言，你真的学会了吗？</h2><br><h3 id="go-1">为什么是 Go？</h3><br><p>传统的编程语言都存在一些通用的缺点：</p><br><ul><br><li>学习成本高：诸如 C++ 要理解作者思想，Java 要学习大量库；</li><br><li>编译速度慢：代码的编写、预处理、编译与运行流程花费时间太长；</li><br><li>无法使用现代计算机发展：软件已经不能充分发挥它们的优势，比如多 CPU 下；</li><br><li>项目迭代周期短：996 已经成为常态，任务压的又压，在如何提高团队生产效率、又能保证项目质量两者之间，权衡成了一个比较重要的问题。</li><br></ul><br><p>所以急需一门语言改善以上问题，这时候的 Go 优势就很充足了。</p><br><h4 id="go-2">Go 语言的优势</h4><br><p>Go 作为 Google 开源的编程语言，近些年来，除 Docker 本身就是 Go 写的，知乎、Bilibili 都纷纷迁移到 Go，面对中国的人口优势，Go 的特性优势就被发挥得很充分。</p><br><p><img src="https://images.gitbook.cn/15742317608583" alt="画板备份"></p><br><p>如果你去上述公司面试，有 Go 基础，懂 Go 核心，面试通关是不是会更容易？</p><br><p>说回来，Go 语言的优势大抵有以下几项：</p><br><ul><br><li>如果有 C 语言的加持，可以轻松学会；</li><br><li>部署简单，实现高并发很轻松，内存占用也非常省；</li><br><li>代码简洁、格式清晰统一、方便协作与阅读；</li><br><li>具备性能强劲但是开发效率不输给一些动态语言，适合编写一些瓶颈业务。</li><br></ul><br><p>上手学习与使用 Go 语言概念少，入门简单，但是真的就简单地会了吗？</p><br><h4 id="go-3">如何重学 Go 语言</h4><br><blockquote><br>  <p>“看完 Go 文档，输出完「Hello World 」，我的 Go 就入门了？”</p><br></blockquote><br><p>当然不是，还有：并发与协程、基于消息传递的通信方式、丰富实用的内置数据类型、函数多返回值、defer 机制、reflect 反射、高性能 HTTP 服务和工程管理，等着你来学习。</p><br><p>脱离 Go 文档之外，学习 Go 会遇到哪些问题：</p><br><ol><br><li>程序怎么理解一个变量？</li><br><li>编码过程中为什么使用常量？</li><br><li>Go 语言里有枚举类型么？</li><br><li>Go 语言引用类型和其他语言有什么不同？</li><br><li>同是流控制语句，switch 和 if 有什么不同？</li><br><li>在编码过程中写过 goto 语句么？</li><br><li>Go 支持支持尾递归优化么？</li><br><li>如何判断两个函数变量相等？</li><br><li>匿名函数有性能问题吗？</li><br><li>使用闭包会导致什么性能问题？</li><br><li>什么是错误？和异常有什么区别？</li><br><li>是不是数组就一定能分配在栈上？</li><br><li>字符串怎么性能优化？</li><br><li>字典怎么性能优化？</li><br><li>字段对齐对结构体有什么影响？</li><br><li>Go 语言怎么实现 OOP 的方法和接口？</li><br><li>接口调用有哪些性能问题？</li><br><li>……</li><br></ol><br><p>有问题，也就对应有解决方案，上述问题应该怎么解决？</p><br><h3 id="go-4">所以，与我一起来重学 Go 语言</h3><br><p>我一直从事服务器后端系统开发快 10 年了，高并发分布式是互联网应用的基础，工作中先后使用过 C#、Java、Go 等语言。</p><br><p>现在项目上的工作需要把平台迁移到 Go，从零开始构建基础设施框架，在基础设施框架上开发各种业务系统。我在迁移过程中逐步自研了一套功能完善的基础框架，同时也对语言的一些特性有了更深入的了解，于是便有了这个专栏。</p><br><p>这个专栏的目的是教你如何把一门语言学精通了，什么叫精通，就是该会的东西都会了，让读者对语言有更全面更深入的认识，让读者掌握怎么利用逆向方法推导某种细节带到其他语言学习中去，而不是仅仅是学一门，吃力一门，让你更好地应用在项目与面试中。</p><br><p>你可以把一门语言看成是一个长期项目，通过这个长期项目来锻炼提升自己。比如 Go，从代码实现上，主要有类型系统设计、函数执行、内置的数据结构、对象系统设计、运行时、标准库、工具链等这些方面，但是这些方面仅仅看文档就能深入理解吗？</p><br><p>相比市面上的文章大多数属于帮助文档型，其目的就是介绍基本语法，使用 API。 要知道，技术日新月异，大多数初学者一直沉浸在学习各种各样的语言、框架中。学得广，但是学得不精，也无法抽出思想应用到其他语言，达到融会贯通。</p><br><p>这就要注意了，你可能是学习方法不对，没有一个人把你带到细节里面，细节是魔鬼，任何简单的背后必然隐藏复杂的逻辑。这也是我为什么要写这个专栏。</p><br><p>本专栏希望这个专栏能与你一起：</p><br><ul><br><li>抽丝剥茧，从 Go 背景知识到灵活使用，让你知其然知其所以然。</li><br><li>一起去思考 Go 语言设计，为什么这样设计？怎么样设计？</li><br><li>使用反汇编、编程范式推导 Go 核心原理。</li><br><li>从架构思想层面解析 Go 语言每个细节。</li><br></ul><br><p>最后，一起理解在官方文档中表达不清楚的知识点，助力项目与面试。</p><br><p>本专栏分为基础篇与进阶篇：</p><br><p><img src="https://images.gitbook.cn/15742244451218" alt="画板"></p><br><h4 id>基础篇</h4><br><ul><br><li>第一部分：类型，包含类型存储、基础类型、引用类型、自定义类型等</li><br><li>第二部分：表达式，包含流控制等</li><br><li>第三部分：函数，包含函数执行、调用堆栈、参数及返回值、闭包等</li><br><li>第四部分：数据，包含基础数据类型、常用数据结构等</li><br><li>第五部分：对象，包含面向对象理论、方法、接口等</li><br></ul><br><h4 id="-1">进阶篇</h4><br><ul><br><li>第六部分：并发，进程、线程、协程、通道、同步等</li><br><li>第七部分：系统，内存管理、垃圾回收、调度、系统监控等</li><br><li>第八部分：标准库，io、bytes、context、net、db 等</li><br><li>第九部分：测试，单元测试、性能测试、代码覆盖率、性能监控等</li><br></ul><br><p>本课程重点从 Go 原理实现和思想深入浅出地讲解「基础篇」部分，希望能对你有所帮助。</p><br><h3 id="-2">你将获得什么</h3><br><ul><br><li>掌握 Go 语言基础特性；</li><br><li>学会从架构层面思考编程语言设计并应用在项目上。</li><br></ul><br><h3 id="-3">作者介绍</h3><br><p><img src="https://images.gitbook.cn/15742317608610" alt="李永京作者介绍图_750x400"></p><br><h3 id="-4">适宜人群</h3><br><ul><br><li>Go 应用开发想转 Go 系统开发的开发人员；</li><br><li>对 Go 语言底层原理实现感兴趣的开发人员；</li><br><li>从事服务端架构设计的架构师、开发人员。</li><br></ul><br><h3 id="-5">购买须知</h3><br><ul><br><li>本专栏为图文内容，共计 79 篇。</li><br><li>每周一、三、五更新，预计于 2019 年 12 月 30 日更新完毕。</li><br><li>付费用户可享受文章永久阅读权限。</li><br><li>付费用户可获取读者圈 PASS 权限，与讲师进一步互动。</li><br><li>本专栏为虚拟产品，一经付费概不退款，敬请谅解。</li><br><li>本专栏可在 GitChat 服务号、App 及网页端 <a href="https://gitbook.cn" target="_blank" rel="noopener">gitbook.cn</a> 上购买，一端购买，多端阅读。</li><br></ul><br><h3 id="-6">订阅福利</h3><br><ul><br><li>本专栏限时特价 49 元，11 月 27 日恢复至原价 79 元。</li><br><li>订购本专栏可获得专属海报（在 GitChat 服务号领取），分享专属海报每成功邀请一位好友购买，即可获得 25% 的返现奖励，多邀多得，上不封顶，立即提现。</li><br><li>提现流程：在 GitChat 服务号中点击「我-我的邀请-提现」。</li><br><li><font color="#ff700a">购买本专栏后，可加入读者群交流（入群方式可查看第 3 篇文末说明）。</font></li><br></ul><br><h3 id="-7">参考</h3><br><ul><br><li>《Go 笔记之为什么要学习 Go》 </li><br><li>《大道至简——Go 语言最佳实践》</li><br></ul></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#go"><span class="toc-number">2.</span> <span class="toc-text">Go 语言，你真的学会了吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#go-1"><span class="toc-number">2.1.</span> <span class="toc-text">为什么是 Go？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#go-2"><span class="toc-number">2.1.1.</span> <span class="toc-text">Go 语言的优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#go-3"><span class="toc-number">2.1.2.</span> <span class="toc-text">如何重学 Go 语言</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#go-4"><span class="toc-number">2.2.</span> <span class="toc-text">所以，与我一起来重学 Go 语言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-number">2.2.1.</span> <span class="toc-text">基础篇</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">进阶篇</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">2.3.</span> <span class="toc-text">你将获得什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">2.4.</span> <span class="toc-text">作者介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-4"><span class="toc-number">2.5.</span> <span class="toc-text">适宜人群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-5"><span class="toc-number">2.6.</span> <span class="toc-text">购买须知</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-6"><span class="toc-number">2.7.</span> <span class="toc-text">订阅福利</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-7"><span class="toc-number">2.8.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&text=重学 Go 语言：基础篇-1"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&is_video=false&description=重学 Go 语言：基础篇-1"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-1&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&title=重学 Go 语言：基础篇-1"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-1/2019/11/&name=重学 Go 语言：基础篇-1&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

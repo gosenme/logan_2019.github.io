@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="匿名函数调用方式匿名函数调用方式有两种，第一种是作为返回值的匿名函数，第二种是直接调用匿名函数。上面的例子是作为返回值的匿名函数。作为返回值的匿名函数我们首先使用 GBD 调试上面的例子。$ gdb test$ l$ l$ b 16 #test()返回匿名函数f，f可以看作一个指针指向main.test.func1函数$ r #执行到断点位置$ info locals #查看局部变量z = 456">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-27">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="匿名函数调用方式匿名函数调用方式有两种，第一种是作为返回值的匿名函数，第二种是直接调用匿名函数。上面的例子是作为返回值的匿名函数。作为返回值的匿名函数我们首先使用 GBD 调试上面的例子。$ gdb test$ l$ l$ b 16 #test()返回匿名函数f，f可以看作一个指针指向main.test.func1函数$ r #执行到断点位置$ info locals #查看局部变量z = 456">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:13.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-27">
+<meta name="twitter:description" content="匿名函数调用方式匿名函数调用方式有两种，第一种是作为返回值的匿名函数，第二种是直接调用匿名函数。上面的例子是作为返回值的匿名函数。作为返回值的匿名函数我们首先使用 GBD 调试上面的例子。$ gdb test$ l$ l$ b 16 #test()返回匿名函数f，f可以看作一个指针指向main.test.func1函数$ r #执行到断点位置$ info locals #查看局部变量z = 456">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-27</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-28何为闭包/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-26匿名函数/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&text=重学 Go 语言：基础篇-27"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&is_video=false&description=重学 Go 语言：基础篇-27"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-27&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&name=重学 Go 语言：基础篇-27&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">匿名函数调用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">作为返回值的匿名函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.3.</span> <span class="toc-text">11 直接调用匿名函数</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-27
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:13.293Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>匿名函数调用方式</h3><br><p>匿名函数调用方式有两种，第一种是作为返回值的匿名函数，第二种是直接调用匿名函数。上面的例子是作为返回值的匿名函数。</p><br><h3 id="-1">作为返回值的匿名函数</h3><br><p>我们首先使用 GBD 调试上面的例子。</p><br><pre><code class="bash language-bash">$ gdb test<br>$ l<br>$ l<br>$ b 16 #test()返回匿名函数f，f可以看作一个指针指向main.test.func1函数<br>$ r #执行到断点位置<br>$ info locals #查看局部变量<br></code></pre><br><pre><code>z = 4567424<br>f = {void (int, int <em>)} 0xc420043f68<br></em></code></pre><br><p>可以看到<code>f</code>指向一个函数指针，签名<code>{void (int,int )}</code>和函数<code>func(x int) int</code>不一样，执行的地址是运行期的地址。</p><br><pre><code class="bash language-bash">$ info address main.test.func1 #查看main.test.func1函数是编译期地址<br></code></pre><br><pre><code>Symbol “main.test.func1” is a function at address 0x450a40.<br></code></pre><br><p><code>main.test.func1</code>函数的地址是<code>0x450a40</code>，而<code>f = {void (int, int <em>)}</em></code>地址是<code>0xc420043f68</code>，这个地址不是在编译期生成的是运行期的地址。因为编译期地址都是短地址，而且<code>main.test.func1</code>函数的真正地址是<code>0x450a40</code>，很显然和<code>f</code>指向的不一样。</p><br><p>接下来看下<code>f</code>到底是什么，首先确定<code>f</code>到底在哪。</p><br><pre><code class="bash language-bash">$ info files<br></code></pre><br><pre><code>Native process:<br>    Using the running image of child LWP 7504.<br>    While running this, GDB does not access memory from…<br>Local exec file:<br>        file type elf64-x86-64.<br>    Entry point: 0x44bae0<br>    0x0000000000401000 - 0x0000000000450ae3 is .text<br>    0x0000000000451000 - 0x000000000047a6fb is .rodata<br>    0x000000000047a820 - 0x000000000047b018 is .typelink<br>    0x000000000047b018 - 0x000000000047b020 is .itablink<br>    0x000000000047b020 - 0x000000000047b020 is .gosymtab<br>    0x000000000047b020 - 0x00000000004a9772 is .gopclntab<br>    0x00000000004aa000 - 0x00000000004aaa38 is .noptrdata<br>    0x00000000004aaa40 - 0x00000000004ab5b8 is .data<br>    0x00000000004ab5c0 - 0x00000000004c97e8 is .bss<br>    0x00000000004c9800 - 0x00000000004cbe18 is .noptrbss<br>    0x0000000000400fc8 - 0x0000000000401000 is .note.go.buildid<br>    0x00007ffff7ffd120 - 0x00007ffff7ffd160 is .hash in system-supplied DSO at 0x7ffff7ffd000<br>    0x00007ffff7ffd160 - 0x00007ffff7ffd1a8 is .gnu.hash in system-supplied DSO at 0x7ffff7ffd000<br>    0x00007ffff7ffd1a8 - 0x00007ffff7ffd2b0 is .dynsym in system-supplied DSO at 0x7ffff7ffd000<br>    0x00007ffff7ffd2b0 - 0x00007ffff7ffd30e is .dynstr in system-supplied DSO at 0x7ffff7ffd000<br></code></pre><br><p>查看<code>f</code>指向运行期地址是哪一段，<code>f</code>的地址是<code>0xc420043f68</code>，显然不是编译期范围的地址。</p><br><p><code>main.test.func1</code>函数的地址是<code>0x450a40</code>，是编译期地址在.text段里面，但<code>f</code>显然不是。</p><br><pre><code class="bash language-bash">$ x/1xg 0xc420043f68 #查看f地址内容<br></code></pre><br><pre><code>xc420043f68:    0x00000000004724b8<br></code></pre><br><p><code>0x00000000004724b8</code>是编译期的地址，指向rodata段里面</p><br><pre><code class="bash language-bash">$ info symbol 0x00000000004724b8 #查看符号<br></code></pre><br><pre><code>func. + 69 in section .rodata of<br></code></pre><br><p>看到<code>func.<em> + 69</em></code>是多出来的，在rodata段里，很显然<code>f</code>实际上是指向<code>func. + 69</code>的指针。</p><br><p><code>main.test.func1</code>就是匿名函数。匿名函数编译器会给它生成一个随机的符号名，和普通函数没有什么区别，因为它的代码本身也在text段中。</p><br><p>当我们返回匿名函数的时候，返回的显然不是这个匿名函数的指针，而是<code>func.<em> + 69</em></code>的指针。</p><br><p><code>func. + 69</code>到底是什么？意味着匿名函数并不是你想象的那么简单。</p><br><p><code>func.<em> + 69</em></code>是编译器生成的第二个对象。</p><br><pre><code class="bash language-bash">$ x/2xg 0x00000000004724b8 #输出两组信息<br></code></pre><br><pre><code>4724b8:    0x0000000000450a40  0x0000000000446380<br></code></pre><br><pre><code class="bash language-bash">$ info symbol 0x0000000000450a40 #查看第一个地址<br></code></pre><br><pre><code>main.test.func1 in section .text of<br></code></pre><br><p>很显然第一个地址<code>0x0000000000450a40</code>是真正意义上的匿名函数。</p><br><p>当返回一个匿名函数的时候，首先这个匿名函数会给它一个随机的符号名，在 text 段里面和普通函数没有区别，返回的实际上是一个包装对象，对象内部指向 text 段，返回匿名函数的时候返回的并不是匿名函数的指针，而是个包装对象，包装对象到底干什么用？为什么不直接返回匿名函数的指针呢？因为调用正常函数时候直接 call 函数的地址就可以了，然后前面有一堆传参的过程。为什么在匿名函数调用时 Go 语言会设计一套复杂的东西呢？</p><br><p>我们现在知道了当返回匿名函数时候，返回一个包装对象，这个包装对象内部有个指针指向真实的匿名函数，那么怎么通过这个包装对象来调用匿名函数呢？</p><br><pre><code class="bash language-bash">$ set disassembly-flavor intel<br>$ disass #反汇编<br></code></pre><br><pre><code class="bash language-bash">Dump of assembler code for function main.main:<br>   0x00000000004509d0 &lt;+0&gt;:        mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x00000000004509d9 &lt;+9&gt;:        cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x00000000004509dd &lt;+13&gt;:    jbe    0x450a39 &lt;main.main+105&gt;<br>   0x00000000004509df &lt;+15&gt;:    sub    rsp,0x28 #分配栈空间<br>   0x00000000004509e3 &lt;+19&gt;:    mov    QWORD PTR [rsp+0x20],rbp<br>   0x00000000004509e8 &lt;+24&gt;:    lea    rbp,[rsp+0x20]<br>   0x00000000004509ed &lt;+29&gt;:    call   0x4509b0 &lt;main.test&gt;<br>   0x00000000004509f2 &lt;+34&gt;:    mov    rdx,QWORD PTR [rsp] #因为test函数没有参数，所以rsp+0就是test函数的返回值。这个意思就是把test函数的返回值从rsp搬到rdx<br>   0x00000000004509f6 &lt;+38&gt;:    mov    QWORD PTR [rsp+0x18],rdx #0x18用于存放局部变量，rdx搬到rsp+0x18<br>=&gt; 0x00000000004509fb &lt;+43&gt;:    mov    QWORD PTR [rsp],0x64 #把100放到rsp，就是f(100)，f并不是真正意义上的函数指针，而是包装对象，100就是0x64<br>   0x0000000000450a03 &lt;+51&gt;:    mov    rax,QWORD PTR [rdx] #rdx存的就是那个包装对象,rdx数据就是真正意义上的匿名函数地址取出来放到rax，rax就是存了匿名函数的地址<br>   0x0000000000450a06 &lt;+54&gt;:    call   rax #调用匿名函数，和普通调用函数区别就是需要通过rax做一次二次寻址过程。<br>   0x0000000000450a08 &lt;+56&gt;:    mov    rax,QWORD PTR [rsp+0x8]<br>   0x0000000000450a0d &lt;+61&gt;:    mov    QWORD PTR [rsp+0x10],rax<br>   0x0000000000450a12 &lt;+66&gt;:    call   0x423890 &lt;runtime.printlock&gt;<br>   0x0000000000450a17 &lt;+71&gt;:    mov    rax,QWORD PTR [rsp+0x10]<br>   0x0000000000450a1c &lt;+76&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450a20 &lt;+80&gt;:    call   0x424070 &lt;runtime.printint&gt;<br>   0x0000000000450a25 &lt;+85&gt;:    call   0x423b40 &lt;runtime.printnl&gt;<br>   0x0000000000450a2a &lt;+90&gt;:    call   0x423920 &lt;runtime.printunlock&gt;<br>   0x0000000000450a2f &lt;+95&gt;:    mov    rbp,QWORD PTR [rsp+0x20]<br>   0x0000000000450a34 &lt;+100&gt;:    add    rsp,0x28<br>   0x0000000000450a38 &lt;+104&gt;:    ret<br>   0x0000000000450a39 &lt;+105&gt;:    call   0x448790 &lt;runtime.morestack_noctxt&gt;<br>   0x0000000000450a3e &lt;+110&gt;:    jmp    0x4509d0 &lt;main.main&gt;<br></code></pre><br><p>匿名函数的调用内存图</p><br><pre><code>    |———+—sp<br>    | 100     |<br>    |———|—+8<br>    |         |      包装对象   取匿名函数main.test.func1地址<br>    |———|–+10   rdx —————&gt; rax<br>    |         |      /<br>    |———|–+18—func. + 69<br>    |         |<br>    |———|–+20<br>    |         |<br>    |———|–+28—main<br></code></pre><br><pre><code class="bash language-bash">$ b main.test.func1 #匿名函数打断点<br>$ c #继续执行<br>$ set disassembly-flavor intel #设置intel样式<br>$ disass #反汇编，看匿名函数就是一个普通函数<br></code></pre><br><pre><code>Dump of assembler code for function main.test.func1:<br>=&gt; 0x0000000000450a40 &lt;+0&gt;:        sub    rsp,0x10<br>   0x0000000000450a44 &lt;+4&gt;:        mov    QWORD PTR [rsp+0x8],rbp<br>   0x0000000000450a49 &lt;+9&gt;:        lea    rbp,[rsp+0x8]<br>   0x0000000000450a4e &lt;+14&gt;:    mov    QWORD PTR [rsp+0x20],0x0<br>   0x0000000000450a57 &lt;+23&gt;:    mov    rax,QWORD PTR [rsp+0x18]<br>   0x0000000000450a5c &lt;+28&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450a60 &lt;+32&gt;:    add    rax,0x64<br>   0x0000000000450a64 &lt;+36&gt;:    mov    QWORD PTR [rsp+0x18],rax<br>   0x0000000000450a69 &lt;+41&gt;:    mov    rax,QWORD PTR [rsp+0x18]<br>   0x0000000000450a6e &lt;+46&gt;:    mov    QWORD PTR [rsp+0x20],rax<br>   0x0000000000450a73 &lt;+51&gt;:    mov    rbp,QWORD PTR [rsp+0x8]<br>   0x0000000000450a78 &lt;+56&gt;:    add    rsp,0x10<br>   0x0000000000450a7c &lt;+60&gt;:    ret<br></code></pre><br><p>普通函数和匿名函数的区别在于普通函数直接 call 地址，匿名函数返回的并不是直接返回匿名函数地址，而是一个包装对象，这个包装对象内部持有匿名函数的地址。所以调用匿名函数的时候，先把包装对象里面的地址取出来，然后再去调用。</p><br><p>目前为止，我们还不了解为什么会这样，为什么需要做这样的二次寻址？因为编译时候已经确定下来了 func1 地址，按照正常想法直接 call 这个地址就可以了，为什么会使用这样的包装对象在运行期去解包呢？在闭包一节给出详细的解释。</p><br><p>我们先清楚了<strong>作为返回值的匿名函数并不是函数地址，而是个包装对象</strong>。</p><br><h3 id="11">11 直接调用匿名函数</h3><br><p>如果我们直接调用匿名函数的时候，会有什么区别呢？</p><br><pre><code class="bash language-bash">$ vim test.go #使用println(“hello, world!”);段代码<br></code></pre><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l -m” -o test test.go #编译<br></code></pre><br><pre><code class="bash language-bash">$ gdb test<br>$ l<br>$ l<br>$ b 11 #打断点<br>$ r #执行<br>$ set disassembly-flavor intel #设置intel样式<br>$ disass #反汇编<br></code></pre><br><pre><code>Dump of assembler code for function main.main.func1:<br>=&gt; 0x0000000000450a90 &lt;+0&gt;:        mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x0000000000450a99 &lt;+9&gt;:        cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x0000000000450a9d &lt;+13&gt;:    jbe    0x450adf &lt;main.main.func1+79&gt;<br>   0x0000000000450a9f &lt;+15&gt;:    sub    rsp,0x18<br>   0x0000000000450aa3 &lt;+19&gt;:    mov    QWORD PTR [rsp+0x10],rbp<br>   0x0000000000450aa8 &lt;+24&gt;:    lea    rbp,[rsp+0x10]<br>   0x0000000000450aad &lt;+29&gt;:    call   0x423890 &lt;runtime.printlock&gt;<br>   0x0000000000450ab2 &lt;+34&gt;:    lea    rax,[rip+0x1e1d9]        # 0x46ec92<br>   0x0000000000450ab9 &lt;+41&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450abd &lt;+45&gt;:    mov    QWORD PTR [rsp+0x8],0xd<br>   0x0000000000450ac6 &lt;+54&gt;:    call   0x424230 &lt;runtime.printstring&gt;<br>   0x0000000000450acb &lt;+59&gt;:    call   0x423b40 &lt;runtime.printnl&gt;<br>   0x0000000000450ad0 &lt;+64&gt;:    call   0x423920 &lt;runtime.printunlock&gt;<br>   0x0000000000450ad5 &lt;+69&gt;:    mov    rbp,QWORD PTR [rsp+0x10]<br>   0x0000000000450ada &lt;+74&gt;:    add    rsp,0x18<br>   0x0000000000450ade &lt;+78&gt;:    ret<br>   0x0000000000450adf &lt;+79&gt;:    call   0x448790 &lt;runtime.morestack_noctxt&gt;<br>   0x0000000000450ae4 &lt;+84&gt;:    jmp    0x450a90 &lt;main.main.func1&gt;<br></code></pre><br><p>我们注意到当它不是作为返回值的时候，好像和普通调用没有什么区别。</p><br><pre><code class="bash language-bash">$ set disassembly-flavor intel #设置intel样式<br>$ disass main.main #反汇编main.main<br></code></pre><br><pre><code>Dump of assembler code for function main.main:<br>   0x00000000004509d0 &lt;+0&gt;:        mov    rcx,QWORD PTR fs:0xfffffffffffffff8<br>   0x00000000004509d9 &lt;+9&gt;:        cmp    rsp,QWORD PTR [rcx+0x10]<br>   0x00000000004509dd &lt;+13&gt;:    jbe    0x450a3e &lt;main.main+110&gt;<br>   0x00000000004509df &lt;+15&gt;:    sub    rsp,0x28<br>   0x00000000004509e3 &lt;+19&gt;:    mov    QWORD PTR [rsp+0x20],rbp<br>   0x00000000004509e8 &lt;+24&gt;:    lea    rbp,[rsp+0x20]<br>   0x00000000004509ed &lt;+29&gt;:    call   0x450a90 &lt;main.main.func1&gt;<br>   0x00000000004509f2 &lt;+34&gt;:    call   0x4509b0 &lt;main.test&gt;<br>   0x00000000004509f7 &lt;+39&gt;:    mov    rdx,QWORD PTR [rsp]<br>   0x00000000004509fb &lt;+43&gt;:    mov    QWORD PTR [rsp+0x18],rdx<br>   0x0000000000450a00 &lt;+48&gt;:    mov    QWORD PTR [rsp],0x64<br>   0x0000000000450a08 &lt;+56&gt;:    mov    rax,QWORD PTR [rdx]<br>   0x0000000000450a0b &lt;+59&gt;:    call   rax<br>   0x0000000000450a0d &lt;+61&gt;:    mov    rax,QWORD PTR [rsp+0x8]<br>   0x0000000000450a12 &lt;+66&gt;:    mov    QWORD PTR [rsp+0x10],rax<br>   0x0000000000450a17 &lt;+71&gt;:    call   0x423890 &lt;runtime.printlock&gt;<br>   0x0000000000450a1c &lt;+76&gt;:    mov    rax,QWORD PTR [rsp+0x10]<br>   0x0000000000450a21 &lt;+81&gt;:    mov    QWORD PTR [rsp],rax<br>   0x0000000000450a25 &lt;+85&gt;:    call   0x424070 &lt;runtime.printint&gt;<br>   0x0000000000450a2a &lt;+90&gt;:    call   0x423b40 &lt;runtime.printnl&gt;<br>   0x0000000000450a2f &lt;+95&gt;:    call   0x423920 &lt;runtime.printunlock&gt;<br>   0x0000000000450a34 &lt;+100&gt;:    mov    rbp,QWORD PTR [rsp+0x20]<br>   0x0000000000450a39 &lt;+105&gt;:    add    rsp,0x28<br>   0x0000000000450a3d &lt;+109&gt;:    ret<br>   0x0000000000450a3e &lt;+110&gt;:    call   0x448790 &lt;runtime.morestack_noctxt&gt;<br>   0x0000000000450a43 &lt;+115&gt;:    jmp    0x4509d0 &lt;main.main&gt;<br></code></pre><br><p>可以看到<code>call main.main.func1</code>实际上就是<code>func(){}</code>匿名函数，它生成的名字是<code>main.main.func1</code>，直接call用它的地址了。</p><br><p>很显然，如果匿名函数直接调用的时候，它和普通函数调用根本没有任何区别，只有当它作为返回值的时候才有差别。</p><br><p>现在有两个疑问，第一个匿名函数作为普通函数直接调用的时候，它直接是使用 call 来执行的，没有什么区别。第二个当我们把匿名函数当作返回值的时候，这时候就有个包装对象的创建，进行二次调用的，需要做二次寻址。</p><br><p>这就告诉我们同样是匿名函数，在不同的情况下，它可能是有差别的，这种差别从代码上来看显然是有性能差异的。</p><br><p>当学习语言的时候，任何东西和最终调用未必是一致的，任何一门语言的语言规范里面官方文档里都不会告诉细节，而这些细节需要自己去挖掘，你挖掘出来就掌握了一种优化层面的信息，这个信息作为你的储备条件，比如说有些时候避免使用把匿名函数当作返回值来用可能会存在性能问题，以后做重构或者调优时，只有积累的大量细节才知道选择什么样的方式最合理，这些细节显然不会来自于官方文档，官方文档对很多细节描述都会很简单一带而过。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">匿名函数调用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">作为返回值的匿名函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.3.</span> <span class="toc-text">11 直接调用匿名函数</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&text=重学 Go 语言：基础篇-27"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&is_video=false&description=重学 Go 语言：基础篇-27"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-27&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&title=重学 Go 语言：基础篇-27"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-27匿名函数调用方式/2019/11/&name=重学 Go 语言：基础篇-27&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="保留字保留字是语法上的一些关键字。和内置函数不同，大部分语言使用保留字作为符号名可能会出问题，所以不允许在编码中使用保留字。Go 语言内置函数在 builtin 包中，它不需要导入包就可以直接使用，编译器会把它翻译成特殊的函数调用。一些语言允许定义和内置函数相同的函数，我们建议内置函数、内置类型、语法上的保留字不要使用，因为很容易引起误解。运算符（Operators）每种语言都会有特殊的运算符，有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-13">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="保留字保留字是语法上的一些关键字。和内置函数不同，大部分语言使用保留字作为符号名可能会出问题，所以不允许在编码中使用保留字。Go 语言内置函数在 builtin 包中，它不需要导入包就可以直接使用，编译器会把它翻译成特殊的函数调用。一些语言允许定义和内置函数相同的函数，我们建议内置函数、内置类型、语法上的保留字不要使用，因为很容易引起误解。运算符（Operators）每种语言都会有特殊的运算符，有">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:52:53.741Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-13">
+<meta name="twitter:description" content="保留字保留字是语法上的一些关键字。和内置函数不同，大部分语言使用保留字作为符号名可能会出问题，所以不允许在编码中使用保留字。Go 语言内置函数在 builtin 包中，它不需要导入包就可以直接使用，编译器会把它翻译成特殊的函数调用。一些语言允许定义和内置函数相同的函数，我们建议内置函数、内置类型、语法上的保留字不要使用，因为很容易引起误解。运算符（Operators）每种语言都会有特殊的运算符，有">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-13</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-14死代码/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-12自定义类型/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&text=重学 Go 语言：基础篇-13"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&is_video=false&description=重学 Go 语言：基础篇-13"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-13&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&name=重学 Go 语言：基础篇-13&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">保留字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#operators"><span class="toc-number">1.2.</span> <span class="toc-text">运算符（Operators）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#bitflag"><span class="toc-number">1.2.1.</span> <span class="toc-text">使用位运算实现 bit flag</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#andnotxor"><span class="toc-number">1.2.2.</span> <span class="toc-text">AND NOT 和 XOR 的区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.3.</span> <span class="toc-text">对齐函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.4.</span> <span class="toc-text">流控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#if"><span class="toc-number">1.4.1.</span> <span class="toc-text">if 里的初始化语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">1.4.2.</span> <span class="toc-text">减少缩进层次</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-4"><span class="toc-number">1.4.3.</span> <span class="toc-text">避免条件表达式过长</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-13
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:52:53.741Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>保留字</h3><br><p>保留字是语法上的一些关键字。和内置函数不同，大部分语言使用保留字作为符号名可能会出问题，所以不允许在编码中使用保留字。Go 语言内置函数在 builtin 包中，它不需要导入包就可以直接使用，编译器会把它翻译成特殊的函数调用。一些语言允许定义和内置函数相同的函数，我们建议内置函数、内置类型、语法上的保留字不要使用，因为很容易引起误解。</p><br><h3 id="operators">运算符（Operators）</h3><br><p>每种语言都会有特殊的运算符，有些运算符在其他语言里可能没有，系统语言里面有特殊的运算符，尤其是位移操作。另外运算符可能会涉及优先级问题，Go 语言优先级相对来说比较简单，也没有结合律一说。</p><br><h4 id="bitflag">使用位运算实现 bit flag</h4><br><p>运算符中最常见的是位运算符，做应用开发很少会使用二进制位操作，文件系统使用位运算设置权限。</p><br><p>一个字节是由八个二进制位组成，二进制位标记为 1 表示特定的状态，这样一个字节表示八种状态。很多时候适当使用二进制位操作有助于减少内存使用、提高性能，尤其对于系统级软件来说，任何时候的性能要求都是很苛刻的。我们经常看到布隆结构或者位图数据结构使用二进制位去重。</p><br><pre><code class="go language-go">// 定义好的权限<br>const (<br>    read = 1 &lt;&lt; iota //0001<br>    write            //0010<br>    exec             //0100<br>    setuid           //1000<br>)<br><br>func bitFlags() {<br>    var bits int64<br><br>    bits = bits | read | exec | setuid //用或操作设置权限<br>    // bits |= read //单个设置<br>    fmt.Printf(“%08s, %t\n”, strconv.FormatInt(bits, 2), bits&amp;exec &gt; 0)<br><br>    bits = bits ^ exec ^ setuid //取消用异或<br>    fmt.Printf(“%08s, %t\n”, strconv.FormatInt(bits, 2), bits&amp;exec &gt; 0)<br>}<br></code></pre><br><pre><code>00001101, true<br>00000001, false<br></code></pre><br><p>用 64 位整数保存二进制，因为寄存器本身就是 64 位的，如果想增加枚举值在后面加就行了，如果标记位设置二进制权限只要用或（<code>|</code>）操作，取消用异或 XOR（<code>^</code>）操作。</p><br><h4 id="andnotxor">AND NOT 和 XOR 的区别</h4><br><p>Go 语言有很特殊的位运算符：<code>AND NOT</code> 按位清除。下面一个例子首先设置 write 和 exec 权限，用两种方式移除 write 和 setuid 权限。结果有什么不同？</p><br><ul><br><li>异或（XOR：<code>^</code>）操作：反而设置 setuid 了</li><br><li>按位清除（AND NOT：<code>&amp;^</code>）操作：正确移除 write 和 setuid</li><br></ul><br><pre><code class="go language-go">func xorAndnot() {<br>    var bits int64<br><br>    bits = bits | write | exec //设置读写权限<br>    fmt.Printf(“%08s\n”, strconv.FormatInt(bits, 2))<br><br>    a := bits ^ write ^ setuid //XOR 移除write和setuid，setuid反而加上去了<br>    fmt.Printf(“%08s\n”, strconv.FormatInt(a, 2))<br><br>    b := bits &amp;^ (write | setuid) //AND NOT 移除write和setuid<br>    fmt.Printf(“%08s\n”, strconv.FormatInt(b, 2))<br>}<br></code></pre><br><pre><code>00000110<br>00001100<br>00000100<br></code></pre><br><h3 id="-1">对齐函数</h3><br><p>这个函数意思是给个数字 n 按照 a 对齐。例如 3 按照 4 对齐，输出4，5 按照 4 对齐是 8。</p><br><p>这个函数在对象复用、加密算法中使用。</p><br><pre><code class="go language-go">func round(n, a int) int {<br>    return (n + a - 1) &amp;^ (a - 1)<br>}<br></code></pre><br><h3 id="-2">流控制</h3><br><p>Go 语言的流程控制与其他语言对比算是很少了。</p><br><h4 id="if">if 里的初始化语句</h4><br><pre><code class="go language-go">//go:noinline<br>func count() int {<br>    return 3<br>}<br>func main() {<br>    if x := count(); x &gt; 0 { // x := count(); if …<br>        println(“a”)<br>    }<br>    // println(x) // undefined: x<br>}<br></code></pre><br><p>除变量作用域（整个 if…else…）外，和普通调用并无区别。</p><br><p>流控制语句基本上是选择、循环。Go 语言有个很特殊的写法，在流控制语句里面提供初始化语句，这个初始化表达式用于执行一个函数，也可以创建一个块变量。其他语言里可以在 for 循环定义变量。</p><br><p>那我们来看一下 if 初始化函数和普通函数到底特殊在哪。对上面代码进行反汇编，可以看到首先调用 count() 函数，接下来做一次比较操作 <code>CMPQ $0x0,0(SP)</code>，判断它是否大于零，<code>JG 53</code> 大于就跳转执行 printlock 函数，不跳转的话结束当前函数。对比两种写法汇编指令几乎一模一样，从性能上来说没有差别。</p><br><p>写法上唯一的差别是 x 的作用域，x 的作用域在整个 if 语句的 block 块里面，在外面没有办法访问 x，这属于编译器做语法检查的时候出现的问题，和生成指令没有关系。所以两种写法区别在作用域上面，而不是带来一些性能上的提升。</p><br><p>所以 if 初始化函数和普通函数，从某种意义上来说，其实也算是一种语法糖。</p><br><pre><code class="go language-go">func intIF(x int) {<br>    println(x)<br>    if x &gt; 0 {<br>        x += 200<br>    }<br>    println(x)<br>}<br></code></pre><br><pre><code class="go language-go">func intIF(x int) {<br>    if println(x); x &gt; 0 {<br>        x += 200<br>    }<br>    println(x)<br>}<br></code></pre><br><p>if 支持初始化表达式，这个表达式用来执行一个函数或者创建一个块变量。</p><br><p>上面两种写法从编译效果看没有区别。从源码上代表两个分块关系。第一种是很明确的执行判断，第二种是为了执行判断准备的基本条件。</p><br><h4 id="-3">减少缩进层次</h4><br><pre><code class="go language-go">func main() {<br>    x := 10<br>    if err := check(x); err == nil {<br>        x++<br>        println(x)<br>    } else {<br>        log.Fatalln(err)<br>    }<br>}<br></code></pre><br><pre><code class="go language-go">func main() {<br>    x := 10<br>    if err := check(x); err != nil {<br>        log.Fatalln(err)<br>    }<br>    x++<br>    println(x)<br>}<br></code></pre><br><p>在上面示例中，if 块承担了两套完全不同的逻辑：错误处理和后续正常业务逻辑，这两个逻辑根本没有任何关系。基于重构原则，我们应该保持代码块功能的单一性，任何时候一个函数或者代码块最好只做一件事情。在正常阅读模式下，我们更关心正常逻辑怎么执行，对于错误处理我们可忽略它。</p><br><p>常见下面的例子：</p><br><pre><code class="go language-go">func main() {<br>    f, err := os.Open(“./test.dat”)<br>    if err == nil {<br>        fmt.Println(“OK”)<br>    } else {<br>        log.Fatalln(err)<br>    }<br>}<br></code></pre><br><p>推荐做法是这样的，if 块只是处理错误，后面表达的是正确的逻辑。这样的话阅读源码时候可以直接忽略掉，因为错误处理对于业务逻辑来说没有关系的。</p><br><pre><code class="go language-go">func main() {<br>    f, err := os.Open(“./test.dat”)<br>    if err != nil {<br>        log.Fatalln(err)<br>        return<br>    }<br>    fmt.Println(“OK”)<br>}<br></code></pre><br><p>上面是最常见的写法：检查结果返回错误或者对参数或者一些条件做前置检查。实际上分成两种逻辑。第一个称之为正常逻辑，正常执行属于一块。第二种是逻辑是出错的时候，它们实际上是完全分开的。</p><br><p>因为在阅读代码的时候，会下意识地把出错忽略掉。出错并不属于阅读的内容，出错只是一种例外。代码的可阅读性和写法是有很大关系的。</p><br><p>当函数里面出现缩进层次或者嵌套层次的，比如多级 for 循环嵌套或者多级 if 语句嵌套，或者说 if 语句同时承担两套逻辑的时候，那就需要重构。每部分只负责一个单一的事情，不应该承担两个或者是两个以上的责任，主干和细节分清楚。</p><br><h4 id="-4">避免条件表达式过长</h4><br><p>有些时候条件表达式非常复杂，不方便阅读，条件很难测试。因为这个条件可能会依赖前面的一些变量，最好的方式把非常复杂的表达式写成独立的函数，给个很友善的名字，这样的话专门针对这个函数测试这个条件。因为我们很多时候并不关心函数细节是什么，阅读代码时候非常干净，看流程不用关心细节，使用框架把流程和细节分离，是编写代码常见的做法。</p><br><p>我们阅读代码的习惯是先看流程再看细节，因为细节和流程没有关系。细节只依赖于输入的参数，至于细节代码放在哪里并不关心。同样地，对于流程来说，只关心调用了哪些模块，至于模块内部做什么不关心，只关心通过符号名称知道模块干什么用的。</p><br><p>比如用来检查条件、创建数据库，至于怎么创建、创建什么数据库不关心。所以编写代码时候流程和细节分离，一旦发觉代码某些细节影响阅读，尽可能重构出去。一来便于测试，二来不干扰阅读。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">保留字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#operators"><span class="toc-number">1.2.</span> <span class="toc-text">运算符（Operators）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#bitflag"><span class="toc-number">1.2.1.</span> <span class="toc-text">使用位运算实现 bit flag</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#andnotxor"><span class="toc-number">1.2.2.</span> <span class="toc-text">AND NOT 和 XOR 的区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.3.</span> <span class="toc-text">对齐函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.4.</span> <span class="toc-text">流控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#if"><span class="toc-number">1.4.1.</span> <span class="toc-text">if 里的初始化语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-number">1.4.2.</span> <span class="toc-text">减少缩进层次</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-4"><span class="toc-number">1.4.3.</span> <span class="toc-text">避免条件表达式过长</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&text=重学 Go 语言：基础篇-13"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&is_video=false&description=重学 Go 语言：基础篇-13"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-13&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&title=重学 Go 语言：基础篇-13"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-13保留字/2019/11/&name=重学 Go 语言：基础篇-13&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="函数       4.1　表达概念 4.2　函数 4.3　定义函数 4.4　内置函数 4.5　复用函数 4.6　必选及可选参数 4.7　作用域 4.8　异常处理 4.9　文档字符串 4.10　有需要才使用变量 4.11　术语表 4.12　挑战练习           “函数应该做一件事。做好这件事。只能做这一件事。”   ——罗伯特 · C. 马丁（Robert C.Ma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数">
+<meta property="og:url" content="http://logan_2019.github.io/Python无师自通/4_function/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="函数       4.1　表达概念 4.2　函数 4.3　定义函数 4.4　内置函数 4.5　复用函数 4.6　必选及可选参数 4.7　作用域 4.8　异常处理 4.9　文档字符串 4.10　有需要才使用变量 4.11　术语表 4.12　挑战练习           “函数应该做一件事。做好这件事。只能做这一件事。”   ——罗伯特 · C. 马丁（Robert C.Ma">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/8f24fa40-6fc0-11e9-9e1b-5b6158413fa5">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.066Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="函数">
+<meta name="twitter:description" content="函数       4.1　表达概念 4.2　函数 4.3　定义函数 4.4　内置函数 4.5　复用函数 4.6　必选及可选参数 4.7　作用域 4.8　异常处理 4.9　文档字符串 4.10　有需要才使用变量 4.11　术语表 4.12　挑战练习           “函数应该做一件事。做好这件事。只能做这一件事。”   ——罗伯特 · C. 马丁（Robert C.Ma">
+<meta name="twitter:image" content="https://images.gitbook.cn/8f24fa40-6fc0-11e9-9e1b-5b6158413fa5">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>函数</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/Python无师自通/6_strings/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python无师自通/21_data_structure/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/4_function/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&text=函数"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&is_video=false&description=函数"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=函数&body=Check out this article: http://logan_2019.github.io/Python无师自通/4_function/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&name=函数&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#41"><span class="toc-number">1.</span> <span class="toc-text">4.1　表达概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42"><span class="toc-number">2.</span> <span class="toc-text">4.2　函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43"><span class="toc-number">3.</span> <span class="toc-text">4.3　定义函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44"><span class="toc-number">4.</span> <span class="toc-text">4.4　内置函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45"><span class="toc-number">5.</span> <span class="toc-text">4.5　复用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46"><span class="toc-number">6.</span> <span class="toc-text">4.6　必选及可选参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#47"><span class="toc-number">7.</span> <span class="toc-text">4.7　作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#48"><span class="toc-number">8.</span> <span class="toc-text">4.8　异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#49"><span class="toc-number">9.</span> <span class="toc-text">4.9　文档字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#410"><span class="toc-number">10.</span> <span class="toc-text">4.10　有需要才使用变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#411"><span class="toc-number">11.</span> <span class="toc-text">4.11　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#412"><span class="toc-number">12.</span> <span class="toc-text">4.12　挑战练习</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        函数
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.065Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>函数</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#41">4.1　表达概念</a></li>
+<li><a href="#42">4.2　函数</a></li>
+<li><a href="#43">4.3　定义函数</a></li>
+<li><a href="#44">4.4　内置函数</a></li>
+<li><a href="#45">4.5　复用函数</a></li>
+<li><a href="#46">4.6　必选及可选参数</a></li>
+<li><a href="#47">4.7　作用域</a></li>
+<li><a href="#48">4.8　异常处理</a></li>
+<li><a href="#49">4.9　文档字符串</a></li>
+<li><a href="#410">4.10　有需要才使用变量</a></li>
+<li><a href="#411">4.11　术语表</a></li>
+<li><a href="#412">4.12　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“函数应该做一件事。做好这件事。只能做这一件事。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——罗伯特 · C. 马丁（Robert C.Martin）</span></p>
+</blockquote>
+<p>本章将介绍<strong>函数（function）</strong>：可接受输入，执行指令并返回输出的复合语句。通过函数，我们可以在程序中定义功能，并重复使用。其示例如图 4-1 所示。</p>
+<p><img src="https://images.gitbook.cn/8f24fa40-6fc0-11e9-9e1b-5b6158413fa5" alt="enter image description here"></p>
+<p>图 4-1　函数</p>
+<h3 id="41">4.1　表达概念</h3>
+<p>从此处开始，本书将在解释编程概念时使用一种新<strong>约定</strong>（convention）（一种共同认同的方式）。例如，通过 <code>print("[想打印的内容]")</code> 来介绍如何使用 print 函数。</p>
+<p>新约定中结合使用了 Python 代码和方括号，方括号中的描述用来解释编程概念。当给出类似示例时，除了方括号及其中的内容之外，其他所有都是有效的 Python 代码。方括号中的内容隐含了你应该使用何种代码进行替换。Python 语法中也有使用方括号，因此在代码中本该应用方括号的处置将使用两个方括号体现。</p>
+<h3 id="42">4.2　函数</h3>
+<p><strong>调用</strong>（call）一个函数，意味着为函数提供执行指令并返回输出所需的输入。函数的每一个输入就是一个<strong>参数</strong>（parameter）。当你为函数提供参数时，则被称为“函数传参”。</p>
+<p>Python 中的函数类似于数学函数。如果忘记了代数中的函数，请看下面这个示例：</p>
+<pre><code class="hljs bash">1  <span class="hljs-comment"># 请不要运行代码</span>
+2
+3
+4
+5  f(x) = x * 2
+</code></pre>
+<p>上面代码中语句左侧定义了一个函数 <code>f</code>，接受一个参数 <code>x</code>。语句右侧是函数的具体定义，利用 <code>(x)</code> 中传递的参数进行计算并返回结果（输出）。本例中，函数的值被定义为函数的参数乘以 2。</p>
+<p>Python 和代数均使用如下语法调用函数：<code>[函数名]([逗号分隔的参数])</code>。在函数名后加上圆括号即可进行调用，参数放置在圆括号中，以逗号分隔。对于 <code>f(x) = x * 2</code> 这个数学函数，<code>f(2)</code> 的值是 4，<code>f(10)</code> 的值是 20。</p>
+<h3 id="43">4.3　定义函数</h3>
+<p>在 Python 中创建一个函数，需要选择函数名，并定义其参数、行为和返回值。下面是定义函数的语法：</p>
+<pre class="代码无行号"><code class="hljs markdown">1  # 请不要执行代码
+2
+3
+4
+5  <strong>def</strong> [<span class="hljs-string">函数名</span>](<span class="hljs-link">[参数]</span>):
+6      [函数定义]</code></pre>
+<p>数学函数 f(x) = x * 2 在 Python 中应该表示如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j9dctwl</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">(x)</span>:</span>
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">return</span></strong> x * <span class="hljs-number">2</span></code></pre>
+<p>关键字 <code>def</code> 告诉 Python 操作者正在定义一个函数。在 <code>def</code> 关键字后面，指定函数的名称，名称选择遵循与变量名相同的规则。按惯例，函数名不应使用大写字母，单词用下划线分隔：<code>like_this</code>。</p>
+<p>命名函数之后，在名称后加上一对圆括号，圆括号中则是希望函数接受的参数。</p>
+<p>在圆括号之后加入冒号，然后换行并缩进 4 个空格符（和其他复合语句一样）。冒号之后所有缩进 4 个空格符的代码，就是函数的定义。本例中，函数的定义仅有一行，即 <code>return x * 2</code>。关键字 <code>return</code> 指定了调用函数时输出的值，我们称之为函数的返回值。</p>
+<p>在 Python 中，可以使用语法“<code>[函数名]([逗号分隔的参数])</code>”来调用一个函数。以下就是以 2 作为参数调用上述示例中函数 <code>f</code> 的示例：</p>
+<pre class="代码无行号"><code class="hljs bash">1  <span class="hljs-comment"># http://tinyurl.com/zheas3d</span>
+2
+3
+4  <span class="hljs-comment"># 接上一个示例</span>
+5
+6
+7
+8  f(2)</code></pre>
+<p>控制台没有打印任何输出。你可以将函数的输出保存在一个变量中，然后将其传给 <code>print</code> 函数。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gspjcgj</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-comment"># 接上一个示例</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  result = f(<span class="hljs-number">2</span>)
+<span class="hljs-number">9</span>  print(result)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span></code></pre>
+<p>如果后面在程序中有需要使用函数返回值的地方，建议将函数的返回值保存到一个变量中。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/znqp8fk</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">(x)</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-keyword">return</span></strong> x + <span class="hljs-number">1</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+<span class="hljs-number">08</span>  z = f(<span class="hljs-number">4</span>)
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  <strong><span class="hljs-keyword">if</span></strong> z == <span class="hljs-number">5</span>:
+<span class="hljs-number">12</span>      <strong>print</strong>(<span class="hljs-string">"z is 5"</span>)
+<span class="hljs-number">13</span>  <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">14</span>      print(<span class="hljs-string">"z is not 5"</span>)
+
+&gt;&gt; z <span class="hljs-keyword">is</span> <span class="hljs-number">5</span></code></pre>
+<p>函数可以有一个或多个参数，也可以不接受任何参数。如要定义不需要参数的函数，只需要在定义函数时把圆括号内置为空即可：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/htk7tr6</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">()</span></span>:
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-number">1</span> + <span class="hljs-number">1</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  result = f()
+<span class="hljs-number">9</span>  print(result)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span></code></pre>
+<p>如要函数要接受多个参数，则必须将圆括号中的参数以逗号相隔：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gqmkft7</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">(x, y, z)</span></span>:
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">return</span></strong> x + y + z
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  result = f(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+<span class="hljs-number">9</span>  print(result)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">6</span></code></pre>
+<p>最后，函数必须包含 <code>return</code> 语句。如果函数没有 <code>return</code> 语句，则会返回 <code>None</code>。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/j8qyqov</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">5</span>      z = <span class="hljs-number">1</span> + <span class="hljs-number">1</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  result = f()
+<span class="hljs-number">9</span>  print(result)
+
+&gt;&gt; <span class="hljs-keyword">None</span></code></pre>
+<h3 id="44">4.4　内置函数</h3>
+<p>Python 编程语言中自带了一个被称为<strong>内置函数</strong>（builtin function）的函数库，它可执行各式各样的计算和任务，而不需任何额外的工作。在前面已经看到过一个内置函数的例子：我们编写的第一个程序就使用了 <code>print</code> 函数打印 <code>"Hello, World!"</code>。</p>
+<p>len 也是一个内置函数，表示返回对象的长度，如字符串的长度（字符的数量）。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zfkzqw6</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  len(<span class="hljs-string">"Monty"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">5</span>
+
+<span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h75c3cf</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  len(<span class="hljs-string">"Python"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">6</span>
+</code></pre>
+<p>内置函数 <code>str</code> 接受一个对象作为参数，并返回一个数据类型为 <code>str</code> 的新对象。例如，可使用 <code>str</code> 将一个整型数据转换成一个字符串。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/juzxg2z</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  str(<span class="hljs-number">100</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-string">'100'</span>
+</code></pre>
+<p><code>int</code> 函数可接受一个对象作为参数，并返回一个整型对象。示例如下：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/j42qhkf</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-keyword">int</span>(<span class="hljs-string">"1"</span>)
+
+&gt;&gt; <span class="hljs-number">1</span>
+</code></pre>
+<p><code>float</code> 函数可接受一个对象作为参数，并返回一个浮点数对象。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hnk8gh2</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  fload(<span class="hljs-number">100</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100.0</span>
+</code></pre>
+<p>传给 <code>str</code>、<code>int</code> 或 <code>float</code> 函数的参数，必须要能够转换为字符串、整数或浮点数。<code>str</code> 函数可接受大部分对象作为参数，但是 <code>int</code> 函数只能接受内容为数字的字符串或浮点数对象。<code>float</code> 函数只能接受内容为数字的字符串或整型对象。具体示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jcchmlx</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  int(<span class="hljs-string">"110"</span>)
+<span class="hljs-number">5</span>  int(<span class="hljs-number">20.54</span>)
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  float(<span class="hljs-string">"16.4"</span>)
+<span class="hljs-number">9</span>  float(<span class="hljs-number">99</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">20</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">16.4</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">99.0</span>
+</code></pre>
+<p>如果向 <code>int</code> 或 <code>float</code> 函数中传递的是无法转换为整数或浮点数的参数，Python 将会报出异常错误如下：</p>
+<pre><code class="hljs perl"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zseo21s</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <span class="hljs-keyword">int</span>(<span class="hljs-string">"Prince"</span>)
+
+&gt;&gt; ValueError: invalid literal <span class="hljs-keyword">for</span> <span class="hljs-keyword">int</span>() with base <span class="hljs-number">10</span>: <span class="hljs-string">'Prince'</span>
+</code></pre>
+<p>使用内置函数 <code>input</code> 收集用户的信息的示例代码如下：</p>
+<pre class="代码无行号"><code class="hljs perl"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zynprpg</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  age = input(<span class="hljs-string">"Enter your age:"</span>)
+<span class="hljs-number">5</span>  int_age = <span class="hljs-keyword">int</span>(age)
+<span class="hljs-number">6</span>  <strong><span class="hljs-keyword">if</span></strong> int_age &lt; <span class="hljs-number">21</span>:
+<span class="hljs-number">7</span>      <span class="hljs-keyword">print</span>(<span class="hljs-string">"You are young!"</span>)
+<span class="hljs-number">8</span>  <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">9</span>      <span class="hljs-keyword">print</span>(<span class="hljs-string">"Wow, you are old!"</span>)
+
+&gt;&gt; Enter your age:</code></pre>
+<p><code>input</code> 函数接受一个字符串作为参数，并将其展示给使用该程序的用户。用户在 shell 中输入回答，程序将回答保存在变量 <code>age</code> 中。</p>
+<p>接下来，使用 <code>int</code> 函数将 <code>age</code> 变量的值从字符串转换为整数。<code>input</code> 函数从用户收集数据以作为 <code>str</code>，但是需要将变量设为 <code>int</code> 才能与其他整数进行比较。转换为整数后，<code>if-else</code> 语句根据用户的输入决定为用户打印什么信息。如果用户输入的数字小于 21，则打印“<code>You are young!”</code>。如果用户输入的数字大于 21，则打印“<code>Wow, you are old!”</code>。</p>
+<h3 id="45">4.5　复用函数</h3>
+<p>函数不仅可用于计算并返回值，还可以封装我们希望复用的功能。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zhy8y4m</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">even_odd</span><span class="hljs-params">(x)</span></span>:
+<span class="hljs-number">05</span>      <strong><span class="hljs-keyword">if</span></strong> x % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">06</span>          print(<span class="hljs-string">"even"</span>)
+<span class="hljs-number">07</span>      <strong><span class="hljs-symbol">else</span></strong><span class="hljs-symbol">:</span>
+08          print(<span class="hljs-string">"odd"</span>)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  even_odd(<span class="hljs-number">2</span>)
+<span class="hljs-number">12</span>  even_odd(<span class="hljs-number">3</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> even
+<span class="hljs-meta">&gt;&gt;</span> odd</code></pre>
+<p>这里虽然没有定义函数的返回值，但是该函数还是有用的：它检测 <code>x % 2 == 0</code> 是否为真，并打印 <code>x</code> 是奇数还是偶数。</p>
+<p>因为可以对函数进行复用，所以利用函数可以减少代码量。一个未使用函数的示例如下：</p>
+<pre class="代码无行号"><code class="hljs perl"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jk8lugl</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  n = input(<span class="hljs-string">"type a number:"</span>)
+<span class="hljs-number">05</span>  n = <span class="hljs-keyword">int</span>(n)
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+08  <strong><span class="hljs-keyword">if</span></strong> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>:
+09      <span class="hljs-keyword">print</span>(<span class="hljs-string">"n is even."</span>)
+<span class="hljs-number">10</span>  <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">11</span>      <strong><span class="hljs-keyword">print</span></strong>(<span class="hljs-string">"n is odd."</span>)
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>  n = input(<span class="hljs-string">"type a number:"</span>)
+<span class="hljs-number">15</span>  n = <span class="hljs-keyword">int</span>(n)
+<span class="hljs-number">16</span>  <strong><span class="hljs-keyword">if</span></strong> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">17</span>      <span class="hljs-keyword">print</span>(<span class="hljs-string">"n is even."</span>)
+<span class="hljs-number">18</span>  <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">19</span>      <span class="hljs-keyword">print</span>(<span class="hljs-string">"n is odd."</span>)
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>
+<span class="hljs-number">22</span>  n = input(<span class="hljs-string">"type a number:"</span>)
+<span class="hljs-number">23</span>  n = <span class="hljs-keyword">int</span>(n)
+<span class="hljs-number">24</span>  <strong><span class="hljs-keyword">if</span></strong> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">25</span>      <span class="hljs-keyword">print</span>(<span class="hljs-string">"n is even."</span>)
+<span class="hljs-number">26</span>  <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">27</span>      <span class="hljs-keyword">print</span>(<span class="hljs-string">"n is odd."</span>)
+
+&gt;&gt; type a number:</code></pre>
+<p>上面这个程序让用户 3 次输入数字，然后通过 <code>if-else</code> 语句检查数字是否为偶数。如果为偶数，则打印“<code>n is even.”</code>，否则打印“<code>n is odd.”</code>。</p>
+<p>这个程序的问题在于相同的代码重复了 3 次。如果将功能封装在函数中，再调用函数 3 次，则可以大幅减少程序的代码量，并提高可读性。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zzn22mz</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">even_odd</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      n = input(<span class="hljs-string">"type a number:"</span>)
+<span class="hljs-number">06</span>      n = int(n)
+<span class="hljs-number">07</span>      <strong><span class="hljs-keyword">if</span></strong> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>:
+<span class="hljs-number">08</span>          print(<span class="hljs-string">"n is even."</span>)
+<span class="hljs-number">09</span>      <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">10</span>          print(<span class="hljs-string">"n is odd."</span>)
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  even_odd()
+<span class="hljs-number">14</span>  even_odd()
+<span class="hljs-number">15</span>  even_odd()
+
+&gt;&gt; type a number:</code></pre>
+<p>新程序的功能与前一个程序完全相同，但是由于将功能封装在了一个可随时按需调用的函数中，代码量大幅减少，可读性大大提升。</p>
+<h3 id="46">4.6　必选及可选参数</h3>
+<p>函数可接受两种参数。目前所看到的都是<strong>必选参数</strong>（required parameter）。当用户调用函数时，必须传入所有必选参数，否则 Python 将报告异常错误。</p>
+<p>Python 中还有另一种参数，即<strong>可选参数</strong>（optional parameter）。函数只在需要时才会传入，并不是执行程序所必须的。如果没有传入可选参数，函数将使用其默认值。使用如下语法定义可选参数：<code>[函数名]([参数名]=[参数值])</code>。与必选参数一样，可选参数也得使用逗号分隔。一个带可选参数的函数示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h3ych4h</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">(x=<span class="hljs-number">2</span>)</span></span>:
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">return</span></strong> x ** x
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  print(f())
+<span class="hljs-number">9</span>  print(f(<span class="hljs-number">4</span>))
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">4</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">256</span></code></pre>
+<p>首先，这里没有传入参数而是直接调用函数。因为参数是可选的，<code>x</code> 自动获得值为 2，函数返回 4。</p>
+<p>接下来，传入参数 4 并调用函数。函数没有使用默认值，<code>x</code> 获得值为 4，函数返回 256。你可以定义一个既有必选参数也有可选参数的函数，但是必选参数必须位于可选参数之前。</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hm5svn9</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">add_it</span><span class="hljs-params">(x, y=<span class="hljs-number">10</span>)</span></span>:
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">return</span></strong> x + y
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  result = add_it(<span class="hljs-number">2</span>)
+<span class="hljs-number">9</span>  print(result)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">12</span></code></pre>
+<h3 id="47">4.7　作用域</h3>
+<p>变量有一个很重要的属性，<strong>作用域</strong>（scope）。定义变量时，其作用域指的是哪部分程序可以对其进行读写。读取一个变量意味着获取它的值，写变量意味着修改它的值。变量的作用域由其定义在程序中所处的位置决定。</p>
+<p>如果在函数（或类，本书第二部分将介绍）之外定义了一个变量，则变量拥有<strong>全局作用域</strong>（global scope）：即在程序中任意地方都可以对其进行读写操作。带有全局作用域的变量，被称为<strong>全局变量</strong>（global variable）。如果在函数（或类）内部定义一个变量，则变量拥有<strong>局部作用域</strong>（local scope）：即程序只有在定义该变量的函数内部才可对其进行读写。下面示例中的变量拥有全局作用域：</p>
+<pre><code class="hljs cpp"><span class="hljs-number">1</span>  <span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/zhmxnqt</span></span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">1</span>
+<span class="hljs-number">5</span>  y = <span class="hljs-number">2</span>
+<span class="hljs-number">6</span>  z = <span class="hljs-number">3</span>
+</code></pre>
+<p>这些变量不是在函数（或类）内部定义的，因此拥有全局作用域。这意味着可以在程序的任意地方对其进行读写，包含在函数内部。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hgvnj4p</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">1</span>
+<span class="hljs-number">05</span>  y = <span class="hljs-number">2</span>
+<span class="hljs-number">06</span>  z = <span class="hljs-number">3</span>
+<span class="hljs-number">07</span>
+08
+09  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">()</span></span>:
+<span class="hljs-number">10</span>      print(x)
+<span class="hljs-number">11</span>      print(y)
+<span class="hljs-number">12</span>      print(z)
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  f()
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">3</span></code></pre>
+<p>如果是在函数内部定义的这些变量，则只能在那个函数内部对其进行读写。如果尝试在该函数之外访问它们，Python 会报异常错误。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/znka93k</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      x = <span class="hljs-number">1</span>
+<span class="hljs-number">06</span>      y = <span class="hljs-number">2</span>
+<span class="hljs-number">07</span>      z = <span class="hljs-number">3</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  print(x)
+<span class="hljs-number">11</span>  print(y)
+<span class="hljs-number">12</span>  print(z)
+
+&gt;&gt; NameError: name <span class="hljs-string">'x'</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> defined</code></pre>
+<p>如果在函数内部定义这些变量，则会成功运行。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/z2k3jds</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">()</span></span>:
+<span class="hljs-number">05</span>      x = <span class="hljs-number">1</span>
+<span class="hljs-number">06</span>      y = <span class="hljs-number">2</span>
+<span class="hljs-number">07</span>      z = <span class="hljs-number">3</span>
+08      print(x)
+09      print(y)
+<span class="hljs-number">10</span>      print(z)
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  f()
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">3</span></code></pre>
+<p>在定义变量的函数之外使用变量，相当于使用一个尚未定义的变量，二者都会使 Python 报告相同的异常错误：</p>
+<pre class="代码无行号"><code class="hljs coffeescript"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zn8zjmr</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">if</span></strong> x &gt; <span class="hljs-number">100</span>:
+<span class="hljs-number">5</span>      <span class="hljs-built_in">print</span>(<span class="hljs-string">"x is &gt; 100"</span>)
+
+&gt;&gt; NameError: name <span class="hljs-string">'x'</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> defined</code></pre>
+<p>可以在程序的任何地方对全局变量进行写操作，但是在局部作用域中需稍加注意：必须明确使用 <code>global</code> 关键字，并在其后写上希望修改的变量。Python 要求这样做，是为了确保在函数内部定义变量 <code>x</code> 时，不会意外变更之前在函数外部定义的变量的值。在函数内部对全局变量进行写操作的示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zclmda7</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  x = <span class="hljs-number">100</span>
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">f</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">08</span>      <strong><span class="hljs-keyword">global</span></strong> x
+<span class="hljs-number">09</span>      x += <span class="hljs-number">1</span>
+<span class="hljs-number">10</span>      print(x)
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  f()
+
+&gt;&gt; <span class="hljs-number">101</span></code></pre>
+<p>没有作用域，则可以在程序任何地方访问所有变量，这样会造成很大的问题。如果程序代码量很大，其中有一个使用变量 x 的函数，你可能会在其他地方修改该变量的值。类似这样的错误会改变程序的行为，并导致意料之外的结果。程序规模越大，变量数量越多，出现问题的可能性就越高。</p>
+<h3 id="48">4.8　异常处理</h3>
+<p>依赖 input 函数获得用户输入，则意味着无法控制程序的输入（用户提供的输入可能会导致错误）。例如，假设你写了一个程序，从用户端收集两个数字并打印第一个数字除以第二个数字的结果。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jcg5qwp</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  a = input(<span class="hljs-string">"type a nubmer:"</span>)
+<span class="hljs-number">5</span>  b = input(<span class="hljs-string">"type another:"</span>)
+<span class="hljs-number">6</span>  a = int(a)
+<span class="hljs-number">7</span>  b = int(b)
+<span class="hljs-number">8</span>  print(a / b)
+
+<span class="hljs-meta">&gt;&gt;</span> type a <span class="hljs-symbol">number:</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">10</span>
+<span class="hljs-meta">&gt;&gt;</span> type <span class="hljs-symbol">another:</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">5</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">2</span>
+</code></pre>
+<p>程序看起来运行正常。但是，如果用户第二个数字输入的是 0，则会出现问题，如下所示：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/ztpcjs4</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  a = input(<span class="hljs-string">"type a nubmer:"</span>)
+<span class="hljs-number">5</span>  b = input(<span class="hljs-string">"type another:"</span>)
+<span class="hljs-number">6</span>  a = int(a)
+<span class="hljs-number">7</span>  b = int(b)
+<span class="hljs-number">8</span>  print(a / b)
+
+<span class="hljs-meta">&gt;&gt;</span> type a <span class="hljs-symbol">number:</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">10</span>
+<span class="hljs-meta">&gt;&gt;</span> type <span class="hljs-symbol">another:</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-symbol">ZeroDivisionError:</span> integer division or modulo by zero
+</code></pre>
+<p>这里不能指望使用程序的用户不会输入 0 作为第二个数字。其解决方法是使用<strong>异常处理</strong>（exception handling），支持测试错误条件，在错误发生时捕获异常，然后决定如何处理。</p>
+<p>异常处理使用 <code>try</code> 和 <code>except</code> 关键字。在你修改程序使用异常处理之后，如果用户第二个数字输入 0，程序不会报错，而是会打印一段话告诉用户不要输入 0。</p>
+<p>Python 中的每一个异常都是一个对象，可在如下网址查看所有内置异常：https://www.tutorialspoint.com/python/standard_exceptions.htm。如果你认为代码可能会报告异常，可使用关键字 <code>try</code> 和 <code>except</code> 来捕获。</p>
+<p><code>try</code> 从句包含可能会发生的错误，<code>except</code> 从句包含仅在错误发生时执行的代码。下面是在程序中进行异常处理的一个示例，这样如果用户输入0作为第二个数字，程序也不会崩溃。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/j2scn4f</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  a = input(<span class="hljs-string">"type a nubmer:"</span>)
+<span class="hljs-number">05</span>  b = input(<span class="hljs-string">"type another:"</span>)
+<span class="hljs-number">06</span>  a = int(a)
+<span class="hljs-number">07</span>  b = int(b)
+08  <strong><span class="hljs-symbol">try</span></strong><span class="hljs-symbol">:</span>
+09      print(a / b)
+<span class="hljs-number">10</span>  <strong>except</strong> <span class="hljs-symbol">ZeroDivisionError:</span>
+<span class="hljs-number">11</span>      print(<span class="hljs-string">"b cannot be zero."</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> type a <span class="hljs-symbol">number:</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">10</span>
+<span class="hljs-meta">&gt;&gt;</span> type <span class="hljs-symbol">another:</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">0</span>
+<span class="hljs-meta">&gt;&gt;</span> b cannot be zero.</code></pre>
+<p>如果用户为 <code>b</code> 参数提供的输入不是 0，则执行 <code>try</code> 代码块，<code>except</code> 代码块不执行。如果用户为 <code>b</code> 参数提供的输入为 0，Python 不会报错，而是执行 <code>except</code> 代码块，并打印“<code>b cannot be zero.</code>”。</p>
+<p>如果用户输入的是无法转换为整型数的字符串，程序也会崩溃。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  a = input(<span class="hljs-string">"type a nubmer:"</span>)
+<span class="hljs-number">2</span>  b = input(<span class="hljs-string">"type another:"</span>)
+<span class="hljs-number">3</span>  a = int(a)
+<span class="hljs-number">4</span>  b = int(b)
+<span class="hljs-number">5</span>  <strong><span class="hljs-symbol">try</span></strong><span class="hljs-symbol">:</span>
+<span class="hljs-number">6</span>      print(a / b)
+<span class="hljs-number">7</span>  <strong>except</strong> <span class="hljs-symbol">ZeroDivisionError:</span>
+<span class="hljs-number">8</span>      print(<span class="hljs-string">"b cannot be zero."</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> type a <span class="hljs-symbol">number:</span>
+<span class="hljs-meta">&gt;&gt;</span> Hundo
+<span class="hljs-meta">&gt;&gt;</span> type <span class="hljs-symbol">another:</span>
+<span class="hljs-meta">&gt;&gt;</span> Million
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-symbol">ValueError:</span> invalid literal for int() with base <span class="hljs-number">10</span>: <span class="hljs-string">'Hundo'</span></code></pre>
+<p>将收集用户收入的部分代码移入 <code>try</code> 语句内，并让 <code>except</code> 语句注意两个异常（ZeroDivisionError 和 ValueError）即可解决问题。如果向 <code>int</code>、<code>str</code> 或 <code>float</code> 等内置函数中传入无效输入，则会出现 <code>ValueError</code>。在 <code>except</code> 关键字后添加圆括号，并用逗号分隔两个异常即可将二者捕获。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jlus42v</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-symbol">try</span></strong><span class="hljs-symbol">:</span>
+<span class="hljs-number">05</span>      a = input(<span class="hljs-string">"type a nubmer:"</span>)
+<span class="hljs-number">06</span>      b = input(<span class="hljs-string">"type another:"</span>)
+<span class="hljs-number">07</span>      a = int(a)
+08      b = int(b)
+09      print(a / b)
+<span class="hljs-number">10</span>  <strong>except</strong> (ZeroDivisionError,
+<span class="hljs-number">11</span>          ValueError):
+<span class="hljs-number">12</span>      print(<span class="hljs-string">"Invalid input."</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> type a <span class="hljs-symbol">number:</span>
+<span class="hljs-meta">&gt;&gt;</span> Hundo
+<span class="hljs-meta">&gt;&gt;</span> type <span class="hljs-symbol">another:</span>
+<span class="hljs-meta">&gt;&gt;</span> Million
+<span class="hljs-meta">&gt;&gt;</span> Invalid input.</code></pre>
+<p>不要在 <code>except</code> 语句中使用 <code>try</code> 语句定义的变量，因为异常可能是在变量定义之前发生的，如果在 <code>except</code> 语句中这样做可能又会导致新的异常出现。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hockur5</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-keyword">try</span></strong>:
+<span class="hljs-number">5</span>      <span class="hljs-number">10</span> / <span class="hljs-number">0</span>
+<span class="hljs-number">6</span>      c = <span class="hljs-string">"I will never get defined."</span>
+<span class="hljs-number">7</span>  <strong><span class="hljs-keyword">except</span></strong> ZeroDivisionError:
+<span class="hljs-number">8</span>      print(c)
+
+&gt;&gt; NameError: name <span class="hljs-string">'c'</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> defined</code></pre>
+<h3 id="49">4.9　文档字符串</h3>
+<p>定义一个带参数的函数时，有时要求参数必须是某种数据类型，函数才能成功执行。那么该如何将这点告知函数的调用者？在编写函数时，在函数顶部留下注释来解释每个参数应该为何种数据类型，是比较好的做法。这些注释被称为<strong>文档字符串</strong>（docstring）。文档字符串用于解释函数的功能，记录所需的参数类型。</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zhahdcg</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">add</span><span class="hljs-params">(x, y)</span>:</span>
+<span class="hljs-number">05</span>      <span class="hljs-string">"""
+06      返回 x + y 的值
+07      :param x: int.
+08      :param y: int.
+09      :return: int, x 与 y 之和
+10      """</span>
+<span class="hljs-number">11</span>      <strong><span class="hljs-keyword">return</span></strong> x + y</code></pre>
+<p>文档字符串的第一行清楚地解释了函数的功能，因此当其他开发者使用该函数或方法时，他们不必读完所有代码才能弄清其目的。文档字符串的其他行列出了函数的参数、参数类型和返回值。文档字符串有助于开发者快速编程，因为不必通读代码，只需通过文档字符串即可了解函数的作用等必要信息。</p>
+<p>为了保证本书的示例简洁，书中省略了一般都会加上的文档字符串。正常情况下，我在编码时会加上文档字符串，以供其他开发者之后阅读。</p>
+<h3 id="410">4.10　有需要才使用变量</h3>
+<p>只有在后面的程序中会用到数据，才有必要将其保存至变量。不要仅仅为了打印数值就将整数保存至变量。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zptktex</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">100</span>
+<span class="hljs-number">5</span>  print(x)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100</span>
+</code></pre>
+<p>这里应该直接将整数传给 print 函数：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hmwr4kd</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  print(<span class="hljs-number">100</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">100</span>
+</code></pre>
+<p>本书中的一些示例多次违背了这条准则，目的是为了方便大家理解。读者在写代码时没有必要这样做。</p>
+<h3 id="411">4.11　术语表</h3>
+<p><strong>函数</strong>：可接受输入和执行指令，并返回输出的复合语句。</p>
+<p><strong>惯例</strong>：普遍认可的行为方式。</p>
+<p><strong>调用</strong>：向函数提供执行指令、返回输出所需的输入。</p>
+<p><strong>参数</strong>：传递给函数的数据。</p>
+<p><strong>必选参数</strong>：非可选参数。</p>
+<p><strong>可选参数</strong>：非必须提供的参数。</p>
+<p><strong>内置函数</strong>：Python 自带的函数。</p>
+<p><strong>作用域</strong>：变量可进行读写的范围。</p>
+<p><strong>全局作用域</strong>：可在程序中任何地方读写的变量的作用域。</p>
+<p><strong>全局变量</strong>：拥有全局作用域的变量。</p>
+<p><strong>局部作用域</strong>：只能在其定义所在的函数（或类）中读写的变量的作用域。</p>
+<p><strong>异常处理</strong>：一个编程概念，要求检测错误条件。如果符合则捕获异常，并决定如何处理。</p>
+<p><strong>文档字符串</strong>：解释函数功能，记录其参数类型的字符串。</p>
+<h3 id="412">4.12　挑战练习</h3>
+<p>1．编写一个函数，接受数字作为输入，并返回该数字的平方。</p>
+<p>2．编写一个以字符串为参数并将其打印的函数。</p>
+<p>3．编写一个接受 3 个必选参数、两个可选参数的函数。</p>
+<p>4．编写一个带两个函数的程序。第一个函数应接受一个整数为参数，并返回该整数除以 2 的值。第二个函数应接受一个整数作为参数，并返回该整数乘以 4 的值。调用第一个函数，将结果保存至变量，并将变量作为参数传递给第二个函数。</p>
+<p>5．编写一个将字符串转换为 float 对象并返回该结果的函数。使用异常处理来捕获可能发生的异常。</p>
+<p>6．为挑战练习 1～5 中编写的所有函数添加文档字符串。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#41"><span class="toc-number">1.</span> <span class="toc-text">4.1　表达概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42"><span class="toc-number">2.</span> <span class="toc-text">4.2　函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43"><span class="toc-number">3.</span> <span class="toc-text">4.3　定义函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44"><span class="toc-number">4.</span> <span class="toc-text">4.4　内置函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45"><span class="toc-number">5.</span> <span class="toc-text">4.5　复用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46"><span class="toc-number">6.</span> <span class="toc-text">4.6　必选及可选参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#47"><span class="toc-number">7.</span> <span class="toc-text">4.7　作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#48"><span class="toc-number">8.</span> <span class="toc-text">4.8　异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#49"><span class="toc-number">9.</span> <span class="toc-text">4.9　文档字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#410"><span class="toc-number">10.</span> <span class="toc-text">4.10　有需要才使用变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#411"><span class="toc-number">11.</span> <span class="toc-text">4.11　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#412"><span class="toc-number">12.</span> <span class="toc-text">4.12　挑战练习</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/4_function/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&text=函数"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&is_video=false&description=函数"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=函数&body=Check out this article: http://logan_2019.github.io/Python无师自通/4_function/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&title=函数"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/4_function/2019/09/&name=函数&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

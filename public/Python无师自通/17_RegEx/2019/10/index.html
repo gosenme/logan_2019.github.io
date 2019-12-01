@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="正则表达式       17.1　初始配置 17.2　简单匹配 17.3　匹配起始位置 17.4　匹配多个字符 17.5　匹配数字 17.6　重复 17.7　转义 17.8　正则工具 17.9　术语表 17.10　挑战练习           “代码胜于雄辩。”   ——林纳斯 · 托瓦兹（Linus Torvalds）  许多编程语言和操作系统都支持正则表达式（regul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="正则表达式       17.1　初始配置 17.2　简单匹配 17.3　匹配起始位置 17.4　匹配多个字符 17.5　匹配数字 17.6　重复 17.7　转义 17.8　正则工具 17.9　术语表 17.10　挑战练习           “代码胜于雄辩。”   ——林纳斯 · 托瓦兹（Linus Torvalds）  许多编程语言和操作系统都支持正则表达式（regul">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正则表达式">
+<meta name="twitter:description" content="正则表达式       17.1　初始配置 17.2　简单匹配 17.3　匹配起始位置 17.4　匹配多个字符 17.5　匹配数字 17.6　重复 17.7　转义 17.8　正则工具 17.9　术语表 17.10　挑战练习           “代码胜于雄辩。”   ——林纳斯 · 托瓦兹（Linus Torvalds）  许多编程语言和操作系统都支持正则表达式（regul">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>正则表达式</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/Python无师自通/16_bash/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python学习路线/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&text=正则表达式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&is_video=false&description=正则表达式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=正则表达式&body=Check out this article: http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&name=正则表达式&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#171"><span class="toc-number">1.</span> <span class="toc-text">17.1　初始配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#172"><span class="toc-number">2.</span> <span class="toc-text">17.2　简单匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#173"><span class="toc-number">3.</span> <span class="toc-text">17.3　匹配起始位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#174"><span class="toc-number">4.</span> <span class="toc-text">17.4　匹配多个字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#175"><span class="toc-number">5.</span> <span class="toc-text">17.5　匹配数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#176"><span class="toc-number">6.</span> <span class="toc-text">17.6　重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#177"><span class="toc-number">7.</span> <span class="toc-text">17.7　转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#178"><span class="toc-number">8.</span> <span class="toc-text">17.8　正则工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#179"><span class="toc-number">9.</span> <span class="toc-text">17.9　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1710"><span class="toc-number">10.</span> <span class="toc-text">17.10　挑战练习</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        正则表达式
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.174Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>正则表达式</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#171">17.1　初始配置</a></li>
+<li><a href="#172">17.2　简单匹配</a></li>
+<li><a href="#173">17.3　匹配起始位置</a></li>
+<li><a href="#174">17.4　匹配多个字符</a></li>
+<li><a href="#175">17.5　匹配数字</a></li>
+<li><a href="#176">17.6　重复</a></li>
+<li><a href="#177">17.7　转义</a></li>
+<li><a href="#178">17.8　正则工具</a></li>
+<li><a href="#179">17.9　术语表</a></li>
+<li><a href="#1710">17.10　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“代码胜于雄辩。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——林纳斯 · 托瓦兹（Linus Torvalds）</span></p>
+</blockquote>
+<p>许多编程语言和操作系统都支持<strong>正则表达式</strong>（regular expression）：定义搜索模式的一组字符串。正则表达式可用于检索文件或其他数据中是否存在指定的复杂模式。例如，可使用正则表达式匹配文件中所有的数字。本章将学习如何定义正则表达式，将其传入类 UNIX 操作系统以用来检索文件的 <code>grep</code> 命令。该命令会返回文件中与指定模式匹配的文本。我们还将学习在 Python 中使用正则表达式检索字符串。</p>
+<h3 id="171">17.1　初始配置</h3>
+<p>开始之前，先创建一个名为 <code>zen.txt</code> 的文件。在命令行中（确保位于 <code>zen.txt</code> 所在的目录）输入命令 <code>python3 -c "import this"</code>，这会打印出蒂姆 · 皮特斯（Tim Peters）写的诗 <code>The Zen of Python</code>（Python 之禅）：</p>
+<blockquote>
+  <p><strong>Python 之禅</strong></p>
+  <p>优美胜于丑陋</p>
+  <p>明了胜于晦涩</p>
+  <p>简洁胜于复杂</p>
+  <p>复杂胜于凌乱</p>
+  <p>扁平胜于嵌套</p>
+  <p>间隔胜于紧凑</p>
+  <p>可读性很重要</p>
+  <p>即便假借特例的实用性之名，也不可违背这些规则</p>
+  <p>不要包容所有错误，除非你确定需要这样做</p>
+  <p>当存在多种可能，不要尝试去猜测</p>
+  <p>而是尽量找一种，最好是唯一一种明显的解决方案</p>
+  <p>虽然这并不容易，因为你不是 Python 之父</p>
+  <p>做也许好过不做，但不假思索就动手还不如不做</p>
+  <p>如果你无法向人描述你的方案，那肯定不是一个好方案</p>
+  <p>命名空间是一种绝妙的理念，我们应当多加利用</p>
+</blockquote>
+<p>旗标 <code>-c</code> 告诉 Python 传入的字符串中包含有 Python 代码。然后 Python 会执行传入的代码。Python 执行 <code>import this</code> 之后，将打印 <code>The Zen of Python</code>（像上述这首诗一样隐藏在代码中的信息，也被称为<strong>彩蛋</strong>）。在 Bash 中输入 <code>exit()</code> 函数退出 Python，然后将诗的内容复制到文件 <code>zen.txt</code> 中。</p>
+<p>在 Ubuntu 系统中，<code>grep</code> 命令默认在输出时以红色字体打印匹配的文本，但是在 UNIX 系统中则不是这么做的。如果使用的是 Mac，可以通过在 Bash 中修改如下环境变量来改变该行为：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># http://tinyurl.com/z9prphe</span>
+
+$ <span class="hljs-built_in">export</span> GREP_OPTIONS=<span class="hljs-string">'--color=always'</span>
+$ <span class="hljs-built_in">export</span> GREP_OPTIONS=<span class="hljs-string">'--color=always'</span>
+</code></pre>
+<p>要记住，在 Bash 中直接设置环境变量的方式是不持久的，如果退出 Bash，下次再打开时必须重新设置环境变量。因此，可将环境变量添加至 <code>.profile</code> 文件，使其持久存在。</p>
+<h3 id="172">17.2　简单匹配</h3>
+<p><code>grep</code> 命令接受两个参数：一个正则表达式和检索正则表达式中定义模式的文件路径。使用正则表达式进行最简单的模式匹配，就是简单匹配，即一个字符串匹配单词中相同的字符串。举个例子，在 <code>zen.txt</code> 文件所在的目录输入如下命令：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/jgh3x4c</span>
+
+$ grep Beautiful zen.txt
+
+<span class="hljs-meta">&gt;&gt;</span> Beautiful is better than ugly.
+</code></pre>
+<p>上例中执行的命令里，第一个参数 <code>Beautiful</code> 是一个正则表达式，第二个参数 <code>zen.txt</code> 是检索正则表达式的文件。Bash 打印了 <code>Beautiful is better than ugly.</code> 这句话，其中 <code>Beautiful</code> 为红色，因为它是正则表达式匹配上的单词。</p>
+<p>如果将上例中的正则表达式从 <code>Beautiful</code> 修改为 <code>beautiful</code>，<code>grep</code> 将无法匹配成功：</p>
+<pre><code class="hljs cpp"><span class="hljs-meta"># http:<span class="hljs-comment">//tinyurl.com/j2z6t2r</span></span>
+
+$ grep beautiful zen.txt
+</code></pre>
+<p>当然，可以加上旗标 <code>-i</code> 来忽略大小写：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/zchmrdq</span>
+
+$ grep -i beautiful zen.txt
+
+<span class="hljs-meta">&gt;&gt;</span> Beautiful is better than ugly.
+</code></pre>
+<p><code>grep</code> 命令默认打印匹配文本所在的整行内容。可以添加旗标 <code>-o</code>，确保只打印与传入的模式参数相匹配的文本：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/zfcdnmx</span>
+
+$ grep -o Beautiful zen.txt
+
+<span class="hljs-meta">&gt;&gt;</span> Beautiful
+</code></pre>
+<p>也可通过内置模块 <code>re</code> 在 Python 中使用正则表达式。<code>re</code> 模块提供了一个叫 <code>findall</code> 的方法，将正则表达式和目标文本作为参数传入，该方法将以列表形式返回文本中与正则表达式匹配的所有元素：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/z9q2286</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  &lt;strong&gt;<span class="hljs-keyword">import</span>&lt;/strong&gt; re
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  l = <span class="hljs-string">"Beautiful is better than ugly."</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  matches = re.findall(<span class="hljs-string">"Beautiful"</span>, l)
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  <span class="hljs-built_in">print</span>(matches)
+
+&gt;&gt; [<span class="hljs-string">'Beautiful'</span>]
+</code></pre>
+<p>本例中 <code>findall</code> 方法只找到了一处匹配，返回了一个包含匹配结果 <code>[Beautiful]</code> 的列表。</p>
+<p>将 <code>re.IGNORECASE</code> 作为第 3 个参数传入 <code>findall</code>，可以让其忽略大小写：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jzeonne</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  &lt;strong&gt;<span class="hljs-keyword">import</span>&lt;/strong&gt; re
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  l = <span class="hljs-string">"Beautiful is better than ugly."</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  matches = re.findall(<span class="hljs-string">"beautiful"</span>,
+<span class="hljs-number">11</span>                        l,
+<span class="hljs-number">12</span>                        re.IGNORECASE)
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  <span class="hljs-built_in">print</span>(matches)
+
+&gt;&gt; [<span class="hljs-string">'Beautiful'</span>]
+</code></pre>
+<h3 id="173">17.3　匹配起始位置</h3>
+<p>我们还可以在正则表达式中加入特殊字符来匹配复杂模式，特殊字符并不匹配单个字符，而是定义一条规则。例如，可使用补字符号 <code>^</code> 创建一个正则表达式，表示只有模式位于行的起始位置时才匹配成功：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/gleyzan</span>
+
+$ grep ^If zen.txt
+
+<span class="hljs-meta">&gt;&gt;</span> If the implementation is hard to explain, it is a bad idea.
+<span class="hljs-meta">&gt;&gt;</span> If the implementation is easy to explain, it may be a good idea.
+</code></pre>
+<p>类似地，还可使用美元符号 <code>$</code> 来匹配结尾指定模式的文本行：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/zkvpc2r</span>
+
+$ grep idea.$ zen.txt
+
+<span class="hljs-meta">&gt;&gt;</span> If the implementation is hard to explain, it is a bad idea.
+<span class="hljs-meta">&gt;&gt;</span> If the implementation is easy to explain, it may be a good idea.
+</code></pre>
+<p>本例中，<code>grep</code> 忽略了 <code>Namespaces are one honking great idea -- let us do more of those!</code> 这行，因为它虽然包含了单词 <code>idea</code>，但并不是以其结尾。</p>
+<p>下例是在 Python 中使用补字符 <code>^</code> 的示例（必须传入 <code>re.MULITILINE</code> 作为 <code>findall</code> 的第 3 个参数，才能在多行文本中找到所有匹配的内容）：</p>
+<pre><code class="hljs bash">01  <span class="hljs-comment"># http://tinyurl.com/zntqzc9</span>
+02
+03
+04  &lt;strong&gt;import&lt;/strong&gt; re
+05
+06
+07  zen = <span class="hljs-string">""</span><span class="hljs-string">"Although never is
+08  often better than
+09  *right* now.
+10  If the implementation
+11  is hard to explain,
+12  it's a bad idea.
+13  If the implementation
+14  is easy to explain,
+15  it may be a good
+16  idea. Namesapces
+17  are one honking
+18  great idea -- let's
+19  do more of those!
+20  "</span><span class="hljs-string">""</span>
+21
+22
+23  m = re.findall(<span class="hljs-string">"^If"</span>,
+24                 zen,
+25                 re.MULITILINE)
+26  <span class="hljs-built_in">print</span>(m)
+
+&gt;&gt; [<span class="hljs-string">'If'</span>, <span class="hljs-string">'If'</span>]
+</code></pre>
+<h3 id="174">17.4　匹配多个字符</h3>
+<p>将正则表达式的多个字符放在方括号中，即可定义一个匹配多个字符的模式。如果在正则表达式中加入 <code>[abc]</code>，则可匹配 <code>a</code>、<code>b</code> 或 <code>c</code>。在下一个示例中，我们不再是直接匹配 <code>zen.txt</code> 中的文本，而是将字符串以管道形式传给 <code>grep</code> 进行匹配。示例如下：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># http://tinyurl.com/jf9qzuz</span>
+
+$ <span class="hljs-built_in">echo</span> Two too. &lt;strong&gt;|&lt;/strong&gt; grep -i t[ow]o
+
+&gt;&gt; Two too
+</code></pre>
+<p><code>echo</code> 命令的输出被作为输入传给 <code>grep</code>，因此不用再为 <code>grep</code> 指定文件参数。上述命令将 <code>two</code> 和 <code>too</code> 都打印出来，是因为正则表达式均匹配成功：第一个字符为 <code>t</code>，中间为 <code>o</code> 或 <code>w</code>，最后是 <code>o</code>。</p>
+<p>Python 实现如下：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/hg9sw3u</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  &lt;strong&gt;<span class="hljs-keyword">import</span>&lt;/strong&gt; re
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  string = <span class="hljs-string">"Two too."</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  m = re.findall(<span class="hljs-string">"t[ow]o"</span>,
+<span class="hljs-number">11</span>                 string,
+<span class="hljs-number">12</span>                 re.IGNORECASE)
+<span class="hljs-number">13</span>  <span class="hljs-built_in">print</span>(m)
+
+&gt;&gt; [<span class="hljs-string">'Two'</span>, <span class="hljs-string">'too'</span>]
+</code></pre>
+<h3 id="175">17.5　匹配数字</h3>
+<p>可使用 <code>[[:digit:]]</code> 匹配字符串中的数字：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># http://tinyurl.com/gm8o6gb</span>
+
+$ <span class="hljs-built_in">echo</span> 123 hi 34 hello. &lt;strong&gt;|&lt;/strong&gt; grep [[:digit:]]
+
+&gt;&gt; 123 hi 34 hello.
+</code></pre>
+<p>在 Python 中使用 <code>\d</code> 匹配数字：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z3hr4q8</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">04</span>  &lt;strong&gt;<span class="hljs-keyword">import</span>&lt;/strong&gt; re
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  line = <span class="hljs-string">"123?34 hello?"</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  m = re.findall(<span class="hljs-string">"\d"</span>,
+<span class="hljs-number">11</span>                 line,
+<span class="hljs-number">12</span>                 re.IGNORECASE)
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  <span class="hljs-built_in">print</span>(m)
+
+&gt;&gt; [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>]
+</code></pre>
+<h3 id="176">17.6　重复</h3>
+<p>星号符*可让正则表达式支持匹配重复字符。加上星号符之后，星号前面的元素可匹配零或多次。例如，可使用星号匹配后面接任意个 <code>o</code> 的 <code>tw</code>：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/j8vbwq8</span>
+
+$ echo two twoo <span class="hljs-keyword">not</span> too. &lt;strong&gt;<span class="hljs-params">|&lt;/strong&gt; grep -o two*
+
+&gt;&gt; two
+&gt;&gt; twoo
+</span></code></pre>
+<p>在正则表达式中，句号可匹配任意字符。如果在句号后加一个星号，这将让正则表达式匹配任意字符零或多次。也可使用句号加星号，来匹配两个字符之间的所有内容：</p>
+<pre><code class="hljs markdown"><span class="hljs-section"># http://tinyurl.com/h5x6cal</span>
+
+$ echo <span class="hljs-strong">__hello__</span>there <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span></span>|<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span></span> grep -o <span class="hljs-strong">__.*_</span>_
+
+&gt;&gt; <span class="hljs-strong">__hello__</span>
+</code></pre>
+<p>正则表达式 <code>__.*__</code> 可匹配两个下划线之间（包括下划线）的所有内容。星号是<strong>贪婪匹配</strong>（greedy），意味着会尽可能多地匹配文本。例如，如果在双下划线之间加上更多的单词，上例中的正则表达式也会匹配从第一个下划线到最后一个下划线之间的所有内容：</p>
+<pre><code class="hljs markdown"><span class="hljs-section"># http://tinyurl.com/j9v9t24</span>
+
+$ echo <span class="hljs-strong">__hi__</span>bye<span class="hljs-strong">__hi__</span>there <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span></span>|<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span></span> grep -o <span class="hljs-strong">__.*_</span>_
+
+&gt;&gt; <span class="hljs-strong">__hi__</span>bye<span class="hljs-strong">__hi__</span>
+</code></pre>
+<p>如果不想一直贪婪匹配，可以在星号后面加个问号，使得正则表达式变成<strong>非贪婪模式</strong>（non-greedy）。一个非贪婪的正则表达式会尽可能少地进行匹配。在本例中，将会在碰到第一个双下线后就结束匹配，而不是匹配第一个和最后一个下划线之间的所有内容。grep 并不支持非贪婪匹配，但是在 Python 中可以实现：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/j399sq9</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  &lt;strong&gt;<span class="hljs-keyword">import</span>&lt;/strong&gt; re
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  t = <span class="hljs-string">"__one__ __two__ __three__"</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  found = re.findall(<span class="hljs-string">"__.*?__"</span>, t)
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  &lt;strong&gt;<span class="hljs-keyword">for</span>&lt;/strong&gt; match &lt;strong&gt;<span class="hljs-keyword">in</span>&lt;/strong&gt; found:
+<span class="hljs-number">14</span>      <span class="hljs-built_in">print</span>(match)
+
+&gt;&gt; __one__
+&gt;&gt; __two__
+&gt;&gt; __three__
+</code></pre>
+<p>我们可通过 Python 中的非贪婪匹配，来实现游戏 Mad Libs（本游戏中会给出一段文本，其中有多个单词丢失，需要玩家来补全）：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/ze6oyua</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>  &lt;strong&gt;<span class="hljs-keyword">import</span>&lt;/strong&gt; re
+<span class="hljs-number">04</span>
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>  text = <span class="hljs-string">"""Giraffes have aroused
+07   the curiosity of __PLURAL_NOUN__
+08   since earliest times. The
+09   giraffe is the tallest of all
+10   living __PLURAL_NOUN__, but
+11   scientists are unable to
+12   explain how it got its long
+13   __PART_OF_THE_BODY__. The
+14   giraffe's tremendous height,
+15   which might reach __NUMBER__
+16   __PLURAL_NOUN__, comes from
+17   it legs and __BODYPART__.
+18  """</span>
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>  &lt;strong&gt;def&lt;/strong&gt; mad_libs(mls):
+<span class="hljs-number">22</span>      <span class="hljs-string">"""
+23      :param mls：字符串
+24      双下划线部分的内容要由玩家来补充。
+25      双下划线不能出现在提示语中，如不能
+26      出现 __hint_hint__，只能是 __hint__。
+27
+28
+29
+30
+31      """</span>
+<span class="hljs-number">32</span>      hints = re.findall(<span class="hljs-string">"__.*?__"</span>,
+<span class="hljs-number">33</span>                         mls)
+<span class="hljs-number">34</span>      &lt;strong&gt;<span class="hljs-keyword">if</span>&lt;/strong&gt; hints &lt;strong&gt;<span class="hljs-keyword">is</span>&lt;/strong&gt; &lt;strong&gt;<span class="hljs-keyword">not</span>&lt;/strong&gt; None:
+<span class="hljs-number">35</span>          &lt;strong&gt;<span class="hljs-keyword">for</span>&lt;/strong&gt; word &lt;strong&gt;<span class="hljs-keyword">in</span>&lt;/strong&gt; hints:
+<span class="hljs-number">36</span>              q = <span class="hljs-string">"Enter a {}"</span>.format(word)
+<span class="hljs-number">37</span>              <span class="hljs-keyword">new</span> = input(q)
+<span class="hljs-number">38</span>              mls = mls.replace(word, <span class="hljs-keyword">new</span>, <span class="hljs-number">1</span>)
+<span class="hljs-number">39</span>          &lt;strong&gt;<span class="hljs-built_in">print</span>&lt;/strong&gt;(<span class="hljs-string">"\n"</span>)
+<span class="hljs-number">40</span>          mls = mls.replace(<span class="hljs-string">"\n"</span>, <span class="hljs-string">""</span>)
+<span class="hljs-number">41</span>          <span class="hljs-built_in">print</span>(mls)
+<span class="hljs-number">42</span>      &lt;strong&gt;<span class="hljs-keyword">else</span>&lt;/strong&gt;:
+<span class="hljs-number">43</span>          &lt;strong&gt;<span class="hljs-built_in">print</span>&lt;/strong&gt;(<span class="hljs-string">"invalid mls"</span>)
+<span class="hljs-number">44</span>
+<span class="hljs-number">45</span>
+<span class="hljs-number">46</span>  mad_libs(text)
+
+&gt;&gt; enter a __PLURAL_NOUN__
+</code></pre>
+<p>本例中，我们使用 <code>re.findall</code> 匹配变量 <code>text</code> 中所有被双下划线包围的内容（每个均为玩家需要输入答案进行替代的内容），以列表形式返回。然后，对列表中的元素进行循环，通过每个提示来要求玩家提供一个新的单词。之后，创建一个新的字符串，将提示替换为玩家输入的词。循环结束后，打印替换完成后的新字符串。</p>
+<h3 id="177">17.7　转义</h3>
+<p>我们可以在正则表达式中对字符进行转义（忽略字符的意义，直接进行匹配）。在正则表达式中的字符前加上一个反斜杠 <code>\</code> 即可进行转义：</p>
+<pre><code class="hljs ruby"><span class="hljs-comment"># http://tinyurl.com/zkbumfj</span>
+
+$ echo I love $ &lt;strong&gt;<span class="hljs-params">|&lt;/strong&gt; grep \\$
+
+&gt;&gt; I love $
+</span></code></pre>
+<p>通常情况下，美元符号的意思是出现在匹配文本行尾时才有效，但是由于我们进行了转义，这个正则表达式只是匹配目标文本中的美元符号。</p>
+<p>Python 实现如下：</p>
+<pre><code class="hljs coffeescript"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zy7pr41</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  &lt;strong&gt;<span class="hljs-keyword">import</span>&lt;/strong&gt; re
+<span class="hljs-number">05</span>
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>  line = <span class="hljs-string">"I love $"</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>  m = re.findall(<span class="hljs-string">"\\$"</span>,
+<span class="hljs-number">11</span>                 line,
+<span class="hljs-number">12</span>                 re.IGNORECASE)
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>  <span class="hljs-built_in">print</span>(m)
+
+&gt;&gt; [<span class="hljs-string">'$'</span>]
+</code></pre>
+<h3 id="178">17.8　正则工具</h3>
+<p>找到匹配模式的正则表达式是一件很困难的事。可前往 http://theselftaughtprogrammer.io/regex 了解有助于创建正则表达式的工具。</p>
+<h3 id="179">17.9　术语表</h3>
+<p><strong>正则表达式</strong>：定义检索模式的字符串序列。</p>
+<p><strong>菜单</strong>：代码中隐藏的信息。</p>
+<p><strong>贪婪匹配</strong>：尽量多地匹配文本的正则表达式。</p>
+<p><strong>非贪婪匹配</strong>：尽可能少地进行文本匹配的正则表达式。</p>
+<h3 id="1710">17.10　挑战练习</h3>
+<p>1．编写一个正则表达式，匹配《Python 之禅》（英文版）中出现的单词 <code>Dutch</code>。</p>
+<p>2．编写一个正则表达式，匹配字符串 <code>Arizona 479</code>、<code>501</code>、<code>870. Carlifornia 209</code>、<code>213</code>、<code>650.</code> 中的所有数字。</p>
+<p>3．编写一个正则表达式，匹配以任意字符开头，后面是两个 o 的单词。然后使用 Python 的 <code>re</code> 模块匹配 <code>The ghost that says boo huants the loo.</code> 出现的 boo 和 loo。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#171"><span class="toc-number">1.</span> <span class="toc-text">17.1　初始配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#172"><span class="toc-number">2.</span> <span class="toc-text">17.2　简单匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#173"><span class="toc-number">3.</span> <span class="toc-text">17.3　匹配起始位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#174"><span class="toc-number">4.</span> <span class="toc-text">17.4　匹配多个字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#175"><span class="toc-number">5.</span> <span class="toc-text">17.5　匹配数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#176"><span class="toc-number">6.</span> <span class="toc-text">17.6　重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#177"><span class="toc-number">7.</span> <span class="toc-text">17.7　转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#178"><span class="toc-number">8.</span> <span class="toc-text">17.8　正则工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#179"><span class="toc-number">9.</span> <span class="toc-text">17.9　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1710"><span class="toc-number">10.</span> <span class="toc-text">17.10　挑战练习</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&text=正则表达式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&is_video=false&description=正则表达式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=正则表达式&body=Check out this article: http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&title=正则表达式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/17_RegEx/2019/10/&name=正则表达式&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

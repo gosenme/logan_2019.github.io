@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="处理请求(上)       4.1　请求和响应 4.1.1　Request 结构 4.1.2　请求 URL 4.1.3　请求首部 4.1.4　请求主体   4.2　Go 与 HTML 表单 4.2.1　Form 字段 4.2.2　PostForm 字段 4.2.3　MultipartForm 字段 4.2.4　文件 4.2.5　处理带有 JSON 主体的 POST 请求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="处理请求(上)">
+<meta property="og:url" content="http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="处理请求(上)       4.1　请求和响应 4.1.1　Request 结构 4.1.2　请求 URL 4.1.3　请求首部 4.1.4　请求主体   4.2　Go 与 HTML 表单 4.2.1　Form 字段 4.2.2　PostForm 字段 4.2.3　MultipartForm 字段 4.2.4　文件 4.2.5　处理带有 JSON 主体的 POST 请求">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://images.gitbook.cn/ee9036a0-a48e-11e8-a2aa-0bd41466d20f">
+<meta property="og:image" content="https://images.gitbook.cn/f593de20-a48e-11e8-8b4a-cf3651600922">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="处理请求(上)">
+<meta name="twitter:description" content="处理请求(上)       4.1　请求和响应 4.1.1　Request 结构 4.1.2　请求 URL 4.1.3　请求首部 4.1.4　请求主体   4.2　Go 与 HTML 表单 4.2.1　Form 字段 4.2.2　PostForm 字段 4.2.3　MultipartForm 字段 4.2.4　文件 4.2.5　处理带有 JSON 主体的 POST 请求">
+<meta name="twitter:image" content="https://images.gitbook.cn/ee9036a0-a48e-11e8-a2aa-0bd41466d20f">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>处理请求(上)</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/go_web编程/chit_chat论坛/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/go_web编程/2-1接收请求/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&text=处理请求(上)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&is_video=false&description=处理请求(上)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=处理请求(上)&body=Check out this article: http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&name=处理请求(上)&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#41"><span class="toc-number">1.</span> <span class="toc-text">4.1　请求和响应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#411request"><span class="toc-number">1.1.</span> <span class="toc-text">4.1.1　Request 结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#412url"><span class="toc-number">1.2.</span> <span class="toc-text">4.1.2　请求 URL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#413"><span class="toc-number">1.3.</span> <span class="toc-text">4.1.3　请求首部</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#414"><span class="toc-number">1.4.</span> <span class="toc-text">4.1.4　请求主体</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42gohtml"><span class="toc-number">2.</span> <span class="toc-text">4.2　Go 与 HTML 表单</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#421form"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1　Form 字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#422postform"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2　PostForm 字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#423multipartform"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3　MultipartForm 字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#424"><span class="toc-number">2.4.</span> <span class="toc-text">4.2.4　文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#425jsonpost"><span class="toc-number">2.5.</span> <span class="toc-text">4.2.5　处理带有 JSON 主体的 POST 请求</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        处理请求(上)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.224Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>处理请求(上)</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#41">4.1　请求和响应</a><ul>
+<li><a href="#411request">4.1.1　Request 结构</a></li>
+<li><a href="#412url">4.1.2　请求 URL</a></li>
+<li><a href="#413">4.1.3　请求首部</a></li>
+<li><a href="#414">4.1.4　请求主体</a></li>
+</ul>
+</li>
+<li><a href="#42gohtml">4.2　Go 与 HTML 表单</a><ul>
+<li><a href="#421form">4.2.1　Form 字段</a></li>
+<li><a href="#422postform">4.2.2　PostForm 字段</a></li>
+<li><a href="#423multipartform">4.2.3　MultipartForm 字段</a></li>
+<li><a href="#424">4.2.4　文件</a></li>
+<li><a href="#425jsonpost">4.2.5　处理带有 JSON 主体的 POST 请求</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<p><strong>本章主要内容</strong></p>
+<ul>
+<li>使用 Go 发送请求和响应</li>
+<li>使用 Go 处理 HTML 表单</li>
+<li>使用<code>ResponseWriter</code>向客户端回传响应</li>
+<li>使用 cookie 存储信息</li>
+<li>使用 cookie 实现闪现消息</li>
+</ul>
+<p>在前一章，我们学习了如何使用 Go 语言内置的<code>net/http</code>库创建 Web 应用服务器，并藉此了解了处理器、处理器函数以及多路复用器。在学会了如何接收请求并将请求转发给相应的处理器之后，本章我们要学习的是如何使用 Go 提供的工具来处理请求，以及如何把响应回传给客户端。</p>
+<h3 id="41">4.1　请求和响应</h3>
+<p>本书的第1章对 HTTP 报文做了不少介绍，为了加深印象、防止遗忘，让我们先来回顾一下这方面的知识。HTTP 报文是在客户端和服务器之间传递的消息，它分为 HTTP 请求和 HTTP 响应两种类型，并且这两种类型的报文都拥有相同的结构：</p>
+<p>（1）请求行或者响应行；</p>
+<p>（2）零个或多个首部；</p>
+<p>（3）一个空行；</p>
+<p>（4）一个可选的报文主体。</p>
+<p>下面是一个<code>GET</code>请求的例子：</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">GET</span> /Protocols/rfc2616/rfc2616.html HTTP/<span class="hljs-number">1</span>.<span class="hljs-number">1</span>
+Host: www.w3.org
+User-Agent: Mozilla/<span class="hljs-number">5</span>.<span class="hljs-number">0</span>
+(empty line)
+</code></pre>
+<p>Go 语言的<code>net/http</code>库提供了一系列用于表示 HTTP 报文的结构，为了学习如何使用这个库处理请求和发送响应，我们必须对这些结构有所了解。首先，让我们来看看<code>net/http</code>库中代表 HTTP 请求报文的<code>Request</code>结构。</p>
+<h4 id="411request">4.1.1　Request 结构</h4>
+<p><code>Request</code>结构表示一个由客户端发送的 HTTP 请求报文。虽然 HTTP 请求报文是由一系列文本行组成的，但<code>Request</code>结构并不是完全按照报文逐字逐句定义的。实际情况是，这个结构只包含了报文在经过语法分析之后，其中较为重要的信息；除此之外，这个结构还有一系列相应的方法可供使用。</p>
+<p><code>Request</code>结构主要由以下部分组成：</p>
+<ul>
+<li><code>URL</code>字段；</li>
+<li><code>Header</code>字段；</li>
+<li><code>Body</code>字段；</li>
+<li><code>Form</code>字段、<code>PostForm</code>字段和<code>MultipartForm</code>字段。</li>
+</ul>
+<p>通过<code>Request</code>结构的方法，用户还可以对请求报文中的 cookie、引用 URL 以及用户代理进行访问。当<code>net/http</code>库被用作 HTTP 客户端的时候，<code>Request</code>结构既可以用于表示客户端将要发送给服务器的请求，也可以用于表示服务器接收到的客户端请求。</p>
+<h4 id="412url">4.1.2　请求 URL</h4>
+<p><code>Request</code>结构中的<code>URL</code>字段用于表示请求行中包含的 URL（请求行也就是 HTTP 请求报文的第一行），这个字段是一个指向<code>url.URL</code>结构的指针，代码清单4-1展示了这个结构的定义。</p>
+<p>代码清单4-1　<code>URL</code>结构</p>
+<pre><code class="hljs cpp">type URL <span class="hljs-keyword">struct</span> {
+　　Scheme　 <span class="hljs-built_in">string</span>
+　　Opaque　 <span class="hljs-built_in">string</span>
+　　User　　 *Userinfo
+　　Host　　 <span class="hljs-built_in">string</span>
+　　Path　　 <span class="hljs-built_in">string</span>
+　　RawQuery <span class="hljs-built_in">string</span>
+　　Fragment <span class="hljs-built_in">string</span>
+}
+</code></pre>
+<p>URL 的一般格式为：</p>
+<pre><code class="hljs markdown">scheme://[<span class="hljs-string">userinfo@</span>]host/path[<span class="hljs-string">?query</span>][<span class="hljs-symbol">#fragment</span>]
+</code></pre>
+<p>那些在<code>scheme</code>之后不带斜线的 URL 则会被解释为：</p>
+<pre><code class="hljs markdown">scheme:opaque[<span class="hljs-string">?query</span>][<span class="hljs-symbol">#fragment</span>]
+</code></pre>
+<p>在开发 Web 应用的时候，我们常常会让客户端通过 URL 的查询参数向服务器传递信息，而 URL 结构的<code>RawQuery</code>字段记录的就是客户端向服务器传递的查询参数字符串。举个例子，如果客户端向地址 <a href="http://www.example.com/post?id=123&amp;thread_id=456" target="_blank" rel="noopener">http://www.example.com/post?id=123&amp;thread_id=456</a> 发送一个请求，那么<code>RawQuery</code>字段的值就会被设置为<code>id=123&amp;thread_id=456</code>。虽然通过对<code>RawQuery</code>字段的值进行语法分析可以获取到键值对格式的查询参数，但直接使用<code>Request</code>结构的<code>Form</code>字段来获取这些键值对会更方便一些。本章稍后就会对<code>Request</code>结构的<code>Form</code>字段、<code>PostForm</code>字段和<code>MultipartForm</code>字段进行介绍。</p>
+<p>另外需要注意的一点是，如果请求报文是由浏览器发送的，那么程序将无法通过<code>URL</code>结构的<code>Fragment</code>字段获取 URL 的片段部分。本书在第1章中就提到过，浏览器在向服务器发送请求之前，会将 URL 中的片段部分剔除掉——因为服务器接收到的都是不包含片段部分的 URL，所以程序自然也无法通过<code>Fragment</code>字段去获取 URL 的片段部分了，造成这个问题的原因在于浏览器，与我们正在使用的<code>net/http</code>库无关。<code>URL</code>结构的<code>Fragment</code>字段之所以会存在，是因为并非所有请求都来自浏览器：除了浏览器发送的请求之外，服务器还可能会接收到 HTTP 客户端库、Angular 这样的客户端框架或者某些其他工具发送的请求；此外别忘了，不仅服务器程序可以使用<code>Request</code>结构，客户端库也同样可以把<code>Request</code>结构用作自己的一部分。</p>
+<h4 id="413">4.1.3　请求首部</h4>
+<p>请求和响应的首部都使用<code>Header</code>类型描述，这种类型使用一个映射来表示 HTTP 首部中的多个键值对。<code>Header</code>类型拥有4种基本方法，这些方法可以根据给定的键执行添加、删除、获取和设置值等操作。</p>
+<p>一个<code>Header</code>类型的实例就是一个映射，这个映射的键为字符串，而键的值则是由任意多个字符串组成的切片。为<code>Header</code>类型设置首部以及添加首部都是非常简单的，但了解这两种操作之间的区别有助于更好地理解<code>Header</code>类型的构造：在对<code>Header</code>执行设置操作时，给定键的值首先会被设置成一个空白的字符串切片，然后该切片中的第一个元素会被设置成给定的首部值；而在对<code>Header</code>执行添加操作时，给定的首部值会被添加到字符串切片已有元素的后面，如图4-1所示。</p>
+<p><img src="https://images.gitbook.cn/ee9036a0-a48e-11e8-a2aa-0bd41466d20f" alt="enter image description here"></p>
+<p>图4-1　一个首部就是一个映射，这个映射的键为字符串，值为字符串切片</p>
+<p>代码清单4-2展示了读取请求首部的方法。</p>
+<p>代码清单4-2　读取请求首部</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+func <span class="hljs-title">headers</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request)</span> </span>{
+　　h := r.Header
+　　fmt.Fprintln(w, h)
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+　　http.HandleFunc(<span class="hljs-string">"/headers"</span>, headers)
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>这个代码清单中展示的服务器跟我们在第3章看到过的服务器基本上是一样的，唯一的区别在于这个服务器会把请求的首部打印出来。图4-2展示了在 OS X 系统的 Safari 浏览器上访问这个服务器的结果。</p>
+<p><img src="https://images.gitbook.cn/f593de20-a48e-11e8-8b4a-cf3651600922" alt="enter image description here"></p>
+<p>图4-2　在浏览器上展示的首部打印结果</p>
+<p>如果想要获取的是某个特定的首部，而不是请求的所有首部，那么可以把服务器中的</p>
+<pre><code class="hljs makefile">h := r.Header
+</code></pre>
+<p>替换成</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">h</span> := r.Header[<span class="hljs-string">"Accept-Encoding"</span>]
+</code></pre>
+<p>这样一来，程序就会得到<code>"Accept-Encoding"</code>键的首部值：</p>
+<pre><code class="hljs json">[gzip, deflate]
+</code></pre>
+<p>除此之外，我们还可以使用以下语句：</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">h</span> := r.Header.Get(<span class="hljs-string">"Accept-Encoding"</span>)
+</code></pre>
+<p>并得到以下结果：</p>
+<pre><code class="hljs">gzip, deflate
+</code></pre>
+<p>注意以上两条语句之间的区别：直接引用<code>Header</code>将得到一个字符串切片，而在<code>Header</code>上调用<code>Get</code>方法将返回字符串形式的首部值，其中多个首部值将使用逗号分隔。</p>
+<h4 id="414">4.1.4　请求主体</h4>
+<p>请求和响应的主体都由<code>Request</code>结构的<code>Body</code>字段表示，这个字段是一个<code>io.Read Closer</code>接口，该接口既包含了<code>Reader</code>接口，也包含了<code>Closer</code>接口。其中<code>Reader</code>接口拥有<code>Read</code>方法，这个方法接受一个字节切片为输入，并在执行之后返回被读取内容的字节数以及一个可选的错误作为结果；而<code>Closer</code>接口则拥有<code>Close</code>方法，这个方法不接受任何参数，但会在出错时返回一个错误。同时包含<code>Reader</code>接口和<code>Closer</code>接口意味着用户可以对<code>Body</code>字段调用<code>Read</code>方法和<code>Close</code>方法。作为例子，代码清单4-3展示了如何使用<code>Read</code>方法读取请求主体的内容。</p>
+<p>代码清单4-3　读取请求主体中的数据</p>
+<pre><code class="hljs cs"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> (<span class="hljs-params">
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+</span>)
+
+func <span class="hljs-title">body</span>(<span class="hljs-params">w http.ResponseWriter, r *http.Request</span>) </span>{
+　　len := r.ContentLength
+　　body := make([]<span class="hljs-keyword">byte</span>, len)
+　　r.Body.Read(body)
+　　fmt.Fprintln(w, <span class="hljs-keyword">string</span>(body))
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+　　http.HandleFunc(<span class="hljs-string">"/body"</span>, body)
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>这段程序首先通过<code>ContentLength</code>方法获取主体数据的字节长度，接着根据这个长度创建一个字节数组，然后调用<code>Read</code>方法将主体数据读取到字节数组中。</p>
+<p>因为<code>GET</code>请求并不包含报文主体，所以如果我们想要测试这个服务器，就需要给它发送<code>POST</code>请求。正如之前所说，浏览器一般需要通过 HTML 表单才能发送<code>POST</code>请求，但是因为本书在下一节才会开始介绍 HTML 表单，所以这里我们暂且就先使用 HTTP 客户端来测试服务器。市面上可用的 HTTP 客户端非常多，既有桌面版的图形 HTTP 客户端，也有浏览器插件或者扩展，还有 cURL 等命令行程序可供选择。</p>
+<p>作为例子，以下命令展示了如何使用 cURL 向服务器发送一条<code>POST</code>请求：</p>
+<pre><code class="hljs objectivec">$ curl -<span class="hljs-keyword">id</span> <span class="hljs-string">"first_name=sausheong&amp;last_name=chang"</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">8080</span>/body
+</code></pre>
+<p>cURL 在接收到响应之后将向用户返回一段完整并且未经处理的 HTTP 响应，其中位于空行之后的就是 HTTP 的主体。以下展示的就是上面的 cURL 命令返回的响应：</p>
+<pre><code class="hljs http">HTTP/1.1 <span class="hljs-number">200</span> OK
+<span class="hljs-attribute">Date</span>: Tue, 13 Jan 2015 16:11:58 GMT
+<span class="hljs-attribute">Content-Length</span>: 37
+<span class="hljs-attribute">Content-Type</span>: text/plain; charset=utf-8
+
+<span class="ini"><span class="hljs-attr">first_name</span>=sausheong&amp;last_name=chang
+</span></code></pre>
+<p>因为 Go 语言提供了诸如<code>FormValue</code>和<code>FormFile</code>这样的方法来提取通过<code>POST</code>方法提交的表单，所以用户一般不需要自行读取主体中未经处理的表单，本章接下来的一节就会介绍<code>FormValue</code>和<code>FormFile</code>等方法。</p>
+<h3 id="42gohtml">4.2　Go 与 HTML 表单</h3>
+<p>在学习如何从<code>POST</code>请求中获取表单数据之前，让我们先来了解一下 HTML 表单。在绝大多数情况下，<code>POST</code>请求都是通过 HTML 表单发送的，这些表单看上去通常会是下面这个样子：</p>
+<pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">"/process"</span> <span class="hljs-attr">method</span>=<span class="hljs-string">"post"</span>&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"first_name"</span>/&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"last_name"</span>/&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</code></pre>
+<p><code>&lt;form&gt;</code>标签可以包围文本行、文本框、单选按钮、复选框以及文件上传等多种 HTML 表单元素，而用户则可以把想要传递给服务器的数据输入到这些元素里面。当用户按下发送按钮、又或者通过某种方式触发了表单的发送操作之后，用户在表单中输入的数据就会被发送至服务器。</p>
+<p>用户在表单中输入的数据会以键值对的形式记录在请求的主体中，然后以 HTTP <code>POST</code>请求的形式发送至服务器。因为服务器在接收到浏览器发送的表单数据之后，还需要对这些数据进行语法分析，从而提取出数据中记录的键值对，因此我们还需要知道这些键值对在请求主体中是如何格式化的。</p>
+<p>HTML 表单的内容类型（content type）决定了<code>POST</code>请求在发送键值对时将使用何种格式，其中，HTML 表单的内容类型是由表单的<code>enctype</code>属性指定的：</p>
+<pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">"/process"</span> <span class="hljs-attr">method</span>=<span class="hljs-string">"post"</span> <span class="hljs-attr">enctype</span>=<span class="hljs-string">"application/x-www-form-urlencoded"</span>&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"first_name"</span>/&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"last_name"</span>/&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</code></pre>
+<p><code>enctype</code>属性的默认值为<code>application/x-www-form-urlencoded</code>。浏览器至少需要支持<code>application/x-www-form-urlencoded</code>和<code>multipart/form-data</code>这两种编码方式。除以上两种编码方式之外，HTML5 还支持<code>text/plain</code>编码方式。</p>
+<p>如果我们把<code>enctype</code>属性的值设置为<code>application/x-www-form-urlencoded</code>，那么浏览器将把 HTML 表单中的数据编码为一个连续的“长查询字符串”（long query string）：在这个字符串中，不同的键值对将使用<code>&amp;</code>符号分隔，而键值对中的键和值则使用等号<code>=</code>分隔。这种编码方式跟我们在第1章看到过的 URL 编码是一样的，<code>application/x-www-form-urlencoded</code>编码名字中的<code>urlencoded</code>一词也由此而来。换句话说，一个<code>application/x-www-form-urlencoded</code>编码的 HTTP 请求主体看上去将会是下面这个样子的：</p>
+<pre><code class="hljs ini"><span class="hljs-attr">first_name</span>=sau%<span class="hljs-number">20</span>sheong&amp;last_name=chang
+</code></pre>
+<p>但是，如果我们把<code>enctype</code>属性的值设置为<code>multipart/form-data</code>，那么表单中的数据将被转换成一条 MIME 报文：表单中的每个键值对都构成了这条报文的一部分，并且每个键值对都带有它们各自的内容类型以及内容配置（disposition）。以下是一个使用<code>multipart/form-data</code>编码对表单数据进行格式化的例子：</p>
+<pre><code class="hljs sql"><span class="hljs-comment">------WebKitFormBoundaryMPNjKpeO9cLiocMw</span>
+ Content-Disposition: form-data; name="first_name"
+
+sau sheong
+ <span class="hljs-comment">------WebKitFormBoundaryMPNjKpeO9cLiocMw</span>
+ Content-Disposition: form-data; name="last_name"
+
+ chang
+ <span class="hljs-comment">------WebKitFormBoundaryMPNjKpeO9cLiocMw--</span>
+</code></pre>
+<p>既然表单同时支持<code>application/x-www-form-urlencoded</code>编码和<code>multipart/form-data</code>编码，那么我们该选择使用哪种编码呢？答案是，如果表单传送的是简单的文本数据，那么使用 URL 编码格式更好，因为这种编码更为简单、高效，并且它所需的计算量要比另一种编码少。但是，如果表单需要传送大量数据（如上传文件）那么使用<code>multipart/form- data</code>编码格式会更好一些。在需要的情况下，用户还可以通过 Base64 编码，以文本方式传送二进制数据。</p>
+<p>到目前为止，我们只讨论了如何通过<code>POST</code>请求发送表单，但实际上通过<code>GET</code>请求也是可以发送表单的——因为 HTML 表单的<code>method</code>属性的值既可以是<code>POST</code>也可以是<code>GET</code>，所以下面这个 HTML 表单也是合法的：</p>
+<pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">"/process"</span> <span class="hljs-attr">method</span>=<span class="hljs-string">"get"</span>&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"first_name"</span>/&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"last_name"</span>/&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</code></pre>
+<p>因为<code>GET</code>请求并不包含请求主体，所以在使用<code>GET</code>方法传递表单时，表单数据将以键值对的形式包含在请求的 URL 里面，而不是通过主体传递。</p>
+<p>在了解了 HTML 表单向服务器传递数据的方法之后，让我们回到服务器一端，学习一下如何使用<code>net/http</code>库来处理这些表单数据。</p>
+<h4 id="421form">4.2.1　Form 字段</h4>
+<p>上一节曾经提到过，为了提取表单传递的键值对数据，用户可能需要亲自对服务器接收到的未经处理的表单数据进行语法分析。但事实上，因为<code>net/http</code>库已经提供了一套用途相当广泛的函数，这些函数一般都能够满足用户对数据提取方面的需求，所以我们很少需要自行对表单数据进行语法分析。</p>
+<p>通过调用<code>Request</code>结构提供的方法，用户可以将 URL、主体又或者以上两者记录的数据提取到该结构的<code>Form</code>、<code>PostForm</code>和<code>MultipartForm</code>等字段当中。跟我们平常通过<code>POST</code>请求获取到的数据一样，存储在这些字段里面的数据也是以键值对形式表示的。使用<code>Request</code>结构的方法获取表单数据的一般步骤是：</p>
+<p>（1）调用<code>ParseForm</code>方法或者<code>ParseMultipartForm</code>方法，对请求进行语法分析。</p>
+<p>（2）根据步骤1调用的方法，访问相应的<code>Form</code>字段、<code>PostForm</code>字段或<code>MultipartForm</code>字段。</p>
+<p>代码清单4-4展示了一个使用<code>ParseForm</code>方法对表单进行语法分析的例子。</p>
+<p>代码清单4-4　对表单进行语法分析</p>
+<pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-title">import</span> <span class="hljs-params">(
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"net/http"</span>
+)</span>
+
+func <span class="hljs-title">process</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request)</span> </span>{
+　　r.ParseForm()
+　　fmt.Fprintln(w, r.Form)
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+　　http.HandleFunc(<span class="hljs-string">"/process"</span>, process)
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>这段代码中最重要的就是下面这两行：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.ParseForm</span>()
+<span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.Form</span>)
+</code></pre>
+<p>如前所述，这段代码首先使用了<code>ParseForm</code>方法对请求进行语法分析，然后再访问<code>Form</code>字段，获取具体的表单。</p>
+<p>现在，让我们来创建一个短小精悍的 HTML 表单，并使用它作为客户端，向代码清单4-4所示的服务器发送请求。请创建一个名为<code>client.html</code>的文件，并将以下代码复制到该文件中：</p>
+<pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+　　<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">"Content-Type"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"text/html; charset=utf-8"</span> /&gt;</span>
+　　<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>GoWebProgramming<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+　<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+　　<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">http://127.0.0.1:8080/process?hello</span>=<span class="hljs-string">world&amp;thread</span>=<span class="hljs-string">123</span>
+　　➥<span class="hljs-attr">method</span>=<span class="hljs-string">"post"</span> <span class="hljs-attr">enctype</span>=<span class="hljs-string">"application/x-www-form-urlencoded"</span>&gt;</span>
+　　　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"hello"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"sau sheong"</span>/&gt;</span>
+　　　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"post"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"456"</span>/&gt;</span>
+　　　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>/&gt;</span>
+　　<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+　<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p>这个 HTML 表单可以完成以下工作：</p>
+<ul>
+<li>通过<code>POST</code>方法将表单发送至地址 http://localhost:8080/process?hello=world&amp;thread=123；</li>
+<li>通过<code>enctype</code>属性将表单的内容类型设置为<code>application/x-www-form-urlencoded</code>;</li>
+<li>将<code>hello=sau sheong</code>和<code>post=456</code>这两个 HTML 表单键值对发送至服务器。</li>
+</ul>
+<p>需要注意的是，这个表单为相同的键<code>hello</code>提供了两个不同的值，其中，值<code>world</code>是通过 URL 提供的，而值<code>sau sheong</code>则是通过 HTML 表单中的文本输入行提供的。</p>
+<p>因为客户端可以直接在浏览器上运行，所以我们并不需要使用服务器来为客户端提供服务：我们要做的就是使用浏览器打开<code>client.html</code>文件，然后点击表单中的发送按钮。如果一切正常，浏览器应该会显示以下输出：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">map</span><span class="hljs-selector-attr">[thread:[123]</span> <span class="hljs-selector-tag">hello</span>:<span class="hljs-selector-attr">[sau sheong world]</span> <span class="hljs-selector-tag">post</span>:<span class="hljs-selector-attr">[456]</span>]
+</code></pre>
+<p>这是服务器在对请求进行语法分析之后，使用字符串形式显示出来的未经处理的<code>Form</code>结构。这个结构是一个映射，它的键是字符串，而键的值是一个由字符串组成的切片。因为映射是无序的，所以你看到的键值对排列顺序可能和这里展示的有所不同。但是无论如何，这个映射总是会包含查询值<code>hello=world</code>和<code>thread=123</code>，还有表单值<code>hello=sau sheong</code>和<code>post=456</code>。正如所见，这些值都进行了相应的 URL 解码，比如在<code>sau</code>和<code>sheong</code>之间就能够正常地看到空格，而不是编码之后的<code>%20</code>。</p>
+<h4 id="422postform">4.2.2　PostForm 字段</h4>
+<p>对上一节提到的<code>post</code>这种只会出现在表单或者 URL 两者其中一个地方的键来说，执行语句<code>r.Form["post"]</code>将返回一个切片，切片里面包含了这个键的表单值或者 URL 值，就像这样：<code>[456]</code>。而对<code>hello</code>这种同时出现在表单和 URL 两个地方的键来说，执行语句<code>r.Form["hello"]</code>将返回一个同时包含了键的表单值和 URL 值的切片，并且表单值在切片中总是排在 URL 值的前面，就像这样：<code>[sau sheong world]</code>。</p>
+<p>如果一个键同时拥有表单键值对和 URL 键值对，但是用户只想要获取表单键值对而不是 URL 键值对，那么可以访问<code>Request</code>结构的<code>PostForm</code>字段，这个字段只会包含键的表单值，而不包含任何同名键的 URL 值。举个例子，如果我们把前面代码中的<code>r.Form</code>语句改为<code>r.PostForm</code>语句，那么程序将打印出以下结果：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">map</span><span class="hljs-selector-attr">[post:[456]</span> <span class="hljs-selector-tag">hello</span>:<span class="hljs-selector-attr">[sau sheong]</span>]
+</code></pre>
+<p>上面这个输出使用的是<code>application/x-www-form-urlencoded</code>内容类型，如果我们修改一下客户端的 HTML 表单，让它使用<code>multipart/form-data</code>作为内容类型，并对服务器代码进行调整，让它重新使用<code>r.Form</code>语句而不是<code>r.PostForm</code>语句，那么程序将打印出以下结果：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">map</span><span class="hljs-selector-attr">[hello:[world]</span> <span class="hljs-selector-tag">thread</span>:<span class="hljs-selector-attr">[123]</span>]
+</code></pre>
+<p>因为<code>PostForm</code>字段只支持<code>application/x-www-form-urlencoded</code>编码，所以现在的<code>r.Form</code>语句将不再返回任何表单值，而是只返回 URL 查询值。为了解决这个问题，我们需要通过<code>MultipartForm</code>字段来获取<code>multipart/form-data</code>编码的表单数据。</p>
+<h4 id="423multipartform">4.2.3　MultipartForm 字段</h4>
+<p>为了取得<code>multipart/form-data</code>编码的表单数据，我们需要用到<code>Request</code>结构的<code>ParseMultipartForm</code>方法和<code>MultipartForm</code>字段，而不再使用<code>ParseForm</code>方法和<code>Form</code>字段，不过<code>ParseMultipartForm</code>方法在需要时也会自行调用<code>ParseForm</code>方法。现在，我们需要修改代码清单4-4中展示的服务器程序，把原来的<code>ParseForm</code>方法调用以及打印语句替换成以下两条语句：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.ParseMultipartForm</span>(1024)
+<span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.MultipartForm</span>)
+</code></pre>
+<p>这里的第一行代码说明了我们想要从 multipart 编码的表单里面取出多少字节的数据，而第二行语句则会打印请求的<code>MultipartForm</code>字段。修改后的服务器在执行时将打印以下结果：</p>
+<pre><code class="hljs cpp">&amp;{<span class="hljs-built_in">map</span>[hello:[sau sheong] post:[<span class="hljs-number">456</span>]] <span class="hljs-built_in">map</span>[]}
+</code></pre>
+<p>因为<code>MultipartForm</code>字段只包含表单键值对而不包含 URL 键值对，所以这次打印出来的只有表单键值对而没有 URL 键值对。另外需要注意的是，<code>MultipartForm</code>字段的值也不再是一个映射，而是一个包含了两个映射的结构，其中第一个映射的键为字符串，值为字符串组成的切片，而第二个映射则是空的——这个映射之所以会为空，是因为它是用来记录用户上传的文件的，关于这个映射的具体信息我们将会在接下来的一节看到。</p>
+<p>除了上面提到的几个方法之外，<code>Request</code>结构还提供了另外一些方法，它们可以让用户更容易地获取表单中的键值对。其中，<code>FormValue</code>方法允许直接访问与给定键相关联的值，就像访问<code>Form</code>字段中的键值对一样，唯一的区别在于：因为<code>FormValue</code>方法在需要时会自动调用<code>ParseForm</code>方法或者<code>ParseMultipartForm</code>方法，所以用户在执行<code>FormValue</code>方法之前，不需要手动调用上面提到的两个语法分析方法。</p>
+<p>这意味着，如果我们把以下语句写到代码清单4-4所示的服务器程序中：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>,<span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.FormValue</span>("<span class="hljs-selector-tag">hello</span>"))
+</code></pre>
+<p>并将客户端表单的<code>enctype</code>属性的值设置为<code>application/x-www-form-urlencoded</code>，那么服务器将打印出以下结果：</p>
+<pre><code class="hljs nginx"><span class="hljs-attribute">sau</span> sheong
+</code></pre>
+<p>因为<code>FormValue</code>方法即使在给定键拥有多个值的情况下，也只会从<code>Form</code>结构中取出给定键的第一个值，所以如果想要获取给定键包含的所有值，那么就需要直接访问<code>Form</code>结构：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.FormValue</span>("<span class="hljs-selector-tag">hello</span>"))
+<span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.Form</span>)
+</code></pre>
+<p>上面这两条语句将产生以下输出：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">sau</span> <span class="hljs-selector-tag">sheong</span>
+<span class="hljs-selector-tag">map</span><span class="hljs-selector-attr">[post:[456]</span> <span class="hljs-selector-tag">hello</span>:<span class="hljs-selector-attr">[sau sheong world]</span> <span class="hljs-selector-tag">thread</span>:<span class="hljs-selector-attr">[123]</span>]
+</code></pre>
+<p>除了访问的是<code>PostForm</code>字段而不是<code>Form</code>字段之外，<code>PostFormValue</code>方法的作用跟上面介绍的<code>FormValue</code>方法的作用基本相同。下面是一个使用<code>PostFormValue</code>方法的例子：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.PostFormValue</span>("<span class="hljs-selector-tag">hello</span>"))
+<span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.PostForm</span>)
+</code></pre>
+<p>下面是这两行代码的输出结果：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">sau</span> <span class="hljs-selector-tag">sheong</span>
+<span class="hljs-selector-tag">map</span><span class="hljs-selector-attr">[hello:[sau sheong]</span> <span class="hljs-selector-tag">post</span>:<span class="hljs-selector-attr">[456]</span>]
+</code></pre>
+<p>正如结果所示，<code>PostFormValue</code>方法只会返回表单键值对而不会返回 URL 键值对。</p>
+<p><code>FormValue</code>方法和<code>PostFormValue</code>方法都会在需要时自动去调用<code>ParseMultipartForm</code>方法，因此用户并不需要手动调用<code>ParseMultipartForm</code>方法，但这里也有一个需要注意的地方（至少对于 Go 1.4版本来说）：如果你将表单的<code>enctype</code>设置成了<code>multipart/form-data</code>，然后尝试通过<code>FormValue</code>方法或者<code>PostFormValue</code>方法来获取键的值，那么即使这两个方法调用了<code>ParseMultipartForm</code>方法，你也不会得到任何结果。</p>
+<p>为了验证这一点，让我们再次修改服务器程序，给它加上以下代码：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, "(1)", <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.FormValue</span>("<span class="hljs-selector-tag">hello</span>"))
+<span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, "(2)", <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.PostFormValue</span>("<span class="hljs-selector-tag">hello</span>"))
+<span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, "(3)", <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.PostForm</span>)
+<span class="hljs-selector-tag">fmt</span><span class="hljs-selector-class">.Fprintln</span>(<span class="hljs-selector-tag">w</span>, "(4)", <span class="hljs-selector-tag">r</span><span class="hljs-selector-class">.MultipartForm</span>)
+</code></pre>
+<p>以下是在表单的<code>enctype</code>为<code>multipart/form-data</code>的情况下，服务器打印出的结果：</p>
+<pre><code class="hljs cpp">(<span class="hljs-number">1</span>) world
+(<span class="hljs-number">2</span>)
+(<span class="hljs-number">3</span>) <span class="hljs-built_in">map</span>[]
+(<span class="hljs-number">4</span>) &amp;{<span class="hljs-built_in">map</span>[hello:[sau sheong] post:[<span class="hljs-number">456</span>]] <span class="hljs-built_in">map</span>[]}
+</code></pre>
+<p>结果中的第一行返回的是键<code>hello</code>的值，并且这个值来自 URL 而不是表单。至于结果中的第二行和第三行，则证明了前面提到的“使用<code>PostFormValue</code>方法不会得到任何值”这一说法，而<code>PostForm</code>字段为空则是引发这一现象的罪魁祸首。<code>PostForm</code>字段之所以会为空，是因为<code>FormValue</code>方法和<code>PostFormValue</code>方法分别对应<code>Form</code>字段和<code>PostForm</code>字段，而表单在使用<code>multipart/form-data</code>编码时，表单数据将被存储到<code>MultipartForm</code>字段而不是以上两个字段中。结果的最后一行证明<code>ParseMultipartForm</code>方法的确被调用了——用户只要访问<code>MultipartForm</code>字段，就可以取得所有表单值。</p>
+<p>本节介绍了<code>Request</code>结构的很多相关字段以及方法，表4-1对它们进行了回顾，并阐述了各个方法之间的区别。除此之外，这个表还说明了调用哪个方法可以取得哪个字段的值，并阐述了这些值的来源以及这些值的类型。比如，表的第一行就说明了，通过以直接或间接的方式调用<code>ParseForm</code>方法，用户可以将数据存储到<code>Form</code>字段里面，然后用户只要访问<code>Form</code>字段，就可以取得编码类型为<code>application/x-www-form-urlencoded</code>的 URL 数据和表单数据。对表4-1中列出的字段以及方法来说，它们唯一令人感到遗憾的地方就是，这些字段以及方法的命名规范并不是特别让人满意，还有很多有待改善的地方。</p>
+<p class="表题">表4-1　对比<code>Form、PostForm</code>和<code>MultipartForm</code>字段</p>
+<table>
+                <tbody>
+                    <tr>
+                        <th rowspan="2">
+                            <p>字段</p>
+                        </th>
+                        <th rowspan="2">
+                            <p>需要调用的方法或<br>需要访问的字段</p>
+                        </th>
+                        <th colspan="2">
+                            <p>键值对的来源</p>
+                        </th>
+                        <th colspan="2">
+                            <p>内容类型</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <p>URL</p>
+                        </th>
+                        <th>
+                            <p>表单</p>
+                        </th>
+                        <th>
+                            <p>URL 编码</p>
+                        </th>
+                        <th>
+                            <p>Multipart 编码</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><code>Form </code></p>
+                        </td>
+                        <td>
+                            <p><code>ParseForm</code>方法</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><code>PostForm </code></p>
+                        </td>
+                        <td>
+                            <p><code>Form</code>字段</p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><code>MultipartForm</code></p>
+                        </td>
+                        <td>
+                            <p><code>ParseMultipartForm</code> 方法</p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><code>FormValue</code></p>
+                        </td>
+                        <td>
+                            <p>无</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><code>PostFormValue</code></p>
+                        </td>
+                        <td>
+                            <p>无 </p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>✓</p>
+                        </td>
+                        <td>
+                            <p>—</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+<h4 id="424">4.2.4　文件</h4>
+<p><code>multipart/form-data</code>编码通常用于实现文件上传功能，这种功能需要用到<code>file</code>类型的<code>input</code>标签。代码清单4-5给出的就是之前展示过的客户端表单在实现了文件上传功能之后的样子，其中以加粗方式呈现的是新增或者经过修改的代码。</p>
+<p>代码清单4-5　文件上传</p>
+<pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+　　<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">"Content-Type"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"text/html; charset=utf-8"</span> /&gt;</span>
+　　<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Go Web Programming<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+　<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+　<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+　　<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">"http://localhost:8080/process?hello=world&amp;thread=123"</span>
+　<span class="hljs-attr">method</span>=<span class="hljs-string">"post"</span> <span class="hljs-attr">enctype</span>=<span class="hljs-string">"multipart/form-data"</span>&gt;</span>
+　　　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"hello"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"sau sheong"</span>/&gt;</span>
+　　　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"post"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"456"</span>/&gt;</span>
+　　　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"file"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"uploaded"</span>&gt;</span>
+　　　<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>&gt;</span>
+　　<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+　<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p>为了能够接收表单上传的文件，处理器函数也需要做相应的修改，具体见代码清单4-6。</p>
+<p>代码清单4-6　通过<code>MultipartForm</code>字段接收用户上传的文件</p>
+<pre><code class="hljs cs"><span class="hljs-function">package main
+
+<span class="hljs-title">import</span> (<span class="hljs-params">
+　　<span class="hljs-string">"fmt"</span>
+　　<span class="hljs-string">"io/ioutil"</span>
+　　<span class="hljs-string">"net/http"</span>
+</span>)
+
+func <span class="hljs-title">process</span>(<span class="hljs-params">w http.ResponseWriter, r *http.Request</span>) </span>{
+　　r.ParseMultipartForm(<span class="hljs-number">1024</span>)
+　　fileHeader := r.MultipartForm.File[<span class="hljs-string">"uploaded"</span>][<span class="hljs-number">0</span>]
+　　file, err := fileHeader.Open()
+　　<span class="hljs-keyword">if</span> err == nil {
+　　　　data, err := ioutil.ReadAll(file)
+　　　　<span class="hljs-keyword">if</span> err == nil {
+　　　　　　fmt.Fprintln(w, <span class="hljs-keyword">string</span>(data))
+　　　　}
+　　}
+}
+
+<span class="hljs-function">func <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+　　server := http.Server{
+　　　　Addr: <span class="hljs-string">"127.0.0.1:8080"</span>,
+　　}
+　　http.HandleFunc(<span class="hljs-string">"/process"</span>, process)
+　　server.ListenAndServe()
+}
+</code></pre>
+<p>正如之前所说，服务器在处理文件上传时首先要做的就是执行<code>ParseMultipartForm</code>方法，接着从<code>MultipartForm</code>字段的<code>File</code>字段里面取出文件头<code>FileHeader</code>，然后通过调用文件头的<code>Open</code>方法来打开文件。在此之后，服务器会将文件的内容读取到一个字节数组中，并将这个字节数组的内容打印出来。现在，如果我们向服务器上传一个纯文本文件，那么服务器将把这个文件的内容打印在浏览器上。</p>
+<p>跟<code>FormValue</code>方法和<code>PostFormValue</code>方法类似，<code>net/http</code>库也提供了一个<code>FormFile</code>方法，它可以快速地获取被上传的文件：<code>FormFile</code>方法在被调用时将返回给定键的第一个值，因此它在客户端只上传了一个文件的情况下，使用起来会非常方便。代码清单4-7展示了一个使用<code>FormFile</code>方法的例子。</p>
+<p>代码清单4-7　使用<code>FormFile</code>方法获取被上传的文件</p>
+<pre><code class="hljs cpp"><span class="hljs-function">func <span class="hljs-title">process</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request)</span> </span>{
+　　file, _, err := r.FormFile(<span class="hljs-string">"uploaded"</span>)
+　　<span class="hljs-keyword">if</span> err == nil {
+　　　　data, err := ioutil.ReadAll(file)
+　　　　<span class="hljs-keyword">if</span> err == nil {
+　　　　　　fmt.Fprintln(w, <span class="hljs-built_in">string</span>(data))
+　　　　}
+　　}
+}
+</code></pre>
+<p>正如代码所示，<code>FormFile</code>方法将同时返回文件和文件头作为结果。用户在使用<code>FormFile</code>方法时，将不再需要手动调用<code>ParseMultipartForm</code>方法，只需要对返回的文件进行处理即可。</p>
+<h4 id="425jsonpost">4.2.5　处理带有 JSON 主体的 POST 请求</h4>
+<p>因为前面的内容一直只使用 HTML 表单发送 POST 请求，所以到目前为止，我们考虑的都是如何处理请求主体中的键值对。但实际上，POST 请求并不是只能通过 HTML 表单发送：诸如 jQuery 这样的客户端库，又或者是 Angular、Ember 这样的客户端框架，甚至是 Adobe Flash、Microsoft Silverlight 这样的技术，都能够发送 POST 请求，并且这种行为正在变得越来越常见。</p>
+<p>需要注意的是，使用<code>ParseForm</code>方法是无法从 Angular 客户端发送的 POST 请求中获取 JSON 数据的，但使用 jQuery 这样的 JavaScript 库却不会出现这样的问题。</p>
+<p>造成这一区别的原因在于，不同客户端使用了不同的方式编码 POST 请求：jQuery 会像 HTML 表单一样，使用<code>application/x-www-form-urlencoded</code>对 POST 请求进行编码（具体做法是，jQuery 会把 POST 请求的<code>Content-Type</code>首部的值设置为<code>application/x-www-form-urlencoded</code>），而 Angular 在编码 POST 请求时使用的却是<code>application/json</code>。因为 Go 语言的<code>ParseForm</code>方法只会对表单数据进行语法分析，它并不接受<code>application/json</code>编码，所以使用这一编码发送 POST 请求的用户自然也无法通过<code>ParseForm</code>方法获得任何数据。</p>
+<p>这个问题跟库的实现无关，真正的罪魁祸首实际上是没有足够的文档对这种行为进行说明，而程序员又对他们使用的框架做了某种假设，这样一来，问题自然而然地也就出现了。</p>
+<p>因为框架可以隐藏复杂性和实现细节，所以程序员应该使用框架。但与此同时，理解框架的工作方式，了解框架如何化繁为简，也是非常重要的。否则，在使用框架与其他程序进行对接的时候，就可能会出现各种各样的问题。</p>
+<p>到目前为止，本章已经对“如何处理请求”这一问题做了足够多的介绍，现在，是时候讲讲如何向用户发送响应了。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#41"><span class="toc-number">1.</span> <span class="toc-text">4.1　请求和响应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#411request"><span class="toc-number">1.1.</span> <span class="toc-text">4.1.1　Request 结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#412url"><span class="toc-number">1.2.</span> <span class="toc-text">4.1.2　请求 URL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#413"><span class="toc-number">1.3.</span> <span class="toc-text">4.1.3　请求首部</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#414"><span class="toc-number">1.4.</span> <span class="toc-text">4.1.4　请求主体</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42gohtml"><span class="toc-number">2.</span> <span class="toc-text">4.2　Go 与 HTML 表单</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#421form"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1　Form 字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#422postform"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2　PostForm 字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#423multipartform"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3　MultipartForm 字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#424"><span class="toc-number">2.4.</span> <span class="toc-text">4.2.4　文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#425jsonpost"><span class="toc-number">2.5.</span> <span class="toc-text">4.2.5　处理带有 JSON 主体的 POST 请求</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&text=处理请求(上)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&is_video=false&description=处理请求(上)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=处理请求(上)&body=Check out this article: http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&title=处理请求(上)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/go_web编程/2-2处理请求(上)/2019/10/&name=处理请求(上)&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

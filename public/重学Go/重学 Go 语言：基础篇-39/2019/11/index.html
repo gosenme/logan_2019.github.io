@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="4-2 False Sharing 的问题02 数组指针 vs 指针数组01 是不是数组就一定能分配在栈上？02 False Sharing的问题4-2 False Sharing 的问题02 数组指针 vs 指针数组func main() {    var a [3]int    var b [3]int    var p [3]int = &amp;amp;a    p[0] = 10    var">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-39">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="4-2 False Sharing 的问题02 数组指针 vs 指针数组01 是不是数组就一定能分配在栈上？02 False Sharing的问题4-2 False Sharing 的问题02 数组指针 vs 指针数组func main() {    var a [3]int    var b [3]int    var p [3]int = &amp;amp;a    p[0] = 10    var">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:29.638Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-39">
+<meta name="twitter:description" content="4-2 False Sharing 的问题02 数组指针 vs 指针数组01 是不是数组就一定能分配在栈上？02 False Sharing的问题4-2 False Sharing 的问题02 数组指针 vs 指针数组func main() {    var a [3]int    var b [3]int    var p [3]int = &amp;amp;a    p[0] = 10    var">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-39</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-40/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-38/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&text=重学 Go 语言：基础篇-39"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&is_video=false&description=重学 Go 语言：基础篇-39"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-39&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&name=重学 Go 语言：基础篇-39&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42falsesharing"><span class="toc-number">2.</span> <span class="toc-text">4-2 False Sharing 的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#02vs"><span class="toc-number">2.1.</span> <span class="toc-text">02 数组指针 vs 指针数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#01"><span class="toc-number">2.2.</span> <span class="toc-text">01 是不是数组就一定能分配在栈上？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#02falsesharing"><span class="toc-number">2.3.</span> <span class="toc-text">02 False Sharing的问题</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-39
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:29.638Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><p><div class="toc"><br><ul><br><li><ul><br><li><a href="#42falsesharing">4-2 False Sharing 的问题</a><ul><br><li><a href="#02vs">02 数组指针 vs 指针数组</a></li><br><li><a href="#01">01 是不是数组就一定能分配在栈上？</a></li><br><li><a href="#02falsesharing">02 False Sharing的问题</a></li><br></ul><br></li><br></ul><br></li><br></ul><br></div><br></p><br><h2 id="42falsesharing">4-2 False Sharing 的问题</h2><br><h3 id="02vs">02 数组指针 vs 指针数组</h3><br><pre><code class="go language-go">func main() {<br>    var a [3]int<br>    var b [3]<em>int<br>    var p </em>[3]int = &amp;a<br>    p[0] = 10<br>    var p1 <em>int = &amp;a[2]
+    </em>p1 = 30<br>    fmt.Println(a, b)<br>}<br></code></pre><br><ul><br><li>数组指针引用整个目标数组。</li><br><li>数组指针元素类型为指针。</li><br><li>可使用数组指针访问和赋值元素，可直接获取元素地址。</li><br></ul><br><p>数组指针指的是数组的起始位置，用一个变量保存这个地址，这个变量叫做数组指针。变量要分配内存，这个变量里面存了某一个地址，而地址只是抽象的序号，所以指针和地址并不是一回事。数组指针是一个变量保存了数组的起始位置，指针数组是数组里面保存的是指针，就是说一个数组的元素类型是指针的情况下叫指针数组，等于整数数组整数换成指针而已。</p><br><p>上面例子中<code>a</code>和<code>b</code>都是普通的数组，<code>a</code>存的是整数，<code>b</code>存的是指针。<code>p</code>是数组的指针，数组本质上是一个单一对象，对它取指针操作，虽然指针指向数组起始地址，实际上包括完整的内存访问空间，我们称为数组的指针。数组的指针和数组本身操作没什么区别，支持语法糖访问。<code>p1</code>取的是某个元素的指针，不能用下标的方式退化为普通的指针操作。</p><br><pre><code class="go language-go">func main() {<br>    var x [100]int<br>    p := &amp;x<br>    p[1] = 100 //语法糖(<em>p)[1]<br>    println(p[1])<br><br>    p2 := &amp;p<br>    println((</em>p2)[1])<br><br>    p3 := &amp;x[30]<br>    <em>p3 = 99<br>    println(x[30])<br>}<br></em></code></pre><br><p>上面例子数组<code>x</code>，<code>p</code>取它的地址返回它的指针，<code>p</code>的类型是<code>[100]int</code>。数组的指针指的是把这个数组当成单一对象来对待，可以通过类型的指针进行赋值<code>p[1] = 100</code>，这是一种语法糖，相当于自动转换为<code>(<em>p)[1]</em></code>。<code>p2</code>是二级指针，取指针<code>p</code>的指针，语法糖仅支持一级指针，不支持<code>p2[1]</code>写法，需要指定<code>(p2)[1]</code>。</p><br><p>数组支持直接取元素的地址。比如<code>p3 := &amp;x[30]</code>，<code>p3</code>不能通过下标赋值，下标只是数组的方式。<code>p3</code>是单个元素的地址，是把一个块当成整数处理。这两种指针类型是不一样的，数组的指针是完整的，可以用语法糖下标的方式，如果取的是其中元素从数组演化成单一对象只能针对元素操作，不是操作整个数组而是操作其中一个元素<code><em>p3 = 99</em></code>。所以要分清楚数组的指针、元素的指针。</p><br><p>指针数组<code>var x [100]int</code>是一个普通的数组。区别就是每个元素是一个指针，指向某个对象。所以数组的指针和指针数组不一样的，数组的指针是内存块而言，指针数组和整数数组字符串数组没什么区别。</p><br><pre><code class="go language-go">func main() {<br>    var x [100]unsafe.Pointer //任意类型的指针<br><br>    a := 1<br>    x[0] = unsafe.Pointer(&amp;a) //整数的指针<br><br>    s := “abc”<br>    x[1] = unsafe.Pointer(&amp;s) //字符串的指针<br>}<br></code></pre><br><h3 id="01">01 是不是数组就一定能分配在栈上？</h3><br><p>很多时候我们用数组优化会非常好，但是数组未必分配到栈上，下面的例子声明一个数组并把它的地址打印出来。</p><br><pre><code class="go language-go">func escape() {<br>    var d [10]int<br>    fmt.Println(&amp;d)<br>}<br></code></pre><br><pre><code class="bash language-bash">$ go run -gcflags “-m” main.go<br># command-line-arguments<br>&amp;d escapes to heap<br>&amp;d escapes to heap<br>moved to heap: d<br>escape … argument does not escape<br>&amp;[0 0 0 0 0 0 0 0 0 0]<br></code></pre><br><p>我们发觉<code>&amp;d</code>逃逸到堆上了，因为<code>fmt.Println</code>接收参数的是接口对象，接口对象必须复制原始对象内部需要储存相应的信息，原始数据必须保证生命周期必须要放到堆上面。</p><br><h3 id="02falsesharing">02 False Sharing的问题</h3><br><p><code>cache miss</code>就是cache没有命中，在数组操作时候可能会写一些性能有问题的代码。</p><br><p>CPU的结构是多核，核内部每个都有L1、L2缓存，L3是共享的，L1分成指令缓存和数据缓存。</p><br><p>当我们获取数据的时候首先在缓存中查，查不到到主存中查，查到存到缓存中，问题是数据不是完全按对象缓存，因为缓存时候CPU根本不知道对象结构是什么样的，所有的内存都是字节，它把空间分成多个等长的块，每个块称之为<code>cache line</code>，每次缓存是固定大小的块，这个块可能是64字节。</p><br><p>假如一个数组，一个块缓存可能是多个元素，假设<code>cpu0</code>访问index=0数据，<code>cpu1</code>访问index=1数据，这样<code>cpu0</code>和<code>cpu1</code>除了自己操作的数据以外还缓存了别人的数据，假如<code>cpu0</code>和<code>cpu1</code>并发执行两个任务，<code>cpu0</code>的index=0做加法的时候整个<code>cache line</code>发生变化了，因为cpu内部<code>cache line</code>是一整块，所以两个<code>cache line</code>同时被两个CPU缓存，一旦修改里面的状态就会导致其他核同样的缓存块失效，<code>cpu0</code>上状态改变了<code>cpu1</code>必须同步，同样的<code>cpu1</code>修改数据<code>cpu0</code>必须同步，<code>cpu0</code>和<code>cpu1</code>频繁进行缓存同步会造成缓存效应非常的差。我们管这种现象叫做<code>False Sharing</code>，这种缓存是有问题的。</p><br><p>这个原理是因为CPU不清楚内部什么数据结构，它是按照64字节来缓存一个块，如果<code>cpu0</code>和<code>cpu1</code>都持有这64字节，任何字节发生改变都需要同步到其他CPU核。</p><br><pre><code class="go language-go">func falseSharing() {<br>    var wg sync.WaitGroup<br><br>    // 有4个计数器，有4个并发任务，每个任务拿其中一个来作为计数器使用<br>    var counter [4]int<br><br>    for i := 0; i &lt; len(counter); i++ {<br>        wg.Add(1)<br><br>        go func(idx int) {<br>            defer wg.Done()<br><br>            for n := 0; n &lt; 1000000; n++ {<br>                counter[idx]++<br>            }<br>        }(i)<br>    }<br>    wg.Wait()<br>}<br></code></pre><br><p>上面的这段代码，有<code>False Sharing</code>问题，我们修改一下：</p><br><pre><code class="go language-go">func falseSharing() {<br>    var wg sync.WaitGroup<br><br>    var counter [4]struct {<br>        data int<br>        _    [64 - 8]byte<br>    }<br><br>    for i := 0; i &lt; len(counter); i++ {<br>        wg.Add(1)<br><br>        go func(idx int) {<br>            defer wg.Done()<br><br>            for n := 0; n &lt; 1000000; n++ {<br>                counter[idx].data++<br>            }<br>        }(i)<br>    }<br>    wg.Wait()<br>}<br></code></pre><br><p>每个计数器一条<code>cache line</code>，修改计数器只是修改0号位，相互之间没有重叠的地方，这样就不会导致缓存失效问题。怎么样保证每个计数器调用单独的<code>cache line</code>，简单做法就是用来补位，需要补位字段，提高性能。</p><br><pre><code class="go language-go">func test() {<br>    var counter [8]struct {<br>        x int<br>        // _ [64 - 8]byte<br>    }<br>    var wg sync.WaitGroup<br>    wg.Add(len(counter))<br>    for i := 0; i &lt; len(counter); i++ {<br>        go func(id int) {<br>            for n := 0; n &lt; 100000; n++ {<br>                counter[id].x++<br>            }<br>            wg.Done()<br>        }(i)<br>    }<br>    wg.Wait()<br>}<br><br>func BenchmarkTest(b <em>testing.B) {<br>    b.Run(“nopad”, func(b </em>testing.B) {<br>        for i := 0; i &lt; b.N; i++ {<br>            test1()<br>        }<br>    })<br>    b.Run(“pad”, func(b *testing.B) {<br>        for i := 0; i &lt; b.N; i++ {<br>            test2()<br>        }<br>    })<br>}<br></code></pre><br><blockquote><br>  <p>false sharing; cache line; MESI, RFO</p><br></blockquote><br><p>下面命令查看系统<code>cache line</code>大小：</p><br><pre><code class="bash language-bash">$ cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size<br>$ cat /proc/cpuinfo | grep cache_alignment<br></code></pre><br><p>mheap.go文件</p><br><p>测试样本有八个计数器，每个计数器是个结构体，根据索引访问每个是独立的计数器，没有数据竞争因为不会访问相邻的内存。区别在于有一行用来补位，结果带来这么大的性能差别，这就是所谓的缓存共会不会失效的问题。</p><br><p>CPU有一套自己缓存体系，CPU没有办法直接访问内存，现代CPU所有的数据都是从它的缓存获取的。L1缓存分为指令和数据，CPU有自己独立的L1缓存、L2缓存，所有CPU共享L3级缓存，实际上是这样架构。当访问数据的时候，它会优先一级一级缓存去找，找不到才会到主存里找。缓存器负责从主存和L3、L2、L1取数据，写数据反过来一个方向。</p><br><p>一份数据可能同时被两个CPU缓存，读没有问题。假设CPU1修改数据，它会向地址总线发出一个请求对修改数据要求独占，这条指令在地址总线被其他CPU监听，会立即把自己缓存里相同的数据缓存失效，导致相同的数据在其他的CPU核立即失效，从共享变成独占直到修改成功下次访问重新刷新缓存。</p><br><p>CPU实际上不理解数据结构，它的缓存器存的是一块缓存，缓存分成一块一块的，每块称之为行，每行称之为<code>cahce line</code>缓存行。所谓的独占、修改、共享是以缓存行为单位的。缓存行通常情况下64字节。当缓存数据的时候，它会以某个对象起始的连续的64个字节内存一次性缓存一行，这就是所谓的缓存空间局部性原则，接下来很大概率读取相邻的内存，也就意味着修改同样是缓存行，拿到这一行的独占权。会导致其他CPU相同的这一行数据失效，修改成功要重新刷新缓存，这就是所谓的缓存行的概念。</p><br><p>每个计数器是8字节，一共是8个64字节正好一缓存行，意味着数据正好会被刷到CPU1的一行里，CPU2、CPU3、CPU4都有同样的数组，这样同一个数组会被所有CPU内核缓存起来。如果不了解这个背景知识，我们认为CPU1只修改一小块，CPU2修改一小块，从代码上看它修改内存不相等。但是对cpu来说它按照一整行64字节来锁定的，它不关心在64字节里访问哪一块，64字节是一个整体。当CPU1修改数据的时候要独占64字节会导致CPU2整个缓存行全部失效。CPU2要修改也要把缓存重新刷回来。任何一方修改计数器都会导致其他cpu里缓存行全部失效。</p><br><p>怎么解决呢？用补位的方式占64字节。这样CPU1刷到是64字节，CPU1和CPU2刷的数据是不一样的，数据不相交。CPU2缓存数据不会出现在CPU1里。用补位把原来挤在一块凑成一个cache line。通过补位的方式每一个元素占64字节不被所有CPU共享，每个CPU都持有一条独立的行，这样缓存就能正常工作。尤其是在服务器编程核数量越多的情况下，影响会越来越严重。</p><br><p>对于伪共享背后有一整套的理论，以后写相关并发的时候要考虑到伪共享可能会造成一些性能损失。它跟语言无关，使用任何的语言最终都跟cpu打交道，都可能会面临这样的一些问题。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42falsesharing"><span class="toc-number">2.</span> <span class="toc-text">4-2 False Sharing 的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#02vs"><span class="toc-number">2.1.</span> <span class="toc-text">02 数组指针 vs 指针数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#01"><span class="toc-number">2.2.</span> <span class="toc-text">01 是不是数组就一定能分配在栈上？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#02falsesharing"><span class="toc-number">2.3.</span> <span class="toc-text">02 False Sharing的问题</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&text=重学 Go 语言：基础篇-39"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&is_video=false&description=重学 Go 语言：基础篇-39"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-39&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&title=重学 Go 语言：基础篇-39"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-39/2019/11/&name=重学 Go 语言：基础篇-39&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

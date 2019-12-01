@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="面向对象       12.1　状态 12.2　过程式编程 12.3　函数式编程 12.4　面向对象编程 12.5　术语表 12.6　挑战练习           “只有两种编程语言：大家抱怨的和没人用的。”   ——本贾尼 · 斯特劳斯特鲁普（Bjarne Stroustrup）  编程范式（programming paradigm），即编程风格。当前有许多不同的编程范">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面向对象">
+<meta property="og:url" content="http://logan_2019.github.io/Python无师自通/12_oop/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="面向对象       12.1　状态 12.2　过程式编程 12.3　函数式编程 12.4　面向对象编程 12.5　术语表 12.6　挑战练习           “只有两种编程语言：大家抱怨的和没人用的。”   ——本贾尼 · 斯特劳斯特鲁普（Bjarne Stroustrup）  编程范式（programming paradigm），即编程风格。当前有许多不同的编程范">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.048Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面向对象">
+<meta name="twitter:description" content="面向对象       12.1　状态 12.2　过程式编程 12.3　函数式编程 12.4　面向对象编程 12.5　术语表 12.6　挑战练习           “只有两种编程语言：大家抱怨的和没人用的。”   ——本贾尼 · 斯特劳斯特鲁普（Bjarne Stroustrup）  编程范式（programming paradigm），即编程风格。当前有许多不同的编程范">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>面向对象</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/Python无师自通/20_use/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python无师自通/13_4_pillars/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&text=面向对象"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&is_video=false&description=面向对象"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=面向对象&body=Check out this article: http://logan_2019.github.io/Python无师自通/12_oop/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&name=面向对象&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#121"><span class="toc-number">1.</span> <span class="toc-text">12.1　状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#122"><span class="toc-number">2.</span> <span class="toc-text">12.2　过程式编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#123"><span class="toc-number">3.</span> <span class="toc-text">12.3　函数式编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#124"><span class="toc-number">4.</span> <span class="toc-text">12.4　面向对象编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#125"><span class="toc-number">5.</span> <span class="toc-text">12.5　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#126"><span class="toc-number">6.</span> <span class="toc-text">12.6　挑战练习</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        面向对象
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.048Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>面向对象</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#121">12.1　状态</a></li>
+<li><a href="#122">12.2　过程式编程</a></li>
+<li><a href="#123">12.3　函数式编程</a></li>
+<li><a href="#124">12.4　面向对象编程</a></li>
+<li><a href="#125">12.5　术语表</a></li>
+<li><a href="#126">12.6　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“只有两种编程语言：大家抱怨的和没人用的。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——本贾尼 · 斯特劳斯特鲁普（Bjarne Stroustrup）</span></p>
+</blockquote>
+<p><strong>编程范式</strong>（programming paradigm），即编程风格。当前有许多不同的编程范式。要达到专业程序员水平，则需要学习面向对象编程或函数式编程范式。本章中将学习过程式编程、函数式编程和面向对象编程，并着重介绍面向对象编程。</p>
+<h3 id="121">12.1　状态</h3>
+<p>不同编程范式之间的根本区别之一，就是对<strong>状态</strong>（state）的处理。状态，是程序运行时其内部变量的值。<strong>全局状态</strong>（global state）是程序运行时其内部全局变量的值。</p>
+<h3 id="122">12.2　过程式编程</h3>
+<p>本书第一部分的程序，使用的是<strong>过程式编程</strong>（procedural programming）：这种编程风格要求你编写一系列步骤来解决问题，每步都会改变程序的状态。在过程式编程中，写的是“先做这个，再做那个”这样的代码。示例如下：</p>
+<pre><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/jv2rrl8</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  x = <span class="hljs-number">2</span>
+<span class="hljs-number">5</span>  y = <span class="hljs-number">4</span>
+<span class="hljs-number">6</span>  z = <span class="hljs-number">8</span>
+<span class="hljs-number">7</span>  xyz = x + y + z
+<span class="hljs-number">8</span>  xyz
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">14</span>
+</code></pre>
+<p>上例中每行代码都改变了程序的状态。首先，定义了 <code>x</code>，随后定义 <code>y</code>，然后是 <code>z</code>。最后，定义 <code>xyz</code> 的值。</p>
+<p>在过程式编程时，我们将数据存储在全局变量中，并通过函数进行处理。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/gldykam</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  rock = []
+<span class="hljs-number">05</span>  country = []
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+<span class="hljs-number">08</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">collect_songs</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">09</span>      song = <span class="hljs-string">"Enter a song."</span>
+<span class="hljs-number">10</span>      ask = <span class="hljs-string">"Type r or c. q to quit"</span>
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>      <strong><span class="hljs-keyword">while</span></strong> <span class="hljs-keyword">True</span>:
+<span class="hljs-number">14</span>          genre = input(ask)
+<span class="hljs-number">15</span>          <strong><span class="hljs-keyword">if</span></strong> genre == <span class="hljs-string">"q"</span>:
+<span class="hljs-number">16</span>              <strong><span class="hljs-keyword">break</span></strong>
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>
+<span class="hljs-number">19</span>          <strong><span class="hljs-keyword">if</span></strong> genre == <span class="hljs-string">"r"</span>:
+<span class="hljs-number">20</span>              rk = input(song)
+<span class="hljs-number">21</span>              rock.append(rk)
+<span class="hljs-number">22</span>
+<span class="hljs-number">23</span>
+<span class="hljs-number">24</span>          <strong><span class="hljs-keyword">elif</span></strong> genre ==(<span class="hljs-string">"c"</span>):
+<span class="hljs-number">25</span>              cy = input(song)
+<span class="hljs-number">26</span>              country.append(cy)
+<span class="hljs-number">27</span>
+<span class="hljs-number">28</span>
+<span class="hljs-number">29</span>          <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">30</span>              print(<span class="hljs-string">"Invalid."</span>)
+<span class="hljs-number">31</span>      <strong>print</strong>(rock)
+<span class="hljs-number">32</span>      print(country)
+<span class="hljs-number">33</span>
+<span class="hljs-number">34</span>
+<span class="hljs-number">35</span>  collect_songs()
+
+&gt;&gt; Type r <span class="hljs-keyword">or</span> c. q to quit:</code></pre>
+<p>编写类似的简短程序时，使用过程式编程是没有什么问题的，但是由于我们将程序的状态都保存在全局变量中，如果程序慢慢变大就会碰到问题。因为随着程序规模扩大，可能会在多个函数中使用全局变量，我们很难记录都有哪些地方对一个全局变量进行了修改。例如，某个函数可能改变了一个全局变量的值，在后面的程序中又有一个函数改变了相同的变量，因为写第二个函数时程序员忘记了已经在第一个函数中做了修改。这种情况经常发生，会严重破坏程序的数据准确性。</p>
+<p>随着程序越来越复杂，全局变量的数量也逐渐增加。再加上程序需要不断添加新的功能，也需要修改全局变量，这样程序很快会变得无法维护。而且，这种编程方式也会有<strong>副作用</strong>（side effects），其中之一就是会改变全局变量的状态。使用过程式编程时，经常会碰到意料之外的副作用，比如意外递增某个变量两次。</p>
+<p>这些问题促使了面向对象编程和函数式编程的出现，二者采取了不同的方法来解决上述问题。</p>
+<h3 id="123">12.3　函数式编程</h3>
+<p><strong>函数式编程</strong>（functional programming）源自拉姆达运算（lambda calculus）：世界上最小的通用编程语言（由数学家阿隆佐 · 邱奇发明）。函数式编程通过消除全局状态，解决了过程式编程中出现的问题。函数式程序员依靠的是不使用或不改变全局状态的函数，他们唯一使用的状态就是传给函数的参数。一个函数的结果通常被继续传给另一个函数。因此，这些程序员通过函数之间传递状态，避免了全局状态的问题，也因此消除了由此带来的副作用和其他问题。</p>
+<p>函数式编程的专业术语很多，有人下过一个还算精简的定义：“函数式代码有一个特征：没有副作用。它不依赖当前函数之外的数据，也不改变当前函数之外的数据。”并给出了一个带副作用的函数。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/gu9jpco</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  a = <span class="hljs-number">0</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">increment</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">8</span>      <strong><span class="hljs-keyword">global</span></strong> a
+<span class="hljs-number">9</span>      a += <span class="hljs-number">1</span></code></pre>
+<p>还给出了一个不带副作用的函数。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/z27k2yl</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">increment</span><span class="hljs-params">(a)</span>:</span>
+<span class="hljs-number">5</span>      <strong><span class="hljs-keyword">return</span></strong> a + <span class="hljs-number">1</span></code></pre>
+<p>第一个函数有副作用，因为它依赖函数之外的数据，并改变了当前函数之外的数据——递增了全局变量的值。第二个函数没有副作用，因为它没有依赖或修改自身之外的数据。</p>
+<p>函数式编程的一个优点，在于它消除了所有由全局状态引发的错误（函数式编程中不存在全局状态）。但是也有缺点，即部分问题更容易通过状态进行概念化。例如，设计一个包含全局状态的人机界面，比设计没有全局状态的人机界面要更简单。如果你要写一个程序，通过按钮改变用户看到画面的可见状态，用全局状态来编写该按钮会更简单。你可以创建一个全局变量，值为 True 时画面可见，值为 False 时则不可见。如果不使用全局状态，设计起来就比较困难。</p>
+<h3 id="124">12.4　面向对象编程</h3>
+<p><strong>面向对象</strong>（object-oriented）编程范式也是通过消除全局状态来解决过程式编程引发的问题，但并不是用函数，而是用对象来保存状态。在面向对象编程中，<strong>类</strong>（class）定义了一系列相互之间可进行交互的对象。类是程序员对类似对象进行分类分组的一种手段。假设有一袋橘子，每个橘子是一个对象。所有的橘子都有类似的属性，如颜色和重量，但是这些属性的具体值则各不相同。这里就可以使用类对橘子进行建模，创建属性值不同的橘子对象。例如，可定义一个橘子类，既支持创建深色、重 10 盎司（约 283 克）的橘子对象，也支持创建浅色、重 12 盎司（约 340 克）的橘子对象。</p>
+<p>每个对象都是类的示例。如果定义了一个叫 Orange 的类，然后创建两个 Orange 对象，那么每个对象都是 Orange 类的实例；它们的数据类型相同，都是 Orange。对象和实例这两个术语可以替换使用。在定义类时，该类的所有实例是类似的：都拥有类中定义的属性，如颜色或种类，但是每个实例的具体属性值是不一样的。</p>
+<p>在 Python 中，类是一个复合语句，包含代码头和主体。可使用语法 <code>class [类名]: [代码主体]</code> 来定义类，其中<code>[类名]</code>是类的名称，<code>[代码主体]</code>是定义的类的具体代码。根据惯例，Python 中的类名都是以大写字母开头，且采用驼峰命名法，即如果类名由多个单词组成，每个单词的第一个字母都应该大写，如 <code>LikeThis</code>，而不是用下划线分隔（函数的命令惯例）。类中的代码主体可以是一个单一语句，或一个叫<strong>方法</strong>（method）的复合语句。方法类似于函数，但因为是在类中定义的，只能在类创建的对象上调用方法（如本书第一部分中在字符串上调用 <code>.upper()</code>）。方法的命名则遵循函数命名规则，都是小写，并用下划线分隔。</p>
+<p>方法的定义方式与函数定义方式相同，但有两处区别：一是必须在类的内部定义方法，二是必须接受至少一个参数（特殊情况除外）。按照惯例，方法的第一个参数总是被命名为 <code>self</code>。创建方法时，至少要定义一个参数，因为在对象上调用方法时，Python 会自动将调用方法的对象作为参数传入。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zrmjape</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Orange</span>:</span>
+<span class="hljs-number">5</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">6</span>          print(<span class="hljs-string">"Created!"</span>)</code></pre>
+<p>可使用 <code>self</code> 定义<strong>实例变量</strong>（instance variable）：属于对象的变量。如果创建多个对象，各自都有不同的实例变量值。通过语法 <code>self.[变量名] = [变量值]</code> 定义实例变量。通常是在特殊方法 <code>__init__</code>（代表初始化）中定义实例变量，创建对象时 Python 会调用该方法。</p>
+<p>一个代表橘子的类的示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/hrf6cus</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Orange</span>:</span>
+<span class="hljs-number">5</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, c)</span></span>:
+<span class="hljs-number">6</span>          <span class="hljs-keyword">self</span>.weight = w
+<span class="hljs-number">7</span>          <span class="hljs-keyword">self</span>.color = c
+<span class="hljs-number">8</span>          <strong>print</strong>(<span class="hljs-string">"Created!"</span>)</code></pre>
+<p>创建 <code>Orange</code> 对象时（上例中没有创建），就会执行 <code>__init__</code> 中的代码，创建两个实例变量：<code>weight</code> 和 <code>color</code>。可以在类的方法中，和使用普通变量一样使用这些实例变量。创建 <code>Orange</code> 对象时，<code>__init__</code> 中的代码还会打印 <code>Created!</code>。双下划线包围的方法（如 <code>__init__</code>），被称为<strong>魔法方法</strong>（magic method），即 Python 用于创建对象等特殊用途的方法。</p>
+<p>创建新 <code>Orange</code> 对象的语法，与调用函数的语法类似：<code>[类名]([参数])</code>，将<code>[类名]</code>替换为想要用来创建对象的类的名称，<code>[参数]</code>替换为 <code>__init__</code> 接受的参数即可。这里不用传入 <code>self</code> 参数，Python 会自动传入。创建新对象的过程，也被称为<strong>创建类的实例</strong>。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jlc7pvk</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Orange</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, c)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.weight = w
+<span class="hljs-number">07</span>          <span class="hljs-keyword">self</span>.color = c
+08          print(<span class="hljs-string">"Created!"</span>)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  or1 = Orange(<span class="hljs-number">10</span>, <span class="hljs-string">"dark orange"</span>)
+<span class="hljs-number">12</span>  print(or1)
+
+<span class="hljs-meta">&gt;&gt;</span> Created!
+&gt;&gt; &lt;__main_<span class="hljs-number">_</span>.Orange object at <span class="hljs-number">0x101a787b8</span>&gt;</code></pre>
+<p>定义好类之后，接着用代码 <code>Orange(10, "dark orange")</code> 创建了一个 <code>Orange</code> 类的实例，程序会打印出 <code>Created!</code> 字样。然后，再打印新创建的 <code>Orange</code> 对象，Python 告诉我们它是一个 <code>Orange</code> 对象，并打印其在内存中的地址（你在计算机上运行时得到的结果，将不同于本例中的结果）。</p>
+<p>创建对象之后，可使用语法<code>[对象名].[变量名]</code>获取实例变量的值。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/grwzeo4</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Orange</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, c)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.weight = w
+<span class="hljs-number">07</span>          <span class="hljs-keyword">self</span>.color = c
+08          <strong>print</strong>(<span class="hljs-string">"Created!"</span>)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  or1 = Orange(<span class="hljs-number">10</span>, <span class="hljs-string">"dark orange"</span>)
+<span class="hljs-number">12</span>  print(or1.weight)
+<span class="hljs-number">13</span>  <strong>print</strong>(or1.color)
+
+<span class="hljs-meta">&gt;&gt;</span> Created!
+&gt;&gt; <span class="hljs-number">10</span>
+<span class="hljs-meta">&gt;&gt;</span> dark orange</code></pre>
+<p>也可使用语法<code>[对象名].[变量名] = [新的值]</code>改变实例变量的值：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jsxgw44</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Orange</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, c)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.weight = w
+<span class="hljs-number">07</span>          <span class="hljs-keyword">self</span>.color = c
+08          <strong>print</strong>(<span class="hljs-string">"Created!"</span>)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  or1 = Orange(<span class="hljs-number">10</span>, <span class="hljs-string">"dark orange"</span>)
+<span class="hljs-number">12</span>  or1.weight = <span class="hljs-number">100</span>
+<span class="hljs-number">13</span>  or1.color = <span class="hljs-string">"light orange"</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  print(or1.weight)
+<span class="hljs-number">17</span>  print(or1.color)
+
+<span class="hljs-meta">&gt;&gt;</span> Created!
+&gt;&gt; <span class="hljs-number">100</span>
+<span class="hljs-meta">&gt;&gt;</span> light orange</code></pre>
+<p>尽管实例变量 <code>color</code> 和 <code>weight</code> 一开始被赋予了值 <code>"dark orange"</code> 和 <code>10</code>，但是我们还是能将其改为 <code>"light orange"</code> 和 <code>100</code>。</p>
+<p>可以使用 <code>Orange</code> 类创建多个橘子对象。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jrmxlmo</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Orange</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, c)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.weight = w
+<span class="hljs-number">07</span>          <span class="hljs-keyword">self</span>.color = c
+08          print(<span class="hljs-string">"Created!"</span>)
+09
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  or1 = Orange(<span class="hljs-number">4</span>, <span class="hljs-string">"light orange"</span>)
+<span class="hljs-number">12</span>  or2 = Orange(<span class="hljs-number">8</span>, <span class="hljs-string">"dark orange"</span>)
+<span class="hljs-number">13</span>  or3 = Orange(<span class="hljs-number">14</span>, <span class="hljs-string">"yellow"</span>)
+
+<span class="hljs-meta">&gt;&gt;</span> Created!
+&gt;&gt; Created!
+&gt;&gt; Created!</code></pre>
+<p>橘子除了颜色和重量等属性之外，还有其他的属性。它可能还会腐烂，这些都可以通过方法来模拟。下面的代码为 <code>Orange</code> 对象增加了腐烂的属性：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/zcp32pz</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Orange</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self, w, c)</span>:</span>
+<span class="hljs-number">06</span>          <span class="hljs-string">"""重量的单位是盎司"""</span>
+<span class="hljs-number">07</span>          self.weight = w
+<span class="hljs-number">08</span>          self.color = c
+<span class="hljs-number">09</span>          self.mold = <span class="hljs-number">0</span>
+<span class="hljs-number">10</span>          print(<span class="hljs-string">"Created!"</span>)
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">rot</span><span class="hljs-params">(self, days, temp)</span>:</span>
+<span class="hljs-number">14</span>          self.mold = days * temp
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>  orange = Orange(<span class="hljs-number">6</span>, <span class="hljs-string">"orange"</span>)
+<span class="hljs-number">18</span>  <strong>print</strong>(orange.mold)
+<span class="hljs-number">19</span>  orange.rot(<span class="hljs-number">10</span>, <span class="hljs-number">98</span>)
+<span class="hljs-number">20</span>  <strong>print</strong>(orange.mold)
+
+&gt;&gt; Created!
+&gt;&gt; <span class="hljs-number">0</span>
+&gt;&gt; <span class="hljs-number">98.0</span></code></pre>
+<p><code>rot</code> 方法接受两个参数：橘子被摘下的天数，以及这些天的平均温度。调用该方法时，其使用公式改变了变量 <code>mold</code> 的值，这是因为可以在任意方法中改变实例变量的值。现在，橘子就可以腐烂了。</p>
+<p>可以在类中定义多个方法。下面的代码是一个关于长方形的类，包含一个计算面积的方法和一个改变大小的方法：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/j28qoox</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Rectangle</span>():</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, l)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.width = w
+<span class="hljs-number">07</span>          <span class="hljs-keyword">self</span>.len = l
+08
+09
+<span class="hljs-number">10</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">area</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">11</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.width * <span class="hljs-keyword">self</span>.len
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">change_size</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, l)</span></span>:
+<span class="hljs-number">15</span>          <span class="hljs-keyword">self</span>.width = w
+<span class="hljs-number">16</span>          <span class="hljs-keyword">self</span>.len = l
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>
+<span class="hljs-number">19</span>  rectangle = Rectangle(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>)
+<span class="hljs-number">20</span>  <strong>print</strong>(rectangle.area())
+<span class="hljs-number">21</span>  rectangle.change_size(<span class="hljs-number">20</span>, <span class="hljs-number">40</span>)
+<span class="hljs-number">22</span>  <strong>print</strong>(rectangle.area())
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">200</span>
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">800</span></code></pre>
+<p>本例中，<code>Rectangle</code> 对象有两个实例变量：<code>len</code> 和 <code>width</code>。<code>area</code> 方法将两个实例变量相乘，返回 <code>Rectangle</code> 的面积；<code>change_size</code> 方法为实例变量赋予调用者新传入参数的值，从而改变了大小。</p>
+<p>面向对象编程有多个优点：鼓励代码复用，从而减少了开发和维护的时间；还鼓励拆解问题，使代码更容易维护。但有一个缺点便是编写程序时要多下些功夫，因为要做很多的事前规划和设计。</p>
+<h3 id="125">12.5　术语表</h3>
+<p><strong>编程范式</strong>：编程风格。</p>
+<p><strong>状态</strong>：程序运行时其内变量的值。</p>
+<p><strong>全局状态</strong>：程序运行时其内全局变量的值。</p>
+<p><strong>过程式编程</strong>：该编程风格要求编写一系列步骤来解决问题，每一步都会改变程序的状态。</p>
+<p><strong>函数式编程</strong>：函数式编程通过函数传递消除了全局状态，解决了过程式编程中出现的问题。</p>
+<p><strong>副作用</strong>：改变全局变量的值。</p>
+<p><strong>面向对象</strong>：定义相互之间可交互的对象的编程范式。</p>
+<p><strong>类</strong>：程序员对类似对象进行分类分组的一种手段。</p>
+<p><strong>方法</strong>：类似函数，但其是在类中定义的，只能在类创建的对象上调用方法。</p>
+<p><strong>实例</strong>：每个对象都是类的一个实例。类的每个实例与该类的其他实例拥有相同的数据类型。</p>
+<p><strong>实例变量</strong>：属于对象的变量。</p>
+<p><strong>魔法方法</strong>：Python 在特殊情况下使用的方法，如对象初始化。</p>
+<p><strong>类的实例化</strong>：使用类创建一个新对象。</p>
+<h3 id="126">12.6　挑战练习</h3>
+<p>1．定义一个叫 <code>Apple</code> 的类，创建4个实例变量，表示苹果的4种属性。</p>
+<p>2．定义一个叫 <code>Circle</code> 的类，创建 <code>area</code> 方法计算其面积。然后创建一个 <code>Circle</code> 对象，调用其 <code>area</code> 方法，打印结果。可使用 Python 内置的 <code>math</code> 模块中的 <code>pi</code> 函数。</p>
+<p>3．定义一个叫 <code>Triangle</code> 的类，创建 <code>area</code> 方法计算并返回面积。然后创建一个 <code>Triangle</code> 对象，调用其 <code>area</code> 方法，打印结果。</p>
+<p>4．定义一个叫 <code>Hexagon</code> 的类，创建 <code>cacculate_perimeter</code> 方法，计算并返回其周长。然后创建一个 <code>Hexagon</code> 对象，调用其 <code>calculate_perimeter</code> 方法，并打印结果。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#121"><span class="toc-number">1.</span> <span class="toc-text">12.1　状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#122"><span class="toc-number">2.</span> <span class="toc-text">12.2　过程式编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#123"><span class="toc-number">3.</span> <span class="toc-text">12.3　函数式编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#124"><span class="toc-number">4.</span> <span class="toc-text">12.4　面向对象编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#125"><span class="toc-number">5.</span> <span class="toc-text">12.5　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#126"><span class="toc-number">6.</span> <span class="toc-text">12.6　挑战练习</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&text=面向对象"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&is_video=false&description=面向对象"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=面向对象&body=Check out this article: http://logan_2019.github.io/Python无师自通/12_oop/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&title=面向对象"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/12_oop/2019/09/&name=面向对象&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

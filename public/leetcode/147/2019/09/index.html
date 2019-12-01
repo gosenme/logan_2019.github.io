@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="1123456789class Solution:    def tribonacci(self, n: int) -&amp;gt; int:        n_l = [0, 1, 1]        if n &amp;lt;= 2:            return n_l[n]        else:            for x in range(3, n + 1):">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode周赛147">
+<meta property="og:url" content="http://logan_2019.github.io/leetcode/147/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="1123456789class Solution:    def tribonacci(self, n: int) -&amp;gt; int:        n_l = [0, 1, 1]        if n &amp;lt;= 2:            return n_l[n]        else:            for x in range(3, n + 1):">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.095Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode周赛147">
+<meta name="twitter:description" content="1123456789class Solution:    def tribonacci(self, n: int) -&amp;gt; int:        n_l = [0, 1, 1]        if n &amp;lt;= 2:            return n_l[n]        else:            for x in range(3, n + 1):">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>leetcode周赛147</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/leetcode/146/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/http/http2/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/leetcode/147/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/leetcode/147/2019/09/&text=leetcode周赛147"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/leetcode/147/2019/09/&is_video=false&description=leetcode周赛147"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=leetcode周赛147&body=Check out this article: http://logan_2019.github.io/leetcode/147/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/leetcode/147/2019/09/&name=leetcode周赛147&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">1.</span> <span class="toc-text">1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">2.</span> <span class="toc-text">2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">3.</span> <span class="toc-text">3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4"><span class="toc-number">4.</span> <span class="toc-text">4</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        leetcode周赛147
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.094Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tribonacci</span><span class="params">(self, n: int)</span> -&gt; int:</span></span><br><span class="line">        n_l = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> n &lt;= <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">return</span> n_l[n]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">3</span>, n + <span class="number">1</span>):</span><br><span class="line">                n_l.append(sum(n_l[x - <span class="number">3</span>:x]))</span><br><span class="line">        <span class="keyword">return</span> n_l[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">alphabetBoardPath</span><span class="params">(self, target: str)</span> -&gt; str:</span></span><br><span class="line"></span><br><span class="line">        res = <span class="string">""</span></span><br><span class="line">        d = &#123;<span class="string">'a'</span>: (<span class="number">0</span>, <span class="number">0</span>), <span class="string">'b'</span>: (<span class="number">0</span>, <span class="number">1</span>), <span class="string">'c'</span>: (<span class="number">0</span>, <span class="number">2</span>), <span class="string">'d'</span>: (<span class="number">0</span>, <span class="number">3</span>), <span class="string">'e'</span>: (<span class="number">0</span>, <span class="number">4</span>), <span class="string">'f'</span>: (<span class="number">1</span>, <span class="number">0</span>), <span class="string">'g'</span>: (<span class="number">1</span>, <span class="number">1</span>), <span class="string">'h'</span>: (<span class="number">1</span>, <span class="number">2</span>),</span><br><span class="line">             <span class="string">'i'</span>: (<span class="number">1</span>, <span class="number">3</span>), <span class="string">'j'</span>: (<span class="number">1</span>, <span class="number">4</span>), <span class="string">'k'</span>: (<span class="number">2</span>, <span class="number">0</span>), <span class="string">'l'</span>: (<span class="number">2</span>, <span class="number">1</span>), <span class="string">'m'</span>: (<span class="number">2</span>, <span class="number">2</span>), <span class="string">'n'</span>: (<span class="number">2</span>, <span class="number">3</span>), <span class="string">'o'</span>: (<span class="number">2</span>, <span class="number">4</span>), <span class="string">'p'</span>: (<span class="number">3</span>, <span class="number">0</span>),</span><br><span class="line">             <span class="string">'q'</span>: (<span class="number">3</span>, <span class="number">1</span>), <span class="string">'r'</span>: (<span class="number">3</span>, <span class="number">2</span>), <span class="string">'s'</span>: (<span class="number">3</span>, <span class="number">3</span>), <span class="string">'t'</span>: (<span class="number">3</span>, <span class="number">4</span>), <span class="string">'u'</span>: (<span class="number">4</span>, <span class="number">0</span>), <span class="string">'v'</span>: (<span class="number">4</span>, <span class="number">1</span>), <span class="string">'w'</span>: (<span class="number">4</span>, <span class="number">2</span>), <span class="string">'x'</span>: (<span class="number">4</span>, <span class="number">3</span>),</span><br><span class="line">             <span class="string">'y'</span>: (<span class="number">4</span>, <span class="number">4</span>), <span class="string">'z'</span>: (<span class="number">5</span>, <span class="number">0</span>)&#125;</span><br><span class="line">        start = (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">for</span> ns <span class="keyword">in</span> target:</span><br><span class="line">            nxt = d[ns]</span><br><span class="line">            UD = nxt[<span class="number">0</span>] - start[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> UD &gt; <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">if</span> start[<span class="number">1</span>] &gt; <span class="number">0</span> <span class="keyword">and</span> nxt[<span class="number">0</span>] == <span class="number">5</span>:</span><br><span class="line">                    res += <span class="string">"D"</span> * (<span class="number">4</span> - start[<span class="number">0</span>])</span><br><span class="line">                    UD -= (<span class="number">4</span> - start[<span class="number">0</span>])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="string">"D"</span> * UD</span><br><span class="line">                    UD = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res += <span class="string">"U"</span> * (-UD)</span><br><span class="line">            LR = nxt[<span class="number">1</span>] - start[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">if</span> LR &gt; <span class="number">0</span>:</span><br><span class="line">                res += <span class="string">"R"</span> * LR</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res += <span class="string">"L"</span> * (-LR)</span><br><span class="line">            res += <span class="string">"D"</span>*UD</span><br><span class="line">            res += <span class="string">"!"</span></span><br><span class="line">            start = nxt</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> List</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largest1BorderedSquare</span><span class="params">(self, grid: List[List[int]])</span> -&gt; int:</span></span><br><span class="line">        lr, lc = len(grid), len(grid[<span class="number">0</span>])</span><br><span class="line">        left = [[<span class="number">0</span>] * lc <span class="keyword">for</span> _ <span class="keyword">in</span> range(lr)]</span><br><span class="line">        up = [[<span class="number">0</span>] * lc <span class="keyword">for</span> _ <span class="keyword">in</span> range(lr)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(lr):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(lc):</span><br><span class="line">                <span class="keyword">if</span> grid[i][j] == <span class="number">0</span>:</span><br><span class="line">                    left[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    left[i][j] = <span class="number">1</span> + (left[i][j - <span class="number">1</span>] <span class="keyword">if</span> j &gt;= <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(lc):</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(lr):</span><br><span class="line">                <span class="keyword">if</span> grid[i][j] == <span class="number">0</span>:</span><br><span class="line">                    up[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    up[i][j] = <span class="number">1</span> + (up[i - <span class="number">1</span>][j] <span class="keyword">if</span> i &gt;= <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        ans = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(lr):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(lc):</span><br><span class="line">                <span class="keyword">if</span> grid[i][j] == <span class="number">1</span>:</span><br><span class="line">                    tmp = <span class="number">1</span></span><br><span class="line">                    l = min(up[i][j], left[i][j])</span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span>, l + <span class="number">1</span>):</span><br><span class="line">                        <span class="keyword">if</span> up[i][j - k + <span class="number">1</span>] &gt;= k <span class="keyword">and</span> left[i - k + <span class="number">1</span>][j] &gt;= k:</span><br><span class="line">                            tmp = max(tmp, k)</span><br><span class="line">                    ans = max(ans, tmp)</span><br><span class="line">        <span class="keyword">return</span> ans * ans</span><br></pre></td></tr></table></figure>
+<h3 id="4"><a href="#4" class="headerlink" title="4"></a>4</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stoneGameII</span><span class="params">(self, piles: list)</span> -&gt; int:</span></span><br><span class="line">        dp = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">search</span><span class="params">(st, bigm)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> (st, bigm) <span class="keyword">in</span> dp:</span><br><span class="line">                <span class="keyword">return</span> dp[(st, bigm)]</span><br><span class="line">            <span class="keyword">if</span> len(piles) - st &lt;= <span class="number">2</span> * bigm:</span><br><span class="line">                dp[st, bigm] = sum(piles[st:])</span><br><span class="line">                <span class="keyword">return</span> dp[(st, bigm)]</span><br><span class="line">            tmp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">2</span> * bigm + <span class="number">1</span>):</span><br><span class="line">                cur = sum(piles[st:st + i])</span><br><span class="line">                cur += sum(piles[st + i:]) - search(st + i, max(bigm, i))</span><br><span class="line">                tmp = max(tmp, cur)</span><br><span class="line">            dp[(st, bigm)] = tmp</span><br><span class="line">            <span class="keyword">return</span> tmp</span><br><span class="line"></span><br><span class="line">        search(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">1.</span> <span class="toc-text">1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">2.</span> <span class="toc-text">2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">3.</span> <span class="toc-text">3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4"><span class="toc-number">4.</span> <span class="toc-text">4</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/leetcode/147/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/leetcode/147/2019/09/&text=leetcode周赛147"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/leetcode/147/2019/09/&is_video=false&description=leetcode周赛147"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=leetcode周赛147&body=Check out this article: http://logan_2019.github.io/leetcode/147/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/leetcode/147/2019/09/&title=leetcode周赛147"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/leetcode/147/2019/09/&name=leetcode周赛147&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="进程和线程   本节内容：  进程、线程的区别 系统线程（内核线程、内核态）和用户线程的区别 CPU 时间片分配方式  进程、线程的区别 进程、线程、协程是我们在编程中最常见的三个概念。 什么叫程序，一个程序包含很多东西，比如代码、图片、音视频、安装文件，很显然程序是运行一段代码所需所有资源的总和，进程是程序启动后的状态。 进程严格上说也是资源的集合，相对于程序静态资源来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程和线程">
+<meta property="og:url" content="http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="进程和线程   本节内容：  进程、线程的区别 系统线程（内核线程、内核态）和用户线程的区别 CPU 时间片分配方式  进程、线程的区别 进程、线程、协程是我们在编程中最常见的三个概念。 什么叫程序，一个程序包含很多东西，比如代码、图片、音视频、安装文件，很显然程序是运行一段代码所需所有资源的总和，进程是程序启动后的状态。 进程严格上说也是资源的集合，相对于程序静态资源来">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://images.gitbook.cn/208c6c40-17a0-11e8-92e0-d983a1e85cb7">
+<meta property="og:image" content="http://images.gitbook.cn/45952a90-17a0-11e8-ac0a-03d2406b28d7">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.086Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程和线程">
+<meta name="twitter:description" content="进程和线程   本节内容：  进程、线程的区别 系统线程（内核线程、内核态）和用户线程的区别 CPU 时间片分配方式  进程、线程的区别 进程、线程、协程是我们在编程中最常见的三个概念。 什么叫程序，一个程序包含很多东西，比如代码、图片、音视频、安装文件，很显然程序是运行一段代码所需所有资源的总和，进程是程序启动后的状态。 进程严格上说也是资源的集合，相对于程序静态资源来">
+<meta name="twitter:image" content="http://images.gitbook.cn/208c6c40-17a0-11e8-92e0-d983a1e85cb7">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>进程和线程</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/gitchat/系统和并发/6_连续栈/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/gitchat/系统和并发/7_系统监控/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&text=进程和线程"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&is_video=false&description=进程和线程"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=进程和线程&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&name=进程和线程&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">进程、线程的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">系统线程（内核线程、内核态）和用户线程的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cpu"><span class="toc-number">3.</span> <span class="toc-text">CPU 时间片分配方式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        进程和线程
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.086Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>进程和线程</title>
+</head>
+<body>
+<article id="articleDiv" style="overflow: hidden;padding-bottom:20px;text-align: justify;"><div class="mazi-article-content dont-break-out"><p>本节内容：</p>
+<ul>
+<li>进程、线程的区别</li>
+<li>系统线程（内核线程、内核态）和用户线程的区别</li>
+<li>CPU 时间片分配方式</li>
+</ul>
+<h3 id>进程、线程的区别</h3>
+<p>进程、线程、协程是我们在编程中最常见的三个概念。</p>
+<p>什么叫程序，一个程序包含很多东西，比如代码、图片、音视频、安装文件，很显然程序是运行一段代码所需所有资源的总和，进程是程序启动后的状态。</p>
+<p>进程严格上说也是资源的集合，相对于程序静态资源来说它更多的是动态资源，比如说运行期的虚拟内存空间，正在执行时 CPU 所缓存的数据，这些的总和称之为<code>进程</code>，进程很显然是一种资源单位，操作系统为资源单位做管理。</p>
+<p>和 CPU 打交道的东西，称之为<code>线程</code>，线程是由进程的组成，线程在进程里面专门负责执行指令，指令是从进程 .text 段映射里读出来的，然后在进程里堆栈上操作一些数据，线程处理数据的资源边界是在进程内的。</p>
+<p>所以总结起来就是进程是一种资源单位，操作系统按照进程来分配资源管理资源，线程是进程内的，专门用来执行。</p>
+<p>对于操作系统来说，它的资源管理都是以进程为单位的，操作系统所有资源分配都是按照进程来处理的，每个进程会有唯一的 Id，操作系统给进程处理 mmu 映射、文件表，至于进程中的线程共享资源是内部的事情，操作系统分配资源是以进程为单位的，当程序执行的时候，必须要有线程的概念，所以每个进程最少有一个线程，否则 CPU 没法执行。生活中类似的如果一个工厂里面没有任何的生产线就是仓库不是工厂。</p>
+<h3 id="-1">系统线程（内核线程、内核态）和用户线程的区别</h3>
+<p>线程有两种状态，一种称之为<code>系统线程</code>，一种称之为<code>用户线程</code>，系统线程是什么呢？比如以 Linux 为例，早期的 Linux 没有线程一说，它把所有的这种执行单位称之为<code>任务</code>，一个任务可以有自己一套独立的资源，相当于一个进程有一个线程，多个任务共享一拨资源，实际上相当于一个进程里有多个线程。换句话说，任务本身是操作系统内部的执行单位，它唯一的区别在于这个任务是独立一拨资源还是共享一拨资源以此来划分资源边界。那我们就很容易理解，当我们先用进程圈好一部分资源，接下来我们可以创建多个任务，如果是每个任务看作一个线程的话无非就在于他们是否共享资源。</p>
+<p>但是严格来说任务和线程还是有区别的，线程我们严格意义上来说通常指的是任务加上它执行所需的资源，才称之为线程，如果线程只是执行单位没有任何资源，我们把它称之为纯任务，它是可复用的而线程本身实际上是有状态的，因为线程执行的时候实际上是有线程栈，所以说<strong>任务加上线程栈类似这样一些资源我们把它称之为线程</strong>。</p>
+<p>那么<code>系统线程</code>说白了就是操作系统提供的这样的任务单元，<code>用户线程</code>指的是在用户空间实现的一些这样的并发任务，跟操作系统没关系。</p>
+<h3 id="cpu">CPU 时间片分配方式</h3>
+<p>操作系统分配执行单位时候按照 CPU 时间片进行分配的，用户线程就和系统线程就有这样的一个区别。</p>
+<p>比如说系统线程，假设这个资源单位是进程边界的话，它的内部有两个系统线程的话，对于操作系统来说就是映射到两个执行单位，这些执行单位无非就是区别在于是否共享同拨资源，当它两个都共享同拨资源时候我们把它视作一个进程里面的两个线程，但是操作系统来说根本不关心这些，它关心的是两个执行单位，给执行单位分配时间片，至于它们俩共享资源和分配时间片无关，因为操作系统不关心享有了多少资源享有谁的资源，关心的就是两个独立的执行单位，给每个都分配时间片，就像你给每个孩子一颗糖接下来他们谁把谁的糖抢了跟你没关系。</p>
+<p>而用户线程在用户空间实现的，我们说过起码最少有一个系统任务，那么操作系统只给系统任务分配时间片，接下来怎么去共享这个系统任务进行切换，操作系统不知道，因为操作系统看不到用户空间层面上的用户线程，操作系统根本不关心。</p>
+<p><img src="http://images.gitbook.cn/208c6c40-17a0-11e8-92e0-d983a1e85cb7" alt="enter image description here"></p>
+<p>所以当你选择一门语言或者一种并发库时候必须知道它究竟是由系统线程实现的还是用户线程实现的，系统线程很显然在多核上直接可以被分配到多核上去，用户线程实际上只有一个实际上只能分配到一个核上，这地方有很大的差别。</p>
+<p>那么系统线程比用户线程好么？未必。程序执行的时候实际上分为两种状态，这个状态会被一条线划分，上面称之为用户态，下面称之为系统/内核态。用户态执行的都是我们自己写的代码，比如我们做的登录、用户注册。但是这些都是由操作系统做支持的，操作系统支持的时候就得进入系统态。举个例子调用文件读写操作，实际上是调用类似 open 的 API，这个 API 最终是由操作系统实现的，操作系统实际上会把 API 翻译成具体的系统调用 syscall，然后在操作系统里面执行一些代码，所以说这个代码实际上分为用户态代码和系统态代码。当从用户态代码进入系统态代码调用的时候会涉及到上下文切换，这是要付出一定的代价的。很显然系统线程去创建去调度是要付出这些代价的，所以很多时候系统线程成本会非常的高，当我们频繁的去创建系统线程销掉系统线程这种代价实在太大了。</p>
+<p><img src="http://images.gitbook.cn/45952a90-17a0-11e8-ac0a-03d2406b28d7" alt="enter image description here"></p>
+<p>所以呢，在这基础上往往会实现这样的模型。在用户态抽象很多个执行单位，我们把这些用户态线程映射到少量的系统线程上面去，然后建立类似于 Pool 这样的一个概念可以复用的。内核态的系统线程专门负责执行，而用户态的线程负责存储状态，比如说线程栈状态，所有线程执行的线程栈是用来保存当时执行线程状态的，还包含寄存器相关的信息、局部变量，这样的好处是我们把建成 Pool 以后就不需要频繁的创建系统线程，只需要用户态去创建各种各样我们所需的这种抽象的专门用来存储状态的这种用户态线程，我们可以创建很多个，当我们创建好当需要执行的时候，把它绑定到一个系统线程上面去，然后去执行执行完了以后可以把这个系统线程释放掉，系统线程回到 Pool 里面只需要把这个状态杀掉，我们不需要消灭这个系统线程。因为接下来我们可以把另外一个任务重新的调度到这个系统线程上去执行。</p>
+<p>这样首先我们创建一定数量的系统线程，创建好了这些系统线程专门用来做执行的。第二，我们额外在用户态空间创建一些对象专门用来保存执行时候所需要的状态，其中包括线程栈，它不负责执行，因为它只是抽象的一个很普通的数据容器，它执行的时候把它绑定到某个系统线程上去，这样这个线程就具备了普通线程那种状态然后执行，执行完了这个线程上的状态全部被剥离掉然后这个线程就变成干净的了原始状态接下来可以执行其他的任务。</p>
+<p>所以呢，在现代语言当中往往会在系统线程之上做一次抽象，就是在用户态空间去实现大量的专门用来保存状态的这种用户线程，用户线程不负责执行它只负责保存用户状态，所有的执行最终交给底层的系统线程执行，所以底层去实现类似像并行，用户态我们只需要创建像大量的并发任务，中间通过调度器来实现这两个层面上的绑定从而实现把用户态这样的执行和系统态这样的执行分离掉，避免反复的系统调用所消耗的资源。</p>
+<p>所以我们做任何东西或者做出选择的时候，不要说推其一而推导出全部，设计的好或不好都是相对的没有绝对的，因为在实际的运用当中我们往往会把很多东西去结合起来尽可能发挥它的优势来避免它的缺陷，在任何时候没有任何一个人能告诉你什么设计是好的什么设计是不好的，你必须要做出大量的积累然后去设计出一种相对来说比较和谐的执行方式，尽可能发挥所有机制的优点来隐藏它的缺点。</p>
+<p>你要说用户态线程不好，它怎么不好了，当然很好，因为我们用户态创建大量的对象，创建十个、一万个、一千万个只是在用户态分配内存而已，不需要频繁的做系统调用。系统线程开销大，你创建好了不去销毁它那么它不就没有开销了，那它可能会占用资源，它不执行的时候告诉操作系统把它休眠了就不占用资源了，操作系统也不分配时间片，需要它执行的时候再把它激活行了，因为它这时候对象是存在的是保存在内核里的，同时它也是最小执行单位并不需要比较大的开销，说白了在内核里面它也不就是一个普通对象么，这个对象被激活了它才会需要一定的资源，当对象不激活的时候它不就消耗很少的内存可能就几k内存。</p>
+<p>他们区别在于创建和销毁这个过程需要大量的时间，因为大部分时候性能直接考虑都是创建和消耗的操作带来的性能损耗，但是我们在内核中保存最小的状态其实浪费不了多少空间，因为我们说过浪费的是VA地址空间，当创建之后长时间不用无非是被操作系统交换到硬盘上去而已，就算我们经常说的现在就像实现 C10K、C100K 类似于这样的一些东西很正常，我们在一个服务器上挂十万个甚至一百万个连接不是同时在工作无非就是消耗很简单的消息对象。</p>
+<p>我们刚刚知道了概念，也知道了系统线程和用户线程在 CPU 时间片上的区别，如果我们不在底层分配足够多的系统线程的话那么它很麻烦只能被一个核使用，而且它在CPU时间片上会很麻烦，因为少，很显然比如A进程有两个系统线程，B进程有两个用户线程只有一个系统线程，那么在时间片分配上绝对不公平，归根结底是用户线程操作系统根本看不到，因为它是一个很抽象的概念不是操作系统提供的，操作系统根本不理解用户线程是什么。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.</span> <span class="toc-text">进程、线程的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">2.</span> <span class="toc-text">系统线程（内核线程、内核态）和用户线程的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cpu"><span class="toc-number">3.</span> <span class="toc-text">CPU 时间片分配方式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&text=进程和线程"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&is_video=false&description=进程和线程"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=进程和线程&body=Check out this article: http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&title=进程和线程"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/gitchat/系统和并发/8_进程和线程/2019/09/&name=进程和线程&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

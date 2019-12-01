@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="什么时候应该传递指针？函数传递参数传指针进去，拷贝指针，对值修改。func test(x int) {     x += 100}func main() {    x := 1    test(&amp;amp;x)    println(x)}函数传递默认都是值拷贝，如果传的是 x，把 x 拷贝一份，接下来对 x 的修改和外面没有关系。第二种是 x 有个指针 p 指向它，然后把 p 传递进去，复制了 p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-20">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="什么时候应该传递指针？函数传递参数传指针进去，拷贝指针，对值修改。func test(x int) {     x += 100}func main() {    x := 1    test(&amp;amp;x)    println(x)}函数传递默认都是值拷贝，如果传的是 x，把 x 拷贝一份，接下来对 x 的修改和外面没有关系。第二种是 x 有个指针 p 指向它，然后把 p 传递进去，复制了 p">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:03.649Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-20">
+<meta name="twitter:description" content="什么时候应该传递指针？函数传递参数传指针进去，拷贝指针，对值修改。func test(x int) {     x += 100}func main() {    x := 1    test(&amp;amp;x)    println(x)}函数传递默认都是值拷贝，如果传的是 x，把 x 拷贝一份，接下来对 x 的修改和外面没有关系。第二种是 x 有个指针 p 指向它，然后把 p 传递进去，复制了 p">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-20</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-21函数：多返回值/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&text=重学 Go 语言：基础篇-20"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&is_video=false&description=重学 Go 语言：基础篇-20"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-20&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&name=重学 Go 语言：基础篇-20&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">什么时候应该传递指针？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#out"><span class="toc-number">1.2.</span> <span class="toc-text">指针和二级指针的区别，如何用二级指针实现 out 参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#outreturn"><span class="toc-number">1.3.</span> <span class="toc-text">用 out 和 return 的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.4.</span> <span class="toc-text">变参和切片参数是否相同？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.5.</span> <span class="toc-text">函数参数列表重构，实现可选和默认参数</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-20
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:03.649Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>什么时候应该传递指针？</h3><br><p>函数传递参数传指针进去，拷贝指针，对值修改。</p><br><pre><code class="go language-go">func test(x <em>int) {
+    </em>x += 100<br>}<br><br>func main() {<br>    x := 1<br>    test(&amp;x)<br><br>    println(x)<br>}<br></code></pre><br><p>函数传递默认都是值拷贝，如果传的是 x，把 x 拷贝一份，接下来对 x 的修改和外面没有关系。第二种是 x 有个指针 p 指向它，然后把 p 传递进去，复制了 p 的拷贝 p1，p1 也指向 x，通过 p1 修改是同一个 x，这是传指针常见的做法。</p><br><h3 id="out">指针和二级指针的区别，如何用二级指针实现 out 参数</h3><br><p>声明一个空指针 p 没有指向任何一个位置，传递函数里面，这个函数创建一个对象，让 p 指向这个对象。当 p 传递函数的时候实际上有个指针叫 p1，创建对象也是 p1 指向这个对象和原来 p 没有关系，没有办法让外面 p 指向它，只是说让新的 p1 指向新对象，我们怎么样让 p 指向它，使用二级指针。</p><br><pre><code class="go language-go">func test(p1 *<em>int) {<br>    y := 100
+    </em>p1 = &amp;y<br>}<br><br>func main() {<br>    // 一个指针<br>    var p <em>int<br><br>    //调用函数复制指针p1<br>    test(&amp;p)<br><br>    fmt.Println(</em>p)<br>}<br></code></pre><br><p>有个指针 p，有个函数函数内部指向新的对象，目标让 p 指向新的对象，问题是函数参数复制的是 p 的拷贝，最简单把 p 看做整数，用 z 指向 p，把 z 传给函数，这时参数是 z 的复制品，z 和 z 的复制品都指向 p，修改 z 的复制品就修改 p 的值，把新的对象地址赋值上去就修改了 p 的指向。</p><br><h3 id="outreturn">用 out 和 return 的区别</h3><br><p>谁来修改的问题，return 由函数来创建实例，out 在函数内部修正。</p><br><pre><code class="go language-go">func out(s <em>string) {<br>    x := “hello, world”
+    </em>s = x<br>}<br><br>func testOut() {<br>    var s <em>string<br>    out(s) //invalid memory address or nil pointer dereference<br><br>    fmt.Println(</em>s)<br>}<br></code></pre><br><p>使用返回值代表函数内部没有控制权，只是按照要求返回，调用方使不使用对于函数来说是不知道的，所以使用返回值控制权在调用方。如果用二级指针很明确相表达的是给定一个路标，让函数做件事，然后把结果告诉这个路标，这样一来控制权是在函数内部。</p><br><p>函数明确收到指示，控制权在函数。虽然我们可以使用返回值，但是从重构角度表达两种不同的意思。</p><br><h3 id="-1">变参和切片参数是否相同？</h3><br><p>很多语言支持变参，<code>…string</code> 和 <code>[]string</code> 从功能上来说差不多的，实际上把 <code>…string</code> 打包成 <code>[]string</code>。我们把这种称之为语法糖，很多时候写起来会更方便一点。</p><br><pre><code class="go language-go">func test(x int, y …string) {<br>    fmt.Println(x)<br>    fmt.Println(y)<br>}<br><br>func test2(x int, y []string) {<br>    fmt.Println(x)<br>    fmt.Println(y)<br>}<br><br>func main() {<br>    test(1, “a”, “b”, “c”)<br>    test2(1, []string{“a”, “b”, “c”})<br>}<br></code></pre><br><h3 id="-2">函数参数列表重构，实现可选和默认参数</h3><br><p>在重构时候函数经常会有很多参数，在调用时候所有参数都需要提供，比较麻烦的地方是不支持默认值。</p><br><pre><code class="go language-go">func test(a int, b string, c byte) {<br><br>}<br><br>type options struct {<br>    a int<br>    b string<br>    c byte<br>}<br><br>//默认值<br>func NewOptions() <em>options {<br>    return &amp;options{<br>        a: 0,<br>        b: “hello”,<br>        c: 10,<br>    }<br>}<br><br>func test2(option </em>options) {<br><br>}<br><br>func main() {<br>    test(1, “a”, 1)<br><br>    options := NewOptions()<br>    //可选参数<br>    options.b = “”<br><br>    test2(options)<br>}<br></code></pre></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">什么时候应该传递指针？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#out"><span class="toc-number">1.2.</span> <span class="toc-text">指针和二级指针的区别，如何用二级指针实现 out 参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#outreturn"><span class="toc-number">1.3.</span> <span class="toc-text">用 out 和 return 的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.4.</span> <span class="toc-text">变参和切片参数是否相同？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.5.</span> <span class="toc-text">函数参数列表重构，实现可选和默认参数</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&text=重学 Go 语言：基础篇-20"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&is_video=false&description=重学 Go 语言：基础篇-20"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-20&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&title=重学 Go 语言：基础篇-20"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/&name=重学 Go 语言：基础篇-20&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

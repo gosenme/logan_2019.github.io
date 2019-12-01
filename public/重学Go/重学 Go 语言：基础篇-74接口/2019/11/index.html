@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="接口接口(interface)代表一种“约定”或“协议”。允许在非显式关联的情况下，组合并调用其他类型的方法。接口是多个方法声明的集合。接口可解除依赖关系，屏蔽实现细节。只要方法集包含对应方法即为实现，无显式声明。类型可实现多个接口，以面向不同服务。调用一个对象的成员有两种方式，第一种是直接调用，另外一种方式是通过接口间接调用。接口代表一种行为上的约定或协议。接口是设计上的概念。接口本身是多个方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-74">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="接口接口(interface)代表一种“约定”或“协议”。允许在非显式关联的情况下，组合并调用其他类型的方法。接口是多个方法声明的集合。接口可解除依赖关系，屏蔽实现细节。只要方法集包含对应方法即为实现，无显式声明。类型可实现多个接口，以面向不同服务。调用一个对象的成员有两种方式，第一种是直接调用，另外一种方式是通过接口间接调用。接口代表一种行为上的约定或协议。接口是设计上的概念。接口本身是多个方法">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:19.352Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-74">
+<meta name="twitter:description" content="接口接口(interface)代表一种“约定”或“协议”。允许在非显式关联的情况下，组合并调用其他类型的方法。接口是多个方法声明的集合。接口可解除依赖关系，屏蔽实现细节。只要方法集包含对应方法即为实现，无显式声明。类型可实现多个接口，以面向不同服务。调用一个对象的成员有两种方式，第一种是直接调用，另外一种方式是通过接口间接调用。接口代表一种行为上的约定或协议。接口是设计上的概念。接口本身是多个方法">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-74</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-755-12 gdb接口内部结构/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-73匿名嵌入方法集/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&text=重学 Go 语言：基础篇-74"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&is_video=false&description=重学 Go 语言：基础篇-74"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-74&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&name=重学 Go 语言：基础篇-74&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">接口和抽象类的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">接口定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.4.</span> <span class="toc-text">11 编译器根据方法集判断接口实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.5.</span> <span class="toc-text">接口内部实现</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-74
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:19.352Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>接口</h3><br><p>接口(interface)代表一种“约定”或“协议”。允许在非显式关联的情况下，组合并调用其他类型的方法。</p><br><ul><br><li>接口是多个方法声明的集合。</li><br><li>接口可解除依赖关系，屏蔽实现细节。</li><br><li>只要方法集包含对应方法即为实现，无显式声明。</li><br><li>类型可实现多个接口，以面向不同服务。</li><br></ul><br><p>调用一个对象的成员有两种方式，第一种是直接调用，另外一种方式是通过接口间接调用。</p><br><p>接口代表一种行为上的约定或协议。接口是设计上的概念。接口本身是多个方法集合。接口好处解除依赖关系。技术细节不关心，符合实现方式可以。</p><br><p>方法集归根结底是为实现接口而准备的，接口到底是怎么样实现的，我们现在已经为接口调用准备好了接口所对应的方法，接下来接口到底怎么样把一个普通的对象变成一个接口呢？或者说怎么样通过接口来调用真实的对象方法呢？</p><br><p>我们实现一个类型X，X有a，b，c三个方法，现在有个接口I，要求必须要实现a，b，c。这样的情况下就说X实现了I接口，接下来可以I等于X的实例，I可以调用a，这个最终会还原成X.a的调用。我们想分析下“I等于X的实例”怎么实现的？就是说接口怎么存储一个真实的对象，还想了解用接口调用一个方法的时候究竟是怎么实现的，就是说接口怎么找到真实的方法，怎么知道那个方法在哪？这是接下来需要了解的，第一接口怎么存储对象实例，第二通过接口调用和普通方法调用究竟什么区别。</p><br><p>很多语言里都会使用大量接口，接口到底是什么样的？我们说我们定义一个类型，声明字段方法。接口就是一个声明。</p><br><p>大部分语言对接口实现方式类似，动态语言没有明确接口一说，是按名字来寻址和按地址寻址不太一样，大多数静态语言对接口实现方式理论上非常相似。</p><br><h3 id="-1">接口和抽象类的区别</h3><br><p>这句话代表两层意思，既然两个东西放在一起，它们肯定有很多相同的地方，在很多时候有相互替代场景。首先看它们相同的地方在哪里，然后再去找不同的地方，要求对抽象基类体系和接口体系有清晰的认识。</p><br><h3 id="-2">接口定义</h3><br><pre><code class="go language-go">type Xer interface {<br>    A(a int) //签名包括方法名、参数和返回列表，不包括参数名。<br>    B()<br>}<br>type X int<br><br>func (X) A(b int) {}<br>func (<em>X) B()     {}<br><br>var o X<br>var _ Xer = &amp;o //利用编译器检查接口实现。<br></em></code></pre><br><ul><br><li>不能包含字段。</li><br><li>方法只能声明，不能定义。</li><br><li>可嵌入其他接口。</li><br><li>通常以er作为命名后缀。</li><br></ul><br><p>接口通常情况下用<code>er</code>的方式作为后缀，接下来定义方法签名。一个方法签名包括方法名，参数列表，参数列表不包含参数名字，只要类型和参数的数量，还有返回值。</p><br><p>类型X包含两个方法A和B，但是接口和类型之间并没有说X一定实现了这个接口，这是Go语言很别扭的地方。怎么能保证一定实现接口，我们通过简单的方式来确保。比如有个os把它赋值给一个接口，变量名用的是下划线，也就是会被优化，但是编译器必须保证这个语法是对的，就是右值必须实现这个接口，这涉及方法集概念。利用编译器检查可以确保X必须实现这个接口.因为有时接口定义和类型定义可能不在一个文件里甚至不在一个包里。以后扩展接口的时候怎么能保证代码逻辑是正确呢？用一些技巧来避免语言本身设计上的一些很奇怪事情。</p><br><p>接口约定一个协议，更多的是表达了一些技术参数，所以包含一系列的声明，但是不能有定义。不能有字段，因为字段会涉及内存分配。</p><br><h3 id="11">11 编译器根据方法集判断接口实现</h3><br><pre><code class="go language-go">type Xer interface {<br>    A(int)<br>    B()<br>}<br>type X int<br><br>func (X) A(b int) {}<br>func (X) B()     {}<br>func main() {<br>    var o X        // T<br>    var e Xer = &amp;o // <em>T<br>    println(e)<br>}<br></em></code></pre><br><p>接口包含A和B然后去实现这个接口，接下来调用的时候先创建o，直接把o赋值给Xer报错，缺少B因为O的方法集里面是没有B，必须把改成&amp;o拥有A和B这两个方法符合这个接口定义。所以使用接口的时候通过方法集处理，使用实例调用的时候是通过方法来调用的。</p><br><h3 id="-3">接口内部实现</h3><br><pre><code class="go language-go">type iface struct {<br>    tab  itab<br>    data unsafe.Pointer<br>}<br>type eface struct {<br>    _type <em>_type<br>    data  unsafe.Pointer<br>}<br></em></code></pre><br><p>接口实际上是由两个结构体定义的，<code>iface</code>包含有方法的和<code>eface</code>没有方法的。接口实际上是一种在运行期分配的内存实例。当创建一个接口对象变量的时候，它存在着这样的一个变量，类型T有A和B(T)分配给接口的时候，接口它本身是个数据结构由两个字段<code>tab</code>和<code>data</code>构成。首先创建一个拷贝，这会涉及到拷贝的过程，接下来把它的地址赋值给data。Go语言设计接口的时候，把拷贝的复制品设计成不可寻址的，因为它是内部的并没有把这个结构公开，也就是他以后可能会发生改变。</p><br><p><code>T</code>情况：调用A的时候，拷贝一份实例，调用B的时候接收的是<code><em>T</em></code>，需要地址，但是不可寻址，显然这种用法不行违反安全协议了。<code>T</code>情况是把内存地址指针复制进来，这个指针指向原始实例。调用A的时候，直接通过这个指针找到原始的T复制一份放进来没有问题。调用B的时候直接把指针拷贝一份放进来也是合法的。</p><br><p>当<code><em>T</em></code>放进来的时候都是合法的，这两个规则对应它的方法集。把<code>T</code>放进来，复制品是原始的完整对象是把这个对象拷贝。A不可寻址没关系，所以A合法。B要操作它的内存地址，但是这块内存是不可寻址的，所以Go语言规则很简单，内存地址不可寻址。当扔进来的是T复制品的时候，只有A是合法的，B的内存模型不合法。当扔进来了是<code>T</code>实际是一个指针，A操作指针拷贝原始对象没有修改内存，A是合法的。B也一样拷贝内容。所以<code>T</code>可能对应A而<code><em>T</em></code>对应A和B，正好对应方法集的概念。</p><br><p>接口内部实现有个问题就在于为了实现接口的这种内存模型，变相的搞出方法集这个概念。如果搞不清方法集的概念使用接口就会出问题。</p><br><p>好的设计可能方法全部是<code>T</code>没有<code>T</code>，只有一种模型就简单了。最早可能没有必要有方法这种概念，按照函数来设计，<code>T</code>和<code><em>T</em></code>作为第一个参数，后来把函数转换成方法的时候也很正常，因为编译器自动处理。可能是接收一个复制品，接收一个指针也没问题，当这个概念继续设计接口时候和内存模型起冲突了，又搞出了方法集这种概念。一步一步推导到最后越搞越复杂，所以接口是在Go语言设计里缺乏一致性，接口的本来目的为了简化，用接口抹平OOP里多态和继承概念。但是Go语言搞出方法集的概念，其他语言不存在。</p><br><p>很显然，方法集的目的是为了适应接口的内存模型。因为它并不想把接口的内部实现对外公开。接口直接用，内部实现不公开，内存不能选址。就会导致两种情况，第一种把值拷贝进来。那么对A合法对B不合法，因为B要拿到这块内存地址作为第一个参数。把<code>T</code>拷贝进来，这块内存是指针的复制品，没有操作它的内存地址操作的是它的内容是合法的。</p><br><p>做OO模型设计的时候，可能砍掉继承。用函数的方式来实现，接下来用语法糖的方式包装方法，通过方法再推导接口的时候和前面的设计缺乏连贯性。</p><br><p>所以一个语言的设计其实跟软件架构是一样的，必须有宏观的概念从大往细节设计。</p><br><pre><code>$ go build &amp;&amp; go tool objdump -s “main.main” test<br></code></pre><br><p>接口调用会涉及到itab和data，就是两个指针构成的。itab里存的是一些原始类型信息。</p><br><pre><code>LEAQ go.itab.<em>main.X,main.Xer(SB),AX<br>LEAQ 0x10(SP),AX<br></em></code></pre><br><blockquote><br>  <p>go/src/runtime/runtime2.go</p><br></blockquote><br><pre><code class="bash language-bash">(gdb) p e #变量<br>$1 = {<br> tab = 0x4784c0 &lt;X,main.Xer&gt;,<br> data = 0xc00002e768<br>}<br>(gdb) p &amp;o<br>$2 = (main.X ) 0xc00002e768 #拷贝内存地址<br>(gdb) p/x e.tab.fun[0] #对应的方法<br>$8 = 0x44eb80<br>(gdb) p/x e.tab.fun[1] #对应的方法<br>$9 = 0x44ea90<br>(gdb) info symbol 0x44eb80 #符号表查找对应方法名<br>main.(<em>X).A in section .text<br>(gdb) info symbol 0x44ea90 #符号表查找对应方法名<br>main.(</em>X).B in section .text<br></code></pre></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">接口和抽象类的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">接口定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.4.</span> <span class="toc-text">11 编译器根据方法集判断接口实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">1.5.</span> <span class="toc-text">接口内部实现</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&text=重学 Go 语言：基础篇-74"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&is_video=false&description=重学 Go 语言：基础篇-74"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-74&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&title=重学 Go 语言：基础篇-74"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-74接口/2019/11/&name=重学 Go 语言：基础篇-74&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

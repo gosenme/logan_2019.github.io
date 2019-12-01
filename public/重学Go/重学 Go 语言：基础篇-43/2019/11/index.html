@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="切片比较诡异的地方是不支持Pointer[index]访问，这也是它设计上的理念差异。就想表达当你拿到切片指针的时候，很明确的就想操作头部结构体内存。数组指针拿到的是数据的内存。通过这个限制很明确的想表明你操作的目标到底是谁。这东西在某些语言里就是说我替你自动转换了，但是有些严谨的语言就不替你转换。你想操作可以，你用(pb)恢复成一个切片，然后用切片的行为去访问。系统语言对内存操作非常严谨，你想操">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-43">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="切片比较诡异的地方是不支持Pointer[index]访问，这也是它设计上的理念差异。就想表达当你拿到切片指针的时候，很明确的就想操作头部结构体内存。数组指针拿到的是数据的内存。通过这个限制很明确的想表明你操作的目标到底是谁。这东西在某些语言里就是说我替你自动转换了，但是有些严谨的语言就不替你转换。你想操作可以，你用(pb)恢复成一个切片，然后用切片的行为去访问。系统语言对内存操作非常严谨，你想操">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:35.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-43">
+<meta name="twitter:description" content="切片比较诡异的地方是不支持Pointer[index]访问，这也是它设计上的理念差异。就想表达当你拿到切片指针的时候，很明确的就想操作头部结构体内存。数组指针拿到的是数据的内存。通过这个限制很明确的想表明你操作的目标到底是谁。这东西在某些语言里就是说我替你自动转换了，但是有些严谨的语言就不替你转换。你想操作可以，你用(pb)恢复成一个切片，然后用切片的行为去访问。系统语言对内存操作非常严谨，你想操">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-43</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-44/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-4205 用new或make创建引用类型的差别/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&text=重学 Go 语言：基础篇-43"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&is_video=false&description=重学 Go 语言：基础篇-43"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-43&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&name=重学 Go 语言：基础篇-43&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-43
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:35.231Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><p>切片比较诡异的地方是不支持<code>Pointer[index]</code>访问，这也是它设计上的理念差异。就想表达当你拿到切片指针的时候，很明确的就想操作头部结构体内存。数组指针拿到的是数据的内存。通过这个限制很明确的想表明你操作的目标到底是谁。这东西在某些语言里就是说我替你自动转换了，但是有些严谨的语言就不替你转换。你想操作可以，你用<code>(<em>pb)</em></code>恢复成一个切片，然后用切片的行为去访问。</p><br><p>系统语言对内存操作非常严谨，你想操作的内存到底是什么东西，编译器替你优化那是语法糖，不替你优化的时候，你必须知道你操作的是哪一块内存。</p><br><pre><code class="go language-go">func main() {<br>    a := […]int{1, 2, 3} //array<br>    b := a[:] //slice<br><br>    pa := &amp;a //array pointer<br>    pb := &amp;b //slice pointer<br><br>    pa[1] = 10 //pointer[index]<br>    pb[1] = 100 //pointer[index]<br>    (pb)[1] = 100 //sliceptr[index]<br>}<br></code></pre><br><p><code>invalid operation: pb[1] (type <em>[]int does not support indexing)</em></code>错误提示切片指针不支持索引操作。</p><br><p>当你拿到数组指针的时候，你很显然需要操作的就是数组这块内存，这个行为非常确定。当你拿到切片指针的时候，默认持有的是头部内存，它不允许在这种数据结构上按照索引访问，因为就这块内存来说你用索引访问这三个字段是非法的，结构体默认情况下不支持索引访问的，这种行为是不合理的。</p><br><p>有一个函数，接收接口类型的切片，为什么不能传递<code>test([]int{1, 2, 3})</code>进去呢？不应该把<code>[…]int</code>自动转换为<code>[]interface{}</code>类型么？编译器的确可以帮你转换，但是这绝对不是内存的隐式转换，<code>[…]int</code>内存结构是每个格子是8byte的数组，<code>[]interface{}</code>内部结构是由两个指针组成{itab，data}至少16byte，这两个玩意如果不插入代码直接转换从内存的角度肯定不能直接转换。很显然这两块内存不能直接转换的，必然需要写代码比如for循环重新赋值的代码。这段代码可以由编译器自己生成，我们管自动生成的代码称之为语法糖，编译器帮你完成这种事。很显然大多数系统语言所谓的转换都是在同一块内存上转换不同的类型，很显然这两个内存结构根本不同，这时候这种转换逻辑肯定会出错，因为它们的数据结构根本不一样。所以需要搞清楚，转换的两种行为方式，第一种直接在原来内存上转换类型，第二种编译器隐藏替你插入这样的代码。系统语言很多转换是基于内存的一种行为。</p><br><pre><code class="go language-go">func test(x []interface{}) {<br><br>}<br><br>func convert([]int) []interface{} {<br>    // for {<br>    //  …<br>    // }<br>}<br><br>func main() {<br>    test(convert([]int{1, 2, 3}))<br>}<br></code></pre><br><p>这些东西很小的细节当中会体现设计上一些系统语言和应用语言上的差异，比如像python，java这种应用型语言有很多的语法糖替你完成很多的事情，但是这种东西其实在背后也隐藏另外一个问题，让学习者养成惰性，不再关心底层实现，也不关心底层怎么来的，造成只是会用。当需要自己去设计逻辑的时候并不知道边界在哪，因为我们知道这么多设计都是中庸方案。你不可能偏向于某一方。</p><br><p>比如我们设计架构，你偏向于性能必然会使用非常苛刻的限制，当你完全偏向于应用，那么你的代码中就存在着大量所谓的魔法。因为很多东西为了用户方便你实现了大量的魔法也就意味着你想做优化这块你就可能很苦逼了，所以取中庸，哪些地方该设限制哪些地方应该放弃，同时你要培养用户什么样的习惯同样是你架构当中都需要考虑的事情，你设计个算法也好，暴露什么隐藏什么这些东西都需要我们去思考，你需要搞明白，你是个设计者，你不能永远把自己当做用户。</p><br><p>所有的应用开发人员永远把自己定义在用户层面，它们用任何一门语言第一个想到这门语言方便不方便，能不能自动帮我完成什么工作，自动转换啊，自动操作符重载。结果就养成不动脑子，这些我在java、.net语言自动帮我完成为什么到你这就不行。你学习一门严谨的语言，go的话是相对严谨不是绝对严谨，它为什么要做这个限制，这比你学语法更重要的东西，因为这个时候实际上是在培养你的思维能力。如果是我会想数组和切片到底有什么不同，因为我们觉得很多时候我们只用切片不用数组，甚至我在标准库里都看不到有数组的痕迹。那你别忘了一点，当你使用标准库的时候你是个用户，当你自己去开发一个库的时候，如果这个库有性能要求的时候，那你是设计者，当你处于设计者或者用户时候思维方式是不一样的，因为用户只关心暴露给它的，而设计者除了考虑暴露什么以外还得考虑不暴露的地方该怎么做。这是两种思维。如果你是架构师或者核心开发人员，你必须得明白对外怎么思考，对内怎么思考，这是不同的，这个边界在哪，这个中庸的点到底在哪，天平的砝码到底怎么放，怎么样是合理的，这些都是需要培养的。你就得从一些语言，它的一些细微设计，可能很多人不介意不关心的地方来看作者设计的到底什么考虑。</p><br><p>例如<code>var s []int</code>很多人会说这地方根本没有分配内存所以你不能访问，或者<code>var x int</code>指针根本没有初始化，这指针根本不能用。因为这些说法即对也不对，因为当做普通用户这说法勉强算作对，但是你如果作为系统级程序员你一定要搞明白这玩意到底在你脑子里什么样子的。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&text=重学 Go 语言：基础篇-43"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&is_video=false&description=重学 Go 语言：基础篇-43"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-43&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&title=重学 Go 语言：基础篇-43"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-43/2019/11/&name=重学 Go 语言：基础篇-43&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="迭代法 数字意义上是一种不断用变量的旧值递推新值的过程， 其相应的迭代算法也是用计算机解决问题的一种基本方法。  迭代法，还有一种更广泛的观点， 就是所有使用了迭代思想的算法实现， 都可以理解为是使用了迭代法。 从这个角度理解， 除了线性动态规划算法、 遗传算法、退火算法等算法 也可归入迭代法的范畴。 迭代法的实现 确定迭代变量：     迭代变量一般就是要求解的问题的解，     利用迭代递推公">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法设计常用思想之迭代法">
+<meta property="og:url" content="http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="迭代法 数字意义上是一种不断用变量的旧值递推新值的过程， 其相应的迭代算法也是用计算机解决问题的一种基本方法。  迭代法，还有一种更广泛的观点， 就是所有使用了迭代思想的算法实现， 都可以理解为是使用了迭代法。 从这个角度理解， 除了线性动态规划算法、 遗传算法、退火算法等算法 也可归入迭代法的范畴。 迭代法的实现 确定迭代变量：     迭代变量一般就是要求解的问题的解，     利用迭代递推公">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.117Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法设计常用思想之迭代法">
+<meta name="twitter:description" content="迭代法 数字意义上是一种不断用变量的旧值递推新值的过程， 其相应的迭代算法也是用计算机解决问题的一种基本方法。  迭代法，还有一种更广泛的观点， 就是所有使用了迭代思想的算法实现， 都可以理解为是使用了迭代法。 从这个角度理解， 除了线性动态规划算法、 遗传算法、退火算法等算法 也可归入迭代法的范畴。 迭代法的实现 确定迭代变量：     迭代变量一般就是要求解的问题的解，     利用迭代递推公">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>算法设计常用思想之迭代法</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/训练营/基础卡03-动态规划/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/训练营/基础卡04-穷举法/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&text=算法设计常用思想之迭代法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&is_video=false&description=算法设计常用思想之迭代法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法设计常用思想之迭代法&body=Check out this article: http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&name=算法设计常用思想之迭代法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        算法设计常用思想之迭代法
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.117Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>迭代法</p>
+<pre><code>数字意义上是一种不断用变量的旧值递推新值的过程，
+其相应的迭代算法也是用计算机解决问题的一种基本方法。
+
+迭代法，还有一种更广泛的观点，
+就是所有使用了迭代思想的算法实现，
+都可以理解为是使用了迭代法。
+从这个角度理解，
+除了线性动态规划算法、
+遗传算法、退火算法等算法
+也可归入迭代法的范畴。
+</code></pre><p>迭代法的实现</p>
+<pre><code>确定迭代变量：
+    迭代变量一般就是要求解的问题的解，
+    利用迭代递推公式可以不断地由旧值递推出新值。
+    根据问题的不同，迭代变量可以是一个，也可以是多个。
+    确定迭代变量，通常还要根据迭代递推关系给出迭代变量的初始值，
+    这一点也很重要。
+
+确定迭代递推关系：
+    迭代递推关系是根据旧值计算新值的关系或公式，
+    这是迭代法实现的关键，如果不能确定迭代关系，
+    则无法用迭代法实现算法。
+
+确定迭代终止条件：
+    迭代终止条件是控制迭代过程退出的关键条件。
+    迭代不可能无休止地进行，必须设置迭代终止条件，
+    在适当的时候退出迭代。
+
+    迭代终止条件一般有三种假设：
+    其一是迭代变量已经求得问题的精确值；
+    其二是迭代变量无法得到精确值，
+    但是某个迭代的值的精度已经满足要求；
+    其三是指定明确的迭代计算次数。
+
+    迭代算法的具体实现，可根据问题的类型选择迭代终止条件。
+    一般情况下，为了防止迭代关系在某个区间上发散（不收敛）
+    使得算法进入死循环，都会把第三个条件作为异常退出条件
+    和其他迭代终止条件配合使用，也就是说，
+    即使无法得到符合条件的解，
+    只要迭代计算次数达到某个限制值，
+    也退出迭代过程。
+</code></pre><p>常见的迭代法</p>
+<pre><code>梯度法
+最小二乘法
+牛顿迭代法
+</code></pre><p>迭代法和递推法</p>
+<pre><code>迭代法作为很多数学问题的求解算法，
+是解决数学问题的一种常用的算法模式，
+可以独立构成解决问题的算法。
+
+递推法作为一种设计算法的常用思想，
+没有固定的算法实现模式，
+通常是与其他算法模式配合形成算法实现。
+比如线性动态规划问题，
+一般都有明确的子问题最优解递推公式，
+递推思想常常作为算法实现的一部分
+融入到动态规划算法的实现中。
+</code></pre><p>使用Python实现 求根函数 并与内置求根函数对比<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">like_sqrt</span><span class="params">(num: int)</span>:</span></span><br><span class="line">    xi = num / <span class="number">2</span></span><br><span class="line">    xt = xi</span><br><span class="line">    xi = (xt + num / xt) / <span class="number">2</span></span><br><span class="line">    count = <span class="number">1</span></span><br><span class="line">    eps = <span class="number">0.1</span> ** <span class="number">6</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> abs(xi - xt) &gt; eps:</span><br><span class="line">        xt = xi</span><br><span class="line">        xi = (xt + num / xt) / <span class="number">2</span></span><br><span class="line"></span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">    print(xi)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(math.sqrt(<span class="number">3</span>))</span><br><span class="line">like_sqrt(<span class="number">3</span>)</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&text=算法设计常用思想之迭代法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&is_video=false&description=算法设计常用思想之迭代法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法设计常用思想之迭代法&body=Check out this article: http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&title=算法设计常用思想之迭代法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/基础卡05-迭代法/2019/09/&name=算法设计常用思想之迭代法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="深入面向对象编程       14.1　类变量与实例变量 14.2　魔法方法 14.3　is 14.4　术语表 14.5　挑战练习           “视代码如诗词，勿要做无所谓的堆砌。”   ——伊利亚 · 多尔曼（Ilya Dorman）  本章将学习与面向对象编程相关的其他概念。 14.1　类变量与实例变量 在 Python 中，类即对象。这个理念源自引领了面向对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入面向对象编程">
+<meta property="og:url" content="http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="深入面向对象编程       14.1　类变量与实例变量 14.2　魔法方法 14.3　is 14.4　术语表 14.5　挑战练习           “视代码如诗词，勿要做无所谓的堆砌。”   ——伊利亚 · 多尔曼（Ilya Dorman）  本章将学习与面向对象编程相关的其他概念。 14.1　类变量与实例变量 在 Python 中，类即对象。这个理念源自引领了面向对象">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-10-13T04:12:02.174Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入面向对象编程">
+<meta name="twitter:description" content="深入面向对象编程       14.1　类变量与实例变量 14.2　魔法方法 14.3　is 14.4　术语表 14.5　挑战练习           “视代码如诗词，勿要做无所谓的堆砌。”   ——伊利亚 · 多尔曼（Ilya Dorman）  本章将学习与面向对象编程相关的其他概念。 14.1　类变量与实例变量 在 Python 中，类即对象。这个理念源自引领了面向对象">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>深入面向对象编程</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/Python无师自通/21_data_structure/2019/10/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/Python无师自通/15_opp_testing/2019/10/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&text=深入面向对象编程"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&is_video=false&description=深入面向对象编程"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深入面向对象编程&body=Check out this article: http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&name=深入面向对象编程&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#141"><span class="toc-number">1.</span> <span class="toc-text">14.1　类变量与实例变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#142"><span class="toc-number">2.</span> <span class="toc-text">14.2　魔法方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#143is"><span class="toc-number">3.</span> <span class="toc-text">14.3　is</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#144"><span class="toc-number">4.</span> <span class="toc-text">14.4　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#145"><span class="toc-number">5.</span> <span class="toc-text">14.5　挑战练习</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        深入面向对象编程
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-13T04:12:02.174Z" itemprop="datePublished">2019-10-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+    <title>深入面向对象编程</title>
+</head>
+<body>
+<article id="articleDiv"><div class="mazi-article-content dont-break-out"><p></p><div class="toc">
+<ul>
+<li><ul>
+<li><ul>
+<li><a href="#141">14.1　类变量与实例变量</a></li>
+<li><a href="#142">14.2　魔法方法</a></li>
+<li><a href="#143is">14.3　is</a></li>
+<li><a href="#144">14.4　术语表</a></li>
+<li><a href="#145">14.5　挑战练习</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p></p>
+<blockquote>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">“视代码如诗词，勿要做无所谓的堆砌。”</span></p>
+  <p><span style="font-family: Times New Roman,楷体_GB2312">——伊利亚 · 多尔曼（Ilya Dorman）</span></p>
+</blockquote>
+<p>本章将学习与面向对象编程相关的其他概念。</p>
+<h3 id="141">14.1　类变量与实例变量</h3>
+<p>在 Python 中，类即对象。这个理念源自引领了面向对象编程风潮的 Smalltalk 语言。Python 中的每个类，都是 <code>type</code> 类的一个实例对象：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/h7ypzmd</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Square</span>:</span>
+<span class="hljs-number">5</span>      <strong>pass</strong>
+<span class="hljs-number">6</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span>  print(Square)
+
+<span class="hljs-meta">&gt;&gt;</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> '<span class="hljs-title">__main__</span>.<span class="hljs-title">Square</span>'&gt;</span></code></pre>
+<p>本例中，<code>Square</code> 类就是一个对象，我们也将其类型打印出来了。</p>
+<p>类中有两种类型的变量：<strong>类变量</strong>（class variable）和<strong>实例变量</strong>（instance variable）。目前书中出现过的变量，均为实例变量，通过语法 <code>self.[变量名] = [变量值]</code> 定义。实例变量属于对象，示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">1</span>  <span class="hljs-comment"># http://tinyurl.com/zmnf47e</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Rectangle</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self, w, l)</span>:</span>
+<span class="hljs-number">06</span>          self.width = w
+<span class="hljs-number">07</span>          self.len = l
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">print_size</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">11</span>          print(<span class="hljs-string">"""{} by {}
+12                """</span>.format(self.width,
+<span class="hljs-number">13</span>                           self.len))
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>
+<span class="hljs-number">16</span>  my_rectangle = Rectangle(<span class="hljs-number">10</span>, <span class="hljs-number">24</span>)
+<span class="hljs-number">17</span>  my_rectangle.print_size()
+
+&gt;&gt; <span class="hljs-number">10</span> by <span class="hljs-number">24</span></code></pre>
+<p>本例中的 <code>width</code> 和 <code>len</code> 都是实例变量。</p>
+<p>类变量属于 Python 为每个类定义创建的对象，以及类本身创建的对象。类变量的定义方式与普通变量相同（但是必须在类内部定义），可以通过类对象访问，也可以通过使用类创建的对象访问。访问方式与实例变量（变量名前面加 <code>self.</code>）的访问方式相同。类变量可以在不使用全局变量的情况下，在类的所有实例之间共享数据。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/gu9unfc</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Rectangle</span>():</span>
+<span class="hljs-number">05</span>      recs = []
+<span class="hljs-number">06</span>
+<span class="hljs-number">07</span>
+08      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, w, l)</span></span>:
+09          <span class="hljs-keyword">self</span>.width = w
+<span class="hljs-number">10</span>          <span class="hljs-keyword">self</span>.len = l
+<span class="hljs-number">11</span>          <span class="hljs-keyword">self</span>.recs.append((<span class="hljs-keyword">self</span>.width,
+<span class="hljs-number">12</span>                            <span class="hljs-keyword">self</span>.len))
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>
+<span class="hljs-number">15</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">print_size</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">16</span>          print(<span class="hljs-string">""</span><span class="hljs-string">"{} by {}
+17                "</span><span class="hljs-string">""</span>.format(<span class="hljs-keyword">self</span>.width,
+<span class="hljs-number">18</span>                           <span class="hljs-keyword">self</span>.len))
+<span class="hljs-number">19</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">21</span>  r1 = Rectangle(<span class="hljs-number">10</span>, <span class="hljs-number">24</span>)
+<span class="hljs-number">22</span>  r2 = Rectangle(<span class="hljs-number">20</span>, <span class="hljs-number">40</span>)
+<span class="hljs-number">23</span>  r3 = Rectangle(<span class="hljs-number">100</span>, <span class="hljs-number">200</span>)
+<span class="hljs-number">24</span>
+<span class="hljs-number">25</span>
+<span class="hljs-number">26</span>  print(Rectangle.recs)
+
+<span class="hljs-meta">&gt;&gt;</span> [(<span class="hljs-number">10</span>, <span class="hljs-number">24</span>), (<span class="hljs-number">20</span>, <span class="hljs-number">40</span>), (<span class="hljs-number">100</span>, <span class="hljs-number">200</span>)]</code></pre>
+<p>本例中，我们在类 <code>Rectangle</code> 中添加了一个叫 <code>recs</code> 的类变量，它是在 <code>__init__</code> 方法之外定义的。因为 Python 只有在创建对象时才调用 <code>__init__</code> 方法，而我们希望能够使用类对象（不会调用 <code>__init__</code> 方法）访问类变量。</p>
+<p>接下来，我们创建了 3 个 <code>Rectangle</code> 对象。每创建一个 <code>Rectangle</code> 对象，<code>__init__</code> 方法中的代码就会向 <code>recs</code> 列表中添加一个由新对象宽度和长度组成的元组。这样，每当新创建一个 <code>Rectangle</code> 对象时，就会被自动添加到 <code>recs</code> 列表。通过使用类变量，即可在不使用全局变量的情况下，做到了在类创建的不同实例之间共享数据。</p>
+<h3 id="142">14.2　魔法方法</h3>
+<p>Python 中所有的类，均继承自一个叫 <code>Object</code> 的父类。Python 在不同的情况下会使用从 <code>Object</code> 中继承的方法，如打印对象时：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/ze8yr7s</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Lion</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.name = name
+<span class="hljs-number">07</span>
+08
+09  lion = Lion(<span class="hljs-string">"Dilbert"</span>)
+<span class="hljs-number">10</span>  print(lion)
+
+<span class="hljs-meta">&gt;&gt;</span> &lt;__main_<span class="hljs-number">_</span>.Lion object at <span class="hljs-number">0x101178828</span>&gt;</code></pre>
+<p>打印 <code>Lion</code> 对象时，Python 调用了其从 <code>Object</code> 继承的魔法方法 <code>__repr__</code>，并打印 <code>__repr__</code> 方法返回的结果。我们可以覆盖继承来的 <code>__repr__</code> 方法，以改变打印结果。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/j5rocqm</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Lion</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.name = name
+<span class="hljs-number">07</span>
+08
+09      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__repr__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span>:
+<span class="hljs-number">10</span>          <strong><span class="hljs-keyword">return</span></strong> <span class="hljs-keyword">self</span>.name
+<span class="hljs-number">11</span>
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>  lion = Lion(<span class="hljs-string">"Dilbert"</span>)
+<span class="hljs-number">14</span>  <strong>print</strong>(lion)
+
+<span class="hljs-meta">&gt;&gt;</span> Dilbert</code></pre>
+<p>由于我们覆盖了从 <code>Object</code> 继承的 <code>__repr__</code> 方法，并将其修改为返回 <code>Lion</code> 对象的名称。那么再打印 <code>Lion</code> 对象时，打印的内容就是 <code>Dilbert</code>，而不是原本返回的 <code>&lt;__main__.Lion object at 0x101178828&gt;</code>。</p>
+<p>表达式中的操作数必须有一个运算符是用来对表达式求值的魔法方法。例如，在表达式 2 + 2 中，每个整型数对象都有一个叫 <code>__add__</code> 的方法，Python 在对表达式求值时就会调用该方法。如果我们在类中定义了一个 <code>__add__</code> 方法，那么就可以在表达式中将其创建的对象用作加法运算符的操作数。示例如下：</p>
+<pre class="代码无行号"><code class="hljs ruby"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/hlmhrwv</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">AlwaysPositive</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, number)</span></span>:
+<span class="hljs-number">06</span>          <span class="hljs-keyword">self</span>.n = number
+<span class="hljs-number">07</span>
+08
+09      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__add__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, other)</span></span>:
+<span class="hljs-number">10</span>          <strong><span class="hljs-keyword">return</span></strong> abs(<span class="hljs-keyword">self</span>.n +
+<span class="hljs-number">11</span>                     other.n)
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>  x = AlwaysPositive(-<span class="hljs-number">20</span>)
+<span class="hljs-number">15</span>  y = AlwaysPositive(<span class="hljs-number">10</span>)
+<span class="hljs-number">16</span>
+<span class="hljs-number">17</span>
+<span class="hljs-number">18</span>  print(x + y)
+
+<span class="hljs-meta">&gt;&gt;</span> <span class="hljs-number">10</span></code></pre>
+<p><code>AlwaysPostive</code> 对象可用在包含加法运算符的表达式中，因为已经定义好了一个 <code>__add__</code> 方法。Python 在计算含加法运算符的表达式时，会在第一个操作符上调用 <code>__add__</code>，并将第二个操作符对象作为参数传入 <code>__add__</code>，然后返回结果。</p>
+<p>在本例中，<code>__add__</code> 使用内置函数 <code>abs</code> 返回了两个数字相加后的绝对值。因为像这样定义了 <code>__add__</code>，两个 <code>AlwaysPositive</code> 对象相加之后，将永远返回两个对象之和的绝对值；因此，表达式的结果永远为正。</p>
+<h3 id="143is">14.3　is</h3>
+<p>如果两个对象是相同的对象，关键字 <code>is</code> 返回 <code>True</code>，反之则返回 <code>False</code>。示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/gt28gww</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  <strong><span class="hljs-class"><span class="hljs-keyword">class</span></span></strong><span class="hljs-class"> <span class="hljs-title">Person</span>:</span>
+<span class="hljs-number">05</span>      <strong><span class="hljs-function"><span class="hljs-keyword">def</span></span></strong><span class="hljs-function"> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+<span class="hljs-number">06</span>          self.name = <span class="hljs-string">'Bob'</span>
+<span class="hljs-number">07</span>
+<span class="hljs-number">08</span>
+<span class="hljs-number">09</span>  bob = Person()
+<span class="hljs-number">10</span>  same_bob = bob
+<span class="hljs-number">11</span>  <strong>print</strong>(bob <strong><span class="hljs-keyword">is</span></strong> same_bob)
+<span class="hljs-number">12</span>
+<span class="hljs-number">13</span>
+<span class="hljs-number">14</span>  another_bob = Person()
+<span class="hljs-number">15</span>  <strong>print</strong>(bob <strong><span class="hljs-keyword">is</span></strong> another_bob)
+
+&gt;&gt; <span class="hljs-keyword">True</span>
+&gt;&gt; <span class="hljs-keyword">False</span></code></pre>
+<p>当在表达式中使用 <code>is</code> 关键字，且 <code>bob</code> 和 <code>same_bob</code> 为对比的操作数时，表达式的结果为 <code>True</code>，因为两个变量都指向相同的 <code>Person</code> 对象。在创建一个新的 <code>Person</code> 对象之后，再与最初的 <code>bob</code> 进行对比，表达式的结果则为 <code>False</code>，因为两个变量指向不同的 <code>Person</code> 对象。</p>
+<p>还可以使用关键字 <code>is</code> 检查变量是否为 <code>None</code>，示例如下：</p>
+<pre class="代码无行号"><code class="hljs python"><span class="hljs-number">01</span>  <span class="hljs-comment"># http://tinyurl.com/jjettn2</span>
+<span class="hljs-number">02</span>
+<span class="hljs-number">03</span>
+<span class="hljs-number">04</span>  x = <span class="hljs-number">10</span>
+<span class="hljs-number">05</span>  <strong><span class="hljs-keyword">if</span></strong> x <strong><span class="hljs-keyword">is</span></strong> <span class="hljs-keyword">None</span>:
+<span class="hljs-number">06</span>      <strong>print</strong>(<span class="hljs-string">"x is None :（ "</span>）
+<span class="hljs-number">07</span>  <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">08</span>      print(<span class="hljs-string">"x is not None"</span>)
+<span class="hljs-number">09</span>
+<span class="hljs-number">10</span>
+<span class="hljs-number">11</span>  x = <span class="hljs-keyword">None</span>
+<span class="hljs-number">12</span>  <strong><span class="hljs-keyword">if</span></strong> x <strong><span class="hljs-keyword">is</span></strong> <span class="hljs-keyword">None</span>:
+<span class="hljs-number">13</span>      <strong>print</strong>(<span class="hljs-string">"x is None"</span>）
+<span class="hljs-number">14</span>  <strong><span class="hljs-keyword">else</span></strong>:
+<span class="hljs-number">15</span>      <strong>print</strong>(<span class="hljs-string">"x is None:("</span>)
+
+&gt;&gt; x <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">None</span>
+&gt;&gt; x <span class="hljs-keyword">is</span> <span class="hljs-keyword">None</span> :（</code></pre>
+<h3 id="144">14.4　术语表</h3>
+<p><strong>类变量</strong>：属于类对象及其创建的对象。</p>
+<p><strong>实例变量</strong>：实例变量属于对象。</p>
+<p><strong>私有变量</strong>：对象可访问，但客户端代码不能访问的变量。</p>
+<p><strong>私有方法</strong>：对象可访问，但客户端代码不能访问的方法。</p>
+<p><strong>公有变量</strong>：客户端代码可访问的变量。</p>
+<h3 id="145">14.5　挑战练习</h3>
+<p>1．向 <code>Square</code> 类中添加一个 <code>square_list</code> 类变量，要求每次新创建一个 <code>Square</code> 对象时，新对象会被自动添加到列表中。</p>
+<p>2．修改 <code>Square</code> 类，要求在打印 <code>Square</code> 对象时，打印的信息为图形 4 个边的长度。例如，假设创建一个 <code>Square(29)</code>，则应打印 <code>29 by 29 by 29 by 29</code>。</p>
+<p>3．编写一个函数，接受两个对象作为参数，如果为相同的对象则返回 <code>True</code>，反之返回 <code>False</code>。</p>
+<p>答案可从异步社区（www.epubit.com）本书详情页的配套资源中下载。</p></div></article>
+</body>
+</html>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#141"><span class="toc-number">1.</span> <span class="toc-text">14.1　类变量与实例变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#142"><span class="toc-number">2.</span> <span class="toc-text">14.2　魔法方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#143is"><span class="toc-number">3.</span> <span class="toc-text">14.3　is</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#144"><span class="toc-number">4.</span> <span class="toc-text">14.4　术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#145"><span class="toc-number">5.</span> <span class="toc-text">14.5　挑战练习</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&text=深入面向对象编程"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&is_video=false&description=深入面向对象编程"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深入面向对象编程&body=Check out this article: http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&title=深入面向对象编程"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/Python无师自通/14_depp_opp/2019/10/&name=深入面向对象编程&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

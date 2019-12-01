@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="延迟函数到底怎么实现呢？每个defer语句都会形成一条deferproc注册调用。注册调用会把函数名称，函数参数，调用函数的宿主函数SP寄存器地址打包。调用函数的宿主函数SP寄存器地址是什么？func test(){    defer println(“xxx”)}func main(){    defer println(1)    defer println(2)    defer print">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-33">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="延迟函数到底怎么实现呢？每个defer语句都会形成一条deferproc注册调用。注册调用会把函数名称，函数参数，调用函数的宿主函数SP寄存器地址打包。调用函数的宿主函数SP寄存器地址是什么？func test(){    defer println(“xxx”)}func main(){    defer println(1)    defer println(2)    defer print">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:21.713Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-33">
+<meta name="twitter:description" content="延迟函数到底怎么实现呢？每个defer语句都会形成一条deferproc注册调用。注册调用会把函数名称，函数参数，调用函数的宿主函数SP寄存器地址打包。调用函数的宿主函数SP寄存器地址是什么？func test(){    defer println(“xxx”)}func main(){    defer println(1)    defer println(2)    defer print">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-33</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-34/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-32error vs exception/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&text=重学 Go 语言：基础篇-33"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&is_video=false&description=重学 Go 语言：基础篇-33"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-33&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&name=重学 Go 语言：基础篇-33&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#defer"><span class="toc-number">1.1.</span> <span class="toc-text">正确理解defer实现和执行机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.2.</span> <span class="toc-text">误用延迟调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17fordefer"><span class="toc-number">1.3.</span> <span class="toc-text">17 为什么在for循环内defer须慎用</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-33
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:21.713Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><p>延迟函数到底怎么实现呢？</p><br><ul><br><li>每个<code>defer</code>语句都会形成一条<code>deferproc</code>注册调用。</li><br><li>注册调用会把函数名称，函数参数，调用函数的宿主函数SP寄存器地址打包。</li><br></ul><br><p>调用函数的宿主函数SP寄存器地址是什么？</p><br><pre><code class="go language-go">func test(){<br>    defer println(“xxx”)<br>}<br>func main(){<br>    defer println(1)<br>    defer println(2)<br>    defer println(3)<br><br>    test()<br>}<br></code></pre><br><p>当我们打包<code>println</code>语句的时候，实际上它会打包函数名称<code>println</code>、参数<code>1</code>、RSP的寄存器地址<code>main.RSP</code>。这个打包会保存到哪呢？它实际上会存到当前goroutine的列表里<code>G.deferlist</code>。一个goroutine代表完整一套调用逻辑。假设main.goroutine有三个defer，如果函数名称按照FIFO方式命名的话，main.goroutine的<code>G.deferlist</code>包含的是<code>main.println(1)</code>、<code>main.println(2)</code>、<code>main.println(3)</code>、<code>test.println(“xx”)</code>。defer语句通过隐式<code>CALL deferreturn</code>实现延迟调用。通过RSP的寄存器知道是<code>main.RSP</code>还是<code>test.RSP</code>，原理只需要检查RSP和当前这个函数所在的<code>deferreturn</code>函数的RSP是否相等就知道这个延迟函数是不是当前宿主函数的。RSP是在函数调用堆栈初始化的时候固定。所以在test函数的时候就会检查<code>G.deferlist</code>中<code>test.println(“xx”)</code>与宿主函数RSP相等就会执行。</p><br><p>这就是为什么保存RSP的原因，通过这种方式可以快速便捷的知道哪些函数是这一次调用的。因为把函数的信息全部保存下来没有直接保存寄存器的值快。</p><br><p>所有的注册调用，只要是调用堆栈的都会保存到<code>G.deferlist</code>，<code>deferreturn</code>语句处理的时候只需要判断RSP，然后把fn和参数拿出来执行。执行完成后<code>deferreturn</code>语句利用汇编执行一次非常规操作，修改IP值。</p><br><p>test函数里注册<code>defer</code>，通过<code>CALL deferreturn</code>执行。在<code>call</code>之前需要在栈帧中保存<code>test.rip</code>，利用汇编语句它直接去修改<code>test.rip</code>，我们没有任何东西可以直接修改ip的值，但是修改保存在内存里面的值是可以的，这个值作用是用来重新跳转到<code>call return</code>语句。意味着延迟函数的<code>return</code>语句弹出的时候，这个地址等于<code>test.rip</code>的地址就形成了一次<code>call return</code>的循环。这样可以保证<code>call return</code>内部实现一次类似递归调用的这种操作，它来完成所有当前函数的延迟函数的调用。说白了就是通过汇编语句来实现一次人工控制的逻辑跳转，因为汇编实现很容易，高级语言去做的话必须通过递归的方式实现。递归方式不支持尾递归优化会导致新的栈帧，最好的方式是通过<code>JMP</code>无条件跳转实现一个循环就可以了。就是利用汇编来消灭递归调用同时实现递归调用的一种功能。所以<code>deferreturn</code>看上去好像只有一条，实际上<code>deferreturn</code>给自己形成了一套递归调用来保证所有注册的函数都会被执行。</p><br><p><code>defer</code>的细节看源码，我们要知道几点，第一所有<code>defer</code>语句都会引发一次注册，注册的时候需要为参数和函数进行打包放到一个结构体里面，如果参数是通过函数返回的，那这个函数就要立即执行把结果保存起来。</p><br><h3 id="defer">正确理解defer实现和执行机制</h3><br><pre><code class="go language-go">func test() {<br>    defer println(“haha…”)<br><br>    x, y := 5, 0<br>    z := x / y<br>    println(z)<br>}<br><br>func example() {<br>    var m sync.Mutex<br><br>    for i := 0; i &lt; 5; i++ {<br>        func(){<br>            m.Lock()<br>            defer m.Unlock()<br>            println(i)<br>        }()<br>    }<br>}<br><br>func main() {<br>    test()<br>    //example()<br>}<br></code></pre><br><p>比如需要执行<code>println(“haha…”)</code>，在整个函数执行结束的时候执行，就算<code>z := x / y</code>出错，也能保证<code>println(“haha…”)</code>执行。</p><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l” -o test test.go<br>$ ./test<br></code></pre><br><p>注意到就算抛出异常，<code>println(“haha…”)</code>也执行了。</p><br><pre><code class="bash language-bash">$ go tool objdump -s “main.test” test #反汇编<br></code></pre><br><p>defer怎么实现的呢？就涉及到类似语法糖的东西，反汇编实际上是把语句翻译成注册<code>call runtime.deferproc()</code>，在所有语句之前<code>call runtime.deferreturn()</code>执行当时注册的代码。<code>addq $0x38,sp</code>是恢复栈桢，这样的话不管出错还是不出错，都能保证注册的延迟调用都会被执行。</p><br><h3 id>误用延迟调用</h3><br><pre><code class="go language-go">func main() {<br>    for i := 0; i &lt; 10000; i++ {<br>        path := fmt.Sprintf(“./log/%d.txt”, i)<br>        f, err := os.Open(path)<br>        if err != nil {<br>            log.Println(err)<br>            continue<br>        }<br>        defer f.Close()<br>    }<br>}<br></code></pre><br><blockquote><br>  <p>延迟调用总是在函数结束前(ret)才执行。</p><br></blockquote><br><p>误用延迟调用对新手来说很常见，比如这个例子打开10000个日志文件，很多人觉得打开了就关闭了。</p><br><p>很多人使用defer仅仅是因为它会保证<code>f.Close()</code>语句肯定会被执行，问题是<code>defer</code>只是注册函数，等<code>main</code>函数退出的时候才会执行，导致10000个<code>f</code>不会立即关闭，直到<code>main</code>函数结束。很显然和我们的理解是不符的，我们在设计的时候希望每次循环以后立即关闭。</p><br><p>这是很典型的误用，这种误用来源以往编程语言带来的一些错觉，很多人不理解这句话到底是怎么执行的。那我们想改善这件事怎么办？第一就直接执行好了。第二把它打包成函数。这样<code>defer</code>语句属于匿名函数不再属于main函数，这个匿名函数执行完成会立即执行<code>defer</code>，再进入下一次循环。</p><br><pre><code class="go language-go">func main() {<br>    for i := 0; i &lt; 10000; i++ {<br>        func() {<br>            path := fmt.Sprintf(“./log/%d.txt”, i)<br>            f, err := os.Open(path)<br>            if err != nil {<br>                log.Println(err)<br>                return<br>            }<br>            defer f.Close()<br>        }()<br>    }<br>}<br></code></pre><br><h3 id="17fordefer">17 为什么在for循环内defer须慎用</h3><br><p>因为延迟调用的存在，我们必须创建新的变量规避这种情况。这样一来每次循环创建新的变量，所以添加每次的地址是不一样的。所谓的闭包延迟调用对于初学者是个坑，使用闭包在不同语言中有一些忌讳，但是延迟调用几乎在所有语言里都会出现一定要小心。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#defer"><span class="toc-number">1.1.</span> <span class="toc-text">正确理解defer实现和执行机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.2.</span> <span class="toc-text">误用延迟调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17fordefer"><span class="toc-number">1.3.</span> <span class="toc-text">17 为什么在for循环内defer须慎用</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&text=重学 Go 语言：基础篇-33"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&is_video=false&description=重学 Go 语言：基础篇-33"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-33&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&title=重学 Go 语言：基础篇-33"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-33/2019/11/&name=重学 Go 语言：基础篇-33&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

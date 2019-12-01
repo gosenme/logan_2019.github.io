@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="函数：参数func test(x int, y …byte) {    fmt.Printf(“%T\n”, y)}func main() {    test(100, 1, 2, 3)}参数内存由调用者分配，但被当作局部变量。变参的本质只是个 slice 对象。函数有很多细节可能和你想象不太一样。比如一个函数调用，定义一个 test 函数，y 称之为变参，不管语法怎么写，大部分语言都支持变参，可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-19">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="函数：参数func test(x int, y …byte) {    fmt.Printf(“%T\n”, y)}func main() {    test(100, 1, 2, 3)}参数内存由调用者分配，但被当作局部变量。变参的本质只是个 slice 对象。函数有很多细节可能和你想象不太一样。比如一个函数调用，定义一个 test 函数，y 称之为变参，不管语法怎么写，大部分语言都支持变参，可">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:02.345Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-19">
+<meta name="twitter:description" content="函数：参数func test(x int, y …byte) {    fmt.Printf(“%T\n”, y)}func main() {    test(100, 1, 2, 3)}参数内存由调用者分配，但被当作局部变量。变参的本质只是个 slice 对象。函数有很多细节可能和你想象不太一样。比如一个函数调用，定义一个 test 函数，y 称之为变参，不管语法怎么写，大部分语言都支持变参，可">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-19</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-20什么时候应该传递指针？/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-18利用匿名函数重构作用域/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&text=重学 Go 语言：基础篇-19"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&is_video=false&description=重学 Go 语言：基础篇-19"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-19&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&name=重学 Go 语言：基础篇-19&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">函数：参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">参数被当作当前函数局部变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">局部变量的生命周期</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-19
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:02.345Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id>函数：参数</h3><br><pre><code class="go language-go">func test(x int, y …byte) {<br>    fmt.Printf(“%T\n”, y)<br>}<br>func main() {<br>    test(100, 1, 2, 3)<br>}<br></code></pre><br><ul><br><li>参数内存由调用者分配，但被当作局部变量。</li><br><li>变参的本质只是个 slice 对象。</li><br></ul><br><p>函数有很多细节可能和你想象不太一样。比如一个函数调用，定义一个 test 函数，y 称之为变参，不管语法怎么写，大部分语言都支持变参，可以看成语法糖，编译器负责把参数打包成 <code>[]byte</code> 传递过去，调用方式区别不算大。</p><br><p>从语法上来说，我们会把 x 和 y 当成局部变量，因为在同一个层次不能定义名称相同的变量。变量参数 x 和普通局部变量都是局部变量，有什么区别呢？x 和 y 的内存由调用者分配的，局部变量的内存是 test 函数分配的，也就是说它们是在不同的栈帧上。</p><br><p>main 函数调用 test 函数，调用 test 传的参数是 main 函数来提供的，也就是说在 main 栈帧分配内存，而 test 函数分配的局部变量在 test 栈帧，这种行为差异会导致编译器对这两个变量的处理方式不一样。</p><br><p>函数的参数由谁分配内存很关键。在 runtime 里面提供这个函数由谁来调用的方法，它通过一些手段回到调用的地方。test 接受变量 x 和 y，x 的地址指向 main 函数 sp 位置，x 的地址减 8 存的是 ip 位置，这样利用第一个参数地址，可以确定这个函数调用方的 sp、pc（pc 即 ip）信息。</p><br><p>调用函数以后，因为某种原因要终止，会立即回到原来位置。runtime  不是普通地用 return 终止，而是直接使用无条件跳转，无条件跳转必须拿到 pc 值，pc 值就是第一个参数地址减去 8 的位置，把内容读出来就是 ip，然后直接无条件跳转，这样后面所有的调用堆栈全部抛掉回到顶层。</p><br><p>用 GDB 看一下：</p><br><pre><code class="bash language-bash">(gdb) b main.test #打断点<br>(gdb) r #执行<br>(gdb) info frame #查看当前栈帧信息<br>Stack level 0, frame at 0xc00002e748:<br> Arglist at 0xc00002e698, args: x=100, y= []uint8 = {…}<br> Locals at 0xc00002e698, Previous frames sp is 0xc00002e748 #前一个栈帧 sp 的位置<br>(gdb) x/3xg &amp;x #第一个参数 x 的地址内容<br>0xc00002e748: 0x0000000000000064 0x000000c000068010 #0xc00002e748 地址对应前一个栈帧 sp 位置<br>0xc00002e758: 0x0000000000000003<br>(gdb) x/xg 0xc00002e748-8 #x 的地址减去 8 实际上是 ip 位置<br>(gdb) x/3xb 0x000000c000068010<br>0xc000068010: 0x01 0x02 0x03<br></code></pre><br><p>我们用 GDB 来确认这些参数存到哪个栈帧里，因为这会影响它们的生命周期。同样的是局部变量，本地局部变量和参数的生命周期是不同的，本地局部变量的生命周期仅限于当前函数，参数会扩大到调用方，最终会有影响 return 语句和 defer 语句。</p><br><p>尽管从编程语法上来说，本地局部变量和参数看上去没什么区别，都当局部变量来用。真正的区别在于内存是由谁分配，生命周期是不一样的。</p><br><h3 id="-1">参数被当作当前函数局部变量</h3><br><pre><code class="go language-go">func test(x int) {<br>    x := 1 // no new variables on left side of :=<br>    println(x)<br>}<br></code></pre><br><p>把参数当成局部变量不能重复定义。因为从抽象语法上看 x 属于 test 函数，只不过从实现上 x 的内存分配是由前一个函数提供的。Go 语言语法层面上作用域和底层实现上的作用域是不一样的。</p><br><h3 id="-2">局部变量的生命周期</h3><br><pre><code class="go language-go">func main() {<br>    x := make([]byte, 1&lt;&lt;20)<br>    runtime.SetFinalizer(&amp;x, func(o *[]byte) { println(“dead”) })<br>    for i := 0; i &lt; 2; i++ {<br>        runtime.GC()<br>        time.Sleep(time.Second)<br>    }<br>    // runtime.KeepAlive(&amp;x)<br>}<br></code></pre><br><p>如果局部变量后续不再被使用，可被提前回收。</p><br><p>局部变量的生命周期等同于当前函数调用所形成的栈帧，也就是函数调用结束之前局部变量 x 应该是活着的。函数在调用的时候，会在当前的线程栈上创建一个栈帧，这个栈帧的生命周期是完整的函数调用，从 call 开始到 ret 结束，在调整 sp 和 bp 之前局部变量 x 是一直活着的。</p><br><p>大部分语言都是这样，但是 Go 语言不是。因为函数本身可能会涉及到 goroutine 调度，所以变量在函数执行中可能发生垃圾回收。还有变量可能是指向堆上的一块内存指针，堆上的内存在变量引用并且活着的情况下可能会被提前回收。</p><br><p>还有局部变量在前面语句使用后面不再使用可以回收。因为有些时候函数可能会很复杂很长，不再使用的变量提前回收对我们来说是有好处的。</p><br><p>这涉及到编译器怎么分析，在一个函数内部编译器也会扫描局部变量的相关信息，在反汇编的时候，除了正常的指令以外，还有类似于 FUNCDATA、PCDATS 这样的语句，用来给垃圾回收器标记当前有些数据的一些相关状态信息，其中包括变量可能会提前结束它的作用域，在某点垃圾回收器可以提前回收。</p><br><p>我们怎么验证呢？定义一个析构函数，回收的时候打印信息。析构函数会导致两次回收后才会执行，模拟两次垃圾回收操作。也就是在函数结束之前，如果输出打印信息就表明它被回收了。</p><br><p>有些时候对象提前回收可能导致后面执行出错，因为有时我们不会直接使用变量，而把它转换成弱引用使用再转换回来，转换回来可能被提前释放了，这时候使用 runtime.KeepAlive 函数。runtime.KeepAlive 其实就是空函数，强行引用 x 使 x 生命周期被延长。理论上这时候这个对象保持活着。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">1.1.</span> <span class="toc-text">函数：参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.2.</span> <span class="toc-text">参数被当作当前函数局部变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">1.3.</span> <span class="toc-text">局部变量的生命周期</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&text=重学 Go 语言：基础篇-19"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&is_video=false&description=重学 Go 语言：基础篇-19"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-19&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&title=重学 Go 语言：基础篇-19"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-19函数：参数/2019/11/&name=重学 Go 语言：基础篇-19&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

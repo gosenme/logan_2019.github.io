@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="18 预分配字典空间func test1() map[int]int {    m := make(map[int]int)    for i := 0; i &amp;lt; 10000; i++ {        m[i] = i    }    return m}func test2() map[int]int {    m := make(map[int]int, 10000)    for i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-55">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="18 预分配字典空间func test1() map[int]int {    m := make(map[int]int)    for i := 0; i &amp;lt; 10000; i++ {        m[i] = i    }    return m}func test2() map[int]int {    m := make(map[int]int, 10000)    for i">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:53:52.590Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-55">
+<meta name="twitter:description" content="18 预分配字典空间func test1() map[int]int {    m := make(map[int]int)    for i := 0; i &amp;lt; 10000; i++ {        m[i] = i    }    return m}func test2() map[int]int {    m := make(map[int]int, 10000)    for i">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-55</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-56/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-54/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&text=重学 Go 语言：基础篇-55"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&is_video=false&description=重学 Go 语言：基础篇-55"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-55&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&name=重学 Go 语言：基础篇-55&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#18"><span class="toc-number">1.1.</span> <span class="toc-text">18 预分配字典空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#18-1"><span class="toc-number">1.2.</span> <span class="toc-text">18 预置容量的差异</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-55
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:53:52.590Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h3 id="18">18 预分配字典空间</h3><br><pre><code class="go language-go">func test1() map[int]int {<br>    m := make(map[int]int)<br>    for i := 0; i &lt; 10000; i++ {<br>        m[i] = i<br>    }<br>    return m<br>}<br>func test2() map[int]int {<br>    m := make(map[int]int, 10000)<br>    for i := 0; i &lt; 10000; i++ {<br>        m[i] = i<br>    }<br>    return m<br>}<br><br>func BenchmarkTest(b <em>testing.B) {<br>    b.Run(“normal”, func(b </em>testing.B) {<br>        for i := 0; i &lt; b.N; i++ {<br>            _ = test1()<br>        }<br>    })<br>    b.Run(“prealloc”, func(b <em>testing.B) {<br>        for i := 0; i &lt; b.N; i++ {<br>            _ = test2()<br>        }<br>    })<br>}<br></em></code></pre><br><p>第一个我们不对字典提前设置容量，我们往里面去追加数据时候让它动态去扩容。第二个我们提前设置足够大的空间，来减少中间的扩容和内存分配操作。</p><br><pre><code>$ go test -bench . -benchmem<br>BenchmarkTest/normal-4   2000 937146 ns/op 687428 B/op 278 allocs/op<br>BenchmarkTest/prealloc-4 3000 523648 ns/op 322307 B/op 12 allocs/op<br></code></pre><br><p>我们可以看到它们的性能差别并不大，最大的问题是每次操作分配多大空间、有多少次内存分配操作。例如278到12。</p><br><p>提前对字典设置合理的容量有助于改善程序的性能。当然在不同的语言里面对哈希表的实现算法可能不一样，这个不具备通用性，但是给我们的思路在于学习一门语言应该了解下字典怎么去实现的。</p><br><p>字典是否需要预分配空间的问题，视情况，如果字典存储数据非常多，大概知道数字范围，可以考虑提前分配，避免在插入数据的过程中频繁扩容，频繁数据迁移带来性能上的损失。</p><br><p>第一个版本直接创建，自己去扩容。第二种提前分配。对比一下两者的性能差异。主要的性能消耗是扩容，扩容除了分配内存还要数据迁移。</p><br><p>尽可能让基础的数组足够大，因为变大了以后分布会均摊，每个链表本身就会短很多。所以我们预分配容量的时候很重要，比如说可以预估一下，一些算法在实验可以估算出合理的百分比。比如你存储10个的话，那么它真正的合理空间百分比是(100+50)%，因为我们知道有的地方肯定是空的无法命中，肯定有些浪费，所们真实分配的空间要比真实存储KeyValue数据大很多。所以理论上提前计算好这种容量。举个例子。</p><br><pre><code class="go language-go">// Picking loadFactor: too large and we have lots of overflow<br>// buckets, too small and we waste a lot of space. I wrote<br>// a simple program to check some stats for different loads:<br>// (64-bit, 8 byte keys and values)<br>//  loadFactor    %overflow  bytes/entry     hitprobe    missprobe<br>//        4.00         2.13        20.77         3.00         4.00<br>//        4.50         4.05        17.30         3.25         4.50<br>//        5.00         6.85        14.77         3.50         5.00<br>//        5.50        10.55        12.94         3.75         5.50<br>//        6.00        15.27        11.67         4.00         6.00<br>//        6.50        20.90        10.79         4.25         6.50<br>//        7.00        27.14        10.15         4.50         7.00<br>//        7.50        34.03         9.73         4.75         7.50<br>//        8.00        41.10         9.40         5.00         8.00<br>//<br>// %overflow   = percentage of buckets which have an overflow bucket<br>// bytes/entry = overhead bytes used per key/value pair<br>// hitprobe    = # of entries to check when looking up a present key<br>// missprobe   = # of entries to check when looking up an absent key<br>//<br>// Keep in mind this data is for maximally loaded tables, i.e. just<br>// before the table grows. Typical tables will be somewhat less loaded.<br></code></pre><br><p>在<code>hashmap.go</code>文件里，我们可以看出通过大量的实验计算出类似这样的数据表，通过这个数据表决定一个指数，比如你申请10个KeyValue存储空间，那么理论上处理多大是最合理的性能最好的，空间利用率最高的，这些东西都是通过大量的实验计算出来的，因为选择一种哈希算法以后它会通过大量实验统计这种结果。</p><br><pre><code class="go language-go">// makemap implements a Go map creation make(map[k]v, hint)<br>// If the compiler has determined that the map or the first bucket<br>// can be created on the stack, h and/or bucket may be non-nil.<br>// If h != nil, the map can be created directly in h.<br>// If bucket != nil, bucket can be used as the first bucket.<br>func makemap(t maptype, hint int64, h <em>hmap, bucket unsafe.Pointer) </em>hmap {<br>    //……<br><br>    // find size parameter which will hold the requested # of elements<br>    B := uint8(0)<br>    for ; overLoadFactor(hint, B); B++ {<br>    }<br><br>    // allocate initial hash table<br>    // if B == 0, the buckets field is allocated lazily later (in mapassign)<br>    // If hint is large zeroing this memory could take a while.<br>    buckets := bucket<br>    var extra <em>mapextra<br>    if B != 0 {<br>        var nextOverflow </em>bmap<br>        buckets, nextOverflow = makeBucketArray(t, B)<br>        if nextOverflow != nil {<br>            extra = new(mapextra)<br>            extra.nextOverflow = nextOverflow<br>        }<br>    }<br><br>    // initialize Hmap<br>    if h == nil {<br>        h = (<em>hmap)(newobject(t.hmap))<br>    }<br>    h.count = 0<br>    h.B = B<br>    h.extra = extra<br>    h.flags = 0<br>    h.hash0 = fastrand()<br>    h.buckets = buckets<br>    h.oldbuckets = nil<br>    h.nevacuate = 0<br>    h.noverflow = 0<br><br>    return h<br>}<br></em></code></pre><br><p>我们可以看到创建函数的时候，我们想存储KeyValue数量和真实分配的存储空间是不一样的。</p><br><pre><code class="go language-go">// overLoadFactor reports whether count items placed in 1&lt;&lt;B buckets is over loadFactor.<br>func overLoadFactor(count int64, B uint8) bool {<br>    // TODO: rewrite to use integer math and comparison?<br>    return count &gt;= bucketCnt &amp;&amp; float32(count) &gt;= loadFactorfloat32((uint64(1)&lt;&lt;B))<br>}<br></code></pre><br><p><code>overLoadFactor</code>会计算出很合理的指数，这个指数才是它真正意义上的存储空间。存10个KeyValue，真实存储空间肯定比这个大，因为其中某些地方没有办法命中，肯定有空间浪费。所以理论上我们是提前提供足够大的空间有助于改善性能。</p><br><p>因为Go语言本身也会做扩容处理，因为它会发觉单个链表的节点可能会过长，比如说申请容量为10的字典，但是存储1000个，链表就变得非常的长。Go的做法会把10进行扩容，可能10<em>2一直扩容下去做到尽可能让每个链表变短。那么扩容的时候就会涉及到重新分配数组，重新进行哈希。</em></p><br><h3 id="18-1">18 预置容量的差异</h3><br><p>对于很多容器对象都会涉及到预分配内存的问题。比如说切片，我们知道切片有两种创建方式。</p><br><pre><code class="go language-go">func main() {<br>    s1 := make([]byte, 0) //表示动态去扩容，可能在8项扩张一次，16、32扩张，会涉及到很多次内存分配操作<br>    //任何时候内存分配操作都会有很严重的性能问题，除了分配内存以外，还需要把原来数据拷贝过来<br>    s2 := make([]byte, 0, 10000) //提前分配足够大的底层数组，好处内存是一次性分配的，只要没有超出之前不需要重新扩张。<br>}<br></code></pre><br><p>对于容器对象，当然指的是这个容器可能会存很多数据，如果数据量很小可能就不在乎，因为大部分都会有默认大小，比如内置默认可以存8个。数据量比较多的提前给个容量可以减少扩张行为，就减少了内存分配操作和复制操作。对于容器类对象，一般情况下我们尽量给它一个初始化值，减少性能压力。</p><br><p>性能测试函数，第一个我们创建一个字典，但是没有给它默认容量也就是说它得动态增加。第二个函数提前给他预置容量，接下来调用test函数把字典填满，我们看下提供初始化容量和不提供初始化容量的性能差异有多大。先看填充字典的性能有多大差异。</p><br><pre><code class="go language-go">func test(m map[int]int) {<br>    for i := 0; i &lt; 1000000; i++ {<br>        m[i] = i<br>    }<br>}<br><br>func BenchmarkMap1(b testing.B) {<br>    m := make(map[int]int)<br>    b.ResetTimer()<br><br>    for i := 0; i &lt; b.N; i++ {<br>        // m := make(map[int]int)<br>        test(m)<br>    }<br>}<br><br>func BenchmarkMap2(b *testing.B) {<br>    m := make(map[int]int, 1000000)<br>    b.ResetTimer()<br><br>    for i := 0; i &lt; b.N; i++ {<br>        // m := make(map[int]int, 1000000)<br>        test(m)<br>    }<br>}<br></code></pre><br><p>我们可以看到预置容量方式在填充过程中内存分配次数远远少于没有初始化容量的数量。</p><br><p>接下来测试下创建过程也计算在内，我们发觉它们性能比较接近，说白了提前预置容量它需要把所有keyvalue数据准备好。我们多数情况下不会这样做，因为我们创建大字典时候往往会重复使用字典。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#18"><span class="toc-number">1.1.</span> <span class="toc-text">18 预分配字典空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#18-1"><span class="toc-number">1.2.</span> <span class="toc-text">18 预置容量的差异</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&text=重学 Go 语言：基础篇-55"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&is_video=false&description=重学 Go 语言：基础篇-55"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-55&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&title=重学 Go 语言：基础篇-55"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-5518 预分配字典空间/2019/11/&name=重学 Go 语言：基础篇-55&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

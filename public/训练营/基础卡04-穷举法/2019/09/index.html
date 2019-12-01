@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="穷举法 是一种在问题域的解空间中对所有可能的解穷举搜索， 并根据条件选择最优解的方法的总称。  穷举法作为计算机算法使用时， 就是依赖计算机不知疲倦的计算能力。  穷举法作为一种算法模式， 也常常与其他模式配合使用， 成为某个具体算法中的一部分。 难点 1. 解空间或状态空间的定义没有具体的模式，    不同问题的解空间形式上也差异巨大 2. 针对不同问题要选择不同的搜索算法，    有很多问题的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法设计常用思想之穷举法">
+<meta property="og:url" content="http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="穷举法 是一种在问题域的解空间中对所有可能的解穷举搜索， 并根据条件选择最优解的方法的总称。  穷举法作为计算机算法使用时， 就是依赖计算机不知疲倦的计算能力。  穷举法作为一种算法模式， 也常常与其他模式配合使用， 成为某个具体算法中的一部分。 难点 1. 解空间或状态空间的定义没有具体的模式，    不同问题的解空间形式上也差异巨大 2. 针对不同问题要选择不同的搜索算法，    有很多问题的">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-26T16:44:07.117Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法设计常用思想之穷举法">
+<meta name="twitter:description" content="穷举法 是一种在问题域的解空间中对所有可能的解穷举搜索， 并根据条件选择最优解的方法的总称。  穷举法作为计算机算法使用时， 就是依赖计算机不知疲倦的计算能力。  穷举法作为一种算法模式， 也常常与其他模式配合使用， 成为某个具体算法中的一部分。 难点 1. 解空间或状态空间的定义没有具体的模式，    不同问题的解空间形式上也差异巨大 2. 针对不同问题要选择不同的搜索算法，    有很多问题的">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>算法设计常用思想之穷举法</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/训练营/基础卡05-迭代法/2019/09/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/训练营/基础卡06-基础开胃菜/2019/09/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&text=算法设计常用思想之穷举法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&is_video=false&description=算法设计常用思想之穷举法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法设计常用思想之穷举法&body=Check out this article: http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&name=算法设计常用思想之穷举法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        算法设计常用思想之穷举法
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-26T16:44:07.117Z" itemprop="datePublished">2019-09-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>穷举法</p>
+<pre><code>是一种在问题域的解空间中对所有可能的解穷举搜索，
+并根据条件选择最优解的方法的总称。
+
+穷举法作为计算机算法使用时，
+就是依赖计算机不知疲倦的计算能力。
+
+穷举法作为一种算法模式，
+也常常与其他模式配合使用，
+成为某个具体算法中的一部分。
+</code></pre><p>难点</p>
+<pre><code>1. 解空间或状态空间的定义没有具体的模式，
+   不同问题的解空间形式上也差异巨大
+2. 针对不同问题要选择不同的搜索算法，
+   有很多问题的搜索算法并不直观，
+   需要对问题做细致的分析并且依靠丰富的经验才能设计出来。
+3. 在问题的规模大到一定范围时，穷举法只是理论可行。
+   在这种不能对解空间进行完全搜索时，
+   需要对搜索算法进行评估，
+   并确定一些收敛原则。   
+</code></pre><p>步骤</p>
+<pre><code>1. 确定问题的解（或状态）的定义、
+   解空间的范围以及正确解的判定条件。
+2. 根据解空间的特点来选择搜索策略，
+   逐个检验解空间中的候选解是否正确。
+</code></pre><p>解空间的定义</p>
+<pre><code>解空间就是全部可能的候选解的一个约束范围，
+确定问题的解就在这个约束范围内，
+将搜索策略应用到这个约束范围就可以找到问题的解。
+</code></pre><p>穷举解空间的策略</p>
+<pre><code>1. 盲目搜索
+    不带任何假设的穷举搜索，
+    把所有可能的解都检查一遍。
+    -- 广度优先
+        需要额外的存储空间，则应考虑额外空间的规模
+    -- 深度优先
+        容易陷入死循环，则要做状态循环的判断和避免
+
+2. 启发式搜索
+    由启发函数策动有目的的搜索行为，
+    这些策略和依据通常能够加快算法的收敛速度，
+    或能够划定一个更小的、最有可能出现解的空间上搜索。
+    -- 假设解空间符合正态分布
+        可以从分布中间值开始向两边搜索。
+
+3. 剪枝策略
+    在对解空间穷举搜索时，
+    如果有一些状态节点可以根据问题所提供的信息，
+    明确地判定为不可能演化出最优解，
+    则可以跳过此状态节点的遍历。
+</code></pre><p>剪枝和启发</p>
+<pre><code>剪枝是对已产生的结果，根据最优解的判断条件，
+    确定在该方向上不可能存在最优解，
+    从而放弃对这个方向的搜素。
+
+启发是根据启发函数给出的评估值，
+    在结果出来之前就朝着最优解方向搜索
+</code></pre><p>评估与收敛</p>
+<pre><code>收敛原则是只要能找到一个比较好的解就返回，
+根据解的评估判断是否需要继续下一次搜索。  
+</code></pre><p>百钱买百鸡 Python语言实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">p_m = <span class="number">5</span></span><br><span class="line">p_w = <span class="number">3</span></span><br><span class="line">p_x = <span class="number">1</span> / <span class="number">3</span></span><br><span class="line"></span><br><span class="line">n = <span class="number">100</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, n // p_m):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, n // p_w):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i * p_m + j * p_w + (<span class="number">100</span> - i - j) * p_x == <span class="number">100</span>:</span><br><span class="line">            print(i, j, <span class="number">100</span> - i - j)</span><br></pre></td></tr></table></figure></p>
+<p>作业之 鸡兔同笼<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">t = <span class="number">50</span></span><br><span class="line">j = <span class="number">120</span></span><br><span class="line">ji = <span class="number">2</span></span><br><span class="line">tu = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> tu_num <span class="keyword">in</span> range(j // tu):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> tu_num * tu + (t - tu_num) * ji == j:</span><br><span class="line">        print(tu_num, t - tu_num)</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&text=算法设计常用思想之穷举法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&is_video=false&description=算法设计常用思想之穷举法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法设计常用思想之穷举法&body=Check out this article: http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&title=算法设计常用思想之穷举法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/训练营/基础卡04-穷举法/2019/09/&name=算法设计常用思想之穷举法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

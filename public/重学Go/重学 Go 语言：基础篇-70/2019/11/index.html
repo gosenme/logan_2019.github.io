@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="对象：匿名嵌入和匿名字段方法匿名嵌入将其他类型匿名嵌入到复合类型，以组合方式获取方法调用权限。匿名类型字段实际以“类型”为名。不能同时嵌入T和T。方法名存在遮蔽，以“最近”为准。组合和调用语法糖，不是继承。OOP 三大基本规则封装继承多态，继承很多语言都放弃了，涉及到很多概念比如抽象类型、覆盖、重写，Go语言组合优先于继承。所谓的匿名嵌入就是没有给字段名字只给类型，然后用语法糖的概念来实现类似继承">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学 Go 语言：基础篇-70">
+<meta property="og:url" content="http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/index.html">
+<meta property="og:site_name" content="OYJX">
+<meta property="og:description" content="对象：匿名嵌入和匿名字段方法匿名嵌入将其他类型匿名嵌入到复合类型，以组合方式获取方法调用权限。匿名类型字段实际以“类型”为名。不能同时嵌入T和T。方法名存在遮蔽，以“最近”为准。组合和调用语法糖，不是继承。OOP 三大基本规则封装继承多态，继承很多语言都放弃了，涉及到很多概念比如抽象类型、覆盖、重写，Go语言组合优先于继承。所谓的匿名嵌入就是没有给字段名字只给类型，然后用语法糖的概念来实现类似继承">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-30T10:54:13.757Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学 Go 语言：基础篇-70">
+<meta name="twitter:description" content="对象：匿名嵌入和匿名字段方法匿名嵌入将其他类型匿名嵌入到复合类型，以组合方式获取方法调用权限。匿名类型字段实际以“类型”为名。不能同时嵌入T和T。方法名存在遮蔽，以“最近”为准。组合和调用语法糖，不是继承。OOP 三大基本规则封装继承多态，继承很多语言都放弃了，涉及到很多概念比如抽象类型、覆盖、重写，Go语言组合优先于继承。所谓的匿名嵌入就是没有给字段名字只给类型，然后用语法糖的概念来实现类似继承">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>重学 Go 语言：基础篇-70</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-71方法集思想/2019/11/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/重学Go/重学 Go 语言：基础篇-69方法表达式汇编/2019/11/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&text=重学 Go 语言：基础篇-70"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&is_video=false&description=重学 Go 语言：基础篇-70"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-70&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&name=重学 Go 语言：基础篇-70&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#"><span class="toc-number"></span> <span class="toc-text">对象：匿名嵌入和匿名字段方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">0.1.</span> <span class="toc-text">匿名嵌入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tt"><span class="toc-number">0.2.</span> <span class="toc-text">不能同时嵌入T和T</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">0.3.</span> <span class="toc-text">匿名字段方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#07"><span class="toc-number">0.4.</span> <span class="toc-text">07 匿名字段方法遮蔽</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">0.5.</span> <span class="toc-text">同级匿名字段方法遮蔽</span></a></li></ol></li>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        重学 Go 语言：基础篇-70
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">OYJX</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-30T10:54:13.757Z" itemprop="datePublished">2019-11-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <article id="topicContainer" class="column_content"><h2 class="topic_title"></h2><div><h1 id>对象：匿名嵌入和匿名字段方法</h1><br><h3 id="-1">匿名嵌入</h3><br><p>将其他类型匿名嵌入到复合类型，以组合方式获取方法调用权限。</p><br><ul><br><li>匿名类型字段实际以“类型”为名。</li><br><li>不能同时嵌入T和<em>T。</em></li><br><li>方法名存在遮蔽，以“最近”为准。</li><br><li>组合和调用语法糖，不是继承。</li><br></ul><br><p>OOP 三大基本规则封装继承多态，继承很多语言都放弃了，涉及到很多概念比如抽象类型、覆盖、重写，Go语言组合优先于继承。</p><br><p>所谓的匿名嵌入就是没有给字段名字只给类型，然后用语法糖的概念来实现类似继承的概念，用组合的方式来实现继承的能力。</p><br><p>比如下方代码：匿名嵌入后，Y 可以用简短模式调用 X 的方法。</p><br><h3 id="tt">不能同时嵌入T和T</h3><br><pre><code class="go language-go">type X int<br>type A struct {<br>    X<br>    <em>X // duplicate field X<br>}<br></em></code></pre><br><blockquote><br>  <p>因为它们名字相同，结构体不允许有多个相同名字的字段。</p><br></blockquote><br><p>嵌入 X 和 X 名字都是 X，如果同时嵌入就会重名，同时嵌入一个类型和它的指针类型是不行的。在设计层面嵌入这两个类型实际上都是嵌入 X 的类型，目的是为了访问方法权限。</p><br><p>在实现层面，X 和 <em>X 字段存储格式不一样，它们占用内存结构也就不一样，</em>X 实际是一个指针，内存大小占用 8 字节，这里 X 是结构体。因为这和初始化方式有很大关系。</p><br><h3 id="-2">匿名字段方法</h3><br><pre><code class="go language-go">type A int<br><br>//go:noinline<br>func (A) a() { println(“A.a”) }<br><br>type B struct {<br>    A<br>    x int<br>}<br><br>type C struct {<br>    <em>A<br>    x int<br>}<br><br>//go:noinline<br>func (B) b() { println(“B.b”) }<br>func main() {<br>    o := B{A: 100, x: 200}<br>    o.a()<br>    o.b()<br>    o.A.a()<br><br>    var a A<br>    c := C{&amp;a, 200}<br>    c.a()<br>}<br></em></code></pre><br><pre><code>$ go build &amp;&amp; go tool objdump -s “main.main” test<br></code></pre><br><p>类型 A 有一个方法 a 类型， B 匿名嵌入 A，B 有一个方法 b，可以用 a 和 b 的方式调用，匿名嵌入方式让 B 拥有 A 的方法访问权限。</p><br><blockquote><br>  <p>注意：简短模式<code>o.a()</code>和<code>o.A.a()</code>写法一样。</p><br></blockquote><br><p>编译器会把它<code>o.a()</code>翻译成原始调用<code>o.A.a()</code>。所谓的匿名字段或者匿名嵌入在编译器里实际上用类型名字作为字段名字。</p><br><p>嵌入指针<code>T</code>的时候，没有初始化则访问非法的地址，有个字段内存没有初始化，调用的时候认为很危险，这涉及到语言安全规则支离破碎。</p><br><p>如果按照刚对函数的理解、函数表达式的理解，不初始化没有问题，因为在调用的时候并没有在里面使用。不过这里是个坑，<code>o.a()</code>实际上翻译成<code>o.A.a()</code>，调用这个函数需要传参数，函数定义参数是值，没有办法把nil转换成value。如果函数定义是<code><em>T</em></code>没有问题，内存是合法。</p><br><p>第一设计上的一种理念用组合的方式目的是想引用 A 的方法，第二考虑内存中怎么实现，用指针还是整个拷贝进来，这涉及到两种不同的层面。</p><br><p>前面说到结构体，结构体中有内联的问题，提到了内联不等于继承，继承的意思是有个 A，B 继承自 A，A 有个方法叫 Inc，我们可以通过B.Inc来调用。</p><br><p>匿名嵌入是 B 里面包含了 A 的结构体，A 有个方法叫 Inc，我们通过<code>B.A.Inc</code>和<code>B.Inc</code>两种方式调用，<code>B.Inc</code>就是语法糖，先在 B 中找有没有 Inc 方法，如果 B 没有从 A 中找，<code>B.Inc</code>就被编译器还原成<code>B.A.Inc</code>，好处是嵌入了 A，用语法糖方式引入到 B 的集合中，看上去像 B 继承了 A，其实是纯粹的语法糖并不是继承。</p><br><pre><code class="go language-go">type N int<br><br>type Z struct {<br>    x int<br>    N<br>}<br><br>func (n N) Inc() {<br>    <em>n++<br>}<br><br>func main() {<br>    var z Z<br>    z.Inc()<br><br>    fmt.Printf(“%+v\n”, z)<br>}<br></em></code></pre><br><p>有 N 类型，有个Inc方法，有个Z类型，嵌入了N类型，用语法糖Z调用Inc方法</p><br><pre><code class="bash language-bash">$ go build -gcflags “-N -l” -o test embed.go #编译<br>$ go tool objdump -s “main.main” test<br></code></pre><br><p>我们看到了实际的调用<code>CALL main.(N).Inc(SB)</code>还是调用<code>N.Inc</code>方法<code>main.(*N).Inc()</code>，这实际上就是编译器会把<code>z.Inc</code>还原成<code>z.N.Inc</code>。我们通过反汇编可以搞清楚最终调用的是什么。</p><br><p>这会涉及到方法集这样的概念，方法集概念和后面的接口有关系，是属于编译器层面上的一些技巧，我们虽然看上去调用的是语法糖转换，但是在内部其实是有很复杂的体系支撑这种逻辑。</p><br><p>Go语言没有继承的概念，只有组合的概念，他对于面向对象基本特征只实现了封装，没有实现继承，多态实际上是通过接口方式实现的，没有实现继承的多态。多态有两种逻辑，子类可以出现在父类的地方，实现可以出现在抽象接口的地方。Go语言只实现了接口的多态。</p><br><h3 id="07">07 匿名字段方法遮蔽</h3><br><pre><code class="go language-go">type A int<br><br>//go:noinline<br>func (A) test() { println(“A.test”) }<br><br>type B struct {<br>    A<br>}<br><br>//go:noinline<br>func (B) test() { println(“B.test”) }<br>func main() {<br>    var o B<br>    o.test()<br>    o.A.test() //明确调用父类方法<br>}<br></code></pre><br><pre><code>$ go build &amp;&amp; go tool objdump -s “main.main” test<br></code></pre><br><blockquote><br>  <p>可以此实现类似override功能。</p><br></blockquote><br><p>override实现是面向对象编程很常见的案例，我们写面向对象编程有这样的案例，比如类型A，类型A有个方法，类型B嵌入类型A，如果在B中改写A方法。Go怎么实现呢，Go没有继承的概念，但是Go有名称查找规则。查找规则是在当前类型里找，如果有相同方法就使用，如果找不到就在匿名嵌入字段里找。这和大部分语言一样，先查找自己，自己找不着再去父类里面找。</p><br><p>有类型A，有个方法叫test，接下来B匿名嵌入A，所以在B里可以直接调用test。B也定义了test，B现在拥有两个test方法一个是自己实现一个是A实现的，编译器选择谁？会涉及在OOP就近原则，从结构上来看，B间接引用A。A有方法叫test，调用的时候沿着B查，因为o是基于B创建的。这种方式是OPP继承的覆盖，假设用组合的方式实现继承功能，可以把B看成A的子类，B可以调用A的方法。OOP编程有一个概念，子类可以重写父类的方法。</p><br><p>这给我们一些手段修正我们不满意的地方，但是这种手段属于侵入式设计，实际上承担了一部分A的责任，因为使用嵌入字段实际上表达的意思是暴露A所有对外公开的能力，现在用一种方式修正A的某个默认行为，用自定义行为代替A的行为。B只是把A放入了合适的位置，用户是否使用A是用户的责任，A有责任维护它的接口，B只是给A提供存放位置，但是一旦介入到A的默认行为的时候实际上承担了一部分A的职责，这种设计存在着一定的耦合性，我们应该考虑清楚用什么样的方式表达这些东西。一旦介入了以后从设计的角度来说就类似于代理模式，代理模式就是拦截真实调用之前进行检查，可能是权限检查，代理具备了拦截原本调用的能力。</p><br><p>我们可以把A隐藏起来不依赖A<code>a A</code>，这种设计模式就是Facade。找了一堆零件，用一个盒子把这堆零件全装起来，怎么换零件跟用户也没有关系。</p><br><h3 id="-3">同级匿名字段方法遮蔽</h3><br><pre><code class="go language-go">type A int<br>type B int<br><br>//go:noinline<br>func (A) test() { println(“A.test”) }<br><br>//go:noinline<br>func (B) test() { println(“B.test”) }<br><br>type C struct {<br>    A<br>    B<br>}<br>func main() {<br>    var o C<br>    o.test() // ambiguous selector o.test<br>}<br></code></pre><br><p>有些编程语言存在一种规则叫左侧优先，有点像多继承的概念。一些语言按照继承列表优先使用。</p><br><p>为了实现补位调整内存布局减少内存占用，造成行为发生改变。要知道这种隐式错误存在歧义，我们设计上的概念和实现上的概念要分清楚。</p></div></article>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#"><span class="toc-number"></span> <span class="toc-text">对象：匿名嵌入和匿名字段方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">0.1.</span> <span class="toc-text">匿名嵌入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tt"><span class="toc-number">0.2.</span> <span class="toc-text">不能同时嵌入T和T</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">0.3.</span> <span class="toc-text">匿名字段方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#07"><span class="toc-number">0.4.</span> <span class="toc-text">07 匿名字段方法遮蔽</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">0.5.</span> <span class="toc-text">同级匿名字段方法遮蔽</span></a></li></ol></li>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&text=重学 Go 语言：基础篇-70"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&is_video=false&description=重学 Go 语言：基础篇-70"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=重学 Go 语言：基础篇-70&body=Check out this article: http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&title=重学 Go 语言：基础篇-70"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://logan_2019.github.io/重学Go/重学 Go 语言：基础篇-70/2019/11/&name=重学 Go 语言：基础篇-70&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Logan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
